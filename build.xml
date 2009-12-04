@@ -1,43 +1,55 @@
-<project name="project" default="jar" basedir=".">
+<project name="FitLibrary" default="jar" basedir=".">
+	<property name="name" value="fitlibrary" />
 
-	<property name="jar.name" value="../fitlibrary.jar" />
+	<property name="home" value="." />
+	<property name="lib" value="${home}/fitnesse/lib" />
+	<property name="src" value="${home}/src" />
+	<property name="bin" value="${home}/bin" />
+	<property name="test.src" value="${home}/test" />
+	<property name="dist.target" value="${home}/fitnesse" />
 
-<!--  ==================== Directories ==================== -->
-	<property name="fitLibrary.classes" value="../classes" />
-	<property name="fitLibrary.src" value="../src" />
-	<property name="lib.home" value="C:/rickLib" />
-
-<!-- ==================== Compilation Classpath =========================== -->
-	<path id="compile.classpath">
-		<pathelement location="${lib.home}/junit-4.4.jar" />
-		<pathelement location="${lib.home}/fitnesse.jar" />
-		<pathelement location="${lib.home}/poi-2.5.1-final-20040804.jar" />
-		<pathelement location="${lib.home}/fitnesserunner-1.0.5.jar" />
-		<pathelement location="${lib.home}/hamcrest-all-1.1.jar" />
-		<pathelement location="${lib.home}/jmock-2.5.1.jar" />
-		<pathelement location="${lib.home}/jmock-junit4-2.5.1.jar" />
-		<pathelement location="${lib.home}/ognl-2.7.2.jar" />
-	</path>
-
-<!-- ==================== Clean Target ==================================== -->
-
-<target name="clean" description="Delete old build directory">
-	<delete dir="${fitLibrary.classes}" />
-</target>
-
-<!-- ==================== Jar Target ================================== -->
-
-<target name="jar" depends="clean" description="Create Jar">
-	<mkdir dir="${fitLibrary.classes}" />
-	<javac srcdir="${fitLibrary.src}" 
-	       destdir="${fitLibrary.classes}" 
-	       extdirs=""
-	       debug="true"
-	       deprecation="false"
-	       optimize="true">
-	       <classpath refid="compile.classpath" />
-	</javac>
-	<jar jarfile="${jar.name}" basedir="${fitLibrary.classes}" />
-</target>
+	<target name="jar" depends="junit, jar-no-test" description="Create ${name} jar file in local FitNesseServer directory"/>
 	
+	<target name="jar-no-test" depends="clean, compile">
+	    <echo message="Create ${name} jar file in local FitNesse"/>
+	    <jar destfile="${dist.target}/${name}.jar" basedir="bin"   />
+	    <echo message="Create source zip file"/>
+	    <zip destfile="${dist.target}/${name}Src.zip">
+	        <fileset dir="src"/>
+	    </zip>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}" destdir="${bin}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="junit" description="run the junit tests">
+		<junit fork="yes" showoutput="yes" haltonfailure="no" haltonerror="no" printsummary="yes" outputtoformatters="true">
+			<formatter type="plain"/>
+			<classpath>
+				<dirset dir="${bin}">
+					<include name="**"/>
+				</dirset>
+				<fileset dir="${lib}">
+					<include name="**/*.jar"/>
+				</fileset>
+		  	</classpath>
+			<batchtest fork="yes" haltonfailure="no" haltonerror="no" filtertrace="no">
+				<fileset dir="${test.src}">
+				  <include name="**/Test*.java"/>
+				</fileset>
+			</batchtest>
+	    </junit>
+	</target>
 </project>
