@@ -12,6 +12,7 @@ import java.util.Queue;
 import fitlibrary.batch.trinidad.InMemoryTestImpl;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitnesse.FitNesseContext;
+import fitnesse.responders.run.PageListSetUpTearDownSurrounder;
 import fitnesse.responders.run.SuiteContentsFinder;
 import fitnesse.wiki.PageCrawler;
 import fitnesse.wiki.PathParser;
@@ -40,6 +41,10 @@ public class SuiteLoader implements Runnable {
 			}
 			WikiPage root = crawler.getPage(context.root,PathParser.parse("."));
 			List<WikiPage> pages = new SuiteContentsFinder(suiteRoot, null, root).makePageList();
+			
+			PageListSetUpTearDownSurrounder surrounder = new PageListSetUpTearDownSurrounder(root);
+            surrounder.surroundGroupsOfTestPagesWithRespectiveSetUpAndTearDowns(pages);
+            
 			for (WikiPage page : pages){
 				if (selects(page)){		    		
 					String testName = crawler.getFullPath(page).toString();
