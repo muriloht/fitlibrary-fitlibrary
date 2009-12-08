@@ -4,24 +4,30 @@
 */
 package fitlibrary.traverse.workflow.definedAction;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 import java.io.File;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefineActionsOnPage;
-import fitlibrary.definedAction.DefinedActionsRepositoryStandard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContext;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.TestResults;
 
 public class TestDefineActionsOnPage {
+	private File fitNesseDir;
+	@Before
+	public void setFitNesseDirectory() {
+		fitNesseDir = new File("fitnesse");
+		assertThat("This test relies on files in the fitnesse directory - which cannot be found: current directory is "+
+				new File(".").getAbsolutePath(), fitNesseDir.exists(), is(true));
+	}
+	
 	@Test public void actionsAreDefinedThroughFileSystem() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.PlainTextInsteadOfTables.DefinedActions";
 		String wiki = "|''define actions at''|"+pageName+"|";
@@ -29,7 +35,7 @@ public class TestDefineActionsOnPage {
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
-				return new File("../fitnesse");
+				return fitNesseDir;
 			}
 		};
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());
@@ -44,7 +50,7 @@ public class TestDefineActionsOnPage {
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
-				return new File("../fitnesse");
+				return fitNesseDir;
 			}
 		};
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());

@@ -8,7 +8,7 @@
 	<property name="test.src" value="${home}/test" />
 	<property name="dist.target" value="${home}/fitnesse" />
 
-	<target name="jar" depends="junit, jar-no-test" description="Create ${name} jar file in local FitNesseServer directory"/>
+	<target name="jar" depends="clean, compile, junit" description="Create ${name} jar file in local FitNesseServer directory"/>
 	
 	<target name="jar-no-test" depends="clean, compile">
 	    <echo message="Create ${name} jar file in local FitNesse"/>
@@ -32,11 +32,18 @@
 				</fileset>
 			</classpath>
 		</javac>
+		<javac srcdir="${test.src}" destdir="${bin}">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
 	</target>
 	
 	<target name="junit" description="run the junit tests">
-		<junit fork="yes" showoutput="yes" haltonfailure="no" haltonerror="no" printsummary="yes" outputtoformatters="true">
-			<formatter type="plain"/>
+		<junit fork="yes" dir="${home}" showoutput="yes" printsummary="false" outputtoformatters="true">
+			<formatter type="brief" useFile="false"/>
 			<classpath>
 				<dirset dir="${bin}">
 					<include name="**"/>
@@ -45,7 +52,7 @@
 					<include name="**/*.jar"/>
 				</fileset>
 		  	</classpath>
-			<batchtest fork="yes" haltonfailure="no" haltonerror="no" filtertrace="no">
+			<batchtest fork="yes" haltonfailure="yes" haltonerror="yes" filtertrace="no">
 				<fileset dir="${test.src}">
 				  <include name="**/Test*.java"/>
 				</fileset>
