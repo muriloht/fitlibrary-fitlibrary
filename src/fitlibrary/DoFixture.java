@@ -6,6 +6,7 @@ package fitlibrary;
 
 import java.util.List;
 
+import fit.Fixture;
 import fit.Parse;
 import fitlibrary.suite.InFlowPageRunner;
 import fitlibrary.table.Table;
@@ -59,6 +60,9 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	}
 	protected void showAfterTable(String s) {
 		doTraverse.showAfterTable(s);
+	}
+	public Object getSymbolNamed(String fitSymbolName) {
+		return Fixture.getSymbol(fitSymbolName);
 	}
 	protected Object getExpectedResult() {
 		return doTraverse.getExpectedResult();

@@ -58,7 +58,7 @@ public class DoTraverse extends DoTraverseInterpreter {
 		"becomesTimeout/0", "becomesTimeout/1",
 		"comment/0", "ignore/0", "ignored/0", "ignoreTable/0",
 		"clearDynamicVariables/0", "addDynamicVariablesFromFile/1", "recordToFile/1",
-		"setVariables/0", "to/1", "get/1", "getDynamicVariables/0",
+		"setVariables/0", "to/1", "get/1", "getDynamicVariables/0", "getSymbolNamed/1", "setSymbolNamed/1",
 		"setExpandDefinedActions/1", // defined in superclass
 		"selectRandomly/1",
 		"defineAction/0", "defineAction/1", "defineActionsAt/1", "defineActionsSlowlyAt/1", "clearDefinedActions/0",
@@ -669,6 +669,23 @@ public class DoTraverse extends DoTraverseInterpreter {
 			}
 			Object result = findMethodFromRow(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
 			setDynamicVariable(row.text(1,this), result);
+		} catch (IgnoredException e) {
+			// No result, so ignore
+		}
+	}
+	/** Set the named FIT symbol to the result of the action, or to the string if there's no action.
+	 */
+	public void setSymbolNamed(final Row row, TestResults testResults) throws Exception {
+		int less = 3;
+		if (row.size() < less)
+			throw new MissingCellsException("set");
+		try {
+			if (row.text(2, this).equals("=")) {
+				Fixture.setSymbol(row.text(1, this), Ognl.getValue(row.text(3, this), null));
+				return;
+			}
+			Object result = findMethodFromRow(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+			Fixture.setSymbol(row.text(1,this), result);
 		} catch (IgnoredException e) {
 			// No result, so ignore
 		}
