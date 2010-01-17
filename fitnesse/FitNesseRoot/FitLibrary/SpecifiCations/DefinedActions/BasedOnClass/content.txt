@@ -10,6 +10,7 @@ This approach is only intended for advanced storytest writers.
 >SuperClass
 >SuperClassFails
 >OverrideDefinedAction
+>OverrideWithNoImplementation
 >MissingDefinedAction
 >UnknownClass
 >DefaultObject
@@ -18,5 +19,6 @@ This approach is only intended for advanced storytest writers.
 >DefinedElsewhereWithoutClass
 >DefinedElsewhereWithMultipleLevels
 >ClassInsteadOfObject
+
 
 >DefinedActions
