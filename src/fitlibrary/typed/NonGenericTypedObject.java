@@ -13,7 +13,6 @@ import java.util.List;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupClosureStandard;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;

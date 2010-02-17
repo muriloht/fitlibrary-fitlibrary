@@ -3,7 +3,6 @@ package fitlibrary.object;
 import java.lang.reflect.InvocationTargetException;
 
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.ref.EntityReference;

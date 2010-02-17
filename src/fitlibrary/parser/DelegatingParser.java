@@ -5,7 +5,6 @@
 package fitlibrary.parser;
 
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.global.PlugBoard;

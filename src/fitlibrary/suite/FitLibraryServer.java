@@ -44,7 +44,7 @@ public class FitLibraryServer extends FitServerBridge implements Reportage {
 	}
     @Override
 	protected void usage() {
-        print("usage: java fit.FitLibraryServer [-v] host port socketTicket");
+        print("usage: java fitlibrary.suite.FitLibraryServer [-v] host port socketTicket");
         System.exit(-1);
     }
 	public static void main(String[] args) {

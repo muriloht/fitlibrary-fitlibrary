@@ -10,7 +10,6 @@ import java.util.Map;
 
 import fit.exception.FitFailureException;
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.exception.table.MissingCellsException;

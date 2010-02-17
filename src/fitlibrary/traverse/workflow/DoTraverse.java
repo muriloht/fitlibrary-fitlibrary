@@ -19,7 +19,6 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.definedAction.DefinedActionTraverse;
-import fitlibrary.definedAction.DefinedActionsRepositoryStandard;
 import fitlibrary.definedAction.UseTemplateTraverse;
 import fitlibrary.dynamicVariable.RecordDynamicVariables;
 import fitlibrary.exception.FitLibraryException;
@@ -55,7 +54,7 @@ public class DoTraverse extends DoTraverseInterpreter {
 	private final static String[] methodsThatAreVisibleAsActions = {
 		"calculate/0", "start/1", "constraint/0", "failingConstraint/0",
 		"useTemplate/1", "template/1", "abandonStorytest/0", "setStopOnError/1",
-		"becomesTimeout/0", "becomesTimeout/1",
+		"becomesTimeout/0", "becomesTimeout/1", "getTimeout/1",
 		"comment/0", "ignore/0", "ignored/0", "ignoreTable/0",
 		"clearDynamicVariables/0", "addDynamicVariablesFromFile/1", "recordToFile/1",
 		"setVariables/0", "to/1", "get/1", "getDynamicVariables/0", "getSymbolNamed/1", "setSymbolNamed/1",

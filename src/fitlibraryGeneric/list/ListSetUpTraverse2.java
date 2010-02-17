@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.NotSubclassFromClassFactoryMethod;

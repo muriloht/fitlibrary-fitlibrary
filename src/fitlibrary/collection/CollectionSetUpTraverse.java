@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.global.PlugBoard;

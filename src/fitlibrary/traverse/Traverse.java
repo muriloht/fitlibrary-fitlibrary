@@ -10,7 +10,6 @@ import java.lang.reflect.Method;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.differences.DifferenceInterface;
 import fitlibrary.differences.FitNesseDifference;
 import fitlibrary.differences.LocalFile;

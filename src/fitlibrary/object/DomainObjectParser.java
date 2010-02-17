@@ -5,7 +5,6 @@
 package fitlibrary.object;
 
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
 import fitlibrary.table.Cell;

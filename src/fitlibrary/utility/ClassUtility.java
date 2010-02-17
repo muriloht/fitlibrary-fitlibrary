@@ -14,7 +14,6 @@ import java.util.List;
 
 import fitlibrary.CompareFilesFixture;
 import fitlibrary.closure.Closure;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Row;

@@ -5,7 +5,6 @@
 package fitlibrary.object;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;

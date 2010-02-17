@@ -5,7 +5,6 @@
 package fitlibrary.traverse.workflow;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Row;
 

@@ -5,7 +5,6 @@
 package fitlibrary.traverse.function;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.BooleanMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;

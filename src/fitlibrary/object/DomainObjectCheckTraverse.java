@@ -5,7 +5,6 @@
 package fitlibrary.object;
 
 import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
