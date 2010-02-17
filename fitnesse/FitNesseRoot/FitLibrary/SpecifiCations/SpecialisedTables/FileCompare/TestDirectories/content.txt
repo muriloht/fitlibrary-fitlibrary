@@ -1,6 +1,4 @@
 !|fitlibrary.CompareFilesFixture|
-!2 Two empty directories are the same
-!|check|directory|testFiles/emptyDiry|same as|testFiles/alsoEmptyDiry|emptyDiry|
 !2 A directory with files is equal to itself
 !|check|directory|testFiles/selfDiry|same as|testFiles/selfDiry|selfDiry|
 !2 The two directories are equal
@@ -15,3 +13,5 @@
 !|check|directory|testFiles/diry5|same as|testFiles/diry7|!-diry5<ul><li>alsoEmpty.xls</li><li>empty.txt<ul><li><i>File shorter by 3 bytes than:</i></li><li>empty.txt</li></ul></li></ul>-!|
 !2 Differing directories due to different file contents
 !|check|directory|testFiles/diry7|same as|testFiles/diry8|!-diry7<ul><li>alsoEmpty.xls</li><li>empty.txt<ul><li><i>Files differ at byte position 2</i></li><li>empty.txt</li></ul></li></ul>-!|
+
+Note that git doesn't track empty directories, so all of the so-called empty directories used here have, in fact, a single file in them of 0 bytes.

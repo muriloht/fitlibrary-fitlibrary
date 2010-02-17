@@ -109,8 +109,10 @@
 <tr><td>check</td>
 <td><i>first cell string value</i></td>
 <td><table border="1" cellspacing="0">
-<tr><td><br/><ul>
-	<li>one</li>
+<tr><td>
+<ul>
+	<li>one
+</li>
 </ul>
 </td>
 <td><table border="1" cellspacing="0">
@@ -121,8 +123,10 @@
 </tr>
 </table>
 </td>
-<td class="pass"><br/><ul>
-	<li>one</li>
+<td class="pass">
+<ul>
+	<li>one
+</li>
 </ul>
 </td>
 </tr>
