@@ -21,14 +21,14 @@ import fitlibrary.utility.StringUtility;
 
 public class ParameterSubstitution {
 	private Tables tables;
-	private String absoluteFileName;
+	private String pageName;
 
-	public String getAbsoluteFileName() {
-		return absoluteFileName;
+	public String getPageName() {
+		return pageName;
 	}
-	public ParameterSubstitution(List<String> formalParameters, Tables tables, Evaluator evaluator, String absoluteFileName) {
+	public ParameterSubstitution(List<String> formalParameters, Tables tables, Evaluator evaluator, String pageName) {
 		this.tables = tables;
-		this.absoluteFileName = absoluteFileName;
+		this.pageName = pageName;
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
 		for (int c = 0; c < formalParameters.size(); c++) {
 			String formal = formalParameters.get(c);

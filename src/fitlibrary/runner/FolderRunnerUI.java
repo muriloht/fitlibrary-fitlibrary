@@ -28,7 +28,7 @@ public class FolderRunnerUI extends JFrame {
     }
     public FolderRunnerUI(final FolderRunner runner) {
         super("FolderRunner");
-        runner.addTestListener(new TestListener() {
+        runner.addTestListener(new StoryTestListener() {
             public void testComplete(boolean failing, String thePageCounts, String theAssertionCounts) {
                 giveFeedbackToUser(failing,thePageCounts,theAssertionCounts);
             }

@@ -116,7 +116,11 @@ public class DefinedActionCaller extends DoCaller {
 			else
 				for (int i = 0; i < row.size(); i += 2)
 					row.cell(i).ignore(testResults);
-			row.addCell(new Cell("Defined action call:",body));
+			String pageName = parameterSubstitution.getPageName();
+			if (pageName.startsWith("from storytest"))
+				row.addCell(new Cell("Defined action call:",body));
+			else
+				row.addCell(new Cell("Defined action call <a href='"+pageName+"'>."+pageName+"</a>:",body));
 		} else if (!testResults.isAbandoned())
 			row.passKeywords(testResults);
 	}

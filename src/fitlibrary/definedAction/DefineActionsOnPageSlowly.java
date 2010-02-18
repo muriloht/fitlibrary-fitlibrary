@@ -11,6 +11,7 @@ import fit.Parse;
 import fitlibrary.DefineAction;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
+import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -63,29 +64,17 @@ public class DefineActionsOnPageSlowly extends Traverse {
 		}
 		return "";
 	}
-	// Warning: 'orrible code due to Parse!
-	protected void parseDefinitions(Tables tables, String className, String absoluteFileName) {
-		Tables innerTables = tables;
-		for (int i = 0; i < tables.size(); i++) {
-			Table nextTable = tables.table(i);
-			if (i > 0 && isHR(nextTable.parse.leader)) {
-				Table lastTableInDefinition = tables.table(i-1);
-				Parse more = lastTableInDefinition.parse.more;
-				String trailer = lastTableInDefinition.parse.trailer;
-				lastTableInDefinition.parse.more = null;
-				lastTableInDefinition.parse.trailer = "";
-				defineAction(innerTables,className,absoluteFileName);
-				lastTableInDefinition.parse.more = more;
-				lastTableInDefinition.parse.trailer = trailer;
-				innerTables = new Tables(nextTable);
-			} else if (isHR(nextTable.parse.trailer) || i == tables.size() - 1)
-				defineAction(innerTables,className,absoluteFileName);
-		}
+	protected void parseDefinitions(Tables tables, final String className, final String pathName) {
+		new DefinedActionBodyCollector().parseDefinitions(tables, new DefineActionBodyConsumer() {
+			@Override
+			public void addAction(Tables innerTables) {
+				defineAction(innerTables,className,pathName);
+			}
+		});
 	}
-	private void defineAction(Tables innerTables, String className, String absoluteFileName) {
-		Table defineActionTable = createDefineActionTable(innerTables);
-		DefineAction defineAction = new DefineAction(className,absoluteFileName);
-		defineAction.interpret(defineActionTable, new TestResults());
+	protected void defineAction(Tables innerTables, String className, String pathName) {
+		DefineAction defineAction = new DefineAction(className,pathName);
+		defineAction.interpret(createDefineActionTable(innerTables), new TestResults());
 	}
 	private Table createDefineActionTable(Tables innerTables) {
 		Table defineActionTable = new Table();
@@ -96,9 +85,6 @@ public class DefineActionsOnPageSlowly extends Traverse {
 		row.addCell(new Cell(innerTables));
 		defineActionTable.addRow(row);
 		return defineActionTable;
-	}
-	private boolean isHR(String leader) {
-		return leader != null && (leader.contains("<hr>") || leader.contains("<hr/>"));
 	}
 	protected File fitNesseDiry() {
 		return new File(FITNESSE_DIRY);

@@ -43,7 +43,7 @@ public class FolderRunner {
     private static final Set<String> TEARDOWNS = new HashSet<String>(Arrays.asList(
             new String[]{"TEARDOWN.XLS", "TEARDOWN.HTML", "TEARDOWN.HTM"}));
     private Report topReport;
-    private List<TestListener> testListeners = new ArrayList<TestListener>();
+    private List<StoryTestListener> testListeners = new ArrayList<StoryTestListener>();
     private File inDiry;
     private File reportDiry;
 	private File suiteFile;
@@ -320,19 +320,19 @@ public class FolderRunner {
         inDiry = new File(testDiryName);
         reportDiry = new File(reportDiryName);
     }
-    public void addTestListener(TestListener listener) {
+    public void addTestListener(StoryTestListener listener) {
         testListeners.add(listener);
     }
     private void giveFeedbackToUser() {
-        for (TestListener listener : testListeners)
+        for (StoryTestListener listener : testListeners)
         	listener.testComplete(topReport.failing(),topReport.getCounts(),topReport.getAssertionCounts());
     }
     private void reportOutput(String name, String out, String message) {
-        for (TestListener listener : testListeners)
+        for (StoryTestListener listener : testListeners)
         	listener.reportOutput(name,out,message);
     }
     private void suiteFinished() {
-        for (TestListener listener : testListeners)
+        for (StoryTestListener listener : testListeners)
         	listener.suiteComplete();
     }
     public void exit() {

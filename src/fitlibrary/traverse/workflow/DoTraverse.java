@@ -60,7 +60,9 @@ public class DoTraverse extends DoTraverseInterpreter {
 		"setVariables/0", "to/1", "get/1", "getDynamicVariables/0", "getSymbolNamed/1", "setSymbolNamed/1",
 		"setExpandDefinedActions/1", // defined in superclass
 		"selectRandomly/1",
-		"defineAction/0", "defineAction/1", "defineActionsAt/1", "defineActionsSlowlyAt/1", "clearDefinedActions/0",
+		"defineAction/0", "defineAction/1", "defineActionsAt/1",
+		"defineActionsAtFrom/2",
+		"defineActionsSlowlyAt/1", "clearDefinedActions/0", 
 		"startLogging/1", "logMessage/1", "showAfterTable/1",
 		"addDynamicVariablesFromUnicodeFile/1", "file/1",
 		"xref/1", "harvestUsingPatternFrom/3",
@@ -208,6 +210,9 @@ public class DoTraverse extends DoTraverseInterpreter {
 	}
 	public DefineActionsOnPage defineActionsAt(String pageName) {
 		return new DefineActionsOnPage(pageName);
+	}
+	public DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
+		return new DefineActionsOnPage(pageName,rootLocation);
 	}
 	public void clearDefinedActions() {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();

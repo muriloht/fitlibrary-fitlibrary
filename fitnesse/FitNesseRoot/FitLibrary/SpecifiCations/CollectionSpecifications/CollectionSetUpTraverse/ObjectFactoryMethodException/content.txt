@@ -17,10 +17,11 @@
 <br/><table border="1" cellspacing="0">
 <tr><td colspan="2"><i>create</i></td>
 </tr>
-<tr><td class="error"><i>bad</i><hr/> <span class="fit_label"></span></td>
+<tr><td><i>bad</i></td>
 <td><i>method</i></td>
 </tr>
-<tr><td class="ignore">1</td>
-<td class="ignore">2</td>
+<tr><td class="error">1<hr><pre><div class="fit_stacktrace">
+</div></pre></td>
+<td>2</td>
 </tr>
 </table>-!|

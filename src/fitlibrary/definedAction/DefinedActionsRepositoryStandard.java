@@ -89,7 +89,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 			throw new FitLibraryException("Duplicate defined action: " + name
 					+ " defined in " + absoluteFileName
 					+ " but already defined in "
-					+ map.get(definedAction).getAbsoluteFileName());
+					+ map.get(definedAction).getPageName());
 		map.put(definedAction, parameterSubstitution);
 	}
 	protected void defineCamel(Row parametersRow, String wikiClassName,
@@ -102,7 +102,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 			throw new FitLibraryException("Duplicate defined action: " + name
 					+ "/" + parametersRow.argumentCount() + " defined in "
 					+ absoluteFileName + " but already defined in "
-					+ map.get(definedAction).getAbsoluteFileName());
+					+ map.get(definedAction).getPageName());
 		map.put(definedAction, parameterSubstitution);
 	}
 	protected Map<DefinedAction, ParameterSubstitution> getClassMapForPlain(String wikiClassName) {

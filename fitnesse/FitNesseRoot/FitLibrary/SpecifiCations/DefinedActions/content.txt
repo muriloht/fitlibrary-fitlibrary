@@ -28,6 +28,8 @@ See .FitLibrary.UserGuide.FitLibraryByExample.DefinedActions for further details
 ^DefinedInHierarchy
 ^DefinedInMixedAndRepetitiveHierarchy
 
+^DefinedWithRootLocation
+
 ^AbandonInDefinedAction
 ^AbandonInNestedDefinedAction
 ^StopOnErrorInDefinedAction

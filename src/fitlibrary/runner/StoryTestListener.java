@@ -4,7 +4,7 @@
 */
 package fitlibrary.runner;
 
-public interface TestListener {
+public interface StoryTestListener {
     void testComplete(boolean failing, String pageCounts, String assertionCounts);
     void reportOutput(String name, String out, String output);
     void suiteComplete();

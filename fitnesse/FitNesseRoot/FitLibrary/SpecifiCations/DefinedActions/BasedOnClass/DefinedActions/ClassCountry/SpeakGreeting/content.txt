@@ -9,4 +9,3 @@
 |say something|
 
 |set|somethingGreeting|to|there i've said something!|
-----

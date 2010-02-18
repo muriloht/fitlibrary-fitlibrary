@@ -177,6 +177,14 @@ public class TestSimpleWikiTranslator {
 		assertThat(SimpleWikiTranslator.translate("|a|"),
 				is("<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>"));
 	}
+	@Test
+	public void secondDefinedActionBodyIsEmpty() {
+		assertThat(SimpleWikiTranslator.translate("|a|\n\n|comment|\n----\n|b|\n"),
+				is("<html>\n<br/>"+
+				   "<table>\n<tr><td>a</td></tr>\n</table>\n<br/><br/>\n"+
+				   "<table>\n<tr><td>comment</td></tr>\n</table>\n<br/><hr/>\n"+
+				   "<table>\n<tr><td>b</td></tr>\n</table>\n<br/></html>"));
+	}
 
 	private void createFile(String fileName, String... wiki) {
 		File file = new File(fileName);

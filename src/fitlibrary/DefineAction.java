@@ -14,17 +14,17 @@ import fitlibrary.utility.TestResults;
 
 public class DefineAction extends Traverse {
 	private String wikiClassName = "";
-	private String absoluteFileName;
+	private String pageName;
 	
-    public DefineAction() {
-		this.absoluteFileName = "from storytest table";
+	public DefineAction() {
+		this.pageName = "from storytest table";
 	}
     public DefineAction(String className) {
 		this(className,"from storytest table");
 	}
-    public DefineAction(String className, String absoluteFileName) {
+    public DefineAction(String className, String pathName) {
 		this.wikiClassName = className;
-		this.absoluteFileName = absoluteFileName;
+		this.pageName = pathName;
 	}
     @Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
@@ -35,8 +35,7 @@ public class DefineAction extends Traverse {
 			return null;
 		}
     }
-    public Object interpret(Table table, TestResults testResults)
-	{
+    public Object interpret(Table table, TestResults testResults) {
 		if (table.size() < 2 || table.size() > 3)
     		throw new FitLibraryException("Table for DefineAction needs to be two or three rows, but is "+table.size()+".");
     	boolean hasClass = false;
@@ -56,6 +55,9 @@ public class DefineAction extends Traverse {
     	processDefinition(table.row(1).cell(0).innerTables(), testResults);
     	return null;
 	}
+    public String getPageName() {
+		return pageName;
+	}
 	private void processDefinition(Tables tables, TestResults testResults) {
 		Table headerTable = tables.table(0);
 		if (headerTable.size() == 2) {
@@ -64,7 +66,7 @@ public class DefineAction extends Traverse {
 		}
 
 		if (headerTable.size() > 1)
-			throw new FitLibraryException("Unexpected rows in first table of defined action inpage at "+absoluteFileName);
+			throw new FitLibraryException("Unexpected rows in first table of defined action inpage at "+pageName);
 		Row parametersRow = headerTable.row(0);
 		parametersRow.passKeywords(testResults);
 		Tables body = tables.followingTables();
@@ -75,8 +77,8 @@ public class DefineAction extends Traverse {
 		}
 		
 		List<String> formalParameters = getDefinedActionParameters(parametersRow);
-		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,body.deepCopy(),this,absoluteFileName);
-		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, absoluteFileName);
+		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,body.deepCopy(),this,pageName);
+		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, pageName);
 	}
 	private void processNamedParameterDefinedAction(Table headerTable, Tables body) {
 		String definedActionName = headerTable.row(0).cell(0).text();

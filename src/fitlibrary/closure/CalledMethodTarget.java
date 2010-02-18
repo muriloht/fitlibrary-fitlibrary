@@ -351,7 +351,7 @@ public class CalledMethodTarget implements MethodTarget {
 	    Class<?> returnType = getReturnType();
 		return returnType.isPrimitive() ||
 			   returnType == Boolean.class ||
-			   returnType.isInstance(Number.class) ||
+			   Number.class.isAssignableFrom(returnType) ||
 			   returnType == Character.class;
 	}
 	public Object invokeAndWrap(Row row, TestResults testResults) throws Exception {
