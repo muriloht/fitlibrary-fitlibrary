@@ -8,7 +8,7 @@
 |!3 ^UserGuide|''User guide for FitLibrary''|
 |!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 |!3 ^SuiteFixture|''Details of suite fixtures''|
-|!3 ^CoreFitSpecifications|''Storytests that specify the core parts of Fit''|
+|!3 ^SpecifiCations.CoreFitSpecifications|''Storytests that specify the core parts of Fit''|
 |!3 ^FitBook|''Example storytests from the [[Fit Book][.FitLibrary.GlosSary.FitBook]]''|
 |!3 ^RentEz|''An extended example of storytests for an application. These build on the example in the [[Fit Book][.FitLibrary.GlosSary.FitBook]].''|
 |!3 ^WhatIsNew|''What's new in this release.''|

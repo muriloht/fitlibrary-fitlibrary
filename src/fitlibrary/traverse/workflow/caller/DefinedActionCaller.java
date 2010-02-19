@@ -117,11 +117,18 @@ public class DefinedActionCaller extends DoCaller {
 				for (int i = 0; i < row.size(); i += 2)
 					row.cell(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
-			if (pageName.startsWith("from storytest"))
-				row.addCell(new Cell("Defined action call:",body));
-			else
-				row.addCell(new Cell("Defined action call <a href='"+pageName+"'>."+pageName+"</a>:",body));
+			row.addCell(new Cell(link(pageName),body));
 		} else if (!testResults.isAbandoned())
 			row.passKeywords(testResults);
+	}
+	public static String link(String pageName) {
+		if (pageName.startsWith("from storytest"))
+			return "Defined action call:";
+		return "Defined action call <a href='"+pageName+"'>."+pageName+"</a>:";
+	}
+	public static String link2(String pageName) {
+		if (pageName.startsWith("from storytest"))
+			return "storytest";
+		return "<a href='"+pageName+"'>."+pageName+"</a>:";
 	}
 }

@@ -13,6 +13,7 @@ import fit.FitServerBridge;
 import fit.FixtureListener;
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
@@ -26,28 +27,25 @@ public class DebugPage {
 	private static String FITNESSE_URL = "http://localhost:8080/";
 	
 	protected FixtureListener fixtureListener = new FixtureListener() {
-		public void tableFinished(@SuppressWarnings("unused") Parse table) {
+		public void tableFinished(Parse table) {
 			tablesFinished++;
 		}
-		public void tablesFinished(@SuppressWarnings("unused") Counts count) {
+		public void tablesFinished(Counts count) {
 			storytestsFinished++;
 		}
 	};
 	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(fixtureListener));
-	private GrabPage grabPage;
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.DefinedActions.AbandonInDefinedAction"
+				"FitLibrary.SpecifiCations.CoreFitSpecifications.ActionFixture.UsualOperation",
+				"FitLibrary.SpecifiCations.CoreFitSpecifications.ActionFixture.SelfStarter"
 		};
-		run(FITNESSE_URL, pageNames);
+		run(pageNames);
 	}
-	public static void run(String url, String[] pageNames) throws Exception {
-		DebugPage runPage = new DebugPage(url);
+	public static void run(String[] pageNames) throws Exception {
+		DebugPage runPage = new DebugPage();
 		runPage.runs(pageNames);
-	}
-	public DebugPage(String url) {
-		grabPage = new GrabPage(url);
 	}
 	public void runs(String[] pageNames) throws FitParseException, IOException {
 		tablesFinished = 0;
@@ -63,9 +61,9 @@ public class DebugPage {
 					" tables but instead got "+tablesFinished);
 	}
 	public void run(String pageName) throws IOException, FitParseException {
-		String html = grabPage.grabPage(pageName);
-		Parse parse = new Parse(html);
+		String html = new ParallelFitNesseRepository("fitnesse").getTest(pageName).getContent();
 		System.out.println("\n----------\nHTML for "+pageName+"\n----------\n"+html);
+		Parse parse = new Parse(html);
 		Tables tables = new Tables(parse);
 		expectedTablesFinished += tables.size();
 		FitServerBridge.setFitNesseUrl(FITNESSE_URL); // Yuck passing important info through a global. See method for links.

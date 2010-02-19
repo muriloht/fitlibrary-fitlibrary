@@ -38,5 +38,6 @@ See .FitLibrary.UserGuide.FitLibraryByExample.DefinedActions for further details
 
 ^WrongCall
 ^BlankParameter
+^DuplicatedParameter
 
 ^NestedTablesAsArguments

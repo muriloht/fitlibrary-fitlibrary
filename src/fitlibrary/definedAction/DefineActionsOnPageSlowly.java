@@ -64,16 +64,16 @@ public class DefineActionsOnPageSlowly extends Traverse {
 		}
 		return "";
 	}
-	protected void parseDefinitions(Tables tables, final String className, final String pathName) {
+	protected void parseDefinitions(Tables tables, final String className, final String pageName) {
 		new DefinedActionBodyCollector().parseDefinitions(tables, new DefineActionBodyConsumer() {
 			@Override
 			public void addAction(Tables innerTables) {
-				defineAction(innerTables,className,pathName);
+				defineAction(innerTables,className,pageName);
 			}
 		});
 	}
-	protected void defineAction(Tables innerTables, String className, String pathName) {
-		DefineAction defineAction = new DefineAction(className,pathName);
+	protected void defineAction(Tables innerTables, String className, String pageName) {
+		DefineAction defineAction = new DefineAction(className,pageName);
 		defineAction.interpret(createDefineActionTable(innerTables), new TestResults());
 	}
 	private Table createDefineActionTable(Tables innerTables) {

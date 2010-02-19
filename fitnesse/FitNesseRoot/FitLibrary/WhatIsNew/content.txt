@@ -1,3 +1,41 @@
+!1 February 2010 Version
+#
+#
+!2 Additions
+#
+!3 Fit included
+#
+ * Fit is now included in the !-FitLibrary-! download. 
+ * Fit will continue to run under !-FitNesse-! but !-FitNesse-! will no longer come with the Fit framework code included.
+ * Fir variables can be accessed from !-FitLibrary-! - see below.
+#
+!3 Loading defined actions
+#
+ * An action has been added to allow defined actions to be loaded quickly when the !-FitNesseRoot-! directory is not in the usual place.
+ * The extra argument is a relative or absolute location for the !-FitNesseRoot-! directory
+ * See .FitLibrary.SpecifiCations.DefinedActions.DefinedWithRootLocation
+ * For example:
+
+|''define actions at''|.FitLibrary.SpecifiCations.DefinedActions.OneDefinedAction|''from''|!-../whereIkeepFitNesse/FitNesseRoot-!|
+#
+!3 Link to defining page for defined action
+#
+ * Consider when a defined action is called in a storytest
+ * If there is an error in the defined action body, or if the body is to be expanded regardless, this is shown in an added cell.
+ * This has been changed so that a link is included back to the page in which the defined action was given.
+ * For example, see .FitLibrary.SpecifiCations.DefinedActions.DefinedElsewhereExpanded
+#
+!3 Using Fit variables in !-FitLibrary-!
+#
+ * From !-FitLibrary-!, it is now possible set change and access Fit variables.
+ * See .FitLibrary.SpecifiCations.DynamicVariables.SpecifyConvertFromToFitSymbols
+#
+!3 Bug fixes
+#
+ * !-DebugPage-!, a Java class that's handy for running a storytest from within a debugger, works again with !-FitNesse-!. It failed because of changes to the !-FitNesse-! code.
+ * All subclasses of class ''Number'' are now treated as primitive types and are not ${autoWrapped} by !-DoFixture-!.
+ * Checks are now made for blank parameters and for duplicated parameters in the definition of a defined action. See .FitLibrary.SpecifiCations.DefinedActions.BlankParameter and .FitLibrary.SpecifiCations.DefinedActions.DuplicatedParameter
+
 !1 October 2009 Version
 #
 ''!-FitLibrary-!'' now depends on Java 6.

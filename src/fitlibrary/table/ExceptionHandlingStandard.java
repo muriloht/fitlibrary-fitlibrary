@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import fit.Fixture;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.traverse.Traverse;
 
@@ -23,6 +24,8 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
 		Throwable exception = unwrapThrowable(throwable);
         if (exception instanceof IgnoredException)
             return "";
+        if (exception instanceof FitLibraryExceptionInHtml)
+        	return "<hr/>" + exception.getMessage();
         if (exception instanceof FitLibraryException)
             return "<hr/>" + Fixture.label(Traverse.escapeHtml(exception.getMessage()));
         final StringWriter buf = new StringWriter();

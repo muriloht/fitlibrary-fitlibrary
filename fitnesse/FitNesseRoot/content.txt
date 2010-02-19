@@ -1,5 +1,5 @@
-!path fitlibrary.jar
-#!path C:\Documents and Settings\RimuResearch\My Documents\work\FitLibrary\classes
+#!path fitlibrary.jar
+!path ../bin
 !path fitnesse.jar
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
 

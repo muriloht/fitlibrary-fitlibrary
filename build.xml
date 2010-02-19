@@ -5,7 +5,7 @@
 	<property name="bin" value="${home}/bin" />
 	<property name="test.src" value="${home}/test" />
 	<property name="fitnesse.dir" value="${home}/fitnesse" />
-	<property name="port" value="8080" />
+	<property name="port" value="8980" />
 	
 	<!-- batch runner properties -->
 	<property name="showpassesinreport" value="showpasses" />   <!-- set any value here to switch this on, leave blank to switch off -->

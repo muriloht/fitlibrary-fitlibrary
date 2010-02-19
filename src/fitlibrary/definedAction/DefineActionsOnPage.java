@@ -7,8 +7,9 @@ package fitlibrary.definedAction;
 import java.io.File;
 import java.util.List;
 
+import fit.Fixture;
 import fit.Parse;
-import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.FileIO;
@@ -30,7 +31,7 @@ public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 		try {
 			String errors = processPagesAsFiles(topPageName.substring(1));
 			if (!"".equals(errors))
-				throw new FitLibraryException(errors);
+				throw new FitLibraryExceptionInHtml(Fixture.label("<ul>"+errors+"</ul>"));
 		} catch (Exception e) {
 			tableWithPageName.error(testResults, e);
 		}
@@ -50,7 +51,7 @@ public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 					parseDefinitions(new Tables(new Parse(html)),determineClassName("",fileName),fileToPageName(file));
 				}
 			} catch (Exception e) {
-				errors += e.getMessage()+". \n";
+				errors += "<li>"+e.getMessage()+"</li>\n";
 			}
 		}
 		return errors;

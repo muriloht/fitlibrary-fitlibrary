@@ -31,5 +31,7 @@
 |^AlienEvaluator|''How ${fitLibrary} inter-operates with ${fit}''|
 |^ExperiMental|''Some experimental features that may well be dropped''|
 
+|^CoreFitSpecifications|''Specifications for the Java version of Fit''|
+
 Contents in alphabetical order:
 |!contents|
