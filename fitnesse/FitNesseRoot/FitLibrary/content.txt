@@ -1,5 +1,10 @@
 !3 Invented and developed in Java by [[''Rick Mugridge''][.FitLibrary.GlosSary.RickMugridge]], http://www.rimuresearch.com
 
+!1 Temporarily disabled tests:
+
+.FitLibrary.SpecifiCations.DefinedActions.BlankParameter
+.FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.UseTheTextThisInClassBasedActions
+
 |!3 ^UserGuide|''User guide for FitLibrary''|
 |!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 |!3 ^SuiteFixture|''Details of suite fixtures''|

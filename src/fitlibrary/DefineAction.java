@@ -64,7 +64,6 @@ public class DefineAction extends Traverse {
 			processNamedParameterDefinedAction(headerTable,tables.followingTables());
 			return;
 		}
-
 		if (headerTable.size() > 1)
 			throw new FitLibraryException("Unexpected rows in first table of defined action inpage at "+pageName);
 		Row parametersRow = headerTable.row(0);
@@ -84,8 +83,12 @@ public class DefineAction extends Traverse {
 		String definedActionName = headerTable.row(0).cell(0).text();
 		ArrayList<String> parameters = new ArrayList<String>();
 		Row parametersRow = headerTable.row(1);
-		for (int c = 0; c < parametersRow.size(); c++)
-			parameters.add(parametersRow.cell(c).text());
+		for (int c = 0; c < parametersRow.size(); c++) {
+			String parameter = parametersRow.cell(c).text();
+			if ("".equals(parameter))
+				throw new FitLibraryException("Parameter names cannot be blank.");
+			parameters.add(parameter);
+		}
 		TemporaryPlugBoardForRuntime.definedActionsRepository().defineMultiDefinedAction(definedActionName, parameters, body.deepCopy(), "");
 	}
 	private List<String> getDefinedActionParameters(Row parametersRow) {
