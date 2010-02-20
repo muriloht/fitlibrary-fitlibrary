@@ -6,9 +6,12 @@ package fitlibraryGeneric.object;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
+import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.object.Finder;
 import fitlibrary.ref.EntityReference;
@@ -38,15 +41,15 @@ public class GenericFinder implements Finder {
 		String findMethodSignature = "public "+shortClassName+" find"+shortClassName+"(String key) { } ";
 		String genericFindMethodSignature = "public "+shortClassName+" find"+shortClassName+"(String key, Type type) { } ";
 		final String showMethodName = ExtendedCamelCase.camel(SHOW+" "+shortClassName);
-		String potentialClasses = PlugBoard.lookupTarget.identifiedClassesInOutermostContext(evaluator, true);
+		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.identifiedClassesInOutermostContext(evaluator, true);
 		
-		findExceptionMessage = "EITHER "+shortClassName+
-			" is (1) a Value Object. So missing parse method: "+
-			"public static "+shortClassName+" parse(String s) { } in class "+typed.getClassName()+
-			"; OR (2) an Entity. So missing finder method: "+findMethodSignature;
+		findExceptionMessage = "Either "+shortClassName+
+			" is <ul><li>A <b>Value Object</b>. So missing parse method: "+
+			"public static "+shortClassName+" parse(String s) { }<br/>in class "+typed.getClassName()+
+			"; or</li><li><b>An Entity</b>. So missing finder method: "+findMethodSignature;
 		if (typed.isGeneric())
-			findExceptionMessage += " or missing generic finder method: "+genericFindMethodSignature;
-		findExceptionMessage += "in "+potentialClasses;
+			findExceptionMessage += " or</li>Missing generic finder method: "+genericFindMethodSignature;
+		findExceptionMessage += ", possibly in classes:"+names(potentialClasses)+"</li></ul>";
 				
 		findIntMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, findName, intArg);
 		findStringMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, findName, stringArg);
@@ -58,6 +61,9 @@ public class GenericFinder implements Finder {
 			genericShowMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, showMethodName, genericShowArg);
 		}
 	}
+	private String names(List<Class<?>> classes) {
+		return MissingMethodException.htmlListOfClassNames(classes);
+	}
 	private Object callFindStringMethod(String text) throws Exception {
         if (genericFindStringMethod != null)
             return genericFindStringMethod.invoke(new Object[]{ text,typed.asType() });
@@ -65,7 +71,7 @@ public class GenericFinder implements Finder {
         	return findStringMethod.invoke(new String[]{ text });
         if ("".equals(text))
         	return null;
-        throw new FitLibraryException(findExceptionMessage);
+        throw new FitLibraryExceptionInHtml(findExceptionMessage);
     }
 	public Object find(final String text) throws Exception, IllegalAccessException, InvocationTargetException {
 		if (findIntMethod != null) {

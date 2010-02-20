@@ -17,9 +17,9 @@
 |^SuiteFixture|''How the same suite of storytests can be used to test a system in very different ways''|
 |^DynamicVariables|''How variables can be used in storytests at runtime''|
 |^DefinedActions|''Parameterised actions can be defined within storytests''|
-|^DefinedActionsWithNamedParameters|''Parameterised actions with optional named parameters'|
+|^DefinedActionsWithNamedParameters|''(Multi Defined Actions) Parameterised actions with optional named parameters''|
 |>SelectFixture|''Switches between several named do fixtures''|
-|^GoingIntoFlow|''Using !-FitLibraryServer-!, it's no longer necessary for the first table to have a !-DoFixture-! table in order to be in flow''|
+|^GoingIntoFlow|''Using !-FitLibraryServer-!, it's not necessary for the first table to have a !-DoFixture-! table in order to be in flow''|
 |[[!-ShowAfter-!][>DoWorkflow.SpecialActions.TestShowAfter]]|''Logging useful information after the current table''|
 |^PlainTextInsteadOfTables|''${doFixture} actions can be written in plain text, instead of in tables''|
 

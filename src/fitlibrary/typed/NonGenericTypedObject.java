@@ -33,7 +33,7 @@ public class NonGenericTypedObject implements TypedObject {
 	public Object getSubject() {
 		return subject;
 	}
-	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name, int argCount, Evaluator evaluator, String signature) {
+	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name, int argCount, Evaluator evaluator, List<String> signatures) {
 		CalledMethodTarget result = optionallyFindMethodOnTypedObject(name,argCount,evaluator, true);
 		if (result != null)
 			return result;
@@ -43,16 +43,19 @@ public class NonGenericTypedObject implements TypedObject {
 		} catch (MissingMethodException e) {
 			// Provide a more general error message
 		}
-		throw new MissingMethodException(signature,PlugBoard.lookupTarget.identifiedClassesInSUTChain(subject),"");
+		throw new MissingMethodException(signatures,PlugBoard.lookupTarget.identifiedClassesInSUTChain(subject));
+	}
+	private List<String> signatures(String... signature) {
+		return Arrays.asList(signature);
 	}
 	public CalledMethodTarget findGetterOnTypedObject(String propertyName, Evaluator evaluator) {
 		CalledMethodTarget target = optionallyFindGetterOnTypedObject(propertyName,evaluator);
     	if (target != null)
     		return target;
-    	throw new MissingMethodException("public ResultType "+ExtendedCamelCase.camel("get "+propertyName)+"() { }"+
-		"OR: public ResultType "+ExtendedCamelCase.camel("is "+propertyName)+"() { }",
-    			PlugBoard.lookupTarget.identifiedClassesInSUTChain(subject),
-    			"DomainObject");
+    	throw new MissingMethodException(
+    			signatures("public ResultType "+ExtendedCamelCase.camel("get "+propertyName)+"() { }",
+    					"public ResultType "+ExtendedCamelCase.camel("is "+propertyName)+"() { }"),
+    			PlugBoard.lookupTarget.identifiedClassesInSUTChain(subject));
 	}
 	public CalledMethodTarget optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
 		String getMethodName = ExtendedCamelCase.camel("get "+propertyName);

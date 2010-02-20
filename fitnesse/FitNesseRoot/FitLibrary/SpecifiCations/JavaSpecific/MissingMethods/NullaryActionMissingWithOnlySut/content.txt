@@ -12,12 +12,12 @@
 <tr><td>fitlibrary.specify.missingMethod.InJustSut</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>actions</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td class="error"><b>check</b><hr/> <span class="fit_label">Missing method: public TypeOfResult getTotal() { } OR: public TypeOfResult total() { } in class fitlibrary.specify.missingMethod.InJustSut</span></td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="error"><b>check</b><hr/> <span class="fit_label">Missing method, possibly: <ul><li>public Type getTotal() { }</li><li>public Type total() { }</li></ul><hr/>In:<ul><li>fitlibrary.specify.missingMethod.InJustSut</li></ul></span></td>
 <td><i>total</i></td>
 <td>4</td>
 </tr>

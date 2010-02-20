@@ -25,7 +25,7 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
         if (exception instanceof IgnoredException)
             return "";
         if (exception instanceof FitLibraryExceptionInHtml)
-        	return "<hr/>" + exception.getMessage();
+        	return "<hr/>" + Fixture.label(exception.getMessage());
         if (exception instanceof FitLibraryException)
             return "<hr/>" + Fixture.label(Traverse.escapeHtml(exception.getMessage()));
         final StringWriter buf = new StringWriter();

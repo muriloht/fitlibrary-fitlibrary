@@ -583,7 +583,7 @@ public class DoTraverse extends DoTraverseInterpreter {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseCheck");
-		CalledMethodTarget target = findMethodFromRow(row,1, less);
+		CalledMethodTarget target = findMethodFromRow(row,1,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);

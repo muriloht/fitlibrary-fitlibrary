@@ -1,9 +1,12 @@
 package fitlibrary.object;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
+import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.ref.EntityReference;
 import fitlibrary.traverse.Evaluator;
@@ -27,24 +30,27 @@ public class NonGenericFinder implements Finder {
 		final Class<?>[] showArg = { typed.asClass() };
 		final String findName = ExtendedCamelCase.camel(FIND+" "+shortClassName);
 		final String showMethodName = ExtendedCamelCase.camel(SHOW+" "+shortClassName);
-		String potentialClasses = PlugBoard.lookupTarget.identifiedClassesInOutermostContext(evaluator, true);
+		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.identifiedClassesInOutermostContext(evaluator, true);
 		
-		findExceptionMessage = "EITHER "+shortClassName+
-			" is (1) a Value Object. So missing parse method: "+
+		findExceptionMessage = "Either "+shortClassName+
+			" is<ul><li> A <b>Value Object</b>. So missing parse method: "+
 			"public static "+shortClassName+" parse(String s) { } in class "+typed.getClassName()+
-			"; OR (2) an Entity. So missing finder method: "+
-			"public "+shortClassName+" find"+shortClassName+"(String key) { } in "+potentialClasses;
+			"; or </li></li>An Entity. So missing finder method: "+
+			"public "+shortClassName+" find"+shortClassName+"(String key) { }</li></ul>In:"+names(potentialClasses);
 		
 		findIntMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, findName, intArg);
 		findStringMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, findName, stringArg);
 		showMethod = PlugBoard.lookupTarget.findFixturingMethod(evaluator, showMethodName, showArg);
+	}
+	private String names(List<Class<?>> classes) {
+		return MissingMethodException.htmlListOfClassNames(classes);
 	}
 	private Object callFindStringMethod(String text) throws Exception {
         if (findStringMethod != null)
             return findStringMethod.invoke(new String[]{ text });
         if ("".equals(text))
         	return null;
-        throw new FitLibraryException(findExceptionMessage);
+        throw new FitLibraryExceptionInHtml(findExceptionMessage);
     }
 	public Object find(final String text) throws Exception, IllegalAccessException, InvocationTargetException {
 		if (findIntMethod != null) {

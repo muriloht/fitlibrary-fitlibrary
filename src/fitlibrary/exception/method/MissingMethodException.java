@@ -4,21 +4,44 @@
 */
 package fitlibrary.exception.method;
 
-import fitlibrary.exception.FitLibraryExceptionWithHelp;
+import java.util.List;
 
-public class MissingMethodException extends FitLibraryExceptionWithHelp {
-	private String signature;
-	private String classes;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
 
-	public MissingMethodException(String signature, String classes, String link) {
-		super("Missing method: "+signature+" in "+classes,link);
-		this.signature = signature;
+public class MissingMethodException extends FitLibraryExceptionInHtml {
+	private List<String> signatures;
+	private List<Class<?>> classes;
+
+	public MissingMethodException(List<String> signatures, List<Class<?>> classes) {
+		super("Missing method, possibly: "+htmlListOfSignatures(signatures)+"<hr/>In:"+htmlListOfClassNames(classes));
+		this.signatures = signatures;
 		this.classes = classes;
 	}
-	public String getMethodSignature() {
-		return signature;
+	public List<String> getMethodSignature() {
+		return signatures;
 	}
-	public String getClasses() {
+	public List<Class<?>> getClasses() {
 		return classes;
+	}
+	public String htmlListOfClassNames() {
+		return htmlListOfClassNames(classes);
+	}
+	public static String htmlListOfClassNames(List<Class<?>> classes) {
+		String result = "<ul>";
+		for (Class<?> c : classes)
+			result += "<li>"+c.getCanonicalName()+"</li>";
+		return result+"</ul>";
+	}
+	public String htmlInnerListOfSignature() {
+		String result = "";
+		for (String s : signatures)
+			result += "<li>"+s+"</li>";
+		return result;
+	}
+	public static String htmlListOfSignatures(List<String> signatures) {
+		String result = "<ul>";
+		for (String s : signatures)
+			result += "<li>"+s+"</li>";
+		return result+"</ul>";
 	}
 }

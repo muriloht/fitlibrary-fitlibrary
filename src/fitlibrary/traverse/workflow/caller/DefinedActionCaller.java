@@ -28,7 +28,6 @@ public class DefinedActionCaller extends DoCaller {
 		this.doTraverse = doTraverse;
 		methodName = row.methodNameForCamel(doTraverse);
 		actualArgs = actualArgs(row);
-		//		System.out.println("DefinedActionCaller.methodName : '"+methodName+"'");
 		parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel(methodName, actualArgs.size());
 		if (parameterSubstitution == null) {
 			Object objectName = doTraverse.getDynamicVariable("this");

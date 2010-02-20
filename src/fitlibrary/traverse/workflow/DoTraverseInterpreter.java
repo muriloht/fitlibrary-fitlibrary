@@ -15,6 +15,7 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.collection.CollectionSetUpTraverse;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.AmbiguousActionException;
 import fitlibrary.exception.method.AmbiguousNameException;
@@ -29,14 +30,19 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.ActionCaller;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
+import fitlibrary.traverse.workflow.caller.DoActionCaller;
 import fitlibrary.traverse.workflow.caller.FixtureCaller;
 import fitlibrary.traverse.workflow.caller.MultiDefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.PostFixSpecialCaller;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.option.None;
+import fitlibrary.utility.option.Option;
+import fitlibrary.utility.option.Some;
 
 public abstract class DoTraverseInterpreter extends Traverse implements DoEvaluator {
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";
@@ -161,24 +167,12 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     		interpretInnerTables(cell.innerTables(),testResults);
     		return null;
     	}
-    	setExpectedResult(new Boolean(true));
     	try {
-    		DoCaller[] actions = { 
-    				new DefinedActionCaller(row, this),
-    				new MultiDefinedActionCaller(row, this),
-    				new SpecialCaller(row,switchSetUp()),
-    				new PostFixSpecialCaller(row,switchSetUp()),
-    				new FixtureCaller(fixtureByName),
-    				new ActionCaller(row,switchSetUp()) };
-			checkForAmbiguity(actions);
-			for (int i = 0; i < actions.length; i++)
-				if (actions[i].isValid()) {
-					Object result = actions[i].run(row, testResults);
-					if (testResults.isAbandoned() && !testResults.problems())
-						row.ignore(testResults);
-					return result;
-				}
-			methodsAreMissing(actions,row.text(0, this));
+    		DoCaller[] actions = createDoCallers(row, fixtureByName);
+    		Option<Object> result = interpretSimpleRow(row,testResults,actions,fixtureByName);
+    		if (result.isSome())
+    			return result.get();
+    		methodsAreMissing(actions,row.text(0, this),possibleSeq(row));
     	} catch (IgnoredException ex) {
     		//
     	} catch (AbandonException e) {
@@ -188,6 +182,55 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     	}
     	return null;
     }
+    public Option<Object> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
+    	setExpectedResult(new Boolean(true));
+		Option<Object> result = pickCaller(actions, row, testResults);
+		if (result.isSome())
+			return result;
+		if (row.size() > 2) {
+			Option<Object> seqResult = trySequenceCall(row, testResults, fixtureByName);
+			if (seqResult.isSome())
+				return seqResult;
+		}
+		return None.none();
+    }
+    // The following is overridden in SequenceTraverse, so it doesn't try again (repeatedly)
+    protected Option<Object> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
+    	SequenceTraverse sequenceTraverse = new SequenceTraverse(this);
+    	sequenceTraverse.setRuntimeContext(runtimeContext);
+		return sequenceTraverse.interpretSimpleRow(row, testResults, sequenceTraverse.createDoCallers(row, fixtureByName),fixtureByName);
+    }
+    private Option<Object> pickCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
+		for (int i = 0; i < actions.length; i++)
+			if (actions[i].isValid()) {
+				Object result = actions[i].run(row, testResults);
+				if (testResults.isAbandoned() && !testResults.problems())
+					row.ignore(testResults);
+				return new Some<Object>(result);
+			}
+		return None.none();
+    }
+	public DoCaller[] createDoCallers(Row row, Fixture fixtureByName) {
+		DoCaller[] actions = { 
+				new DefinedActionCaller(row, this),
+				new MultiDefinedActionCaller(row, this),
+				new SpecialCaller(row,switchSetUp()),
+				new PostFixSpecialCaller(row,switchSetUp()),
+				new FixtureCaller(fixtureByName),
+				new DoActionCaller(row,switchSetUp()) };
+		checkForAmbiguity(actions);
+		return actions;
+	}
+	private String possibleSeq(Row row) {
+		if (row.size() < 3)
+			return "";
+		String result = ExtendedCamelCase.camel(row.text(0, this))+"(";
+		if (row.size() > 0)
+			result += "p1";
+		for (int i = 2; i < row.size(); i++)
+			result += ", p"+i;
+		return result+")";
+	}
 	public CalledMethodTarget findMethodFromRow(final Row row, int from, int less) throws Exception {
 		return findMethodByActionName(row.rowFrom(from), row.size() - less);
 	}
@@ -213,43 +256,44 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		if (valid.size() > 1)
 			throw new AmbiguousActionException(message.substring(AND.length()));
 	}
-	private void methodsAreMissing(DoCaller[] actions, String possibleFixtureName) {
-		// It would be better to pass all these exceptions on in a wrapper exception.
-		// Then they can be sorted and organised into <hr> lines in the cell.
-		final String OR = " OR: ";
-		String missingMethods = "";
-		String missingAt = "";
+	private void methodsAreMissing(DoCaller[] actions, String possibleFixtureName, String possibleSequenceCall) {
+		List<String> missingMethods = new ArrayList<String>();
+		List<Class<?>> possibleClasses = new ArrayList<Class<?>>();
 		String ambiguousMethods = "";
 		for (int i = 0; i < actions.length; i++)
 			if (actions[i].isProblem()) {
 				Exception exception = actions[i].problem();
 				if (exception instanceof MissingMethodException) {
 					MissingMethodException missingMethodException = (MissingMethodException) exception;
-					missingMethods += OR+missingMethodException.getMethodSignature();
-					missingAt = missingMethodException.getClasses();
+					missingMethods.addAll(missingMethodException.getMethodSignature());
+					for (Class<?> c : missingMethodException.getClasses())
+						if (!possibleClasses.contains(c))
+							possibleClasses.add(c);
 				} else if (exception instanceof AmbiguousNameException) {
 					AmbiguousNameException ambiguousNameException = (AmbiguousNameException) exception;
-					ambiguousMethods += OR+ambiguousNameException.getMessage();
+					ambiguousMethods += "<li>"+ambiguousNameException.getMessage()+"</li>";
 				} else if (exception instanceof ClassNotFoundException) {
 					ClassNotFoundException cnf = (ClassNotFoundException) exception;
 					if (cnf.getCause() != null) {
 						System.out.println("methodsAreMissing(): CNFE: "+exception.getMessage()+": "+cnf.getCause().getMessage());
 					} else
 						System.out.println("methodsAreMissing(): CNFE: "+exception.getMessage());
-					missingMethods += OR+exception.getMessage();
+					missingMethods.add(exception.getMessage());
 				} else
-					missingMethods += OR+exception.getMessage();
+					missingMethods.add(exception.getMessage());
 			}
+		if (!missingMethods.isEmpty() && !possibleSequenceCall.isEmpty())
+			missingMethods.add(possibleSequenceCall);
 		String message = "";
 		if (possibleFixtureName.contains("."))
 			message += "Missing class or ";
-		if (!"".equals(missingMethods))
-			message += "Missing methods: "+missingMethods.substring(OR.length());
-		if (!"".equals(ambiguousMethods))
-			message += " "+ambiguousMethods.substring(OR.length());
-		if (!"".equals(missingAt))
-			message += " in "+missingAt;
-		throw new FitLibraryException(message.trim());
+		if (!missingMethods.isEmpty())
+			message += "Missing method. Possibly:"+MissingMethodException.htmlListOfSignatures(missingMethods);
+		if (!ambiguousMethods.isEmpty())
+			message += "<ul>"+ambiguousMethods+"</ul>";
+		if (!possibleClasses.isEmpty())
+			message += "<hr/>Possibly in class:"+MissingMethodException.htmlListOfClassNames(possibleClasses);
+		throw new FitLibraryExceptionInHtml(message.trim());
 	}
 	private void interpretInnerTables(Tables tables, TestResults testResults) {
 		new InFlowPageRunner(this,testResults).run(tables,0,new TableListener(testResults),true);

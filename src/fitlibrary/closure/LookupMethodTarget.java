@@ -25,8 +25,8 @@ public interface LookupMethodTarget extends MustBeThreadSafe {
 	CalledMethodTarget findSetter(String propertyName, Evaluator evaluator);
 	CalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, 
 			String propertyName, boolean considerContext);
-	String identifiedClassesInSUTChain(Object firstObject);
-	String identifiedClassesInOutermostContext(Object firstObject, boolean includeSut);
+	List<Class<?>> identifiedClassesInSUTChain(Object firstObject);
+	List<Class<?>> identifiedClassesInOutermostContext(Object firstObject, boolean includeSut);
 	Class<?> findClassFromFactoryMethod(Evaluator evaluator, Class<?> type, String typeName) throws IllegalAccessException,
 			InvocationTargetException;
 	Closure findNewInstancePluginMethod(Evaluator evaluator);

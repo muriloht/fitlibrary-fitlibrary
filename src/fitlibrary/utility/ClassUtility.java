@@ -27,7 +27,7 @@ public class ClassUtility {
 		}
 		String result = ""+classes.get(0);
 		for (int i = 1; i < classes.size(); i++)
-			result += " or "+classes.get(i);
+			result += "</li><li>"+classes.get(i);
 		return result;
 	}
 	public static boolean aFitLibraryClass(Class<?> declaringClass) {
@@ -96,12 +96,12 @@ public class ClassUtility {
 			return className;
 		return ExtendedCamelCase.camel(className);
 	}
-	public static String methodSignature(String name, List<String> methodArgs, String returnType) {
-		String signature = "";
+	public static List<String> methodSignatures(String name, List<String> methodArgs, String returnType) {
+		List<String> signatures = new ArrayList<String>();
 		if (methodArgs.isEmpty())
-			signature = "public "+returnType+" get"+name.substring(0,1).toUpperCase()+
-				name.substring(1)+"() { } OR: ";
-		signature += "public "+returnType+" "+name+"(";
+			signatures.add("public "+returnType+" get"+name.substring(0,1).toUpperCase()+
+				name.substring(1)+"() { }");
+		String signature = "public "+returnType+" "+name+"(";
 		Iterator<String> iterator = methodArgs.iterator();
 		for (int i = 0; i < methodArgs.size(); i++) {
 			if (i > 0)
@@ -109,7 +109,8 @@ public class ClassUtility {
 			signature += "Type"+(i+1)+" "+iterator.next();
 		}
 		signature += ") { }";
-		return signature;
+		signatures.add(signature);
+		return signatures;
 	}
 	public static Object newInstance(Class<?> sutClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		Constructor<?> declaredConstructor = sutClass.getDeclaredConstructor(new Class[]{});

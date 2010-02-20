@@ -19,13 +19,15 @@ public class PostFixSpecialCaller extends DoCaller {
 		if (row.size() >= 2) {
 			methodName = row.text(row.size()-2,switchSetUp);
 			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(switchSetUp, methodName);
-			if (specialMethod != null) {
-				try {
-					switchSetUp.findMethodFromRow(row,0,3);
-				} catch (Exception e) {
-					setProblem(e);
-				}
-			}
+			if (specialMethod != null)
+				findMethodForInnerAction(row, switchSetUp);
+		}
+	}
+	private void findMethodForInnerAction(Row row, DoTraverseInterpreter switchSetUp) {
+		try {
+			switchSetUp.findMethodFromRow(row,0,3);
+		} catch (Exception e) {
+			setProblem(e);
 		}
 	}
 	@Override

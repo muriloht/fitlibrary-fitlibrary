@@ -11,12 +11,12 @@
 <tr><td>fitlibrary.specify.exception.AmbiguousActionMethod</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>actions</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td class="error">overloaded<hr/> <span class="fit_label">"overloaded" is ambiguous</span></td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="error">overloaded<hr/> <span class="fit_label"><ul><li>"overloaded" is ambiguous</li></ul></span></td>
 <td>1</td>
 </tr>
 </table>-!|

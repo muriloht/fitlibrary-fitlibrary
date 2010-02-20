@@ -83,7 +83,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
 		List<String> arguments = new ArrayList<String>();
 		String argNames = buildArguments(row, arguments,evaluator);
 		String methodName = ExtendedCamelCase.camel(argNames);
-		CalledMethodTarget findMethod = PlugBoard.lookupTarget.findMethod(methodName, arguments, "ResultType", evaluator);
+		CalledMethodTarget findMethod = PlugBoard.lookupTarget.findMethod(methodName, arguments, "Type", evaluator);
 		if (findMethod.returnsVoid() && embedded)
 			throw new VoidMethodException(methodName,"SetUpTraverse");
 		return findMethod;

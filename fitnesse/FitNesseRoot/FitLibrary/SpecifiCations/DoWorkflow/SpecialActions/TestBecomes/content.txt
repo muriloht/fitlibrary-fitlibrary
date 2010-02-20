@@ -44,11 +44,11 @@
 <br/><table border="1" cellspacing="0">
 <tr><td>string property</td>
 <td><b>becomes</b></td>
-<td class="fail">apple and blueberry e <span class="fit_label">expected</span><hr>apple pie <span class="fit_label">actual</span><hr><font color='white'>apple </font><strike>and blueberry </strike><b>pi</b><font color='white'>e</font> <span class="fit_label">diff</span></td>
+<td class="fail">apple and blueberry e <span class="fit_label">expected</span><hr>apple pie <span class="fit_label">actual</span><hr><divv style='color:white'>apple </divv><strike>and blueberry&Delta;</strike><b>pi</b><divv style='color:white'>e</divv> <span class="fit_label">diff</span></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td class="error">missing property<hr/> <span class="fit_label">Missing methods: public TypeOfResult getMissingProperty() { } OR: public TypeOfResult missingProperty() { } OR: public TypeOfResult missingPropertyPi(Type1 arg1) { } in class fitlibrary.specify.DoFixtureFlowUnderTest or class fitlibrary.specify.SystemUnderTest</span></td>
+<tr><td class="error">missing property<hr/> <span class="fit_label">Missing method. Possibly:<ul><li>public Type getMissingProperty() { }</li><li>public Type missingProperty() { }</li><li>public Type missingPropertyPi(Type1 arg1) { }</li><li>missingProperty(p1, p2)</li></ul><hr/>Possibly in class:<ul><li>fitlibrary.specify.DoFixtureFlowUnderTest</li><li>fitlibrary.specify.SystemUnderTest</li></ul></span></td>
 <td><b>becomes</b></td>
 <td>pi</td>
 </tr>

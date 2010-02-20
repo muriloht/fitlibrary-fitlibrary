@@ -64,7 +64,7 @@ public class CalledMethodTarget implements MethodTarget {
 	public boolean isValid() {
 		return closure != null;
 	}
-	private Class<?> getReturnType() {
+	public Class<?> getReturnType() {
 		return closure.getReturnType();
 	}
 	public Class<?>[] getParameterTypes() {
