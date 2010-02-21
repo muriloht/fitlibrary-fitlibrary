@@ -18,6 +18,7 @@ import fitlibrary.collection.list.ListTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.FitLibrarySelector;
@@ -43,10 +44,10 @@ public class ListParser implements Parser {
 		       Iterator.class.isAssignableFrom(type) ||
 		       type.isArray();
 	}
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	private Object parse(Cell cell, TestResults testResults) throws Exception {
+	private Object parse(ICell cell, TestResults testResults) throws Exception {
 		List<Object> results = null;
 		if (cell.hasEmbeddedTable())
 			results = parseTable(cell.getEmbeddedTable(),testResults);
@@ -74,7 +75,7 @@ public class ListParser implements Parser {
     		Array.set(array, i++, it.next());
 		return array;
 	}
-	public boolean matches(Cell cell, Object actual, TestResults testResults) throws Exception {
+	public boolean matches(ICell cell, Object actual, TestResults testResults) throws Exception {
 		if (actual == null)
 			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
     	if (cell.hasEmbeddedTable())

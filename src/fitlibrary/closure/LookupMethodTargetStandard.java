@@ -11,6 +11,7 @@ import java.util.List;
 
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -28,6 +29,8 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		if (name.equals(""))
 			return null;
 		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class, TestResults.class });
+		if (findEntityMethod == null)
+			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ IRow.class, TestResults.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
@@ -53,7 +56,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	private static TypedObject asTypedObject(Object subject) {
 		return Traverse.asTypedObject(subject);
 	}
-	public CalledMethodTarget findMethodInEverySecondCell(Evaluator evaluator, Row row, int allArgs) {
+	public CalledMethodTarget findMethodInEverySecondCell(Evaluator evaluator, IRow row, int allArgs) throws Exception {
 		int parms = allArgs / 2 + 1;
 		int argCount = (allArgs + 1) / 2;
 		String name = row.text(0,evaluator);
@@ -63,7 +66,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		target.setEverySecond(true);
 		return target;
 	}
-	public CalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) {
+	public CalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
 		return findTheMethod(camel(name), unknownParameterNames(argCount),"Type",evaluator);
 	}
 	private static List<String> unknownParameterNames(int argCount) {
@@ -72,7 +75,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			methodArgs.add("arg"+(i+1));
 		return methodArgs;
 	}
-	public CalledMethodTarget findTheMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) {
+	public CalledMethodTarget findTheMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
 		TypedObject typedObject = asTypedObject(evaluator);
 		return typedObject.findSpecificMethodOrPropertyGetter(name,methodArgs.size(),evaluator,signatures);

@@ -5,8 +5,10 @@ package fit;
 
 public class NullFixtureListener implements FixtureListener {
   public void tableFinished(Parse table) {
+	  //
   }
 
   public void tablesFinished(Counts count) {
+	  //
   }
 }

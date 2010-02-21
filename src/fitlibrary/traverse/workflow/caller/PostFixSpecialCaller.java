@@ -6,6 +6,7 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -15,17 +16,17 @@ public class PostFixSpecialCaller extends DoCaller {
 	private String methodName;
 	private CalledMethodTarget specialMethod;
 
-	public PostFixSpecialCaller(Row row, DoTraverseInterpreter switchSetUp) {
+	public PostFixSpecialCaller(Row row, DoTraverseInterpreter interpreter) {
 		if (row.size() >= 2) {
-			methodName = row.text(row.size()-2,switchSetUp);
-			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(switchSetUp, methodName);
+			methodName = row.text(row.size()-2,interpreter);
+			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(interpreter, methodName);
 			if (specialMethod != null)
-				findMethodForInnerAction(row, switchSetUp);
+				findMethodForInnerAction(row, interpreter);
 		}
 	}
-	private void findMethodForInnerAction(Row row, DoTraverseInterpreter switchSetUp) {
+	private void findMethodForInnerAction(Row row, DoTraverseInterpreter interpreter) {
 		try {
-			switchSetUp.findMethodFromRow(row,0,3);
+			interpreter.findMethodFromRow(row,0,3);
 		} catch (Exception e) {
 			setProblem(e);
 		}
@@ -35,7 +36,7 @@ public class PostFixSpecialCaller extends DoCaller {
 		return specialMethod != null && !isProblem();
 	}
 	@Override
-	public Object run(Row row, TestResults testResults) throws Exception {
+	public Object run(IRow row, TestResults testResults) throws Exception {
 		return specialMethod.invoke(new Object[] { testResults, row });
 	}
 	@Override

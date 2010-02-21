@@ -14,6 +14,7 @@ public abstract class FixtureDecoratorTestCase extends TestCase {
   protected static final long ELAPSED = 20;
   protected Timer stopWatch = new Timer() {
     public void start() {
+    	//
     }
 
     public long elapsed() {
@@ -104,10 +105,14 @@ public abstract class FixtureDecoratorTestCase extends TestCase {
 
   private FixtureDecorator dummyFitDecorator() {
     FixtureDecorator decorator = new FixtureDecorator() {
-      protected void setupDecorator(String[] args) throws InvalidInputException {
+      @Override
+	protected void setupDecorator(String[] args) throws InvalidInputException {
+    	  //
       }
 
-      protected void updateColumnsBasedOnResults(Parse table) {
+      @Override
+	protected void updateColumnsBasedOnResults(Parse table) {
+    	  //
       }
     };
     return decorator;

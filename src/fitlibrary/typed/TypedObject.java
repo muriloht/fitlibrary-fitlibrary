@@ -24,7 +24,7 @@ public interface TypedObject {
 	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name, int argCount, Evaluator evaluator, boolean includeSut);
 	public CalledMethodTarget optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
 	public CalledMethodTarget findGetterOnTypedObject(String propertyName, Evaluator evaluator);
-	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name, int argCount, Evaluator evaluator, List<String> signatures);
+	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name, int argCount, Evaluator evaluator, List<String> signatures) throws Exception;
 	public Class<?> getClassType();
 	public Closure findMethodClosure(String name, int argCount, boolean includeSut);
 	public Parser[] parameterParsers(Evaluator evaluator, Method method);

@@ -7,6 +7,7 @@ package fitlibrary.traverse.workflow;
 import fit.Fixture;
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.utility.TestResults;
 import fitlibrary.utility.option.None;
@@ -17,7 +18,7 @@ public class SequenceTraverse extends DoTraverse {
 		super(sut);
 	}
 	@Override
-	public CalledMethodTarget findMethodByActionName(Row row, int allArgs) throws Exception {
+	public CalledMethodTarget findMethodByActionName(IRow row, int allArgs) throws Exception {
 		return PlugBoard.lookupTarget.findTheMethodMapped(row.text(0,this), allArgs, this);
 	}
     @Override

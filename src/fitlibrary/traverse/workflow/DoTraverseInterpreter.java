@@ -12,9 +12,9 @@ import fit.Fixture;
 import fit.Parse;
 import fitlibrary.DoFixture;
 import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.collection.CollectionSetUpTraverse;
 import fitlibrary.exception.AbandonException;
-import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.AmbiguousActionException;
@@ -23,12 +23,12 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.suite.InFlowPageRunner;
 import fitlibrary.table.Cell;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.traverse.workflow.caller.ActionCaller;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.DoActionCaller;
 import fitlibrary.traverse.workflow.caller.FixtureCaller;
@@ -214,7 +214,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		DoCaller[] actions = { 
 				new DefinedActionCaller(row, this),
 				new MultiDefinedActionCaller(row, this),
-				new SpecialCaller(row,switchSetUp()),
+				new SpecialCaller(row,switchSetUp(),PlugBoard.lookupTarget),
 				new PostFixSpecialCaller(row,switchSetUp()),
 				new FixtureCaller(fixtureByName),
 				new DoActionCaller(row,switchSetUp()) };
@@ -224,22 +224,23 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 	private String possibleSeq(Row row) {
 		if (row.size() < 3)
 			return "";
-		String result = ExtendedCamelCase.camel(row.text(0, this))+"(";
+		String result = "public Type "+ExtendedCamelCase.camel(row.text(0, this))+"(";
 		if (row.size() > 0)
-			result += "p1";
+			result += "Type p1";
 		for (int i = 2; i < row.size(); i++)
-			result += ", p"+i;
-		return result+")";
+			result += ", Type p"+i;
+		return result+") {}";
 	}
-	public CalledMethodTarget findMethodFromRow(final Row row, int from, int less) throws Exception {
+	public ICalledMethodTarget findMethodFromRow(IRow row, int from, int less) throws Exception {
 		return findMethodByActionName(row.rowFrom(from), row.size() - less);
 	}
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
 		asTypedObject(this).findMethodsFromPlainText(textCall,results);
 	}
 	/** Is overridden in subclass SequenceTraverse to process arguments differently
+	 * @throws Exception 
 	 */
-	public CalledMethodTarget findMethodByActionName(Row row, int allArgs) throws Exception {
+	public CalledMethodTarget findMethodByActionName(IRow row, int allArgs) throws Exception {
 		return PlugBoard.lookupTarget.findMethodInEverySecondCell(this, row, allArgs);
 	}
 	private static void checkForAmbiguity(DoCaller[] actions) {
@@ -325,8 +326,8 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 	protected Object callMethodInRow(Row row, TestResults testResults, boolean catchError, Cell operatorCell) throws Exception {
 		return findMethodFromRow(row,1, 2).invokeForSpecial(row.rowFrom(2),testResults,catchError,operatorCell);
 	}
-	protected CalledMethodTarget findSpecialMethod(String name) {
-		return PlugBoard.lookupTarget.findSpecialMethod(this, name);
+	public boolean isGatherExpectedForGeneration() {
+		return gatherExpectedForGeneration;
 	}
 	public void setGatherExpectedForGeneration(boolean gatherExpectedForGeneration) {
 		this.gatherExpectedForGeneration = gatherExpectedForGeneration;

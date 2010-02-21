@@ -8,7 +8,7 @@ package fitlibrary.parser;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
@@ -24,8 +24,8 @@ public class EnumParser implements Parser {
 		this.typed = typed;
 		this.evaluator = evaluator;
 	}
-	@SuppressWarnings({"unused", "unchecked"})
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	@SuppressWarnings("unchecked")
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		String text = cell.text(evaluator);
 		if (text.equals(""))
 			return  typed.typedObject(null);
@@ -40,7 +40,7 @@ public class EnumParser implements Parser {
 			}
 		}
 	}
-	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+	public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) {
 			cell.unexpected(testResults,"collection");
 			return false;

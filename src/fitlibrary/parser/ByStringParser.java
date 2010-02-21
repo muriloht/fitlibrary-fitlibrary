@@ -5,7 +5,7 @@
 package fitlibrary.parser;
 
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
@@ -28,14 +28,14 @@ public class ByStringParser implements Parser {
     		return "null";
         return actual.toString();
     }
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return Traverse.asTypedObject(parse(cell,testResults));
 	}
 	@SuppressWarnings("unused")
-   private Object parse(Cell cell, TestResults testResults) throws Exception {
+   private Object parse(ICell cell, TestResults testResults) throws Exception {
         return cell.text(evaluator);
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
         return equals(parse(cell,testResults),result);
     }
     private boolean equals(Object a, Object b) { // a will be a String

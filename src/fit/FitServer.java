@@ -34,6 +34,7 @@ public class FitServer {
   }
 
   public FitServer() {
+	  //
   }
 
   public static void main(String argv[]) throws Exception {

@@ -38,8 +38,7 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.CoreFitSpecifications.ActionFixture.UsualOperation",
-				"FitLibrary.SpecifiCations.CoreFitSpecifications.ActionFixture.SelfStarter"
+				"FitLibrary.SpecifiCations.JavaSpecific.MissingMethods.NullaryActionMissingWithAdapter"
 		};
 		run(pageNames);
 	}

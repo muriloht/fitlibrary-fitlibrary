@@ -5,7 +5,7 @@
 package fitlibrary.traverse.workflow.caller;
 
 import fit.Fixture;
-import fitlibrary.table.Row;
+import fitlibrary.table.IRow;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.utility.TestResults;
 
@@ -20,8 +20,7 @@ public class FixtureCaller extends DoCaller {
 		return fixtureByName != null;
 	}
 	@Override
-	@SuppressWarnings("unused")
-	public Object run(Row row, TestResults testResults) throws Exception {
+	public Object run(IRow row, TestResults testResults) throws Exception {
 		return fixtureByName;
 	}
 	@Override

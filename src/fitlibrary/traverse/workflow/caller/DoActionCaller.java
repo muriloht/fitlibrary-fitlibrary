@@ -5,6 +5,7 @@
 package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -27,7 +28,7 @@ public class DoActionCaller extends DoCaller {
 		return target != null;
 	}
 	@Override
-	public Object run(Row row, TestResults testResults) throws Exception {
+	public Object run(IRow row, TestResults testResults) throws Exception {
 		return new ActionCaller(target).run(row, testResults);
 	}
 	@Override

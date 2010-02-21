@@ -23,6 +23,7 @@ public class FitMatcherTest extends TestCase {
       fail();
     }
     catch (Exception e) {
+    	//
     }
   }
 

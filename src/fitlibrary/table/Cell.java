@@ -18,7 +18,7 @@ import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
-public class Cell extends ParseNode {
+public class Cell extends ParseNode implements ICell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
     private boolean cellIsInHiddenRow = false;
     

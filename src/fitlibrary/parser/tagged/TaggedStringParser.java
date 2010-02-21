@@ -7,7 +7,7 @@ package fitlibrary.parser.tagged;
 import fitlibrary.parser.HtmlParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
@@ -23,26 +23,26 @@ public class TaggedStringParser implements HtmlParser {
 	    	return "null";
         return object.toString();
     }
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return Traverse.asTyped(String.class).typedObject(parse(cell,testResults));
 	}
     // Is registered in LibraryTypeAdapter.on()
-    public Object parse(Cell cell, @SuppressWarnings("unused") TestResults testResults) throws Exception {
+    public Object parse(ICell cell, @SuppressWarnings("unused") TestResults testResults) throws Exception {
         return new TaggedString(cell.fullText());
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
         return parse(cell,testResults).equals(result);
     }
 	public static ParserFactory parserFactory() {
 		return new ParserFactory() {
 			private TaggedStringParser taggedStringParser = new TaggedStringParser();
 			
-			public Parser parser(@SuppressWarnings("unused") Evaluator evaluator, @SuppressWarnings("unused") Typed typed) {
+			public Parser parser(Evaluator evaluator, Typed typed) {
 				return taggedStringParser;
 			}
 		};
 	}
-	public Evaluator traverse(@SuppressWarnings("unused") TypedObject typedObject) {
+	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}
 }

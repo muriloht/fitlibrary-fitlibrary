@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 
 import fitlibrary.parser.HtmlParser;
 import fitlibrary.parser.Parser;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
@@ -22,10 +22,10 @@ public class FieldParser implements ResultParser {
 		this.parser = parser;
 		this.field = field;
 	}
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return parser.parseTyped(cell,testResults);
 	}
-	public boolean matches(Cell cell, Object result, TestResults testResults)
+	public boolean matches(ICell cell, Object result, TestResults testResults)
 			throws Exception {
 		return parser.matches(cell,result,testResults);
 	}

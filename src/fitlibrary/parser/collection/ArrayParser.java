@@ -17,6 +17,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -40,10 +41,10 @@ public class ArrayParser implements Parser {
 			(ClassUtility.isEffectivelyPrimitive(type.getComponentType()) ||
 			 type.getComponentType().isArray());
 	}
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return componentType.typedObject(parse(cell,testResults));
 	}
-	private Object parse(Cell cell, TestResults testResults) throws Exception {
+	private Object parse(ICell cell, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
@@ -53,7 +54,7 @@ public class ArrayParser implements Parser {
         setUp.interpretWithinContext(table,evaluator,testResults);
         return setUp.getResults();
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTable())
     		return tableMatches(cell.getEmbeddedTable(),result,testResults);
     	return equals(parse(cell,testResults),result,testResults);

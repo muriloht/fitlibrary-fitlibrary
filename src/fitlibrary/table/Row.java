@@ -13,7 +13,7 @@ import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
-public class Row extends ParseNode {
+public class Row extends ParseNode implements IRow {
     private boolean rowIsHidden = false;
     
 	public Row(Parse parse) {
@@ -80,7 +80,7 @@ public class Row extends ParseNode {
 		addCell(cell);
 		return cell;
     }
-    public Row addCell(Cell cell) {
+    public IRow addCell(Cell cell) {
     	if (rowIsHidden)
     		System.out.println("Bug: Adding a cell to a hidden row in a table");
         if (parse.parts == null)

@@ -2,7 +2,6 @@
 
 !1 Temporarily disabled tests:
 
-.FitLibrary.SpecifiCations.DefinedActions.BlankParameter
 .FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.UseTheTextThisInClassBasedActions
 
 |!3 ^UserGuide|''User guide for FitLibrary''|

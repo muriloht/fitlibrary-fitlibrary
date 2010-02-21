@@ -10,7 +10,7 @@ import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.object.DomainObjectCheckTraverse;
 import fitlibrary.object.DomainObjectSetUpTraverse;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
@@ -27,10 +27,10 @@ public class DelegatingParser implements Parser {
 		this.evaluator = evaluator;
 		this.typed = typed;
 	}
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	private Object parse(Cell cell, TestResults testResults) throws Exception {
+	private Object parse(ICell cell, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable())
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		try {
@@ -55,7 +55,7 @@ public class DelegatingParser implements Parser {
     	setUp.callEndCreatingObjectMethod(newInstance);
 		return newInstance;
 	}
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTable())
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return delegateParser.matches(parse(cell,testResults),result);

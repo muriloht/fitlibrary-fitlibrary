@@ -25,6 +25,8 @@ import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -37,7 +39,7 @@ import fitlibrary.utility.TestResults;
  * Manages calling a method on row cells, and possibly checking the result against a cell.
  * It constructs Parsers to use for getting cell values, comparisons, etc.
  */
-public class CalledMethodTarget implements MethodTarget {
+public class CalledMethodTarget implements ICalledMethodTarget {
 	final private Closure closure;
 	final private Evaluator evaluator;
 	private Parser[] parameterParsers;
@@ -47,8 +49,8 @@ public class CalledMethodTarget implements MethodTarget {
     private String exceptionString = null;
 	private boolean everySecond = false;
 
-    public CalledMethodTarget(Closure method, Evaluator evaluator) {
-		this.closure = method;
+    public CalledMethodTarget(Closure closure, Evaluator evaluator) {
+		this.closure = closure;
 		this.evaluator = evaluator;
 		args = new Object[getParameterTypes().length];
 		parameterParsers = closure.parameterParsers(evaluator);
@@ -80,7 +82,7 @@ public class CalledMethodTarget implements MethodTarget {
     	collectCell(cell,0,cell.text(evaluator),testResults,true);
     	return invoke(args);
     }
-    public TypedObject invokeTyped(Row row, TestResults testResults, boolean catchParseError) throws Exception {
+    public TypedObject invokeTyped(IRow row, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -97,7 +99,7 @@ public class CalledMethodTarget implements MethodTarget {
 			throw new IgnoredException(); // no more to do
 		}
 	}
-    public Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception {
+    public Object invoke(IRow row, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -126,13 +128,13 @@ public class CalledMethodTarget implements MethodTarget {
 			throw e;
 		}
 	}
-    private void collectCells(Row row, int step, TestResults testResults, boolean catchParseError) throws Exception {
+    private void collectCells(IRow row, int step, TestResults testResults, boolean catchParseError) throws Exception {
 		for (int argNo = 0; argNo < args.length; argNo++) {
-			Cell cell = row.cell(argNo*step);
+			ICell cell = row.cell(argNo*step);
 			collectCell(cell, argNo,cell.text(evaluator),testResults,catchParseError);
 		}
 	}
-	private void collectCell(Cell cell, int argNo, String text, TestResults testResults, boolean catchParseError) throws Exception {
+	private void collectCell(ICell cell, int argNo, String text, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (!text.equals(repeatString))
 				args[argNo] = parameterParsers[argNo].parseTyped(cell,testResults).getSubject();
@@ -158,7 +160,7 @@ public class CalledMethodTarget implements MethodTarget {
         	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
         }
     }
-    public void invokeAndCheckForSpecial(Row row, Cell expectedCell, TestResults testResults, Row fullRow, Cell specialCell) {
+    public void invokeAndCheckForSpecial(IRow row, ICell expectedCell, TestResults testResults, IRow fullRow, ICell specialCell) {
         boolean exceptionExpected = exceptionIsExpected(expectedCell);
         try {
             Object result = invoke(row,testResults,true);
@@ -187,7 +189,7 @@ public class CalledMethodTarget implements MethodTarget {
         	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
         }
     }
-	private boolean exceptionIsExpected(Cell expectedCell) {
+	private boolean exceptionIsExpected(ICell expectedCell) {
 		return exceptionString != null && exceptionString.equals(expectedCell.text(evaluator));
 	}
 	public String getResult() throws Exception {
@@ -211,7 +213,7 @@ public class CalledMethodTarget implements MethodTarget {
 			return false;
 		}
 	}
-	public boolean checkResult(Cell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
+	public boolean checkResult(ICell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
 		ResultParser valueParser = resultParser;
 		if (handleSubtype && closure != null)
 			valueParser = closure.specialisedResultParser(resultParser,result,evaluator);
@@ -290,14 +292,14 @@ public class CalledMethodTarget implements MethodTarget {
 			expectedCell.error(testResults,e);
 		}
 	}
-	public Object getResult(Cell expectedCell, TestResults testResults) {
+	public Object getResult(ICell expectedCell, TestResults testResults) {
 		try {
 			return resultParser.parseTyped(expectedCell,testResults).getSubject();
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	public void color(Row row, boolean right, TestResults testResults) throws Exception {
+	public void color(IRow row, boolean right, TestResults testResults) throws Exception {
 		if (!everySecond && row.cellExists(0))
 			row.cell(0).passOrFail(testResults,right);
 		else
@@ -354,7 +356,7 @@ public class CalledMethodTarget implements MethodTarget {
 			   Number.class.isAssignableFrom(returnType) ||
 			   returnType == Character.class;
 	}
-	public Object invokeAndWrap(Row row, TestResults testResults) throws Exception {
+	public Object invokeAndWrap(IRow row, TestResults testResults) throws Exception {
         return wrapObjectWithTraverse(invokeTyped(row,testResults,true));
     }
 	public String getResultString(Object result) throws Exception {

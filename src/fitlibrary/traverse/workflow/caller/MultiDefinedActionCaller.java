@@ -6,6 +6,7 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -32,8 +33,7 @@ public class MultiDefinedActionCaller extends DoCaller {
 		return furtherRows && multiParameterSubstitution != null;
 	}
 	@Override
-	@SuppressWarnings("unused")
-	public Object run(Row row, TestResults testResults) throws Exception {
+	public Object run(IRow row, TestResults testResults) throws Exception {
 		return new MultiDefinedActionTraverse(multiParameterSubstitution,doTraverse);
 	}
 }

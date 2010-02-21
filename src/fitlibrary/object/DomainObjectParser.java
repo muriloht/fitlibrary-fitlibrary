@@ -7,7 +7,7 @@ package fitlibrary.object;
 import fitlibrary.closure.Closure;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
-import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
@@ -24,10 +24,10 @@ public class DomainObjectParser implements Parser {
 		this.typed = typed;
 		finder = typed.getFinder(evaluator);
 	}
-	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-    private Object parse(Cell cell, TestResults testResults) throws Exception {
+    private Object parse(ICell cell, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTable())
     		return parseTable(cell.getEmbeddedTable(),testResults);
 //    	if (cell.text().equals("")) // Someone may want to use a pseudo key value of ""
@@ -56,7 +56,7 @@ public class DomainObjectParser implements Parser {
 		setUp.interpretInnerTable(embeddedTable,evaluator,testResults);
 		return setUp.getSystemUnderTest();
 	}
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
 			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
     	if (cell.hasEmbeddedTable())

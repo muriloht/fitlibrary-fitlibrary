@@ -394,7 +394,9 @@ public class Fixture {
       // Ignore parse exceptions, print non-parse exceptions,
       // return null so that compareCellToResult tries relational matching.
       catch (NumberFormatException e) {
+    	  //
       } catch (ParseException e) {
+    	  //
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -425,6 +427,7 @@ public class Fixture {
     }
   }
 
-  private class Unparseable {
+  protected class Unparseable {
+	  //
   }
 }

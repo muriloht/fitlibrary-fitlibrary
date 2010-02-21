@@ -43,16 +43,13 @@ public abstract class Binding {
   }
 
   private static TypeAdapter makeAdapter(Fixture fixture, String name) throws Throwable {
-    Matcher regexMatcher = regexMethodPattern.matcher(name);
-    if (regexMatcher.find())
-      return makeAdapterForRegexMethod(name, fixture, regexMatcher);
-    else {
-      Matcher methodMatcher = methodPattern.matcher(name);
-      if (methodMatcher.find())
-        return makeAdapterForMethod(name, fixture, methodMatcher);
-      else
-        return makeAdapterForField(name, fixture);
-    }
+	  Matcher regexMatcher = regexMethodPattern.matcher(name);
+	  if (regexMatcher.find())
+		  return makeAdapterForRegexMethod(name, fixture, regexMatcher);
+	  Matcher methodMatcher = methodPattern.matcher(name);
+	  if (methodMatcher.find())
+		  return makeAdapterForMethod(name, fixture, methodMatcher);
+	  return makeAdapterForField(name, fixture);
   }
 
   private static TypeAdapter makeAdapterForField(String name, Fixture fixture) {
@@ -68,6 +65,7 @@ public abstract class Binding {
         field = fixture.getTargetClass().getField(fieldName);
       }
       catch (NoSuchFieldException e) {
+    	  //
       }
     }
 
@@ -103,6 +101,7 @@ public abstract class Binding {
         method = fixture.getTargetClass().getMethod(methodName, new Class[]{});
       }
       catch (NoSuchMethodException e) {
+    	  //
       }
     }
 

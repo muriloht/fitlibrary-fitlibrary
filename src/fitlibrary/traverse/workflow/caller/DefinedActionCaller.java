@@ -11,6 +11,7 @@ import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.table.Cell;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
@@ -53,7 +54,7 @@ public class DefinedActionCaller extends DoCaller {
 		return parameterSubstitution != null;
 	}
 	@Override
-	public Object run(Row row, TestResults testResults) {
+	public Object run(IRow row, TestResults testResults) {
 		CallManager.startCall(parameterSubstitution);
 		try {
 			Object oldThisValue = doTraverse.getDynamicVariable("this");
@@ -85,7 +86,7 @@ public class DefinedActionCaller extends DoCaller {
 		}
 		return result;
 	}
-	private Object processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
+	private Object processDefinedAction(Tables definedActionBody, IRow row, TestResults testResults) {
 		Object lastResult = null;
 		TestResults subTestResults = new TestResults(testResults);
 		for (int i = 0; i < definedActionBody.size(); i++) {
@@ -99,7 +100,7 @@ public class DefinedActionCaller extends DoCaller {
 		colourReport(definedActionBody, row, testResults, subTestResults);
 		return lastResult;
 	}
-	private void colourReport(Tables body, Row row,
+	private void colourReport(Tables body, IRow row,
 			TestResults testResults, TestResults subTestResults) {
 		if (doTraverse.toExpandDefinedActions() || subTestResults.problems() || testResults.isAbandoned()) {
 			if (testResults.isAbandoned())
