@@ -49,14 +49,13 @@ public class TestSpecialAction {
 		assertThat(lazySpecial.isSome(),is(true));
 		assertThat(lazySpecial.get().run(testResults),is((Object)null));
 	}
-	@Test
+	@Test(expected=RuntimeException.class)
 	public void checkIsNone() throws Exception {
 		context.checking(new Expectations() {{
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,3);will(throwException(new RuntimeException()));
 		}});
 		Option<LazySpecial> lazySpecial = special.check(initialRow, testResults);
-		assertThat(lazySpecial.isNone(),is(true));
 	}
 	@Test(expected=MissingCellsException.class)
 	public void rowIsTooSmallForCheck() throws Exception {

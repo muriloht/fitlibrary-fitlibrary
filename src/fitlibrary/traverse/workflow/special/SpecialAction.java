@@ -11,7 +11,6 @@ import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
 import fitlibrary.traverse.workflow.caller.LazySpecial;
 import fitlibrary.utility.TestResults;
-import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
@@ -25,7 +24,6 @@ public class SpecialAction {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseCheck");
-//		try {
 			final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,less);
 			final ICell expectedCell = row.last();
 			return new Some<LazySpecial>(new LazySpecial() {
@@ -37,9 +35,5 @@ public class SpecialAction {
 					return null;
 				}
 			});
-//		} catch (Exception e) {
-//			System.out.println("Exception in SpecialAction is "+e);
-//			return None.none();
-//		}
 	}
 }

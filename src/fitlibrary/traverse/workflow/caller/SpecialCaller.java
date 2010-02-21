@@ -38,7 +38,6 @@ public class SpecialCaller extends DoCaller {
 				specialMethod = null;
 				setProblem(e);
 			} catch (Exception e) {
-				e.printStackTrace();
 				specialMethod = null;
 			}
 		}
