@@ -20,7 +20,7 @@ public abstract class TestSpecialAction {
 	ICell expectedCell = context.mock(ICell.class,"expected cell");
 	ICell firstCell = context.mock(ICell.class,"first cell");
 	TestResults testResults = new TestResults();
-	SpecialAction special = new SpecialAction(actionContext);
+	PrefixSpecialAction special = new PrefixSpecialAction(actionContext);
 	ICalledMethodTarget target = context.mock(ICalledMethodTarget.class);
 	
 }

@@ -13,8 +13,8 @@
 #
  * !-DoFixture-! first tries to find a method that matches an action in keyword style (inter-leaved keywords and arguments)
  * Only if there is no match, it then tries to find a method in sequence style (the first cell contains the name of the method and subsequent cells contain the arguments)
- * This works with all infix special actions ('''is''', '''matches''', etc)
- * This works the following prefix special actions: '''check''', '''not''', '''reject''', '''show''', '''show after''', '''show escaped'''
+ * This works with all the infix special actions ('''is''', '''matches''', etc)
+ * This works with the following prefix special actions: '''check''', '''not''', '''reject''', '''show''', '''show after''', '''show escaped''', '''set''', '''set symbol named''', '''log'''
  * This makes it particularly easy to access ordinary methods within a SUT without having to write adapter methods in keyword style.
 #
 !3 New special action in !-DoFixture-!

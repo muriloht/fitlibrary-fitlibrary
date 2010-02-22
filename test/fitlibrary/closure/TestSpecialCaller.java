@@ -69,10 +69,10 @@ public class TestSpecialCaller {
 			one(lookupMethodTarget).findSpecialMethod(evaluator,"a");will(returnValue(specialMethod));
 			allowing(specialMethod).getReturnType();will(returnValue(TwoStageSpecial.class));
 			one(specialMethod).invoke(with(any(Object[].class)));will(returnValue(lazySpecial));
-			one(lazySpecial).run(testResults);will(returnValue("result"));
+			one(lazySpecial).run(testResults);
 		}});
 		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);
 		assertThat(specialCaller.isValid(), is(true));
-		assertThat(specialCaller.run(row,testResults), is((Object)"result"));
+		assertThat(specialCaller.run(row,testResults), is((Object)null));
 	}
 }

@@ -14,9 +14,9 @@ import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 
 @RunWith(JMock.class)
-public class TestShow extends TestSpecialAction {
+public class TestLog extends TestSpecialAction {
 	@Test
-	public void textIsShown() throws Exception {
+	public void textIsLogged() throws Exception {
 		context.checking(new Expectations() {{
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
@@ -24,9 +24,9 @@ public class TestShow extends TestSpecialAction {
 			allowing(initialRow).cell(0);will(returnValue(firstCell));
 			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
 			one(target).getResultString("result");will(returnValue("Result"));
-			one(actionContext).show(initialRow,"Result");
+			one(actionContext).logMessage("Result");
 		}});
-		TwoStageSpecial lazySpecial = special.show(initialRow);
+		TwoStageSpecial lazySpecial = special.log(initialRow);
 		lazySpecial.run(testResults);
 	}
 	@Test(expected=RuntimeException.class)
@@ -35,13 +35,13 @@ public class TestShow extends TestSpecialAction {
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(throwException(new RuntimeException()));
 		}});
-		special.show(initialRow);
+		special.log(initialRow);
 	}
 	@Test(expected=MissingCellsException.class)
 	public void rowIsTooSmall() throws Exception {
 		context.checking(new Expectations() {{
 			allowing(initialRow).size();will(returnValue(1));
 		}});
-		special.show(initialRow);
+		special.log(initialRow);
 	}
 }

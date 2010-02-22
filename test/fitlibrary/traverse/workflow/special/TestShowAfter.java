@@ -5,9 +5,6 @@
 
 package fitlibrary.traverse.workflow.special;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
@@ -30,7 +27,7 @@ public class TestShowAfter extends TestSpecialAction {
 			one(actionContext).showAfterTable("Result");
 		}});
 		TwoStageSpecial lazySpecial = special.showAfter(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test(expected=RuntimeException.class)
 	public void hasMissingMethod() throws Exception {

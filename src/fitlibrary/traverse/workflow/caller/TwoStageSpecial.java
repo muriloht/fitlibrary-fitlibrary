@@ -8,5 +8,5 @@ package fitlibrary.traverse.workflow.caller;
 import fitlibrary.utility.TestResults;
 
 public interface TwoStageSpecial {
-	Object run(TestResults testResults);
+	void run(TestResults testResults);
 }

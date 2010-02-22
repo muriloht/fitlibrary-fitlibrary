@@ -5,9 +5,6 @@
 
 package fitlibrary.traverse.workflow.special;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
@@ -27,11 +24,10 @@ public class TestShowEscaped extends TestSpecialAction {
 			allowing(initialRow).cell(0);will(returnValue(firstCell));
 			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
 			one(target).getResultString("result");will(returnValue("<Result"));
-			one(initialRow).addCell("&lt;Result");will(returnValue(expectedCell));
-			one(expectedCell).shown();
+			one(actionContext).show(initialRow,"&lt;Result");
 		}});
 		TwoStageSpecial lazySpecial = special.showEscaped(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test(expected=RuntimeException.class)
 	public void hasMissingMethod() throws Exception {

@@ -5,9 +5,6 @@
 
 package fitlibrary.traverse.workflow.special;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.lang.reflect.InvocationTargetException;
 
 import org.jmock.Expectations;
@@ -23,7 +20,7 @@ import fitlibrary.exception.FitLibraryShowException.Show;
 import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
-import fitlibrary.traverse.workflow.special.SpecialAction.NotSyle;
+import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
 
 @RunWith(JMock.class)
 public class TestNot extends TestSpecialAction {
@@ -41,11 +38,10 @@ public class TestNot extends TestSpecialAction {
 	public void reportsPassWithFalseResult() throws Exception {
 		context.checking(new NotExpectations() {{			
 			one(target).invokeForSpecial(subRow,testResults,false,firstCell);will(returnValue(false));
-
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsPassWithParseExceptionThrown() throws Exception {
@@ -55,18 +51,18 @@ public class TestNot extends TestSpecialAction {
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithParseExceptionThrown() throws Exception {
 		final BadNumberException exception = new BadNumberException();
 		context.checking(new NotExpectations() {{
 			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			will(throwException(exception));
+			  will(throwException(exception));
 			one(initialRow).error(testResults,exception);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsFailWithTrueResult() throws Exception {
@@ -75,7 +71,7 @@ public class TestNot extends TestSpecialAction {
 			one(firstCell).fail(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithNonBooleanResult() throws Exception {
@@ -84,7 +80,7 @@ public class TestNot extends TestSpecialAction {
 			one(firstCell).error(with(testResults),with(any(NotRejectedException.class)));
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsNothingWithIgnoredException() throws Exception {
@@ -93,7 +89,7 @@ public class TestNot extends TestSpecialAction {
 			   will(throwException(new IgnoredException()));
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsPassWithParseExceptionInIgnoredException() throws Exception {
@@ -103,18 +99,18 @@ public class TestNot extends TestSpecialAction {
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsFailWithParseExceptionInIgnoredException() throws Exception {
 		final BadNumberException embeddedException = new BadNumberException();
 		context.checking(new NotExpectations() {{
 			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			will(throwException(new IgnoredException(embeddedException)));
+			  will(throwException(new IgnoredException(embeddedException)));
 			one(initialRow).error(testResults,embeddedException);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithOtherFitLibraryExceptionThrown() throws Exception {
@@ -125,7 +121,7 @@ public class TestNot extends TestSpecialAction {
 			one(initialRow).error(testResults,exception);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsPassWithInvocationTargetExceptionThrown() throws Exception {
@@ -135,7 +131,7 @@ public class TestNot extends TestSpecialAction {
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithInvocationTargetExceptionThrown() throws Exception {
@@ -146,7 +142,7 @@ public class TestNot extends TestSpecialAction {
 			one(initialRow).error(testResults,embeddedException);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithFitLibraryInsideInvocationTargetExceptionThrown() throws Exception {
@@ -157,16 +153,17 @@ public class TestNot extends TestSpecialAction {
 			one(initialRow).error(testResults,embeddedException);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsPassWithOtherExceptionThrown() throws Exception {
 		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell); will(throwException(new RuntimeException("")));
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell); 
+			  will(throwException(new RuntimeException("")));
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void reportsErrorWithOtherExceptionThrown() throws Exception {
@@ -176,8 +173,8 @@ public class TestNot extends TestSpecialAction {
 			  will(throwException(exception));
 			one(initialRow).error(testResults,exception);
 		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		TwoStageSpecial twoStageSpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
+		twoStageSpecial.run(testResults);
 	}
 	@Test(expected=RuntimeException.class)
 	public void hasMissingMethod() throws Exception {

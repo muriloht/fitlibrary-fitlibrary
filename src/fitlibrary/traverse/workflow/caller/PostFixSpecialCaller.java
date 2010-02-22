@@ -10,6 +10,7 @@ import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
 
 public class PostFixSpecialCaller extends DoCaller {
@@ -17,6 +18,11 @@ public class PostFixSpecialCaller extends DoCaller {
 	private CalledMethodTarget specialMethod;
 
 	public PostFixSpecialCaller(Row row, DoTraverseInterpreter interpreter) {
+		// Warning: Hack to fix conflict between "set" and "=", by giving "set" precedence.
+		String firstCell = row.text(0,interpreter);
+		if (row.size() == 4 && "=".equals(row.text(2,interpreter)) && 
+		    ("set".equals(firstCell) || "setSymbolNamed".equals(ExtendedCamelCase.camel(firstCell))))
+				return;
 		if (row.size() >= 2) {
 			methodName = row.text(row.size()-2,interpreter);
 			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(interpreter, methodName);

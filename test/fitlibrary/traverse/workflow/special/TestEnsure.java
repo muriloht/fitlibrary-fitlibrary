@@ -5,9 +5,6 @@
 
 package fitlibrary.traverse.workflow.special;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.lang.reflect.InvocationTargetException;
 
 import org.jmock.Expectations;
@@ -26,11 +23,10 @@ public class TestEnsure extends TestSpecialAction {
 		public EnsureExpectations() throws Exception {
 			allowing(initialRow).size();will(returnValue(3));
 			allowing(initialRow).cell(0);will(returnValue(firstCell));
+			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
 			one(actionContext).setExpectedResult(true);
 			one(actionContext).findMethodFromRow(initialRow,1,0);
 			   will(returnValue(target));
-			   
-			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
 		}
 	}
 	@Test
@@ -52,7 +48,7 @@ public class TestEnsure extends TestSpecialAction {
 			one(firstCell).passOrFail(testResults,pass);
 		}});
 		TwoStageSpecial lazySpecial = special.ensure(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void ignoredWithIgnoredException() throws Exception {
@@ -61,7 +57,7 @@ public class TestEnsure extends TestSpecialAction {
 			   will(throwException(new IgnoredException()));
 		}});
 		TwoStageSpecial lazySpecial = special.ensure(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void errorWithEmbeddedException() throws Exception {
@@ -72,7 +68,7 @@ public class TestEnsure extends TestSpecialAction {
 			one(initialRow).error(testResults,embeddedException);
 		}});
 		TwoStageSpecial lazySpecial = special.ensure(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test
 	public void errorWithException() throws Exception {
@@ -83,7 +79,7 @@ public class TestEnsure extends TestSpecialAction {
 			one(initialRow).error(testResults,exception);
 		}});
 		TwoStageSpecial lazySpecial = special.ensure(initialRow);
-		assertThat(lazySpecial.run(testResults),is((Object)null));
+		lazySpecial.run(testResults);
 	}
 	@Test(expected=RuntimeException.class)
 	public void hasMissingMethod() throws Exception {

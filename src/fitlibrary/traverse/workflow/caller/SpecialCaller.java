@@ -17,14 +17,14 @@ import fitlibrary.utility.TestResults;
 public class SpecialCaller extends DoCaller {
 	private String methodName;
 	private ICalledMethodTarget specialMethod;
-	private TwoStageSpecial lazySpecial = null;
+	private TwoStageSpecial twoStageSpecial = null;
 
 	public SpecialCaller(IRow row, Evaluator evaluator, LookupMethodTarget lookupTarget) {
 		methodName = row.text(0,evaluator);
 		specialMethod = lookupTarget.findSpecialMethod(evaluator, methodName);
 		if (specialMethod != null && TwoStageSpecial.class.isAssignableFrom(specialMethod.getReturnType())) {
 			try {
-				lazySpecial = (TwoStageSpecial) specialMethod.invoke(new Object[]{row});
+				twoStageSpecial = (TwoStageSpecial) specialMethod.invoke(new Object[]{row});
 			} catch (InvocationTargetException e) {
 				specialMethod = null;
 				if (e.getCause() instanceof Exception)
@@ -43,8 +43,10 @@ public class SpecialCaller extends DoCaller {
 	}
 	@Override
 	public Object run(IRow row, TestResults testResults) throws Exception {
-		if (lazySpecial != null)
-			return lazySpecial.run(testResults);
+		if (twoStageSpecial != null) {
+			twoStageSpecial.run(testResults);
+			return null;
+		}
 		return specialMethod.invoke(new Object[] { row, testResults });
 	}
 	@Override

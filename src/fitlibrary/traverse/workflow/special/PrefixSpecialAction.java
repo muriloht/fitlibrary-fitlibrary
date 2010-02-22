@@ -7,13 +7,15 @@ package fitlibrary.traverse.workflow.special;
 
 import java.lang.reflect.InvocationTargetException;
 
+import ognl.Ognl;
+
 import fit.Fixture;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.FitLibraryException;
-import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.NotRejectedException;
 import fitlibrary.exception.parse.ParseException;
+import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
@@ -21,13 +23,16 @@ import fitlibrary.traverse.workflow.caller.CallManager;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.option.None;
+import fitlibrary.utility.option.Option;
+import fitlibrary.utility.option.Some;
 
-public class SpecialAction {
-	public enum ShowSyle { ORDINARY, ESCAPED }
+public class PrefixSpecialAction {
+	public enum ShowSyle { ORDINARY, ESCAPED, LOGGED }
 	public enum NotSyle { PASSES_ON_EXCEPION, ERROR_ON_EXCEPION }
 	protected final SpecialActionContext actionContext;
 	
-	public SpecialAction(SpecialActionContext actionContext) {
+	public PrefixSpecialAction(SpecialActionContext actionContext) {
 		this.actionContext = actionContext;
 	}
 	public TwoStageSpecial check(final IRow row) throws Exception {
@@ -37,19 +42,21 @@ public class SpecialAction {
 		final ICell expectedCell = row.last();
 		return new TwoStageSpecial() {
 			@Override
-			public Object run(TestResults testResults) {
+			public void run(TestResults testResults) {
 				if (actionContext.isGatherExpectedForGeneration()) // This needs to use a copy of the row, otherwise duplicates error messages
 					actionContext.setExpectedResult(target.getResult(expectedCell,testResults));
 				target.invokeAndCheckForSpecial(row.rowFrom(2),expectedCell,testResults,row,row.cell(0));
-				return null;
 			}
 		};
 	}
 	public TwoStageSpecial show(final IRow row) throws Exception {
-		return show(row,SpecialAction.ShowSyle.ORDINARY);
+		return show(row,PrefixSpecialAction.ShowSyle.ORDINARY);
 	}
 	public TwoStageSpecial showEscaped(final IRow row) throws Exception {
-		return show(row,SpecialAction.ShowSyle.ESCAPED);
+		return show(row,PrefixSpecialAction.ShowSyle.ESCAPED);
+	}
+	public TwoStageSpecial log(final IRow row) throws Exception {
+		return show(row,PrefixSpecialAction.ShowSyle.LOGGED);
 	}
 	private TwoStageSpecial show(final IRow row, final ShowSyle showStyle) throws Exception {
 		if (row.size() <= 1)
@@ -57,18 +64,26 @@ public class SpecialAction {
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
-			public Object run(TestResults testResults) {
+			public void run(TestResults testResults) {
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
 					String text = target.getResultString(result);
-					if (showStyle == ShowSyle.ESCAPED)
-						text = Fixture.escape(text);
-					row.addCell(text).shown();
-					CallManager.addShow(row);
+					report(text);
 				} catch (Exception e) {
 					// No result, so ignore it
 				}
-				return null;
+			}
+			private void report(String text) {
+				switch (showStyle) {
+				case ORDINARY:
+					actionContext.show(row,text);
+					break;
+				case ESCAPED:
+					actionContext.show(row,Fixture.escape(text));
+					break;
+				case LOGGED:
+					actionContext.logMessage(text);
+				}
 			}
 		};
 	}
@@ -78,14 +93,13 @@ public class SpecialAction {
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
-			public Object run(TestResults testResults) {
+			public void run(TestResults testResults) {
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
 					actionContext.showAfterTable(target.getResultString(result));
 				} catch (Exception e) {
 					// No result, so ignore it
 				}
-				return null;
 			}
 		};
 	}
@@ -95,7 +109,7 @@ public class SpecialAction {
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
-			public Object run(TestResults testResults) {
+			public void run(TestResults testResults) {
 				actionContext.setExpectedResult(true); // Has to be in 2nd stage
 				ICell firstCell = row.cell(0);
 				try {
@@ -110,7 +124,6 @@ public class SpecialAction {
 				} catch (Exception e) {
 					row.error(testResults, e);
 				}
-				return null;
 			}
 		};
 	}
@@ -120,7 +133,7 @@ public class SpecialAction {
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
-			public Object run(TestResults testResults) {
+			public void run(TestResults testResults) {
 				actionContext.setExpectedResult(false); // Has to be in 2nd stage
 				ICell notCell = row.cell(0);
 				try {
@@ -156,7 +169,62 @@ public class SpecialAction {
 					else
 						row.error(testResults,e);
 				}
-				return null;
+			}
+		};
+	}
+	private Option<ICalledMethodTarget> getTarget(final IRow row) throws Exception {
+		if (row.text(2,actionContext).equals("=")) {
+			if (row.size() < 4)
+				throw new MissingCellsException("Do");
+			else if (row.size() > 4)
+				throw new ExtraCellsException("");
+			return None.none();
+		}
+		return new Some<ICalledMethodTarget>(actionContext.findMethodFromRow(row,2,0));
+	}
+	public TwoStageSpecial set(final IRow row) throws Exception {
+		if (row.size() <= 2)
+			throw new MissingCellsException("Do");
+		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);
+		return new TwoStageSpecial() {
+			@Override
+			public void run(TestResults testResults) {
+				actionContext.setExpectedResult(true); // Has to be in 2nd stage
+				try {
+					String variableName = row.text(1,actionContext);
+					if (optionalTarget.isSome()) {
+						Object result = optionalTarget.get().invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+						actionContext.setDynamicVariable(variableName,result);
+					} else
+						actionContext.setDynamicVariable(variableName,Ognl.getValue(row.text(3,actionContext), null));
+				} catch (IgnoredException e) {
+					// No result, so ignore
+				} catch (Exception e) {
+					row.error(testResults, e);
+				}
+			}
+		};
+	}
+	public TwoStageSpecial setSymbolNamed(final IRow row) throws Exception {
+		if (row.size() <= 2)
+			throw new MissingCellsException("Do");
+		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);
+		return new TwoStageSpecial() {
+			@Override
+			public void run(TestResults testResults) {
+				actionContext.setExpectedResult(true); // Has to be in 2nd stage
+				try {
+					String variableName = row.text(1,actionContext);
+					if (optionalTarget.isSome()) {
+						Object result = optionalTarget.get().invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+						actionContext.setFitVariable(variableName,result);
+					} else
+						actionContext.setFitVariable(variableName,Ognl.getValue(row.text(3,actionContext), null));
+				} catch (IgnoredException e) {
+					// No result, so ignore
+				} catch (Exception e) {
+					row.error(testResults, e);
+				}
 			}
 		};
 	}

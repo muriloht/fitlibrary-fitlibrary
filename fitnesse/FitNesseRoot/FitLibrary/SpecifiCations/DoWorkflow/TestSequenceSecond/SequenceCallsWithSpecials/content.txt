@@ -28,6 +28,19 @@
 |'''ensure'''|''or''|true|false|
 |'''ensure'''|''or''|false|false|
 
+|'''set'''|x|''plus''|1|2|
+|''get''|@{x}|'''is'''|3|
+
+|'''set'''|x|=|1+2|
+|''get''|@{x}|'''is'''|3|
+
+|'''set symbol named'''|x|''plus''|1|2|
+|''get symbol named''|x|'''is'''|3|
+
+|'''set symbol  named'''|x|=|1+2|
+|''get symbol named''|x|'''is'''|3|
+
+
 |''plus''|1|2|'''is'''|3|
 
 |''plus''|1|2|'''becomes'''|3|
@@ -156,6 +169,56 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
+<tr><td><b>set</b></td>
+<td>x</td>
+<td><i>plus</i></td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr><td><i>get</i></td>
+<td>3</td>
+<td><b>is</b></td>
+<td colspan="2" class="pass">3</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><b>set</b></td>
+<td>x</td>
+<td>=</td>
+<td>1+2</td>
+</tr>
+<tr><td><i>get</i></td>
+<td>3</td>
+<td><b>is</b></td>
+<td class="pass">3</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><b>set symbol named</b></td>
+<td>x</td>
+<td><i>plus</i></td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr><td><i>get symbol named</i></td>
+<td>x</td>
+<td><b>is</b></td>
+<td colspan="2" class="pass">3</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><b>set symbol  named</b></td>
+<td>x</td>
+<td>=</td>
+<td>1+2</td>
+</tr>
+<tr><td><i>get symbol named</i></td>
+<td>x</td>
+<td><b>is</b></td>
+<td class="pass">3</td>
+</tr>
+</table>
+<br/><br/><table border="1" cellspacing="0">
 <tr><td><i>plus</i></td>
 <td>1</td>
 <td>2</td>
