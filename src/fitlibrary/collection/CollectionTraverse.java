@@ -22,6 +22,7 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.NoSuchPropertyException;
 import fitlibrary.object.DomainObjectSetUpTraverse;
 import fitlibrary.table.Cell;
+import fitlibrary.table.ICell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
@@ -205,7 +206,7 @@ public abstract class CollectionTraverse extends Traverse {
         	return;
         }
         for (int i = 0; i < values.length; i++) {
-        	Cell addCell = row.addCell("&nbsp;");
+        	ICell addCell = row.addCell("&nbsp;");
             Object value = values[i];
             if (value == null)
             	addCell.ignore(testResults);

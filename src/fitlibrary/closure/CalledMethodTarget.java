@@ -110,7 +110,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 		return invoke(args);
 	}
-    public Object invokeForSpecial(Row row, TestResults testResults, boolean catchParseError, Cell operatorCell) throws Exception {
+    public Object invokeForSpecial(IRow row, TestResults testResults, boolean catchParseError, ICell operatorCell) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);

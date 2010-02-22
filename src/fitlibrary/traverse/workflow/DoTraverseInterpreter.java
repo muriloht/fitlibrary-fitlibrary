@@ -231,7 +231,10 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			result += ", Type p"+i;
 		return result+") {}";
 	}
-	public ICalledMethodTarget findMethodFromRow(IRow row, int from, int less) throws Exception {
+	public ICalledMethodTarget findMethodFromRow(IRow row, int from, int extrasCellsOnEnd) throws Exception {
+		return findMethodByActionName(row.rowFrom(from), row.size() - from - extrasCellsOnEnd - 1);
+	}
+	public ICalledMethodTarget findMethodFromRow222(IRow row, int from, int less) throws Exception {
 		return findMethodByActionName(row.rowFrom(from), row.size() - less);
 	}
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
@@ -324,7 +327,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		return expectedResult;
 	}
 	protected Object callMethodInRow(Row row, TestResults testResults, boolean catchError, Cell operatorCell) throws Exception {
-		return findMethodFromRow(row,1, 2).invokeForSpecial(row.rowFrom(2),testResults,catchError,operatorCell);
+		return findMethodFromRow222(row,1, 2).invokeForSpecial(row.rowFrom(2),testResults,catchError,operatorCell);
 	}
 	public boolean isGatherExpectedForGeneration() {
 		return gatherExpectedForGeneration;

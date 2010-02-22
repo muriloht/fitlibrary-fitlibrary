@@ -26,7 +26,7 @@ public class PostFixSpecialCaller extends DoCaller {
 	}
 	private void findMethodForInnerAction(Row row, DoTraverseInterpreter interpreter) {
 		try {
-			interpreter.findMethodFromRow(row,0,3);
+			interpreter.findMethodFromRow222(row,0,3);
 		} catch (Exception e) {
 			setProblem(e);
 		}

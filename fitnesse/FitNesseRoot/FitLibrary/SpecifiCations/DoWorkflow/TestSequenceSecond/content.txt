@@ -1,6 +1,3 @@
 !contents -R2
 
-^SequenceCallInFixture
-^SequenceCallInSut
-^SequenceIsHiddenByDoStyle
-^SequenceIsNotMentionedInErrorIfTooSmall
+^SequenceCallsWithSpecials

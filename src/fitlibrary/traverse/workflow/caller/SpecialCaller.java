@@ -13,23 +13,18 @@ import fitlibrary.table.IRow;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.utility.TestResults;
-import fitlibrary.utility.option.Option;
 
 public class SpecialCaller extends DoCaller {
 	private String methodName;
 	private ICalledMethodTarget specialMethod;
-	private LazySpecial lazySpecial = null;
+	private TwoStageSpecial lazySpecial = null;
 
 	public SpecialCaller(IRow row, Evaluator evaluator, LookupMethodTarget lookupTarget) {
 		methodName = row.text(0,evaluator);
 		specialMethod = lookupTarget.findSpecialMethod(evaluator, methodName);
-		if (specialMethod != null && Option.class.isAssignableFrom(specialMethod.getReturnType())) {
+		if (specialMethod != null && TwoStageSpecial.class.isAssignableFrom(specialMethod.getReturnType())) {
 			try {
-				Option<LazySpecial> lazyOption = (Option<LazySpecial>) invokeSpecialMethod(row,new TestResults());
-				if (lazyOption.isSome())
-					lazySpecial = lazyOption.get();
-				else
-					specialMethod = null;
+				lazySpecial = (TwoStageSpecial) specialMethod.invoke(new Object[]{row});
 			} catch (InvocationTargetException e) {
 				specialMethod = null;
 				if (e.getCause() instanceof Exception)
@@ -50,9 +45,6 @@ public class SpecialCaller extends DoCaller {
 	public Object run(IRow row, TestResults testResults) throws Exception {
 		if (lazySpecial != null)
 			return lazySpecial.run(testResults);
-		return invokeSpecialMethod(row, testResults);
-	}
-	private Object invokeSpecialMethod(IRow row, TestResults testResults) throws Exception {
 		return specialMethod.invoke(new Object[] { row, testResults });
 	}
 	@Override

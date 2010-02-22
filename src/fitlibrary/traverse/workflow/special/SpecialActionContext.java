@@ -9,7 +9,8 @@ import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.table.IRow;
 
 public interface SpecialActionContext {
-	ICalledMethodTarget findMethodFromRow(IRow row, int i, int less) throws Exception ;
+	ICalledMethodTarget findMethodFromRow(IRow row, int start, int extrasCellsOnEnd) throws Exception ;
 	boolean isGatherExpectedForGeneration();
 	void setExpectedResult(Object result);
+	void showAfterTable(String s);
 }

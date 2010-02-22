@@ -7,7 +7,21 @@
 #
  * Fit is now included in the !-FitLibrary-! download. 
  * Fit will continue to run under !-FitNesse-! but !-FitNesse-! will no longer come with the Fit framework code included.
- * Fir variables can be accessed from !-FitLibrary-! - see below.
+ * Fit variables can be accessed from !-FitLibrary-! - see below.
+#
+!3 !-DoFixture-! and Sequence-style actions
+#
+ * !-DoFixture-! first tries to find a method that matches an action in keyword style (inter-leaved keywords and arguments)
+ * Only if there is no match, it then tries to find a method in sequence style (the first cell contains the name of the method and subsequent cells contain the arguments)
+ * This works with all infix special actions ('''is''', '''matches''', etc)
+ * This works the following prefix special actions: '''check''', '''not''', '''reject''', '''show''', '''show after''', '''show escaped'''
+ * This makes it particularly easy to access ordinary methods within a SUT without having to write adapter methods in keyword style.
+#
+!3 New special action in !-DoFixture-!
+#
+ * The action 'not true' is like 'not', except that it gives an error if an exception has been thrown. For example:
+
+|'''not true'''|''some action''|1|''on''|2|
 #
 !3 Loading defined actions
 #

@@ -8,13 +8,13 @@ package fitlibrary.table;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 
 import fit.Fixture;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.traverse.Traverse;
+import fitlibrary.utility.ExceptionHandler;
 
 public class ExceptionHandlingStandard implements ExceptionHandling {
 	public void mustBeThreadSafe() {
@@ -34,14 +34,6 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
             + (buf.toString()) + "</div></pre>";
     }
 	public Throwable unwrapThrowable(Throwable throwable) {
-		Throwable exception = throwable;
-		while (true) {
-			if (exception.getCause() != null)
-				exception = exception.getCause();
-			else if (exception.getClass().equals(InvocationTargetException.class))
-				exception = ((InvocationTargetException) exception).getTargetException();
-			else
-				return exception;
-		}
+		return ExceptionHandler.unwrap(throwable);
 	}
 }

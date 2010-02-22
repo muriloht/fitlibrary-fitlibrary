@@ -78,7 +78,7 @@
 <tr><td class="error"><b>show</b></td>
 <td>add cell to</td>
 <td>gh</td>
-<td bgcolor=#C0C0FF>added: gh<hr>next line</td></tr>
+</tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td class="error"><b>set</b></td>

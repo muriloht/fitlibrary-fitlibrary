@@ -11,6 +11,9 @@ package fitlibrary.exception;
 public class IgnoredException extends RuntimeException {
 	private Exception ignoredException = null;
 
+	public Exception getIgnoredException() {
+		return ignoredException;
+	}
 	public IgnoredException(Exception ignoredException) {
 		this.ignoredException = ignoredException;
 	}

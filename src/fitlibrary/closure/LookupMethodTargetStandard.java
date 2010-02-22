@@ -30,7 +30,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			return null;
 		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class, TestResults.class });
 		if (findEntityMethod == null)
-			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ IRow.class, TestResults.class });
+			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ IRow.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);

@@ -61,11 +61,11 @@ public class Table extends ParseNode {
     public Row lastRow() {
         return row(size()-1);
     }
-    public void addRow(Row row) {
+    public void addRow(IRow copy) {
         if (parse.parts == null)
-            parse.parts = row.parse;
+            parse.parts = copy.parse();
         else
-            parse.parts.last().more = row.parse;
+            parse.parts.last().more = copy.parse();
     }
     public Row newRow() {
         Row row = new Row();

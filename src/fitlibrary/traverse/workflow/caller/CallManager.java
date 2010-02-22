@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 
@@ -40,7 +41,7 @@ public class CallManager {
 		}
 		return set;
 	}
-	public static void addShow(Row row) {
+	public static void addShow(IRow row) {
 		if (definedActionCallsInProgress.get() == null || definedActionCallsInProgress.get().isEmpty())
 			return;
 		Table showTable = shows.get();
@@ -48,7 +49,7 @@ public class CallManager {
 			showTable = new Table();
 			shows.set(showTable);
 		}
-		Row copy = row.copy();
+		IRow copy = row.copy();
 		copy.last().shown();
 		showTable.addRow(copy);
 	}

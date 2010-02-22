@@ -89,7 +89,7 @@ public class Row extends ParseNode implements IRow {
             parse.parts.last().more = cell.parse;
         return this;
     }
-	public Cell addCell(String text) {
+	public ICell addCell(String text) {
         Cell cell = new Cell(text);
         addCell(cell);
         return cell;

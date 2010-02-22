@@ -11,24 +11,28 @@ import fitlibrary.utility.TestResults;
 public interface ICell {
 	String text();
 	String text(Evaluator evaluator);
+	String fullText();
+	boolean isBlank(Evaluator evaluator);
+	boolean hasEmbeddedTable();
+	Table getEmbeddedTable();
+	
+	void passOrFail(TestResults testResults, boolean right);
 	void pass(TestResults testResults);
 	void pass(TestResults testResults, String msg);
+	void passIfNotEmbedded(TestResults testResults);
 	void fail(TestResults testResults);
+	void fail(TestResults testResults, String show, Evaluator evaluator);
+	void failWithStringEquals(TestResults testResults, String show,
+			Evaluator evaluator);
 	void exceptionMayBeExpected(boolean exceptionExpected, Exception e,
 			TestResults testResults);
 	void error(TestResults testResults);
-	boolean unresolved(Evaluator evaluator);
-	void wrongHtml(TestResults testResults, String show);
-	void passIfNotEmbedded(TestResults testResults);
-	boolean hasEmbeddedTable();
-	void failWithStringEquals(TestResults testResults, String show,
-			Evaluator evaluator);
-	void fail(TestResults testResults, String show, Evaluator evaluator);
 	void error(TestResults testResults, Throwable e);
-	Table getEmbeddedTable();
-	boolean isBlank(Evaluator evaluator);
-	void unexpected(TestResults testResults, String string);
-	String fullText();
 	void ignore(TestResults testResults);
-	void passOrFail(TestResults testResults, boolean right);
+	void unexpected(TestResults testResults, String string);
+	void wrongHtml(TestResults testResults, String show);
+	
+	boolean unresolved(Evaluator evaluator);
+	void shown();
+	void setUnvisitedEscapedText(String s);
 }

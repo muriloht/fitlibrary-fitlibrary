@@ -40,18 +40,19 @@ import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
 import fitlibrary.traverse.workflow.caller.CallManager;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
-import fitlibrary.traverse.workflow.caller.LazySpecial;
+import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.traverse.workflow.special.SpecialAction;
 import fitlibrary.traverse.workflow.special.SpecialActionContext;
+import fitlibrary.traverse.workflow.special.SpecialAction.NotSyle;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.FileHandler;
 import fitlibrary.utility.TestResults;
-import fitlibrary.utility.option.Option;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext {
+	private final SpecialAction specialAction = new SpecialAction(this);
 	private static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
 	// Methods that can be called within DoTraverse.
@@ -293,7 +294,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);
@@ -312,7 +313,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell specialCell = operatorCell(row);
 		Cell expectedCell = row.last();
 		try {
-			ICalledMethodTarget target = findMethodFromRow(row,0,less);
+			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			if (gatherExpectedForGeneration)
 				expectedResult = target.getResult(expectedCell,testResults);
 			
@@ -388,7 +389,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell specialCell = operatorCell(row);
 		Cell expectedCell = row.last();
 		try {
-			ICalledMethodTarget target = findMethodFromRow(row,0,less);
+			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			if (gatherExpectedForGeneration)
 				expectedResult = target.getResult(expectedCell,testResults);
 			
@@ -426,7 +427,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			int less = 3;
 			if (row.size() < less)
 				throw new MissingCellsException("DoTraverseMatches");
-			ICalledMethodTarget target = findMethodFromRow(row,0,less);
+			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
 			if (gatherExpectedForGeneration)
 				expectedResult = target.getResult(expectedCell,testResults);
@@ -447,7 +448,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("eventuallyMatches");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);
@@ -480,7 +481,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			int less = 3;
 			if (row.size() < less)
 				throw new MissingCellsException("DoTraverseMatches");
-			ICalledMethodTarget target = findMethodFromRow(row,0,less);
+			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
 			if (gatherExpectedForGeneration)
 				expectedResult = target.getResult(expectedCell,testResults);
@@ -502,7 +503,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);
@@ -520,7 +521,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);
@@ -544,7 +545,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("doesNoContain");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		if (gatherExpectedForGeneration)
 			expectedResult = target.getResult(expectedCell,testResults);
@@ -562,7 +563,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseMatches");
-		ICalledMethodTarget target = findMethodFromRow(row,0,less);
+		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
 		Row actionPartOfRow = row.rowTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
@@ -584,89 +585,37 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the rest of the row matches
 	 *  the expected value in the last cell of the row.
 	 */
-//	public void check(final Row row, TestResults testResults) throws Exception {
-//		int less = 3;
-//		if (row.size() < less)
-//			throw new MissingCellsException("DoTraverseCheck");
-//		ICalledMethodTarget target = findMethodFromRow(row,1,less);
-//		Cell expectedCell = row.last();
-//		if (gatherExpectedForGeneration) // This needs to use a copy of a cell, otherwise duplicates error messages
-//			setExpectedResult(target.getResult(expectedCell,testResults));
-//		target.invokeAndCheckForSpecial(row.rowFrom(2),expectedCell,testResults,row,row.cell(0));
-//	}
-	public Option<LazySpecial> check(final IRow row, final TestResults testResults) throws Exception {
-		return new SpecialAction(this).check(row, testResults);
+	public TwoStageSpecial check(final IRow row) throws Exception {
+		return specialAction.check(row);
 	}
-	public void reject(Row row, TestResults testResults) throws Exception {
-		not(row,testResults);
+	public TwoStageSpecial reject(final IRow row) throws Exception {
+		return not(row);
 	}
     /** Same as reject()
      * @param testResults 
      */
-	public void not(Row row, TestResults testResults) throws Exception {
-		Cell notCell = row.cell(0);
-		expectedResult = new Boolean(false);
-		try {
-			Object result = callMethodInRow(row,testResults,false,row.cell(0));
-		    if (!(result instanceof Boolean))
-		        notCell.error(testResults,new NotRejectedException());
-		    else if (((Boolean)result).booleanValue())
-		        notCell.fail(testResults);
-		    else
-		        notCell.pass(testResults);
-		} catch (IgnoredException e) {
-			// No result, so ignore
-		} catch (FitLibraryException e) {
-			if (e instanceof ParseException)
-				notCell.pass(testResults);
-			else
-				row.error(testResults,e);
-		} catch (InvocationTargetException e) {
-			Throwable embedded = e.getTargetException();
-			if (embedded instanceof FitLibraryShowException) {
-				row.error(testResults, embedded);
-			} else
-				notCell.pass(testResults);
-		} catch (Exception e) {
-		    notCell.pass(testResults);
-		}
+	public TwoStageSpecial not(final IRow row) throws Exception {
+		return specialAction.not(row,NotSyle.PASSES_ON_EXCEPION);
+	}
+	public TwoStageSpecial notTrue(final IRow row) throws Exception {
+		return specialAction.not(row,NotSyle.ERROR_ON_EXCEPION);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is not altered, so it can be viewed directly.
      */
-	public void show(Row row, TestResults testResults) throws Exception {
-		try {
-			ICalledMethodTarget target = findMethodFromRow(row,1, 2);
-		    Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
-		    row.addCell(target.getResultString(result)).shown();
-		    CallManager.addShow(row);
-		} catch (IgnoredException e) {
-			// No result, so ignore
-		}
+	public TwoStageSpecial show(final IRow row) throws Exception {
+		return specialAction.show(row);
 	}
 	/** Adds the result of the action in the rest of the row to a folding area after the table.
      */
-	public void showAfter(Row row, TestResults testResults) throws Exception {
-		try {
-			ICalledMethodTarget target = findMethodFromRow(row,1, 2);
-		    Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
-		    showAfterTable(target.getResultString(result));
-		} catch (IgnoredException e) {
-			// No result, so ignore
-		}
+	public TwoStageSpecial showAfter(final IRow row) throws Exception {
+		return specialAction.showAfter(row);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is escaped so that the underlying layout text can be viewed.
      */
-	public void showEscaped(Row row, TestResults testResults) throws Exception {
-		try {
-			ICalledMethodTarget target = findMethodFromRow(row,1, 2);
-		    Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
-		    row.addCell(Fixture.escape(target.getResultString(result))).shown();
-		    CallManager.addShow(row);
-		} catch (IgnoredException e) {
-			// No result, so ignore
-		}
+	public TwoStageSpecial showEscaped(final IRow row) throws Exception {
+		return specialAction.showEscaped(row);
 	}
 	/** Set the dynamic variable name to the result of the action, or to the string if there's no action.
 	 */
@@ -679,7 +628,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				setDynamicVariable(row.text(1, this), Ognl.getValue(row.text(3, this), null));
 				return;
 			}
-			Object result = findMethodFromRow(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+			Object result = findMethodFromRow222(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
 			setDynamicVariable(row.text(1,this), result);
 		} catch (IgnoredException e) {
 			// No result, so ignore
@@ -696,7 +645,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				Fixture.setSymbol(row.text(1, this), Ognl.getValue(row.text(3, this), null));
 				return;
 			}
-			Object result = findMethodFromRow(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+			Object result = findMethodFromRow222(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
 			Fixture.setSymbol(row.text(1,this), result);
 		} catch (IgnoredException e) {
 			// No result, so ignore
@@ -720,23 +669,27 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
 	 * @param testResults 
      */
-	public void ensure(Row row, TestResults testResults) throws Exception {
-		expectedResult = new Boolean(true);
-		try {
-		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
-		    Boolean resultBoolean = result == null ? Boolean.TRUE : (Boolean) result;
-		    row.cell(0).passOrFail(testResults,resultBoolean.booleanValue());
-		} catch (IgnoredException e) {
-			// No result, so ignore
-		} catch (InvocationTargetException e) {
-			Throwable embedded = e.getTargetException();
-			if (embedded instanceof FitLibraryShowException) {
-				row.error(testResults, embedded);
-			}
-		} catch (Exception e) {
-		    row.cell(0).fail(testResults);
-		}
+//	public void ensure(Row row, TestResults testResults) throws Exception {
+//		expectedResult = new Boolean(true);
+//		try {
+//		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
+//		    Boolean resultBoolean = result == null ? Boolean.TRUE : (Boolean) result;
+//		    row.cell(0).passOrFail(testResults,resultBoolean.booleanValue());
+//		} catch (IgnoredException e) {
+//			// No result, so ignore
+//		} catch (InvocationTargetException e) {
+//			Throwable embedded = e.getTargetException();
+//			if (embedded instanceof FitLibraryShowException) {
+//				row.error(testResults, embedded);
+//			}
+//		} catch (Exception e) {
+//		    row.cell(0).fail(testResults);
+//		}
+//	}
+	public TwoStageSpecial ensure(final IRow row) throws Exception {
+		return specialAction.ensure(row);
 	}
+
 	/** The rest of the row is ignored. 
      */
 	@SuppressWarnings("unused")
@@ -766,7 +719,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	}
 	public void log(Row row, TestResults testResults) throws Exception {
 		try {
-			ICalledMethodTarget target = findMethodFromRow(row,1, 2);
+			ICalledMethodTarget target = findMethodFromRow222(row,1, 2);
 		    Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,row.cell(0));
 		    logMessage(target.getResultString(result));
 		} catch (IgnoredException e) {

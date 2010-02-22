@@ -9,7 +9,6 @@ import fitlibrary.parser.Parser;
 import fitlibrary.table.Cell;
 import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
-import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoTraverse.Comparison;
 import fitlibrary.utility.TestResults;
 
@@ -19,8 +18,8 @@ public interface ICalledMethodTarget extends MethodTarget {
 	void invokeAndCheckForSpecial(IRow rowFrom, ICell expectedCell,
 			TestResults testResults, IRow row, ICell cell);
 	Object getResult(ICell expectedCell, TestResults testResults);
-	public Object invokeForSpecial(Row row, TestResults testResults, 
-			boolean catchParseError, Cell operatorCell) throws Exception;
+	public Object invokeForSpecial(IRow row, TestResults testResults, 
+			boolean catchParseError, ICell operatorCell) throws Exception;
 	void notResult(Cell expectedCell, Object result, TestResults testResults);
 	Object invoke(IRow row, TestResults testResults, boolean catchParseError) throws Exception;
 	public void compare(Cell expectedCell, Comparable actual, TestResults testResults, Comparison compare);

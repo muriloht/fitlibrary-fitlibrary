@@ -16,10 +16,9 @@ import org.junit.runner.RunWith;
 
 import fitlibrary.table.IRow;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.caller.LazySpecial;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
+import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.TestResults;
-import fitlibrary.utility.option.Option;
 
 @RunWith(JMock.class)
 public class TestSpecialCaller {
@@ -27,11 +26,9 @@ public class TestSpecialCaller {
 	Evaluator evaluator = context.mock(Evaluator.class);
 	LookupMethodTarget lookupMethodTarget  = context.mock(LookupMethodTarget.class);
 	IRow row = context.mock(IRow.class);
-	LazySpecial lazySpecial = context.mock(LazySpecial.class);
+	TwoStageSpecial lazySpecial = context.mock(TwoStageSpecial.class);
 	ICalledMethodTarget specialMethod = context.mock(ICalledMethodTarget.class);
 	TestResults testResults = new TestResults();
-	@SuppressWarnings("unchecked")
-	Option option = context.mock(Option.class);
 	
 	@Test
 	public void invalidAsMethodUnknown() {
@@ -43,23 +40,11 @@ public class TestSpecialCaller {
 		assertThat(specialCaller.isValid(), is(false));
 	}
 	@Test
-	public void invalidAsLazySpecialIsNone() throws Exception {
-		context.checking(new Expectations() {{
-			allowing(row).text(0,evaluator);will(returnValue("a"));
-			one(lookupMethodTarget).findSpecialMethod(evaluator,"a");will(returnValue(specialMethod));
-			allowing(specialMethod).getReturnType();will(returnValue(Option.class));
-			one(specialMethod).invoke(with(any(Object[].class)));will(returnValue(option));
-			allowing(option).isSome();will(returnValue(false));
-		}});
-		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);
-		assertThat(specialCaller.isValid(), is(false));
-	}
-	@Test
 	public void invalidAsSpecialMethodThrowsException() throws Exception {
 		context.checking(new Expectations() {{
 			allowing(row).text(0,evaluator);will(returnValue("a"));
 			one(lookupMethodTarget).findSpecialMethod(evaluator,"a");will(returnValue(specialMethod));
-			allowing(specialMethod).getReturnType();will(returnValue(Option.class));
+			allowing(specialMethod).getReturnType();will(returnValue(TwoStageSpecial.class));
 			one(specialMethod).invoke(with(any(Object[].class)));will(throwException(new RuntimeException()));
 		}});
 		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);
@@ -82,10 +67,8 @@ public class TestSpecialCaller {
 		context.checking(new Expectations() {{
 			allowing(row).text(0,evaluator);will(returnValue("a"));
 			one(lookupMethodTarget).findSpecialMethod(evaluator,"a");will(returnValue(specialMethod));
-			allowing(specialMethod).getReturnType();will(returnValue(Option.class));
-			one(specialMethod).invoke(with(any(Object[].class)));will(returnValue(option));
-			one(option).isSome();will(returnValue(true));
-			one(option).get();will(returnValue(lazySpecial));
+			allowing(specialMethod).getReturnType();will(returnValue(TwoStageSpecial.class));
+			one(specialMethod).invoke(with(any(Object[].class)));will(returnValue(lazySpecial));
 			one(lazySpecial).run(testResults);will(returnValue("result"));
 		}});
 		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);

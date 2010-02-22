@@ -7,6 +7,6 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.utility.TestResults;
 
-public interface LazySpecial {
+public interface TwoStageSpecial {
 	Object run(TestResults testResults);
 }
