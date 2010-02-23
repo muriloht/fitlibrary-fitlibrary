@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.exception;
 
-public class ExceptionThrownByNestedToString {
+import fitlibrary.object.DomainFixtured;
+
+public class ExceptionThrownByNestedToString implements DomainFixtured {
 	public Value value() {
 		return new Value();
 	}

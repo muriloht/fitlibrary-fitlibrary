@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.domain;
 
-public class EmptyCellIsNull {
+import fitlibrary.object.DomainFixtured;
+
+public class EmptyCellIsNull implements DomainFixtured {
 	private User user;
 	
 	public User getUser() {

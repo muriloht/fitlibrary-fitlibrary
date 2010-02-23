@@ -7,6 +7,7 @@
 ||!3 ''Storytests for specifying:''|
 |^DomainWorkflow|''As with ^DoWorkflow, but with support for three phases of ${workflow}'': ${setup}, ${actions} and ${checks}|
 |^DoWorkflow|''A sequence of actions on a system, starting in some state (!-DoFixture-!)''|
+|^AutoWrapWithDo|''A nopn-fixture object created in the first table with be auto-wrapped with !-DoFixture-!''|
 |^CollectionSpecifications|''Various collections of elements, such as lists, sets, maps, arrays, etc (both checking and setup)''|
 |^BusinessRules|''Calculation rules, constraints, and combinations''|
 |^DomainObject|''The property values of ${domainObject}s (both checking and setup)''|

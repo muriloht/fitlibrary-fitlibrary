@@ -9,10 +9,11 @@ package fitlibrary.specify.entityParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
 @SuppressWarnings("unchecked")
-public class MissingFinderMethod {
+public class MissingFinderMethod implements DomainFixtured {
 	User user;
 	Map users = new HashMap();
 	

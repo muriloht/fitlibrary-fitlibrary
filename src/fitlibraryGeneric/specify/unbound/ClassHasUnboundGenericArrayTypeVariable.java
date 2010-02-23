@@ -6,7 +6,9 @@
 
 package fitlibraryGeneric.specify.unbound;
 
-public class ClassHasUnboundGenericArrayTypeVariable <T> {
+import fitlibrary.object.DomainFixtured;
+
+public class ClassHasUnboundGenericArrayTypeVariable <T> implements DomainFixtured {
 	private T[] t;
 
 	public T[] getT() {

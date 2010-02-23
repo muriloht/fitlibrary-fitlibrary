@@ -1,9 +1,10 @@
 package fitlibraryGeneric.specify.genericFinder;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
 @SuppressWarnings({"unchecked","unused"})
-public class NonGenericFinderForGeneric implements DomainAdapter {
+public class NonGenericFinderForGeneric implements DomainAdapter, DomainFixtured  {
 	private Pair<Integer,Integer> integerIntegerPair;
 	
 	public Pair<Integer,Integer> getIntegerIntegerPair() {

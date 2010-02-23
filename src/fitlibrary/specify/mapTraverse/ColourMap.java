@@ -7,9 +7,10 @@ package fitlibrary.specify.mapTraverse;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class ColourMap {
+public class ColourMap implements DomainFixtured {
 	@SuppressWarnings("unchecked")
 	public Map getColourMap() {
 		HashMap map = new HashMap();

@@ -6,6 +6,8 @@
 
 package fitlibrary.specify.missingMethod;
 
-public class InJustSut {
+import fitlibrary.object.DomainFixtured;
+
+public class InJustSut implements DomainFixtured {
 	//
 }

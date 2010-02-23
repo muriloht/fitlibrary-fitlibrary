@@ -1,6 +1,5 @@
 !**< def
-!define list (
-|name|
+!define list (|name|
 ||
 |fitlibrary|
 )
@@ -13,13 +12,15 @@
 *!
 !2 An element of the collection may be null
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<br><table border="1" cellspacing="0">
+|${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.collection.NullInCollection</td>
 </tr>
 </table>
-<hr><br><hr><br><table border="1" cellspacing="0">
+<hr/>
+<br/><hr/>
+<br/><table border="1" cellspacing="0">
 <tr><td>list</td>
-<td><br><table border="1" cellspacing="0">
+<td><table border="1" cellspacing="0">
 <tr><td class="error">name<hr/> <span class="fit_label">An element of the collection is null</span></td>
 </tr>
 <tr><td>&nbsp;</td>

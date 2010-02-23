@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class BadClassFromClassFactoryMethodForInterface implements DomainAdapter {
+public class BadClassFromClassFactoryMethodForInterface implements DomainAdapter, DomainFixtured  {
 	public void setAbstractUser(@SuppressWarnings("unused") AbstractUser user) {
 		//
 	}

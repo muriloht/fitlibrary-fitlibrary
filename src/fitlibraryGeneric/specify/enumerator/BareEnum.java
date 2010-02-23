@@ -2,7 +2,9 @@ package fitlibraryGeneric.specify.enumerator;
 
 import java.util.List;
 
-public class BareEnum {
+import fitlibrary.object.DomainFixtured;
+
+public class BareEnum implements DomainFixtured {
 	private ColourEnum enumeration;
 	private List<ColourEnum> list;
 	private ColourEnum[] array;

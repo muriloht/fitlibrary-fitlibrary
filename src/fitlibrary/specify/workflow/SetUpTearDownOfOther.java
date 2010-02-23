@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-public class SetUpTearDownOfOther {
+import fitlibrary.object.DomainFixtured;
+
+public class SetUpTearDownOfOther implements DomainFixtured {
     public SetUp withOtherSetUp() {
         return new SetUp();
     }

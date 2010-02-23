@@ -6,7 +6,9 @@
 
 package fitlibraryGeneric.specify.unbound;
 
-public class MethodHasUnboundTypeVariable {
+import fitlibrary.object.DomainFixtured;
+
+public class MethodHasUnboundTypeVariable implements DomainFixtured {
 	public <T extends Object> T same(T t) {
 		return t;
 	}

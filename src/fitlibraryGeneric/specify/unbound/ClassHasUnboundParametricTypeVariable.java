@@ -8,7 +8,9 @@ package fitlibraryGeneric.specify.unbound;
 
 import java.util.List;
 
-public class ClassHasUnboundParametricTypeVariable <T> {
+import fitlibrary.object.DomainFixtured;
+
+public class ClassHasUnboundParametricTypeVariable <T> implements DomainFixtured {
 	private List<T> t;
 
 	public List<T> getT() {

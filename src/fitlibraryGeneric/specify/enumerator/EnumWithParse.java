@@ -1,6 +1,8 @@
 package fitlibraryGeneric.specify.enumerator;
 
-public class EnumWithParse {
+import fitlibrary.object.DomainFixtured;
+
+public class EnumWithParse implements DomainFixtured {
 	private ColourEnum enumeration;
 	
 	public static enum ColourEnum {

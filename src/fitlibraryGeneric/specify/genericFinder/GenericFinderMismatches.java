@@ -3,10 +3,11 @@ package fitlibraryGeneric.specify.genericFinder;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
 @SuppressWarnings({"unchecked","unused"})
-public class GenericFinderMismatches implements DomainAdapter {
+public class GenericFinderMismatches implements DomainAdapter, DomainFixtured  {
 	private Pair<Integer,Integer> integerIntegerPair;
 	
 	public Pair<Integer,Integer> getIntegerIntegerPair() {

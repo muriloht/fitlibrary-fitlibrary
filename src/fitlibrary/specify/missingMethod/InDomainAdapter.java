@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.missingMethod;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class InDomainAdapter implements DomainAdapter {
+public class InDomainAdapter implements DomainAdapter, DomainFixtured  {
 	public Object getSystemUnderTest() {
 		return new InJustSut();
 	}

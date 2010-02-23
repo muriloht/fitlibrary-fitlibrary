@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.exception;
 
-public class ExceptionThrownByToString {
+import fitlibrary.object.DomainFixtured;
+
+public class ExceptionThrownByToString implements DomainFixtured {
 	public Value value() {
 		return new Value();
 	}

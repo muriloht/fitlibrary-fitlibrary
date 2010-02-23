@@ -6,9 +6,10 @@
 
 package fitlibraryGeneric.specify.object;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class GenericObjectContainsGeneric {
+public class GenericObjectContainsGeneric implements DomainFixtured {
 	private Gen<Colour> gen = new Gen<Colour>();
 	
 	public Gen<Colour> getGen() {

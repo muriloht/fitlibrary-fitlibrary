@@ -6,10 +6,11 @@
 
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Account;
 import fitlibrary.specify.eg.User;
 
-public class Objects {
+public class Objects implements DomainFixtured {
 	private User user = new User();
 	
 	public Objects() {

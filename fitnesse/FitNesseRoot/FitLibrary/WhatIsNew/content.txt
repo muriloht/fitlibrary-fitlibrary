@@ -23,6 +23,16 @@
 
 |'''not true'''|''some action''|1|''on''|2|
 #
+!3 Auto-wrapping of bare objects with !-DoFixture-!
+#
+ * If the first table in a storytest creates an object that's not a fixture, it will be auto-wrapped with !-DoFixture-!
+ * This means that it's not necessary to subclass fixtures for usual development
+ * Bare objects used to be auto-wrapped by !-DomainFixture-!. If that behaviour is still required, include the following in a SuiteSetUp page:
+
+!|fitlibrary.Configuration|
+
+|auto wrap pojo with !-DoFixture-!|
+#
 !3 Loading defined actions
 #
  * An action has been added to allow defined actions to be loaded quickly when the !-FitNesseRoot-! directory is not in the usual place.

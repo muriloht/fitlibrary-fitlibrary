@@ -50,8 +50,8 @@ public class FixtureBridge extends Fixture {
 		}
 		catch (Throwable e) {
 			headingCell.error(results, e);
+			return null;
 		}
-		return null;
 	}
 
     String[] getArgsForTable(Row row) {

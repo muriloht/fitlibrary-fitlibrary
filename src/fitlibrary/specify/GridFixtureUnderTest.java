@@ -6,10 +6,11 @@ package fitlibrary.specify;
 
 import fitlibrary.GridFixture;
 import fitlibrary.ImageFixture;
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.parser.graphic.ImageNameGraphic;
 import fitlibrary.parser.tree.ListTree;
 
-public class GridFixtureUnderTest {
+public class GridFixtureUnderTest implements DomainFixtured {
 	public GridFixture empty() {
 		return new GridFixture(new Object[][] {});
 	}

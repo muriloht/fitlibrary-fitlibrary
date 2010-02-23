@@ -9,10 +9,11 @@ package fitlibrary.specify.domain;
 import java.util.Arrays;
 import java.util.List;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
 @SuppressWarnings("unchecked")
-public class Lists {
+public class Lists implements DomainFixtured {
 	private List aColourList = Arrays.asList(new Colour[]{ 
 			Colour.RED, Colour.GREEN });
 	

@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.missingProperty;
 
-public class InJustSut {
+import fitlibrary.object.DomainFixtured;
+
+public class InJustSut implements DomainFixtured {
 	Colour colour = new Colour();
 	
 	public Colour getColour() {

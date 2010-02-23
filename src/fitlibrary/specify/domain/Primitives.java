@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.domain;
 
-public class Primitives {
+import fitlibrary.object.DomainFixtured;
+
+public class Primitives implements DomainFixtured {
 	private int anInt = 3;
 	private double aDouble = 3.14159;
 	private boolean aBoolean = true;

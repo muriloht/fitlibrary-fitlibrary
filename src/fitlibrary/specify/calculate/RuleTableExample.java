@@ -25,12 +25,5 @@ public class RuleTableExample extends RuleTable {
 		public void setIn2(int i) {
 			this.in2 = i;
 		}
-		public void reset() {
-			System.out.println("Reset");
-		}
-		public void execute() {
-			System.out.println("execute");
-		}
 	}
-
 }

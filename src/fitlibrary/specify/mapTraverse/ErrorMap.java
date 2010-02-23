@@ -7,8 +7,10 @@ package fitlibrary.specify.mapTraverse;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
+
 @SuppressWarnings("unchecked")
-public class ErrorMap {
+public class ErrorMap implements DomainFixtured {
 	public Map getErrorMap() {
 		HashMap map = new HashMap();
 		map.put("a",new InError());

@@ -1,0 +1,6 @@
+!**> configuration
+!|fitlibrary.Configuration|
+
+|auto wrap pojo with !-DoFixture-!|
+
+**!

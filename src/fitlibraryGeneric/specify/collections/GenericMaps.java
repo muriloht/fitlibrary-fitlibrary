@@ -13,9 +13,10 @@ import java.util.Map;
 
 import fitlibrary.collection.map.ListOfMapsTraverse;
 import fitlibrary.collection.map.SubsetMapTraverse;
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class GenericMaps {
+public class GenericMaps implements DomainFixtured {
 	private Map<Colour,Colour> aMap = new HashMap<Colour, Colour>();
 	private Map<Colour,Map<Colour,Colour>> aMapOfMaps  = new HashMap<Colour,Map<Colour,Colour>>();
 

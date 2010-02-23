@@ -6,10 +6,11 @@
 
 package fitlibrary.specify.exception;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
 @SuppressWarnings("unused")
-public class ExceptionThrownByNestedShow implements DomainAdapter {
+public class ExceptionThrownByNestedShow implements DomainAdapter, DomainFixtured  {
 	public Project project() {
 		return new Project();
 	}

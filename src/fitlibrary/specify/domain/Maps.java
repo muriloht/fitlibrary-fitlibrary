@@ -9,10 +9,11 @@ package fitlibrary.specify.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
 @SuppressWarnings("unchecked")
-public class Maps {
+public class Maps implements DomainFixtured {
 	private Map aColourMap = new HashMap();
 	private Map aStringMap = new HashMap();
 	

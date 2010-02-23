@@ -6,13 +6,14 @@
 
 package fitlibrary.specify.valueObject;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.specify.eg.FixedPoint;
 import fitlibrary.specify.eg.FixedPointInterface;
 import fitlibrary.traverse.FitLibrarySelector;
 import fitlibrary.traverse.Traverse;
 
-public class ParseMyFixedPointAsStringWithSuperDelegate {
+public class ParseMyFixedPointAsStringWithSuperDelegate implements DomainFixtured {
 	public ParseMyFixedPointAsStringWithSuperDelegate() {
 		ParseDelegation.registerSuperParseDelegate(FixedPointInterface.class, new FixedPointSuperDelegate());
 	}

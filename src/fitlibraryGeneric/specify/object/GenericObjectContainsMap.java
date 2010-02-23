@@ -8,7 +8,9 @@ package fitlibraryGeneric.specify.object;
 
 import java.util.Map;
 
-public class GenericObjectContainsMap {
+import fitlibrary.object.DomainFixtured;
+
+public class GenericObjectContainsMap implements DomainFixtured {
 	private Gen<Boolean, Integer> gen = new Gen<Boolean, Integer>();
 	
 	public Gen<Boolean, Integer> getGen() {

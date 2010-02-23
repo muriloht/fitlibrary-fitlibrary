@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-public class AnyCharactersInActions {
+import fitlibrary.object.DomainFixtured;
+
+public class AnyCharactersInActions implements DomainFixtured {
 	 public int plusEquals(int arg1, int arg2) {
 		 return arg1+arg2;
 	 }

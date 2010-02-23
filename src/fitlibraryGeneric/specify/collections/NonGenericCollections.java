@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
 @SuppressWarnings("unchecked")
-public class NonGenericCollections {
+public class NonGenericCollections implements DomainFixtured {
 	private List aList;
 	private Set aSet;
 	private Map aMap;

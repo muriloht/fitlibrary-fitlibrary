@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class PropertyOfInterfaceType implements DomainAdapter {
+public class PropertyOfInterfaceType implements DomainAdapter, DomainFixtured  {
 	private AbstractUser user;
 	
 	public interface AbstractUser {

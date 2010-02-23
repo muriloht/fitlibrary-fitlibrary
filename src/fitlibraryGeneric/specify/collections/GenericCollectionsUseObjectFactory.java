@@ -9,9 +9,10 @@ package fitlibraryGeneric.specify.collections;
 import java.util.List;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class GenericCollectionsUseObjectFactory {
+public class GenericCollectionsUseObjectFactory implements DomainFixtured {
 	private List<Colour> aList;
 	private Set<Colour> aSet;
 	public List<Colour> getAList() {

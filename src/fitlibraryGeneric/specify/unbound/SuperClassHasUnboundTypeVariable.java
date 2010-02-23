@@ -6,6 +6,8 @@
 
 package fitlibraryGeneric.specify.unbound;
 
-public class SuperClassHasUnboundTypeVariable <T> extends ClassHasUnboundTypeVariable<T> {
+import fitlibrary.object.DomainFixtured;
+
+public class SuperClassHasUnboundTypeVariable <T> extends ClassHasUnboundTypeVariable<T> implements DomainFixtured {
 	//
 }

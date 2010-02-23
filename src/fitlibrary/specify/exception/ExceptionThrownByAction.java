@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.exception;
 
-public class ExceptionThrownByAction {
+import fitlibrary.object.DomainFixtured;
+
+public class ExceptionThrownByAction implements DomainFixtured {
 	@SuppressWarnings("unused")
 	public void thrown(int i) {
 		throw new ForcedException();

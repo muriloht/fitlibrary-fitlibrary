@@ -7,7 +7,9 @@ package fitlibrary.specify.mapTraverse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StringMap {
+import fitlibrary.object.DomainFixtured;
+
+public class StringMap implements DomainFixtured {
 	@SuppressWarnings("unchecked")
 	public Map getStringMap() {
 		HashMap map = new HashMap();

@@ -9,10 +9,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Count;
 
 @SuppressWarnings("unchecked")
-public class Match {
+public class Match implements DomainFixtured {
 	public List stringAbc() {
 		return Arrays.asList(new String[] {"a","b","c"});
 	}

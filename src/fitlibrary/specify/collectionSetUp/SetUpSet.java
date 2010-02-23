@@ -9,10 +9,11 @@ package fitlibrary.specify.collectionSetUp;
 import java.util.HashSet;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
 @SuppressWarnings("unchecked")
-public class SetUpSet {
+public class SetUpSet implements DomainFixtured {
 	private Set iOUSet = new HashSet();
 	
 	public User nameOwe(String name, double owe) {

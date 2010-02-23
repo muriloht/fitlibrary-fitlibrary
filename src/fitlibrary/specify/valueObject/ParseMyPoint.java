@@ -6,11 +6,12 @@
 
 package fitlibrary.specify.valueObject;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.MyPoint;
 import fitlibrary.traverse.FitLibrarySelector;
 import fitlibrary.traverse.Traverse;
 
-public class ParseMyPoint {
+public class ParseMyPoint implements DomainFixtured {
 	public MyPoint aPoint(MyPoint point) {
 		return point;
 	}

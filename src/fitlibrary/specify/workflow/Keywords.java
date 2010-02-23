@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-public class Keywords {
+import fitlibrary.object.DomainFixtured;
+
+public class Keywords implements DomainFixtured {
 	private double sum = 0.0;
 
 	public void buyAtDollarWithDiscountPercent(int count, double cost, int discountPercent) {

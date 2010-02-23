@@ -6,7 +6,9 @@
 
 package fitlibrary.specify.domain;
 
-public class MissingClassFactoryMethodForInterface {
+import fitlibrary.object.DomainFixtured;
+
+public class MissingClassFactoryMethodForInterface implements DomainFixtured {
 	@SuppressWarnings("unused")
 	public void setAbstractUser(AbstractUser user) {
 		//

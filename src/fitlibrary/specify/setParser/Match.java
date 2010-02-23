@@ -8,10 +8,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Count;
 
 @SuppressWarnings("unchecked")
-public class Match {
+public class Match implements DomainFixtured {
 	public Set getSetOfStringAbc() {
 		return new HashSet(Arrays.asList(new String[]{"a","b","c"}));
 	}

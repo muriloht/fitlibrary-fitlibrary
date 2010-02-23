@@ -6,7 +6,9 @@ package fitlibrary.specify.mapParser;
 
 import java.util.Map;
 
-public class Parse {
+import fitlibrary.object.DomainFixtured;
+
+public class Parse implements DomainFixtured {
 	@SuppressWarnings("unchecked")
 	public Map givenMap(Map map) {
 		return map;

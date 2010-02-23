@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.domain;
 
-public class BadConstructorsInNestedObjects {
+import fitlibrary.object.DomainFixtured;
+
+public class BadConstructorsInNestedObjects implements DomainFixtured {
 	private Employee employee = new Employee();
 	
 	public Employee getEmployee() {

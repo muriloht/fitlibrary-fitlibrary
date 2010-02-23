@@ -4,11 +4,12 @@
 */
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Account;
 import fitlibrary.specify.eg.Phone;
 import fitlibrary.specify.eg.User;
 
-public class UserAdapter {
+public class UserAdapter implements DomainFixtured {
 	private User user = new User();
 	
 	public User getSlowPayingUser() {

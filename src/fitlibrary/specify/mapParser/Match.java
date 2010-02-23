@@ -7,8 +7,10 @@ package fitlibrary.specify.mapParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
+
 @SuppressWarnings("unchecked")
-public class Match {
+public class Match implements DomainFixtured {
 	public Map getMapOfStringAbc() {
 		Map map = new HashMap();
 		map.put("a","b");

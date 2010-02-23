@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.exception;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class ExceptionThrownByFinder implements DomainAdapter {
+public class ExceptionThrownByFinder implements DomainAdapter, DomainFixtured  {
 	public void chargeWith(@SuppressWarnings("unused") User user, @SuppressWarnings("unused") double amount) {
 		//
 	}

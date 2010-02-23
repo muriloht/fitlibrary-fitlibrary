@@ -72,8 +72,15 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		"xref/1", "harvestUsingPatternFrom/3",
 		"setSystemPropertyTo/2",
 		"startStopWatch/0", "stopWatch/0", "sleepFor/1"
+//		"actions/0", "checks/0"
 	};
 	
+//	public void actions() {
+//		// Hack to .... (still needed???)
+//	}
+//	public void checks() {
+//		//
+//	}
 	public void startStopWatch() {
 		setDynamicVariable(STOP_WATCH, new StopWatch());
 	}

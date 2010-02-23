@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.exception;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class ExceptionThrownByNestedEquals implements DomainAdapter {
+public class ExceptionThrownByNestedEquals implements DomainAdapter, DomainFixtured  {
 	public Project project() {
 		return new Project();
 	}

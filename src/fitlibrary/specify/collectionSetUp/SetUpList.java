@@ -9,10 +9,11 @@ package fitlibrary.specify.collectionSetUp;
 import java.util.ArrayList;
 import java.util.List;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
 @SuppressWarnings("unchecked")
-public class SetUpList {
+public class SetUpList implements DomainFixtured {
 	private List iOUs = new ArrayList();
 
 	public User nameOwe(String name, double owe) {

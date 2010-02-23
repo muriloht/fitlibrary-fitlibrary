@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class Array {
+public class Array implements DomainFixtured {
 	private int[] anIntArray = {1,2,4};
 	private Colour[] aColourArray = { Colour.RED, Colour.GREEN };
 	private int[][] a2DArray = {anIntArray,anIntArray};

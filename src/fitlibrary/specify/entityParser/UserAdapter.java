@@ -9,11 +9,12 @@ package fitlibrary.specify.entityParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 import fitlibrary.traverse.DomainAdapter;
 
 @SuppressWarnings("unchecked")
-public class UserAdapter implements DomainAdapter {
+public class UserAdapter implements DomainAdapter, DomainFixtured  {
 	User user;
 	Map users = new HashMap();
 	

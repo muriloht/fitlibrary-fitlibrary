@@ -10,9 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.MyPoint;
 
-public class AutoWrap {
+public class AutoWrap implements DomainFixtured {
 	public int[] getAnArrayOfInt() {
 		return new int[]{1,2,3};
 	}

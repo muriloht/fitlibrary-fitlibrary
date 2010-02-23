@@ -76,21 +76,29 @@ public class RuleTable extends Traverse {
 	private void body(Table table, TestResults testResults) {
 		for (int r = 2; r < table.size(); r++) {
 			Row row = table.row(r);
-			boolean haveCalledExecuteForThisRow = executeMethod.isNone();
 			try {
 				if (resetMethod.isSome())
 					resetMethod.get().invoke();
-				for (int i = 0; i < row.size(); i++) {
-					Cell cell = row.cell(i);
-					ColumnTarget columnTarget = columnTargets.get(i);
-					if (!haveCalledExecuteForThisRow && columnTarget.isOutput()) {
-						executeMethod.get().invoke();
-						haveCalledExecuteForThisRow = true;
-					}
-					columnTarget.act(cell, testResults);
-				}
+				row(testResults, row);
 			} catch (Exception e) {
 				row.error(testResults, e);
+			}
+		}
+	}
+	private void row(TestResults testResults, Row row) throws Exception {
+		boolean haveCalledExecuteForThisRow = executeMethod.isNone();
+		for (int i = 0; i < row.size(); i++) {
+			Cell cell = row.cell(i);
+			try {
+				ColumnTarget columnTarget = columnTargets.get(i);
+				if (!haveCalledExecuteForThisRow && columnTarget.isOutput()) {
+					executeMethod.get().invoke();
+					haveCalledExecuteForThisRow = true;
+				}
+				columnTarget.act(cell, testResults);
+			} catch (Exception e) {
+				cell.error(testResults, e);
+				return;
 			}
 		}
 	}

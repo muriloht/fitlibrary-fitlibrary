@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.calculate;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class ResultingObjectIsSubType {
+public class ResultingObjectIsSubType implements DomainFixtured {
 	public Object superclassColour(Colour colour) {
 		return colour;
 	}

@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 import fitlibraryGeneric.utility.ListCreator;
 
 @SuppressWarnings("unchecked")
-public class GenericCollections {
+public class GenericCollections implements DomainFixtured {
 	private List<Colour> aList = ListCreator.list(Colour.RED, Colour.GREEN);
 	private Set<Colour> aSet = ListCreator.set(Colour.RED, Colour.GREEN);
 	private List<List<Colour>> aListOfLists = ListCreator.list(

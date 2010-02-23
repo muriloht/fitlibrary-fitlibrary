@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-public class Sum {
+import fitlibrary.object.DomainFixtured;
+
+public class Sum implements DomainFixtured {
 	private int sum = 0;
 
 	public void add(int i) {

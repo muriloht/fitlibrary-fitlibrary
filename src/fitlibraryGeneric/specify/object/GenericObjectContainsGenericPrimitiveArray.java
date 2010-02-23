@@ -6,7 +6,9 @@
 
 package fitlibraryGeneric.specify.object;
 
-public class GenericObjectContainsGenericPrimitiveArray {
+import fitlibrary.object.DomainFixtured;
+
+public class GenericObjectContainsGenericPrimitiveArray implements DomainFixtured {
 	private Gen<Integer> gen = new Gen<Integer>();
 	
 	public Gen<Integer> getGen() {

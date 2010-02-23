@@ -6,7 +6,9 @@
 
 package fitlibrary.eg;
 
-public class Calculator {
+import fitlibrary.object.DomainFixtured;
+
+public class Calculator implements DomainFixtured {
 	private int total;
 
 	public int getTotal() {

@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-public class PropertyAccess {
+import fitlibrary.object.DomainFixtured;
+
+public class PropertyAccess implements DomainFixtured {
 	public boolean isTrueProperty() {
 		return true;
 	}

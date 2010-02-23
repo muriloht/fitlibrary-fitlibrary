@@ -38,7 +38,7 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.JavaSpecific.MissingMethods.NullaryActionMissingWithAdapter"
+				"FitLibrary.SpecifiCations.AutoWrapWithDo.PojoInFirstTable"
 		};
 		run(pageNames);
 	}

@@ -22,6 +22,7 @@ public class BatchFitLibrary {
 	private SuiteRunner suiteRunner = new IndependentSuiteRunner(null);
 	private TableListener tableListener = new TableListener(TestResults.create(new Counts()));
 	private Reportage reportage;
+	private DoFlow doFlow = null; //new DoFlow();
 
 	public BatchFitLibrary() {
 		this(new DefaultReportage());
@@ -38,7 +39,9 @@ public class BatchFitLibrary {
 	}
 	public TestResults doTables(Tables theTables) {
 		tableListener.clearTestResults();
-		if (first) {
+		if (doFlow != null) {
+			doFlow.runStorytest(theTables,tableListener);
+		} else if (first) {
 			first = false;
 			FixtureBridge fixtureBridge = new FixtureBridge();
 			fixtureBridge.counts = tableListener.getTestResults().getCounts();

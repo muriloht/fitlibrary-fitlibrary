@@ -11,10 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
 @SuppressWarnings("unchecked")
-public class SetUpMap {
+public class SetUpMap implements DomainFixtured {
 	private Map iOUMap = new HashMap();
 	
 	public User nameOwe(String name, double owe) {

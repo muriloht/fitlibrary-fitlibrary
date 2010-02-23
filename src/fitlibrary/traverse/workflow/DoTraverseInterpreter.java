@@ -143,7 +143,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			return null;
 		}
 	}
-	static class OpenFixture extends Fixture {
+	public static class OpenFixture extends Fixture {
 		public OpenFixture(Counts counts) {
 			this.counts = counts;
 		}

@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class NullGenericCollections {
+public class NullGenericCollections implements DomainFixtured {
 	public List<Colour> getAList() {
 		return null;
 	}

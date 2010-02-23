@@ -4,7 +4,9 @@
 */
 package fitlibrary.specify.arrayParser;
 
-public class Parse {
+import fitlibrary.object.DomainFixtured;
+
+public class Parse implements DomainFixtured {
 	public int[] givenInts(int[] array) {
 		return array;
 	}

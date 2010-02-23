@@ -6,9 +6,10 @@
 
 package fitlibraryGeneric.specify.calculate;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class GenericCalculate {
+public class GenericCalculate implements DomainFixtured {
 	public Gen<Colour> getGen() {
 		return new Gen<Colour>();
 	}

@@ -8,9 +8,10 @@ package fitlibraryGeneric.specify.object;
 
 import java.util.List;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-public class GenericObjectContainsArrayOfGenericList {
+public class GenericObjectContainsArrayOfGenericList implements DomainFixtured {
 	private Gen<Colour> gen = new Gen<Colour>();
 	
 	public Gen<Colour> getGen() {

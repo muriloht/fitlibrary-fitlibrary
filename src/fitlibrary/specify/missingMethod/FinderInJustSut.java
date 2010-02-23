@@ -6,8 +6,10 @@
 
 package fitlibrary.specify.missingMethod;
 
+import fitlibrary.object.DomainFixtured;
+
 @SuppressWarnings("unused")
-public class FinderInJustSut {
+public class FinderInJustSut implements DomainFixtured {
 	public void addToColourMix(Colour colour) {
 		//
 	}

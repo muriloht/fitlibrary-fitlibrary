@@ -8,7 +8,11 @@ package fitlibrary.suite;
 
 import fit.FitServerBridge;
 import fit.FixtureBridge;
+import fitlibrary.Configuration;
+import fitlibrary.DoFixture;
 import fitlibrary.DomainFixture;
+import fitlibrary.Configuration.ConfigAutoWrapPojo;
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.AlienTraverseHandler;
@@ -39,9 +43,13 @@ public class IndependentSuiteRunner implements SuiteRunner {
 			tables.ignoreAndFinished(tableListener);
 			return;
 		}
-		if (!evaluator(object))
-			object = new DomainFixture(object);
-		if (object instanceof DoEvaluator) {
+		if (!evaluator(object)) {
+			if (Configuration.configAutoWrapPojo == ConfigAutoWrapPojo.WITH_DOMAIN_FIXURE ||
+					object instanceof DomainFixtured)
+				object = new DomainFixture(object);
+			else
+				object = new DoFixture(object);
+		} if (object instanceof DoEvaluator) {
 			DoEvaluator doEvaluator = (DoEvaluator)object;
 			doEvaluator.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 			

@@ -7,10 +7,11 @@ package fitlibrary.specify.mapTraverse;
 import java.util.Map;
 import java.util.TreeMap;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 import fitlibrary.specify.eg.Count;
 
-public class MixedMap {
+public class MixedMap implements DomainFixtured {
 	@SuppressWarnings("unchecked")
 	public Map getMixedMap() {
 		Map map = new TreeMap();

@@ -6,9 +6,10 @@
 
 package fitlibrary.specify.domain;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class NotConcrete implements DomainAdapter {
+public class NotConcrete implements DomainAdapter, DomainFixtured {
 	private AbstractUser user;
 	
 	public static abstract class AbstractUser {
