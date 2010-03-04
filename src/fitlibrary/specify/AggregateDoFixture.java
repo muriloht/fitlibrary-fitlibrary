@@ -9,9 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import fitlibrary.DoFixture;
-
-public class AggregateDoFixture extends DoFixture {
+public class AggregateDoFixture {
 	public Point sumAndGives(Point pt1, Point pt2) {
 		return pt1.plus(pt2);
 	}

@@ -1,7 +1,2 @@
-#!path fitlibrary.jar
-!path ../bin
-!path fitnesse.jar
-!define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
-
 |!contents|
 

@@ -17,10 +17,7 @@
 !2 It handles trees and images
 ^TestTrees
 !2 Collections may be nested
-^TestNestedArray
-^TestNestedArrayWithEmptyCollection
 ^TestEntityInNestedArray
-^TestDoubleNestedArray
 !2 Errors
 ^TestMissingCells
 ^TestExtraCells

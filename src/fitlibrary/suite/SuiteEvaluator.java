@@ -6,9 +6,9 @@
 
 package fitlibrary.suite;
 
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.traverse.workflow.DoEvaluator;
 
 public interface SuiteEvaluator extends DoEvaluator {
-	RuntimeContext getCopyOfDynamicVariables();
+	RuntimeContextInternal getCopyOfRuntimeContext();
 }

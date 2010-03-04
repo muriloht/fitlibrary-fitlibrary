@@ -2,8 +2,6 @@
 !**< def
 !define test (!|fitlibrary.specify.workflow.AnyCharactersInActions|
 
-|''actions''|
-
 |'''check'''||1|+|2|=|3|
 
 |'''check'''|"|fit library|"+"|2|"=|fit library 2|
@@ -14,10 +12,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.AnyCharactersInActions</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

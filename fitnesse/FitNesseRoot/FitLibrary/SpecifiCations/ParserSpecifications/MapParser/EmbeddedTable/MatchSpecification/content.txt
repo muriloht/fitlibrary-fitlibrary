@@ -5,10 +5,8 @@
 )
 !define test (!|fitlibrary.specify.mapParser.Match|
 
-|'''checks'''|
-
-|''map of 123''|${list}|
-|''map empty''||
+|''map of 123''|'''is'''|${list}|
+|''map empty''|'''is'''||
 )
 **!
 The Parser uses the key and value types of one of the elements of the Map to parse them all
@@ -17,12 +15,9 @@ The Parser uses the key and value types of one of the elements of the Map to par
 <tr><td>fitlibrary.specify.mapParser.Match</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><b>checks</b></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>map of 123</i></td>
+<td><b>is</b></td>
 <td><table border="1" cellspacing="0">
 <tr class="pass"><td>1</td>
 <td>2</td>
@@ -37,6 +32,7 @@ The Parser uses the key and value types of one of the elements of the Map to par
 </td>
 </tr>
 <tr><td><i>map empty</i></td>
+<td><b>is</b></td>
 <td class="pass">&nbsp;</td>
 </tr>
 </table>-!|

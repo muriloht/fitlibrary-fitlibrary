@@ -4,8 +4,6 @@
 )
 !define test (!|fitlibrary.specify.exception.ExceptionThrownBySetter|
 
-|''actions''|
-
 |''create user''|
 |boss|${boss}|
 
@@ -15,10 +13,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.exception.ExceptionThrownBySetter</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

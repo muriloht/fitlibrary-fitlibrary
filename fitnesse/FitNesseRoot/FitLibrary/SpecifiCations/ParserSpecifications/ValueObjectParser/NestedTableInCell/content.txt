@@ -10,8 +10,6 @@ Here's a simple example of using embedded tables for creating and checking ''val
 )
 !define test (!|fitlibrary.specify.valueObject.ParseMyPoint|
 
-|''actions''|
-
 |'''check'''|a point|${table1}|${table1}|
 
 |'''check'''|a point|${table2}|${table2}|
@@ -22,10 +20,6 @@ Here's a simple example of using embedded tables for creating and checking ''val
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.valueObject.ParseMyPoint</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

@@ -4,8 +4,6 @@
 )
 !define test (!|fitlibrary.specify.exception.ExceptionThrownByGetterInCollection|
 
-|''actions''|
-
 |departments|
 |users|
 |${users}|
@@ -16,10 +14,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.exception.ExceptionThrownByGetterInCollection</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

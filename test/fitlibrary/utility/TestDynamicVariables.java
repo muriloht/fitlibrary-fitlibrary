@@ -5,18 +5,19 @@
 package fitlibrary.utility;
 
 import junit.framework.TestCase;
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.runtime.RuntimeContextImplementation;
 
 public class TestDynamicVariables extends TestCase {
-	private RuntimeContext varEmpty;
-	private RuntimeContext varFull;
+	private RuntimeContextInternal varEmpty;
+	private RuntimeContextInternal varFull;
 	
 	@Override
 	public void setUp() {
-		varEmpty = new RuntimeContext();
+		varEmpty = new RuntimeContextImplementation();
 		String[] vars = { "a","A",
 				"b","B" };
-		varFull = new RuntimeContext(vars);
+		varFull = new RuntimeContextImplementation(vars);
 	}
 	public void testEmptyString() {
 		assertEquals("", varEmpty.dynamicVariables().resolve(""));
@@ -56,6 +57,6 @@ public class TestDynamicVariables extends TestCase {
 	}
 	public void testMatchOutOfSystemProperties() {
 		System.getProperties().put("a", "A");
-		assertEquals("A", new RuntimeContext().dynamicVariables().resolve("@{a}"));
+		assertEquals("A", new RuntimeContextImplementation().dynamicVariables().resolve("@{a}"));
 	}
 }

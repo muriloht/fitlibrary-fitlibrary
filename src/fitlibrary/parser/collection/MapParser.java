@@ -56,7 +56,7 @@ public class MapParser implements Parser {
 		return parse(cell.text(evaluator),testResults);
 	}
 	protected Object parseTable(Table table, TestResults testResults) {
-		MapSetUpTraverse setUp = new MapSetUpTraverse(keyTyped,valueTyped);
+		MapSetUpTraverse setUp = new MapSetUpTraverse(keyTyped,valueTyped,evaluator.getRuntimeContext());
 		setUp.interpretInnerTable(table,evaluator,testResults);
 		return setUp.getResults();
 	}

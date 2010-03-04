@@ -7,11 +7,10 @@ package fitlibrary.specify;
 import java.util.List;
 import java.util.Set;
 
-import fitlibrary.DoFixture;
 import fitlibrary.DomainObjectCheckFixture;
 import fitlibrary.DomainObjectSetUpFixture;
 
-public class AggregateDomainObject extends DoFixture {
+public class AggregateDomainObject {
 	Book description = new Book();
 
 	public DomainObjectSetUpFixture createBook() {

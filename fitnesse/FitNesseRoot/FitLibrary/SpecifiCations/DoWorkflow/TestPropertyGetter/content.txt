@@ -2,8 +2,6 @@ If an action has no arguments and doesn't correspond to a method, the property i
 !**< def
 !define test (!|fitlibrary.specify.workflow.PropertyAccess|
 
-|''actions''|
-
 |''true property''|
 
 |'''check'''|int property with 3|3|
@@ -12,10 +10,6 @@ If an action has no arguments and doesn't correspond to a method, the property i
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.PropertyAccess</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

@@ -7,16 +7,12 @@ The following ''buy'' actions all call the same method: ''buyAtDollarWithDiscoun
 !**< def
 !define test1 (!|fitlibrary.specify.workflow.Keywords|
 
-|''actions''|
-
 |''buy''|1|''at $''|12.00|''with discount''|10|''%''|
 |''buy''|4|''at $''|10.00|''with discount''|10|''%''|
 
 |'''check'''|''total owing $''|46.80|
 )
 !define test2 (!|fitlibrary.specify.workflow.Keywords|
-
-|''actions''|
 
 |''buy at $ with discount %''|1||12.00||10|
 
@@ -34,10 +30,6 @@ The following ''buy'' actions all call the same method: ''buyAtDollarWithDiscoun
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test1}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.Keywords</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
@@ -68,10 +60,6 @@ The following ''buy'' actions all call the same method: ''buyAtDollarWithDiscoun
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test2}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.Keywords</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

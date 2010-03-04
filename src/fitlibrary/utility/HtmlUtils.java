@@ -18,6 +18,11 @@ public class HtmlUtils {
 	public static String escape(String text) {
 		return Fixture.escape(text).replaceAll("\r?\n", "<br />");
 	}
+	public static String escapeHtml(String s) {
+		if (s == null)
+			return "";
+		return s.replaceAll("<","&lt;").replaceAll(">","&gt;");
+	}
 	public static String buildExpectedNotActualText(String actual,
 			String expected) {
 		return HtmlUtils.pre(expected) + Fixture.label("expected") + divider()

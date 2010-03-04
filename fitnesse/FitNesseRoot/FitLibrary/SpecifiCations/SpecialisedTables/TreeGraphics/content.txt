@@ -2,7 +2,6 @@
 |!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoTree</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <table border="1" cellspacing="0">
 <tr><td>check</td><td>tree</td><td colspan="2"><ul><li>a</li><li>BB</li></ul></td></tr>
 <tr><td>show</td><td colspan="3">tree</td></tr>
@@ -21,7 +20,6 @@
 </table>-!|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoTree</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <table border="1" cellspacing="0">
 <tr><td>check</td><td>tree</td><td colspan="2" class="pass"><ul><li>a</li><li>BB</li></ul></td></tr>
 <tr><td>show</td><td colspan="3">tree</td>

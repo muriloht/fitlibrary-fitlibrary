@@ -2,8 +2,6 @@
 !**< def
 !define test (!|fitlibrary.specify.missingMethod.InDomainAdapter|
 
-|''actions''|
-
 |''add''|1|''to total''|
 )
 **!
@@ -13,11 +11,7 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
-<tr><td class="error"><i>add</i><hr/> <span class="fit_label">Missing method. Possibly:<ul><li>public Type addToTotal(Type1 arg1) { }</li><li>public Type add(Type p1, Type p2) {}</li></ul><hr/>Possibly in class:<ul><li>fitlibrary.specify.missingMethod.InDomainAdapter</li><li>fitlibrary.specify.missingMethod.InJustSut</li></ul></span></td>
+<tr><td class="error"><i>add</i><hr/> <span class="fit_label">Missing class or Missing method. Possibly:<ul><li>public Type addToTotal(Type1 arg1) { }</li><li>public Type add(Type p1, Type p2) {}</li></ul><hr/>Possibly in class:<ul><li>fitlibrary.specify.missingMethod.InDomainAdapter</li><li>fitlibrary.specify.missingMethod.InJustSut</li></ul></span></td>
 <td>1</td>
 <td><i>to total</i></td>
 </tr>

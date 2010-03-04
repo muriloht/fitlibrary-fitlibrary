@@ -6,10 +6,9 @@
 
 package fitlibrary.specify.exception;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class ExceptionThrownByEquals implements DomainAdapter, DomainFixtured  {
+public class ExceptionThrownByEquals implements DomainAdapter  {
 	public User user() {
 		return new User();
 	}

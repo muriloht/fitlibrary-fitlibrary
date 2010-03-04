@@ -1,4 +1,4 @@
-Class based defined actions should be able to be overriden by derived classes to provide no implementation method. 
+Class based defined actions should be able to be overriden by derived classes to provide no implementation method.
 
 !|fitlibrary.specify.definedAction.DefinedActionUnderTest|
 

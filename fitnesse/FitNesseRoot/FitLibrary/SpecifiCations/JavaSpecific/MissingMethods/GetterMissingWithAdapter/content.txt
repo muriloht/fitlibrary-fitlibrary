@@ -5,7 +5,7 @@ The ${domainAdapter} can't supply a ${getter}. Perhaps it could in future?
 )
 !define test (!|fitlibrary.specify.missingProperty.InDomainAdapter|
 
-|''checks''|
+|'''checks'''|
 
 |''colour''|${colour}|
 )
@@ -16,7 +16,7 @@ The ${domainAdapter} can't supply a ${getter}. Perhaps it could in future?
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td><i>checks</i></td>
+<tr><td><b>checks</b></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

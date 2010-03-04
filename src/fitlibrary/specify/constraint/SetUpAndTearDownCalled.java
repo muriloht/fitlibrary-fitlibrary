@@ -4,10 +4,9 @@
 */
 package fitlibrary.specify.constraint;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class SetUpAndTearDownCalled implements DomainAdapter, DomainFixtured {
+public class SetUpAndTearDownCalled implements DomainAdapter {
 	private boolean isSetUp = false;
 	
 	public void setUp() {

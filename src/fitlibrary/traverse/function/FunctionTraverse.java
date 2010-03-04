@@ -32,13 +32,11 @@ public abstract class FunctionTraverse extends Traverse {
     }
 	public Object interpretWithSetUp(Table table, TestResults testResults) {
 		Object result = null;
-		setUp(table,testResults);
 		try {
             result = interpretAfterFirstRow(table,testResults);
 		} catch (Exception e) {
 			table.row(0).error(testResults,e);
 		}
-		tearDown(table,testResults);
 		return result;
 	}
 }

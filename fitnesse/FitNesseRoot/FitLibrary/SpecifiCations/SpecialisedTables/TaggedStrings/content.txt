@@ -4,7 +4,6 @@ If the type of a parameter, etc is a subtype of ''!-TaggedString-!'', the tags a
 |!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoWithTags</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <table border="1" cellspacing="0">
 <tr><td>check</td><td>tagged text</td><td><b>bold</b></td></tr>
 </table>
@@ -25,7 +24,6 @@ If the type of a parameter, etc is a subtype of ''!-TaggedString-!'', the tags a
 </table>-!|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoWithTags</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <table border="1" cellspacing="0">
 <tr><td>check</td><td>tagged text</td><td class="pass"><b>bold</b></td></tr>
 </table>

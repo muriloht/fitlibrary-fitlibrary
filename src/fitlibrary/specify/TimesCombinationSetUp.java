@@ -14,11 +14,9 @@ public class TimesCombinationSetUp extends DoFixture {
 	public static class Combine extends CombinationFixture {
 		private boolean isSetUp = false;
 		
-		@Override
 		public void setUp() {
 			isSetUp = true;
 		}
-		@Override
 		public void tearDown() {
 			throw new RuntimeException("tear down");
 		}

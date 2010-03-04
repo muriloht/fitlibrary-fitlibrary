@@ -5,8 +5,6 @@
 )
 !define test (!|fitlibrary.specify.arrayParser.Match|
 
-|''actions''|
-
 |'''check'''|''array123''|${array}|
 
 |'''check'''|''arrayEmpty''||
@@ -15,10 +13,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.arrayParser.Match</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

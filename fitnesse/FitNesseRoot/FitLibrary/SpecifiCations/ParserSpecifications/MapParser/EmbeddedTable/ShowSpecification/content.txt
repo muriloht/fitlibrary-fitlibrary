@@ -6,13 +6,11 @@
 )
 !define test (!|fitlibrary.specify.mapParser.Match|
 
-|'''checks'''|
+|''map of 123''|'''is'''|${list}|
 
-|''map of 123''|${list}|
+|''map of 123''|'''is'''||
 
-|''map of 123''||
-
-|''map empty''|${list}|
+|''map empty''|'''is'''|${list}|
 )
 **!
 The Parser uses the key and value types of one of the elements of the Map to parse them all
@@ -21,12 +19,9 @@ The Parser uses the key and value types of one of the elements of the Map to par
 <tr><td>fitlibrary.specify.mapParser.Match</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><b>checks</b></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>map of 123</i></td>
+<td><b>is</b></td>
 <td><table border="1" cellspacing="0">
 <tr><td>1</td>
 <td class="fail">4 <span class="fit_label">expected</span><hr>2 <span class="fit_label">actual</span></td>
@@ -43,13 +38,15 @@ The Parser uses the key and value types of one of the elements of the Map to par
 </td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>map of 123</i></td>
-<td class="fail">&nbsp; <span class="fit_label">expected</span><hr>2->3, 1->2, 3->4 <span class="fit_label">actual</span></td>
+<td><b>is</b></td>
+<td class="fail">&nbsp; <span class="fit_label">expected</span><hr>1->2, 2->3, 3->4 <span class="fit_label">actual</span></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>map empty</i></td>
+<td><b>is</b></td>
 <td><table border="1" cellspacing="0">
 <tr><td class="fail">1 <span class="fit_label">missing</span></td>
 <td>4</td>

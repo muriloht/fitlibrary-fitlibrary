@@ -4,9 +4,7 @@
 */
 package fitlibrary.specify.arrayParser;
 
-import fitlibrary.object.DomainFixtured;
-
-public class Match implements DomainFixtured {
+public class Match {
 	public int[] getArray123() {
 		return new int[] {1,2,3};
 	}

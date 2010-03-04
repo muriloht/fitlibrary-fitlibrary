@@ -50,7 +50,7 @@ public class TestParseTables extends TestCase {
     public void testTable0Right() {
         Table table0 = tables.table(0);
         table0.pass(testResults);
-        assertTrue(table0.didPass());
+        assertTrue(table0.row(0).didPass());
         assertEquals("1 right, 0 wrong, 0 ignored, 0 exceptions",counts.toString());
     }
     public void testTable0Wrong() {

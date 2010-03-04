@@ -6,11 +6,10 @@ package fitlibrary.specify.setParser;
 
 import java.util.Set;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Count;
 
 @SuppressWarnings("unchecked")
-public class Parse implements DomainFixtured {
+public class Parse {
 	public Set givenSet(Set set) {
 		return set;
 	}

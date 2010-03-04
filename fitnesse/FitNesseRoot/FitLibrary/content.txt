@@ -15,7 +15,7 @@
 |!3 ^CrossReference|''A way of getting cross reference information about actions used by storytest''|
 !c !img http://files/images/fitBookCover.jpeg
 
-^SuiteSetUp
+>WasSuiteSetUp
 
 !**< glossary reference definitions
 !define action ([[''workflow action''][.FitLibrary.GlosSary.WorkflowAction]])

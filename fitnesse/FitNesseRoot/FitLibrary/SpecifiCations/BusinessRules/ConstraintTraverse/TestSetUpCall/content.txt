@@ -3,8 +3,6 @@ The class is defined so that the ''setUp()'' method has to be called for the fir
 !**< def
 !define test (!|fitlibrary.specify.constraint.SetUpAndTearDownCalled|
 
-|''actions''|
-
 |''constraint''|
 |''a''|''b''|
 |1|2|
@@ -14,10 +12,6 @@ The class is defined so that the ''setUp()'' method has to be called for the fir
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.constraint.SetUpAndTearDownCalled</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

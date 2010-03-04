@@ -6,10 +6,9 @@
 
 package fitlibrary.specify.missingMethod;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class NestedFinderInDomainAdapter implements DomainAdapter, DomainFixtured  {
+public class NestedFinderInDomainAdapter implements DomainAdapter  {
 	public Object getSystemUnderTest() {
 		return new NestedDomainAdapterToo();
 	}

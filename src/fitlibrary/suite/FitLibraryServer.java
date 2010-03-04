@@ -15,7 +15,7 @@ import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class FitLibraryServer extends FitServerBridge implements Reportage {
-	private BatchFitLibrary batching = new BatchFitLibrary(this);
+	private BatchFitLibrary batching = new BatchFitLibrary();
 
     public FitLibraryServer(String host, int port, boolean verbose) {
         super(host,port,verbose);

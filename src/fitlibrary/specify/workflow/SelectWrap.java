@@ -4,9 +4,7 @@
 */
 package fitlibrary.specify.workflow;
 
-import fitlibrary.object.DomainFixtured;
-
-public class SelectWrap implements DomainFixtured {
+public class SelectWrap {
 	public int plusAB(int a, int b) {
 		return a + b;
 	}

@@ -8,6 +8,7 @@ import java.lang.reflect.Array;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -22,16 +23,18 @@ public class ArrayTraverse extends Traverse {
     private final Parser parser;
     private boolean embedded = false;
     
-    public ArrayTraverse(Object array) {
+    public ArrayTraverse(Object array, RuntimeContextInternal runtime) {
+    	this.runtimeContext = runtime;
     	this.array = array;
         this.parser = asTyped(array).getComponentTyped().parser(this);
     }
-    public ArrayTraverse(TypedObject typedArray) {
+    public ArrayTraverse(TypedObject typedArray, RuntimeContextInternal runtime) {
+    	this.runtimeContext = runtime;
     	this.array = typedArray.getSubject();
         this.parser = typedArray.getTyped().getComponentTyped().parser(this);
     }
-    public ArrayTraverse(Object array, boolean embedded) {
-    	this(array);
+    public ArrayTraverse(Object array, boolean embedded, RuntimeContextInternal runtime) {
+    	this(array,runtime);
         this.embedded = embedded;
     }
 	@Override

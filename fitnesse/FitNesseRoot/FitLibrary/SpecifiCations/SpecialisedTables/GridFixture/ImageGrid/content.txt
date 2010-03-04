@@ -2,7 +2,6 @@
 |!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.GridFixtureUnderTest</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <br><table border="1" cellspacing="0">
 <tr><td colspan="5">images</td></tr>
 <tr><td><img src="/files/gameImages/wall.jpg"></td>
@@ -13,7 +12,6 @@
 </table>-!|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.GridFixtureUnderTest</td></tr>
 </table>
-<table><tr><td>actions</td></tr></table>
 <br><table border="1" cellspacing="0">
 <tr><td colspan="5">images</td></tr>
 <tr><td class="pass"><img src="/files/gameImages/wall.jpg"></td>

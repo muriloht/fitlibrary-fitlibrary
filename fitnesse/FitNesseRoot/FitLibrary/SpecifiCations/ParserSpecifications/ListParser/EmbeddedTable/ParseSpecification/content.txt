@@ -9,8 +9,6 @@
 )
 !define testInts (!|fitlibrary.specify.listParser.ParseCounts|
 
-|''actions''|
-
 |''given counts''|${ints12}|
 |''count''|
 |1|
@@ -35,8 +33,6 @@
 )
 !define testExpectedMethod (!|fitlibrary.specify.listParser.ParseCounts|
 
-|''actions''|
-
 |''given colours''|${colours}|
 |''name''|
 )
@@ -47,10 +43,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${testInts}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.listParser.ParseCounts</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
@@ -119,10 +111,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${testExpectedMethod}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.listParser.ParseCounts</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

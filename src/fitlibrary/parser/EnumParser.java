@@ -8,6 +8,7 @@ package fitlibrary.parser;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runtime.RuntimeContext;
 import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
@@ -18,15 +19,17 @@ import fitlibraryGeneric.typed.GenericTyped;
 
 public class EnumParser implements Parser {
 	private GenericTyped typed;
-	private Evaluator evaluator;
+	private RuntimeContext runtime;
 
-	public EnumParser(GenericTyped typed, Evaluator evaluator) {
+	public EnumParser(GenericTyped typed, RuntimeContext runtime) {
+		if (runtime == null)
+			throw new NullPointerException("Runtime is null");
 		this.typed = typed;
-		this.evaluator = evaluator;
+		this.runtime = runtime;
 	}
 	@SuppressWarnings("unchecked")
 	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
-		String text = cell.text(evaluator);
+		String text = cell.text(runtime);
 		if (text.equals(""))
 			return  typed.typedObject(null);
 		Class asClass = typed.asClass();
@@ -45,7 +48,7 @@ public class EnumParser implements Parser {
 			cell.unexpected(testResults,"collection");
 			return false;
 		}
-		if (cell.text(evaluator).equals(""))
+		if (cell.text(runtime).equals(""))
 			return result == null;
 		Object parsed = parseTyped(cell,testResults).getSubject();
 		return parsed.equals(result);
@@ -56,11 +59,10 @@ public class EnumParser implements Parser {
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
     		public Parser parser(Evaluator evaluator, Typed typed) {
-    			return new EnumParser((GenericTyped) typed,evaluator);
+    			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext());
     		}
     	};
     }
-    @SuppressWarnings("unused")
     public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}

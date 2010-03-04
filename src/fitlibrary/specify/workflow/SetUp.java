@@ -4,10 +4,9 @@
 */
 package fitlibrary.specify.workflow;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class SetUp implements DomainAdapter, DomainFixtured  {
+public class SetUp implements DomainAdapter  {
 	private boolean setUp = false;
 
 	public void setUp() {

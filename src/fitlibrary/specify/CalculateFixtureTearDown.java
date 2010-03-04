@@ -7,7 +7,6 @@ package fitlibrary.specify;
 import fitlibrary.CalculateFixture;
 
 public class CalculateFixtureTearDown extends CalculateFixture {
-    @Override
 	public void tearDown() {
         throw new RuntimeException("TearDown Worked.");
     }

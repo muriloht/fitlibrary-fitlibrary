@@ -2,5 +2,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |!-<table border><tr><td>fitlibrary.specify.DoFixtureWithExceptionInConstructor</td></tr>
 </table>-!|
-|!-<table border><tr><td class="error">fitlibrary.specify.DoFixtureWithExceptionInConstructor<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
+|!-<table border><tr><td class="error">fitlibrary.specify.DoFixtureWithExceptionInConstructor<hr><pre><div class="fit_stacktrace">java.lang.RuntimeException: Bad constructor
+</div></pre></td></tr>
 </table>-!|

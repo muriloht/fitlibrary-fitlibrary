@@ -4,7 +4,7 @@
 )
 !define test (!|fitlibrary.specify.missingProperty.InJustSut|
 
-|''checks''|
+|'''checks'''|
 
 |''colour''|${colour}|
 )
@@ -15,7 +15,7 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td><i>checks</i></td>
+<tr><td><b>checks</b></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

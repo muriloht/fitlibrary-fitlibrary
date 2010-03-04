@@ -2,8 +2,6 @@ If a workflow action returns an array or a Collection or an Iterator, that colle
 !**< def
 !define test (!|fitlibrary.specify.workflow.AutoWrap|
 
-|''actions''|
-
 |''an array of Point''|
 |''x''|''y''|
 |0|0|
@@ -28,10 +26,6 @@ If a workflow action returns an array or a Collection or an Iterator, that colle
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.AutoWrap</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

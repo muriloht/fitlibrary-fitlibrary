@@ -15,11 +15,6 @@
 ^TestSpecialAction
 ^TestFixtureOverride
 
-^TestNotAwareness
-^TestCheckAware
-
-^StatefulWorkflow
-
 ^TestReturnedFixture
 ^TestReturnedFixtureDoesNotWreckFlow
 

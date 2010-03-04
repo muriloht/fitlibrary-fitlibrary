@@ -7,10 +7,8 @@ package fitlibrary.specify.listParser;
 import java.util.Iterator;
 import java.util.List;
 
-import fitlibrary.object.DomainFixtured;
-
 @SuppressWarnings("unchecked")
-public class Parse implements DomainFixtured {
+public class Parse {
 	public List givenList(List list) {
 		return list;
 	}

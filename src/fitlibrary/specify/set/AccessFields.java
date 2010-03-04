@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import fitlibrary.object.DomainFixtured;
-
 @SuppressWarnings("unchecked")
-public class AccessFields implements DomainFixtured {
+public class AccessFields {
 	private Set aSet = new HashSet(Arrays.asList(new Fields[] {
 			new Fields(3,4), new Fields(1,2)
 	}));

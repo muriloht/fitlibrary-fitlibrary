@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
@@ -41,7 +41,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		return definedActionMapForCamel.get(new DefinedAction(name, argCount));
 	}
 	public ParameterSubstitution lookupByClassByCamel(String className,
-			String name, int argCount, RuntimeContext variables) {
+			String name, int argCount, RuntimeContextInternal variables) {
 		DefinedAction macro = new DefinedAction(name, argCount);
 		Map<DefinedAction, ParameterSubstitution> map = classMapForCamel
 				.get(className);

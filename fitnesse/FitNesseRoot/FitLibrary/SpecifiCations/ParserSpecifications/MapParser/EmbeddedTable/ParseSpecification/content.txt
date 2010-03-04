@@ -7,8 +7,6 @@
 )
 !define testInts (!|fitlibrary.specify.mapParser.Parse|
 
-|''actions''|
-
 |''given map''|${mapAB}|
 |a|b|
 |A|B|
@@ -23,11 +21,7 @@
 <tr><td>fitlibrary.specify.mapParser.Parse</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>given map</i></td>
 <td><table border="1" cellspacing="0">
 <tr><td>a</td>
@@ -46,8 +40,8 @@
 <td>B</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0" class="pass">
-<tr><td><i>given map</i></td>
+<br/><table border="1" cellspacing="0">
+<tr class="pass"><td><i>given map</i></td>
 <td>&nbsp;</td>
 </tr>
 </table>-!|

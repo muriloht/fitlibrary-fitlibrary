@@ -15,12 +15,9 @@ import fitlibrary.traverse.CompareFilesTraverse;
   * 
   * See the FixtureFixture specifications for examples
  */
-public class CompareFilesFixture extends DoFixture {
+public class CompareFilesFixture {
 	private CompareFilesTraverse compareFiles = new CompareFilesTraverse(this);
 	
-	public CompareFilesFixture() {
-		setTraverse(compareFiles);
-	}
 	/** Returns OK if the two directories contain equal directories and files.
      *  Otherwise it returns an error message for the mismatches.
      */
@@ -31,7 +28,7 @@ public class CompareFilesFixture extends DoFixture {
      *  Otherwise it returns an error message for the mismatches.
      */
 	public ListTree folderSameAs(String diryName1, String diryName2) throws IOException {
-	    return compareFiles.folderSameAs(diryName1,diryName2);
+		return compareFiles.folderSameAs(diryName1,diryName2);
     }
     /** Returns OK if the two files match.
      *  Otherwise it returns an error message for the mismatch.

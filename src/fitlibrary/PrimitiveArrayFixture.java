@@ -5,6 +5,7 @@
 package fitlibrary;
 
 import fitlibrary.parser.collection.ArrayParser;
+import fitlibrary.runtime.RuntimeContextImplementation;
 
 /**
  * A row-type fixture for checking on the toString() values of
@@ -12,6 +13,6 @@ import fitlibrary.parser.collection.ArrayParser;
  */
 public class PrimitiveArrayFixture extends FitLibraryFixture {
 	public PrimitiveArrayFixture(Object actuals) {
-		setTraverse(ArrayParser.selectPrimitiveArray(actuals));
+		setTraverse(ArrayParser.selectPrimitiveArray(actuals,new RuntimeContextImplementation()));
 	}
 }

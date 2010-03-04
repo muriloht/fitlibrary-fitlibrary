@@ -19,14 +19,12 @@ public class InFlowPageRunner extends PageRunner {
 		super(runContext);
 		this.doEvaluator = doEvaluator;
 	}
-	public void run(Tables tables, int index, TableListener tableListener, boolean tearingDown) {
+	public void run(Tables tables, int index, TableListener tableListener) {
 		for (int t = index; t < tables.size(); t++) {
 			if (ignored(tables,t,tableListener))
 				return;
 			Table table = tables.table(t);
 			doEvaluator.interpretWholeTable(table, tableListener);
-			if (t == tables.size() - 1  & tearingDown)
-				doEvaluator.tearDown(table, tableListener.getTestResults());
 			tableListener.tableFinished(table);
 		}
 	}

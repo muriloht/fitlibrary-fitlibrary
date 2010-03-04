@@ -3,7 +3,7 @@
  * So we check that that has happened
 !**< def
 !define test (!|fitlibrary.specify.workflow.TearDown|
-----
+
 |some action|
 )
 **!
@@ -12,10 +12,9 @@
 <tr><td>fitlibrary.specify.workflow.TearDown</td>
 </tr>
 </table>
-<hr/>
 <br/><table border="1" cellspacing="0">
-<tr><td class="pass" class="error">some action<hr><pre><div class="fit_stacktrace"></div></pre></td>
+<tr><td class="pass" class="error">some action<hr><pre><div class="fit_stacktrace">
+</div></pre></td>
 </tr>
-</table>
--!|
+</table>-!|
 

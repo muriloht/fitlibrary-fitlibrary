@@ -1,11 +1,9 @@
 !**< def
 !define test {!|fitlibrary.specify.arrayParser.Match|
 
-|''checks''|
+|''array123''|'''is'''|1,2,3|
 
-|''array123''|1,2,3|
-
-|''arrayEmpty''||
+|''arrayEmpty''|'''is'''||
 }
 **!
 |!-fitlibrary.spec.SpecifyFixture-!|
@@ -13,17 +11,15 @@
 <tr><td>fitlibrary.specify.arrayParser.Match</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>checks</i></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>array123</i></td>
+<td><b>is</b></td>
 <td class="pass">1,2,3</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>arrayEmpty</i></td>
+<td><b>is</b></td>
 <td class="pass">&nbsp;</td>
 </tr>
 </table>-!|

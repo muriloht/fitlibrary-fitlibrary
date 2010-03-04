@@ -15,7 +15,6 @@ public class SubsetMapTraverse extends MapTraverse {
 		super(map);
 	}
 	@Override
-	@SuppressWarnings("unused")
 	protected void addSurplusRows(Table table, Map<Object, Object> surplus,
 			TestResults testResults) {
 		// Do nothing with surplus

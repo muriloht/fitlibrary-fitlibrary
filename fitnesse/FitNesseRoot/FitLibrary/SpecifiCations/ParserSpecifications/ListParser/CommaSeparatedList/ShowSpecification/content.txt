@@ -2,8 +2,6 @@
 !**< def
 !define test {!|fitlibrary.specify.listParser.Match|
 
-|''actions''|
-
 |'''check'''|''list 123''|4,5|
 
 |'''check'''|''list empty''|0|
@@ -12,10 +10,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.listParser.Match</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

@@ -16,21 +16,24 @@ import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class DomainInjectionTraverse extends Traverse implements SwitchingEvaluator {
-	private DomainTraverse domainTraverse = null;
+	private DomainTraverser domainTraverser = null;
 
     public DomainInjectionTraverse() {
     	//
 	}
-	public void setDomainTraverse(DomainTraverse domainTraverse) {
-        this.domainTraverse = domainTraverse;
+    public DomainInjectionTraverse(DomainTraverser domainTraverser) {
+    	this.domainTraverser = domainTraverser;
+	}
+	public void setDomainTraverse(DomainTraverser domainTraverser) {
+        this.domainTraverser = domainTraverser;
 	}
     public void runTable(Table table, TableListener tableListener) {
         if (switchOnActions(table)) {
-            domainTraverse.setCurrentAction();
+            domainTraverser.setCurrentAction();
             return;
         }
         if (switchOnChecks(table)) {
-            domainTraverse.setCurrentCheck();
+            domainTraverser.setCurrentCheck();
             return;
         }
         try {
@@ -43,12 +46,12 @@ public class DomainInjectionTraverse extends Traverse implements SwitchingEvalua
         }
     }
     private boolean switchOnActions(Table table) {
-        return domainTraverse != null && table.size() == 1 && 
+        return domainTraverser != null && table.size() == 1 && 
                 table.row(0).size() == 1 && 
                 table.row(0).cell(0).matchesText("actions",this);
     }
     private boolean switchOnChecks(Table table) {
-        return domainTraverse != null && table.size() == 1 && 
+        return domainTraverser != null && table.size() == 1 && 
                 table.row(0).size() == 1 && 
                 table.row(0).cell(0).matchesText("checks",this);
     }

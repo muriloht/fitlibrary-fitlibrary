@@ -3,8 +3,6 @@ So, once again, we can only handle an empty list or a List of String in comma-se
 !**< def
 !define test {!|fitlibrary.specify.listParser.Match|
 
-|''actions''|
-
 |'''check'''|''string abc''|a,b,c|
 
 |'''check'''|''list 123''|1,2,3|
@@ -15,10 +13,6 @@ So, once again, we can only handle an empty list or a List of String in comma-se
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.listParser.Match</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

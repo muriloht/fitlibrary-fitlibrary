@@ -1,8 +1,6 @@
 !**< def
 !define test (!|fitlibrary.specify.exception.ExceptionThrownByAction|
 
-|''actions''|
-
 |thrown|1|
 
 |thrown|2|
@@ -13,10 +11,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.exception.ExceptionThrownByAction</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

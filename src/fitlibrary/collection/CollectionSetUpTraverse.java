@@ -25,8 +25,6 @@ import fitlibrary.utility.TestResults;
  * Serves a similar purpose to Michael Feather's RowEntryFixture
  * It operates the same as CalculateTraverse, except that there is no empty column
  * and thus no expected columns.
- * It calls setUp() before a call of the method for each row.
- * It calls tearDown() afterwards.
  */
 public class CollectionSetUpTraverse extends DoTraverse {
 	protected CalledMethodTarget target;
@@ -58,7 +56,6 @@ public class CollectionSetUpTraverse extends DoTraverse {
 	}
 	@Override
 	public Object interpretInFlow(Table table, TestResults testResults) {
-		setUp(table,testResults);
 		try {
 			interpretAfterFirstRow(table,testResults);
 		} catch (Exception e) {
@@ -67,7 +64,6 @@ public class CollectionSetUpTraverse extends DoTraverse {
 				rowNo = 1;
 			table.row(rowNo).error(testResults,e);
 		}
-		tearDown(table,testResults);
 		return collection;
 	}
 	public void bindFirstRowToTarget(Row row, TestResults testResults, Evaluator evaluator) {

@@ -16,7 +16,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
-import fitlibrary.traverse.Evaluator;
 import fitlibrary.utility.StringUtility;
 
 public class ParameterSubstitution {
@@ -26,7 +25,7 @@ public class ParameterSubstitution {
 	public String getPageName() {
 		return pageName;
 	}
-	public ParameterSubstitution(List<String> formalParameters, Tables tables, Evaluator evaluator, String pageName) {
+	public ParameterSubstitution(List<String> formalParameters, Tables tables, String pageName) {
 		this.tables = tables;
 		this.pageName = pageName;
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
@@ -36,17 +35,17 @@ public class ParameterSubstitution {
 				throw new FitFailureException("Duplicated parameter: "+formal);
 			mapToRef.put(formal,paramRef(c));
 		}
-		macroReplace(tables,mapToRef,evaluator);
+		macroReplace(tables,mapToRef);
 	}
-	public Tables substitute(List<Object> actualParameters, Evaluator evaluator) {
+	public Tables substitute(List<Object> actualParameters) {
 		Tables copy = tables.deepCopy();
 		Map<String,Object> mapFromRef = new HashMap<String,Object>();
 		for (int i = 0; i < actualParameters.size(); i++)
 			mapFromRef.put(paramRef(i), actualParameters.get(i));
-		macroReplace(copy, mapFromRef,evaluator);
+		macroReplace(copy, mapFromRef);
 		return copy;
 	}
-	private static void macroReplace(Tables tables, Map<String,Object> mapToRef, Evaluator evaluator) {
+	private static void macroReplace(Tables tables, Map<String,Object> mapToRef) {
 		List<String> reverseSortOrder = new ArrayList<String>(mapToRef.keySet());
 		Collections.sort(reverseSortOrder,new Comparator<String>() {
 			public int compare(String arg0, String arg1) {
@@ -54,22 +53,22 @@ public class ParameterSubstitution {
 			}
 		});
 		for (String key : reverseSortOrder)
-			macroReplaceTables(tables, key, mapToRef.get(key),evaluator);
+			macroReplaceTables(tables, key, mapToRef.get(key));
 	}
-	private static void macroReplaceTables(Tables tables, String key, Object value, Evaluator evaluator) {
+	private static void macroReplaceTables(Tables tables, String key, Object value) {
 		for (int t = 0; t < tables.size(); t++) {
 			Table table = tables.table(t);
 			for (int r = 0 ; r < table.size(); r++) {
 				Row row = table.row(r);
 				for (int c = 0; c < row.size(); c++)
-					macroReplaceCell(row.cell(c), key, value,evaluator);
+					macroReplaceCell(row.cell(c), key, value);
 			}
 		}
 	}
-	private static void macroReplaceCell(Cell cell, String key, Object value, Evaluator evaluator) {
+	private static void macroReplaceCell(Cell cell, String key, Object value) {
 		// Do NOT do dynamic variable substitution at this stage; it has to be done dynamically.
 		if (cell.hasEmbeddedTable())
-			macroReplaceTables(cell.getEmbeddedTables(),key,value,evaluator);
+			macroReplaceTables(cell.getEmbeddedTables(),key,value);
 		String text = cell.fullText();
 		if (value instanceof String) {
 			String update = StringUtility.replaceString(text, key, (String)value);

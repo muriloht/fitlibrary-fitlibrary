@@ -41,7 +41,7 @@ public class ListParser2 extends ListParser {
     	case CLASS_TYPE:
        		if (componentTyped.isEffectivelyPrimitive() || componentTyped.isEnum()) {
     			ArraySetUpTraverse setUpTraverse = new ArraySetUpTraverse(componentTyped.asClass(),componentTyped.parser(evaluator));
-    			setUpTraverse.setRuntimeContext(evaluator.runtime());
+    			setUpTraverse.setRuntimeContext(evaluator.getRuntimeContext());
     			setUpTraverse.interpretAfterFirstRow(table, testResults);
     			Object array = setUpTraverse.getResults();
     			List<Object> result = new ArrayList<Object>();
@@ -84,7 +84,8 @@ public class ListParser2 extends ListParser {
 				Object arrayResult = Array.newInstance(componentTyped.asClass(), listResult.size());
     			for (int i = 0; i < listResult.size(); i++)
     				Array.set(arrayResult,i,listResult.get(i));
-				ArrayTraverse arrayTraverse = new ArrayTraverse(new GenericTypedObject(arrayResult, new GenericTyped(arrayResult.getClass())));
+				ArrayTraverse arrayTraverse = new ArrayTraverse(new GenericTypedObject(arrayResult, new GenericTyped(arrayResult.getClass())),
+						evaluator.getRuntimeContext());
     			return arrayTraverse.doesInnerTablePass(table,evaluator,testResults);
     		}
     		if (result.getClass().isArray())

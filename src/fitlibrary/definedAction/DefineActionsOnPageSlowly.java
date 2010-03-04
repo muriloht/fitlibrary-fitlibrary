@@ -74,6 +74,7 @@ public class DefineActionsOnPageSlowly extends Traverse {
 	}
 	protected void defineAction(Tables innerTables, String className, String pageName) {
 		DefineAction defineAction = new DefineAction(className,pageName);
+		defineAction.setRuntimeContext(getRuntimeContext());
 		defineAction.interpret(createDefineActionTable(innerTables), new TestResults());
 	}
 	private Table createDefineActionTable(Tables innerTables) {

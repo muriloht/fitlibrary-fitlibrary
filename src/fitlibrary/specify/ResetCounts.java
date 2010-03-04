@@ -11,11 +11,10 @@ import fit.Parse;
  */
 public class ResetCounts extends fit.Fixture {
 	@Override
-	public void doTable(@SuppressWarnings("unused") Parse table) {
+	public void doTable(Parse table) {
 		counts.right = 0;
 		counts.wrong = 0;
 		counts.exceptions = 0;
 		counts.ignores = 0;
 	}
-
 }

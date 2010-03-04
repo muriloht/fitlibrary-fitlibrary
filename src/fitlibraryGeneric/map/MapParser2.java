@@ -22,7 +22,7 @@ public class MapParser2 extends MapParser {
     }
 	@Override
     protected boolean tableMatches(Table table, Map<Object,Object> map, TestResults testResults) {
-    	MapTraverse mapCheck = new MapTraverse(map,keyTyped,valueTyped);
+    	MapTraverse mapCheck = new MapTraverse(map,keyTyped,valueTyped,evaluator.getRuntimeContext());
     	return mapCheck.doesInnerTablePass(table,evaluator,testResults);
     }
 	public static ParserFactory parserFactory() {

@@ -19,8 +19,8 @@ public class TestMacroSubstitution extends TestCase {
 	DoFixture evaluator = new DoFixture();
 	public void testNoParameters() {
 		Tables tables = bodyTables("a","b");
-		ParameterSubstitution macro = new ParameterSubstitution(new ArrayList<String>(), tables,evaluator,"");
-		Tables substituted = macro.substitute(new ArrayList<Object>(),evaluator);
+		ParameterSubstitution macro = new ParameterSubstitution(new ArrayList<String>(), tables,"");
+		Tables substituted = macro.substitute(new ArrayList<Object>());
 		assertEquals(tables,substituted);
 	}
 	private Tables bodyTables(String a, String b) {
@@ -29,30 +29,30 @@ public class TestMacroSubstitution extends TestCase {
 	public void testOneParameter() {
 		Tables tables = bodyTables("A","b");
 		String[] ss = {"A"};
-		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,evaluator,"");
+		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,"");
 		List<Object> actualParameterList = actuals("a");
-		Tables substituted = macro.substitute(actualParameterList,evaluator);
+		Tables substituted = macro.substitute(actualParameterList);
 		assertEquals(bodyTables("a","b"),substituted);
 	}
 	public void testOneParameterSubstitutedTwice() {
 		Tables tables = bodyTables("A","A");
 		String[] ss = {"A"};
-		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,evaluator,"");
-		Tables substituted = macro.substitute(actuals("a"),evaluator);
+		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,"");
+		Tables substituted = macro.substitute(actuals("a"));
 		assertEquals(bodyTables("a","a"),substituted);
 	}
 	public void testTwoParameters() {
 		Tables tables = bodyTables("A","B");
 		String[] ss = {"A", "B"};
-		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,evaluator,"");
-		Tables substituted = macro.substitute(actuals("a","b"),evaluator);
+		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,"");
+		Tables substituted = macro.substitute(actuals("a","b"));
 		assertEquals(bodyTables("a","b"),substituted);
 	}
 	public void testNoDoubleSubstitutions() {
 		Tables tables = bodyTables("A","B");
 		String[] ss = {"A", "B"};
-		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,evaluator,"");
-		Tables substituted = macro.substitute(actuals("B","b"),evaluator);
+		ParameterSubstitution macro = new ParameterSubstitution(list(ss), tables,"");
+		Tables substituted = macro.substitute(actuals("B","b"));
 		assertEquals(bodyTables("B","b"),substituted);
 	}
 	private List<Object> actuals(String... ss) {

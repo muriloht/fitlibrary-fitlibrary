@@ -78,7 +78,7 @@ public class DefineAction extends Traverse {
 		}
 		
 		List<String> formalParameters = getDefinedActionParameters(parametersRow);
-		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,body.deepCopy(),this,pageName);
+		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,body.deepCopy(),pageName);
 		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, pageName);
 	}
 	private void processMultiDefinedAction(Table headerTable, Tables body) {

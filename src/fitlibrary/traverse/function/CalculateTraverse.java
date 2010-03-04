@@ -89,7 +89,7 @@ public class CalculateTraverse extends FunctionTraverse {
         List<String> arguments = new ArrayList<String>();
         for (int i = 0; i < rowLength; i++) {
             Cell cell = row.cell(i);
-            String name = cell.text(this);
+            String name = cell.text(getRuntimeContext());
             try {
                 if (name.equals("")) {
                     if (pastDoubleColumn && notesPermitted) {

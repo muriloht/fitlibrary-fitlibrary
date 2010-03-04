@@ -7,7 +7,6 @@ package fitlibrary.specify;
 import fitlibrary.CalculateFixture;
 
 public class CalculateFixtureSetUpWithException extends CalculateFixture {
-    @Override
 	public void setUp() {
         throw new RuntimeException("setUp exception.");
     }

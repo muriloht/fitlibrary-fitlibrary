@@ -4,22 +4,17 @@
 */
 package fitlibrary.traverse;
 
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
-public interface Evaluator extends DomainAdapter {
+public interface Evaluator extends RuntimeContextual {
 	Object getOutermostContext();
 	Evaluator getNextOuterContext();
 	void setOuterContext(Evaluator outerContext);
 	Object interpretAfterFirstRow(Table table, TestResults testResults);
 	TypedObject getTypedSystemUnderTest();
-    RuntimeContext runtime();
-	void setRuntimeContext(RuntimeContext dynamicVariables);
+    RuntimeContextInternal getRuntimeContext();
 	void setDynamicVariable(String key, Object value);
-	void setUp(Table firstTable, TestResults testResults);
-	void tearDown(Table firstTable, TestResults testResults);
-	void setUp() throws Exception;
-	void tearDown() throws Exception;
 }

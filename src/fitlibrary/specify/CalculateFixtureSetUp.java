@@ -9,7 +9,6 @@ import fitlibrary.CalculateFixture;
 public class CalculateFixtureSetUp extends CalculateFixture {
     private boolean isSetUp = false;
     
-    @Override
 	public void setUp() {
         isSetUp = true;
     }

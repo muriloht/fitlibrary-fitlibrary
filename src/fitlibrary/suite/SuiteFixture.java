@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fitlibrary.DoFixture;
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 
 public class SuiteFixture extends DoFixture implements SuiteEvaluator {
     private Set<String> keys = new HashSet<String>();
@@ -27,7 +27,7 @@ public class SuiteFixture extends DoFixture implements SuiteEvaluator {
         if (!selected)
         	abandon();
     }
-	public RuntimeContext getCopyOfDynamicVariables() {
-		return runtime().freshCopy();
+	public RuntimeContextInternal getCopyOfRuntimeContext() {
+		return getRuntimeContext().freshCopy();
 	}
 }

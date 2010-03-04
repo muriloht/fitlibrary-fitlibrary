@@ -9,7 +9,6 @@ import fitlibrary.DoFixture;
 public class DoFixtureSetUp extends DoFixture {
     private boolean isSetUp = false;
     
-    @Override
 	public void setUp() {
         isSetUp = true;
     }

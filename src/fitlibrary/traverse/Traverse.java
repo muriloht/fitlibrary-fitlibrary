@@ -8,7 +8,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
 import fitlibrary.differences.DifferenceInterface;
 import fitlibrary.differences.FitNesseDifference;
@@ -17,10 +16,9 @@ import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.exception.CycleException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.lookup.ParseDelegation;
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.typed.Typed;
-import fitlibrary.typed.TypedFactory;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
@@ -29,15 +27,12 @@ import fitlibraryGeneric.typed.GenericTypedObject;
 
 public abstract class Traverse implements Evaluator {
 	protected static DifferenceInterface FITNESSE_DIFFERENCES = new FitNesseDifference();
-	protected static AlienTraverseHandler ALIEN_TRAVERSE_HANDLER = new AlienTraverseHandler();
+	protected static FitHandler FIT_HANDLER = new FitHandler();
 	public static final String FITNESSE_URL_KEY = "fitNesse.url";
-	private final static TypedFactory factory = new GenericTypedFactory();
+	private final static GenericTypedFactory factory = new GenericTypedFactory();
 	private TypedObject typedObjectUnderTest = new GenericTypedObject(null);
 	private Evaluator outerContext = null;
-	private boolean setUpAlreadyCalled = false;
-	private boolean tearDownAlreadyCalled = false;
-	protected boolean canTearDown = true;
-	protected RuntimeContext runtimeContext = new RuntimeContext();
+	protected RuntimeContextInternal runtimeContext; // = new RuntimeContextImplementation();
 
 	public Traverse() {
     	// No SUT
@@ -132,57 +127,17 @@ public abstract class Traverse implements Evaluator {
 	public static void setContext(File reportDiry) {
         FITNESSE_DIFFERENCES.setContext(reportDiry);
     }
-	public static String escapeHtml(String s) {
-		if (s == null)
-			return "";
-		return s.replaceAll("<","&lt;").replaceAll(">","&gt;");
-	}
 	protected String camelCase(String suppliedName) {
 		return ExtendedCamelCase.camel(suppliedName);
 	}
-	public void theSetUpTearDownAlreadyHandled() {
-		setUpAlreadyCalled = true;
-		tearDownAlreadyCalled = true;
-	}
-	public void setUp(Table table, TestResults testResults) {
-		try {
-			setUp();
-		} catch (Exception e) {
-			table.error(testResults,e);
-		}
-	}
-	public void setUp() throws Exception {
-		if (setUpAlreadyCalled)
-			return;
-		setUpAlreadyCalled = true;
-		CalledMethodTarget methodTarget = asTypedObject().optionallyFindMethodOnTypedObject("setUp",0,this,false);
-		if (methodTarget == null)
-			return;
-		methodTarget.invoke();
-	}
-	public void tearDown(Table table, TestResults testResults) {
-		try {
-			if (!testResults.inSuiteFixtureSoDoNotTearDown())
-				tearDown();
-		} catch (Exception e) {
-			table.error(testResults,e);
-		}
-	}
-	public void tearDown() throws Exception {
-		if (!canTearDown || tearDownAlreadyCalled)
-			return;
-		tearDownAlreadyCalled = true;
-		CalledMethodTarget methodTarget = asTypedObject().optionallyFindMethodOnTypedObject("tearDown",0,this,false);
-		if (methodTarget == null)
-			return;
-		methodTarget.invoke();
-	}
     public void interpretWithinContext(Table table, Evaluator evaluator, TestResults testResults) {
         setOuterContext(evaluator);
+        setRuntimeContext(evaluator.getRuntimeContext());
         interpretAfterFirstRow(table,testResults);
     }
     public void interpretInnerTable(Table table, Evaluator evaluator, TestResults testResults) {
 		setOuterContext(evaluator);
+		setRuntimeContext(evaluator.getRuntimeContext());
 		interpretAfterFirstRow(table.withDummyFirstRow(),testResults);
 	}
 	public boolean doesInnerTablePass(Table table, Evaluator evaluator, TestResults testResults) {
@@ -193,16 +148,14 @@ public abstract class Traverse implements Evaluator {
 	}
 	public boolean doesTablePass(Table table, Evaluator evaluator, TestResults testResults) {
 		setOuterContext(evaluator);
+		setRuntimeContext(evaluator.getRuntimeContext());
 		TestResults innerResults = new TestResults();
 		interpretAfterFirstRow(table,innerResults);
         testResults.add(innerResults);
 		return innerResults.passed();
 	}
-	public static AlienTraverseHandler getAlienTraverseHandler() {
-		return ALIEN_TRAVERSE_HANDLER;
-	}
-	public static void setAlienTraverseHandler(AlienTraverseHandler handler) {
-		ALIEN_TRAVERSE_HANDLER = handler;
+	public static FitHandler getFitHandler() {
+		return FIT_HANDLER;
 	}
 	public static Typed asTyped(Class<?> type) {
 		return factory.asTyped(type);
@@ -235,15 +188,20 @@ public abstract class Traverse implements Evaluator {
 	public void callEndCreatingObjectMethod(Object element) throws IllegalAccessException, InvocationTargetException {
 		callCreatingMethod("endCreatingObject", element);
 	}
-    public RuntimeContext runtime() {
+    public RuntimeContextInternal getRuntimeContext() {
 		return runtimeContext;
 	}
-    public DynamicVariables getDynamicVariables() {
-    	return runtime().dynamicVariables();
+    public void setRuntimeContext(RuntimeContextInternal runtimeContext) {
+    	this.runtimeContext = runtimeContext;
+    	setRuntimeContextDownSutChain(this,runtimeContext);
     }
-	public void setRuntimeContext(RuntimeContext globalRuntimeContext) {
-		this.runtimeContext = globalRuntimeContext;
+	private static void setRuntimeContextDownSutChain(Object object, RuntimeContextInternal runtimeContext) {
+		if (object instanceof DomainAdapter)
+			setRuntimeContextDownSutChain(((DomainAdapter)object).getSystemUnderTest(),runtimeContext);
 	}
+    public DynamicVariables getDynamicVariables() {
+    	return getRuntimeContext().dynamicVariables();
+    }
 	public void setDynamicVariable(String key, Object value) {
 		getDynamicVariables().put(key, value);
 	}

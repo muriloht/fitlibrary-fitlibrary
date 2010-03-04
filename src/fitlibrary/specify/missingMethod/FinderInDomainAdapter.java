@@ -6,10 +6,9 @@
 
 package fitlibrary.specify.missingMethod;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class FinderInDomainAdapter implements DomainAdapter, DomainFixtured  {
+public class FinderInDomainAdapter implements DomainAdapter  {
 	public Object getSystemUnderTest() {
 		return new FinderInJustSut();
 	}

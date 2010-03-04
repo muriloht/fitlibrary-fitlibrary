@@ -2,8 +2,6 @@ Extended camel is used with all of ${fitLibrary}, taking camel casing one step f
 
 |!-fitlibrary.specify.utility.CamelCase-!|
 
-|''actions''|
-
 |''calculate''|
 |name   || identifier |
 |" hi " || quoteHiQuote |

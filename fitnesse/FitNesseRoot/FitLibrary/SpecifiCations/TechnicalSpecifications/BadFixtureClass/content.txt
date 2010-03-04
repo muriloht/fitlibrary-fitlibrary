@@ -2,6 +2,6 @@
 |!-<table>
 <tr><td>UnknownClass</td></tr>
 </table>-!|!-<table>
-<tr><td class="error">UnknownClass<hr/> <span class="fit_label">Unknown class: UnknownClass</span></td></tr>
+<tr><td class="error">UnknownClass<hr/> <span class="fit_label">Missing class or Missing method. Possibly:<ul><li>public Type getUnknownClass() { }</li><li>public Type unknownClass() { }</li></ul><hr/>Possibly in class:<ul><li>fitlibrary.traverse.workflow.DoTraverse</li></ul></span></td></tr>
 </table>-!|
 

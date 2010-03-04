@@ -9,9 +9,7 @@ package fitlibrary.specify.exception;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.object.DomainFixtured;
-
-public class ExceptionThrownByGetterInCollection implements DomainFixtured {
+public class ExceptionThrownByGetterInCollection {
 	public List<User> users() {
 		ArrayList<User> list = new ArrayList<User>();
 		list.add(new User());

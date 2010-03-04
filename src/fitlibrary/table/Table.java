@@ -42,6 +42,10 @@ public class Table extends ParseNode {
 	public String toString() {
         return "Table["+ParseUtility.toString(parse.parts)+"]";
     }
+    @Override
+	public void pass(TestResults testResults) {
+        row(firstErrorRow).pass(testResults);
+    }
     public void wrong(TestResults testResults, String msg) {
         row(firstErrorRow).cell(0).fail(testResults,msg);
     }
@@ -86,6 +90,7 @@ public class Table extends ParseNode {
 		this.firstErrorRow  = 1;
 		row(0).setIsHidden();
 	}
+	@Override
 	public Parse parse() {
 		return parse;
 	}

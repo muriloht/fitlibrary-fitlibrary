@@ -23,7 +23,7 @@ public class SelfParser extends DelegateParser implements Cloneable {
 		this.parseMethod = parseMethod;
 	}
 	@Override
-	public Object parse(String s, @SuppressWarnings("unused") Typed typed) throws Exception {
+	public Object parse(String s, Typed typed) throws Exception {
 	    return parseMethod.invoke(null, new Object[] { s });
 	}
 	public static Method findParseMethod(Class<?> type)  {

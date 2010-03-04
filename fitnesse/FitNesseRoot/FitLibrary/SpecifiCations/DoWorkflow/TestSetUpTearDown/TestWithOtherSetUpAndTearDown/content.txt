@@ -2,8 +2,6 @@ If workflow temporarily continues with another object, that also has its ''setUp
 !**< def
 !define test (!|fitlibrary.specify.workflow.SetUpTearDownOfOther|
 
-|''actions''|
-
 |''with other set up''|
 |''is set up''|
 
@@ -13,10 +11,6 @@ If workflow temporarily continues with another object, that also has its ''setUp
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.SetUpTearDownOfOther</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

@@ -40,7 +40,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     @Override
 	final public void interpretTables(Parse tables) {
     	TestResults testResults = createTestResults();
-		new InFlowPageRunner(this,testResults).run(new Tables(tables),0,new TableListener(listener,testResults),true);
+		new InFlowPageRunner(this,testResults).run(new Tables(tables),0,new TableListener(listener,testResults));
     }
     // Dispatched to from Fixture when Fixture is doTabling the tables one by one (not in flow)
 	@Override
@@ -56,16 +56,12 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	}
 	protected void abandon() {
 		TestResults.setAbandoned();
-//		throw new AbandonException();
 	}
 	protected void showAfterTable(String s) {
 		doTraverse.showAfterTable(s);
 	}
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
-	}
-	protected Object getExpectedResult() {
-		return doTraverse.getExpectedResult();
 	}
 	protected void setExpandDefinedActions(boolean expandDefinedActions) {
 		doTraverse.setExpandDefinedActions(expandDefinedActions);
@@ -76,32 +72,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	final public Object interpretWholeTable(Table table, TableListener tableListener) {
 		return doTraverse.interpretWholeTable(table,tableListener);
 	}
-	@Override
-	public void setUp(Table firstTable, TestResults testResults) {
-		doTraverse.setUp(firstTable,testResults);
-	}
-	@Override
-	public void setUp() throws Exception {
-		doTraverse.setUp();
-	}
-	@Override
-	public void tearDown(Table firstTable, TestResults testResults) {
-		doTraverse.tearDown(firstTable,testResults);
-	}
-	@Override
-	public void tearDown() throws Exception {
-		doTraverse.tearDown();
-	}
 	// --------- Interpretation ---------------------------------------
-	protected void setGatherExpectedForGeneration(boolean gatherExpectedForGeneration) {
-		doTraverse.setGatherExpectedForGeneration(gatherExpectedForGeneration);
-	}
-	public void setSetUpFixture(SetUpFixture setUpFixture) {
-		doTraverse.setSetUpTraverse(setUpFixture.getSetUpTraverse());
-	}
-	void finishSettingUp() {
-		doTraverse.setSettingUp(false);
-	}
 	public List<String> methodsThatAreVisible() {
 		return doTraverse.methodsThatAreVisible();
 	}

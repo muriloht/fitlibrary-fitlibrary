@@ -7,7 +7,6 @@ package fitlibrary.specify;
 import fitlibrary.DoFixture;
 
 public class DoFixtureSetUpWithException extends DoFixture {
-    @Override
 	public void setUp() {
         throw new RuntimeException("setUp exception.");
     }

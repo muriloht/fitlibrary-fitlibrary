@@ -7,7 +7,6 @@
 **!
 !|fitlibraryGeneric.specify.workflow.GenericObjectFollows|
 
-----
 |''a generic colour object''|
 |'''check'''|''identity''|red|red|
 |'''check'''|''identity''|green|green|

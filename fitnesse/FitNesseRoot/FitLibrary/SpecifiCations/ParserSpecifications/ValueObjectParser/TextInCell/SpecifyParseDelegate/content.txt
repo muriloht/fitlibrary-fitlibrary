@@ -1,8 +1,6 @@
 !**< def
 !define test {!|fitlibrary.specify.valueObject.ParseMyFixedPointAsStringWithDelegate|
 
-|''actions''|
-
 |'''check'''|a fixed point|(12,34)|(12,34)|
 
 |'''check'''|a fixed point|(12,34)|(0,0)|
@@ -15,10 +13,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.valueObject.ParseMyFixedPointAsStringWithDelegate</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

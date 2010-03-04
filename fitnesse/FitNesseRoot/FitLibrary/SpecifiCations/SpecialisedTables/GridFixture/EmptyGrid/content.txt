@@ -1,8 +1,6 @@
 !**< def
 !define test (!|fitlibrary.specify.GridFixtureUnderTest|
 
-|''actions''|
-
 |empty|
 )
 **!
@@ -11,11 +9,7 @@
 <tr><td>fitlibrary.specify.GridFixtureUnderTest</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0" class="pass">
-<tr><td>empty</td>
+<br/><table border="1" cellspacing="0">
+<tr class="pass"><td>empty</td>
 </tr>
 </table>-!|

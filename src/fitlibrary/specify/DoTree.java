@@ -6,12 +6,11 @@ package fitlibrary.specify;
 
 import java.util.List;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.parser.tree.ListTree;
 import fitlibrary.parser.tree.Tree;
 import fitlibrary.parser.tree.TreeInterface;
 
-public class DoTree implements DomainFixtured {
+public class DoTree {
     public ListTree tree() {
         ListTree tree = new ListTree("");
         tree.addChild(new ListTree("a"));

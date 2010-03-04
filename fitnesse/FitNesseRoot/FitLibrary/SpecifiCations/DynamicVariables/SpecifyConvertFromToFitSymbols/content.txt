@@ -9,7 +9,7 @@
 |set symbol named|anotherSymbol|get|@{avar}|
 
 |set symbol named|yetAnotherSymbol|to|2|
- 
+
 !|fitnesse.fixtures.ColumnFixtureTestFixture|
 |input=|output?|
 |anotherSymbol|1|

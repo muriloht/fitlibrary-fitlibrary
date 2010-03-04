@@ -9,6 +9,7 @@ import java.util.Map;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
@@ -23,7 +24,8 @@ public class MapSetUpTraverse extends Traverse {
     protected MapSetUpTraverse() {
     	//
     }
-    public MapSetUpTraverse(Typed keyTyped, Typed valueTyped) {
+    public MapSetUpTraverse(Typed keyTyped, Typed valueTyped, RuntimeContextInternal runtimeContext) {
+    	this.runtimeContext = runtimeContext;
         this.keyParser = keyTyped.parser(this);
         this.valueParser = valueTyped.parser(this);
     }

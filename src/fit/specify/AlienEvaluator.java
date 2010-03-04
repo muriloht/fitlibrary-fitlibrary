@@ -7,9 +7,8 @@
 package fit.specify;
 
 import fit.Fixture;
-import fitlibrary.object.DomainFixtured;
 
-public class AlienEvaluator implements DomainFixtured {
+public class AlienEvaluator {
 	public Fixture fixture() {
 		return new MyColumnFixture();
 	}

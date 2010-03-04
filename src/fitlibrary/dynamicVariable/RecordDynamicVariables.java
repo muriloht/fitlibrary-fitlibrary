@@ -52,8 +52,7 @@ public class RecordDynamicVariables {
 		return recordings.get() != null;
 	}
 	public static void record(String key, String value) {
-		if (!value.contains("@{"+key+"}")) // Don't record a self-reference.
-			recordings.get().record(key,value);
+ 		recordings.get().record(key,value);
 	}
 	public static void write() throws IOException {
 		Recording recording = recordings.get();

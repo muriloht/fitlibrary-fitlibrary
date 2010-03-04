@@ -4,19 +4,13 @@
 |!-<table>
 <tr><td>fitlibrary.specify.workflow.SetUp</td></tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
+<br>
 <table>
 <tr><td>check</td><td><i>is set up</i></td><td>true</td></tr>
 </table>-!|!-<table>
 <tr><td>fitlibrary.specify.workflow.SetUp</td></tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
+<br>
 <table>
 <tr><td>check</td><td><i>is set up</i></td><td class="pass">true</td></tr>
 </table>-!|

@@ -21,11 +21,9 @@ public class SimpleSetUp extends SuiteFixture {
 	public void suiteTearDown() {
 		suiteTearDownCount++;
 	}
-	@Override
 	public void setUp() {
 		setUpCount++;
 	}
-	@Override
 	public void tearDown() {
 		tearDownCount++;
 	}

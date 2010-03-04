@@ -7,11 +7,9 @@
 )
 !define test (!|fitlibrary.specify.setParser.Match|
 
-|''checks''|
+|''set of counts 23''|'''is'''|${list}|
 
-|''set of counts 23''|${list}|
-
-|''set of counts 23''||
+|''set of counts 23''|'''is'''||
 )
 **!
 |!-fitlibrary.spec.SpecifyFixture-!|
@@ -19,12 +17,9 @@
 <tr><td>fitlibrary.specify.setParser.Match</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>checks</i></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>set of counts 23</i></td>
+<td><b>is</b></td>
 <td><table border="1" cellspacing="0">
 <tr><td><i>count</i></td>
 </tr>
@@ -38,8 +33,9 @@
 </td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>set of counts 23</i></td>
+<td><b>is</b></td>
 <td class="fail">&nbsp; <span class="fit_label">expected</span><hr>Count[2], Count[3] <span class="fit_label">actual</span></td>
 </tr>
 </table>-!|

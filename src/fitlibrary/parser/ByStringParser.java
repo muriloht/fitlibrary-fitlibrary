@@ -5,6 +5,7 @@
 package fitlibrary.parser;
 
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runtime.RuntimeContext;
 import fitlibrary.table.ICell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -18,10 +19,10 @@ import fitlibrary.utility.TestResults;
  * It may end up being inconsistent with references, but let's wait ans see.
  */
 public class ByStringParser implements Parser {
-	private Evaluator evaluator;
+	private RuntimeContext runtime;
 	
-	public ByStringParser(Evaluator evaluator) {
-		this.evaluator = evaluator;
+	public ByStringParser(RuntimeContext runtime) {
+		this.runtime = runtime;
 	}
 	public String show(Object actual) {
     	if (actual == null)
@@ -33,7 +34,7 @@ public class ByStringParser implements Parser {
 	}
 	@SuppressWarnings("unused")
    private Object parse(ICell cell, TestResults testResults) throws Exception {
-        return cell.text(evaluator);
+        return cell.text(runtime);
     }
     public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
         return equals(parse(cell,testResults),result);
@@ -47,13 +48,11 @@ public class ByStringParser implements Parser {
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		@SuppressWarnings("unused")
 			public Parser parser(Evaluator evaluator, Typed typed) {
-				return new ByStringParser(evaluator);
+				return new ByStringParser(evaluator.getRuntimeContext());
 			}
     	};
     }
-    @SuppressWarnings("unused")
 	public Evaluator traverse(TypedObject object) {
 		throw new RuntimeException("No Traverse available");
 	}

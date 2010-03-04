@@ -3,8 +3,6 @@
 !define test (
 !|fitlibrary.specify.calculate.ResultingObjectIsSubType|
 
-|''actions''|
-
 |''calculate''|
 |''colour''||''superclass''|
 |red||red|
@@ -18,10 +16,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<br><table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.calculate.ResultingObjectIsSubType</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

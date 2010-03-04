@@ -6,11 +6,12 @@
 
 package fitlibrary.utility;
 
-import junit.framework.TestCase;
-import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.StringUtility;
+import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TestClassUtility extends TestCase {
+public class TestClassUtility {
+	@Test
 	public void testAFitLibraryClass() {
 		assertIsFitLibraryClass(fitlibrary.FitLibraryFixture.class);
 		assertIsFitLibraryClass(fitlibrary.DoFixture.class);
@@ -21,13 +22,14 @@ public class TestClassUtility extends TestCase {
 		
 		assertIsFitLibraryClass(fit.Fixture.class);
 
-		assertFalse(ClassUtility.aFitLibraryClass(fitlibrary.specify.suite.Simple.class));
-		assertFalse(ClassUtility.aFitLibraryClass(fitlibrary.specify.eg.User.class));
+		assertThat(ClassUtility.aFitLibraryClass(fitlibrary.specify.suite.Simple.class),is(false));
+		assertThat(ClassUtility.aFitLibraryClass(fitlibrary.specify.eg.User.class),is(false));
 	}
 	private void assertIsFitLibraryClass(Class<?> type) {
-		assertTrue(ClassUtility.aFitLibraryClass(type));
+		assertThat(ClassUtility.aFitLibraryClass(type),is(true));
 	}
+	@Test
     public void testReplaceString() {
-        assertEquals("%20/%20",StringUtility.replaceString(" / "," ","%20"));
+		assertThat(StringUtility.replaceString(" / "," ","%20"),is("%20/%20"));
     }
 }

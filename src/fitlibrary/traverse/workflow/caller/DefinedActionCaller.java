@@ -10,6 +10,7 @@ import java.util.List;
 import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
@@ -23,29 +24,32 @@ public class DefinedActionCaller extends DoCaller {
 	private ParameterSubstitution parameterSubstitution;
 	private String methodName;
 	private DoTraverseInterpreter doTraverse;
+	private RuntimeContextInternal runtime;
 	private List<Object> actualArgs = new ArrayList<Object>();
 
 	public DefinedActionCaller(Row row, DoTraverseInterpreter doTraverse) {
 		this.doTraverse = doTraverse;
+		this.runtime = doTraverse.getRuntimeContext();
 		methodName = row.methodNameForCamel(doTraverse);
 		actualArgs = actualArgs(row);
 		parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel(methodName, actualArgs.size());
 		if (parameterSubstitution == null) {
-			Object objectName = doTraverse.getDynamicVariable("this");
+			Object objectName = runtime.getDynamicVariable("this");
 			if (objectName != null) {
-				Object className = doTraverse.getDynamicVariable(objectName+".class");
+				Object className = runtime.getDynamicVariable(objectName+".class");
 				actualArgs.add(0,objectName.toString());
 				if (className != null && !"".equals(className))
-					parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel(className.toString(), methodName, (actualArgs.size()-1), doTraverse.runtime());
+					parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel(className.toString(), methodName, (actualArgs.size()-1), doTraverse.getRuntimeContext());
 			}
 		}
 	}
 	public DefinedActionCaller(String object, String className, Row row, DoTraverseInterpreter doTraverse) {
 		this.doTraverse = doTraverse;
+		this.runtime = doTraverse.getRuntimeContext();
 		methodName = row.methodNameForCamel(doTraverse);
 		actualArgs.add(object);
 		actualArgs(row,actualArgs);
-		this.parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel(className, methodName, (actualArgs.size()-1), doTraverse.runtime());
+		this.parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel(className, methodName, (actualArgs.size()-1), doTraverse.getRuntimeContext());
 		if (parameterSubstitution == null)
 			throw new FitLibraryException("Unknown defined action for object of class "+className);
 	}
@@ -57,15 +61,15 @@ public class DefinedActionCaller extends DoCaller {
 	public Object run(IRow row, TestResults testResults) {
 		CallManager.startCall(parameterSubstitution);
 		try {
-			Object oldThisValue = doTraverse.getDynamicVariable("this");
+			Object oldThisValue = runtime.getDynamicVariable("this");
 			if (!actualArgs.isEmpty())
-				doTraverse.setDynamicVariable("this", actualArgs.get(0));
-			Object result = processDefinedAction(parameterSubstitution.substitute(actualArgs,doTraverse),row,testResults);
-			doTraverse.setDynamicVariable("this", oldThisValue);
+				runtime.setDynamicVariable("this", actualArgs.get(0));
+			processDefinedAction(parameterSubstitution.substitute(actualArgs),row,testResults);
+			runtime.setDynamicVariable("this", oldThisValue);
 		} finally {
 			CallManager.endCall(parameterSubstitution);
 		}
-		if (!doTraverse.toExpandDefinedActions() && CallManager.readyToShow() && !testResults.isAbandoned())
+		if (!runtime.toExpandDefinedActions() && CallManager.readyToShow() && !testResults.isAbandoned())
 			row.addCell(new Cell(new Tables(CallManager.getShowsTable())));
 		return null;
 	}
@@ -82,30 +86,27 @@ public class DefinedActionCaller extends DoCaller {
 			if (cell.hasEmbeddedTable())
 				result.add(cell.getEmbeddedTables());
 			else
-				result.add(cell.text(doTraverse));
+				result.add(cell.text(runtime));
 		}
 		return result;
 	}
-	private Object processDefinedAction(Tables definedActionBody, IRow row, TestResults testResults) {
-		Object lastResult = null;
+	private void processDefinedAction(Tables definedActionBody, IRow row, TestResults testResults) {
 		TestResults subTestResults = new TestResults(testResults);
 		for (int i = 0; i < definedActionBody.size(); i++) {
 			Table table = definedActionBody.table(i);
-			if (testResults.isAbandoned()) {
+			if (testResults.isAbandoned())
 				table.ignore(subTestResults);
-				lastResult = null;
-			} else
-				lastResult = doTraverse.interpretWholeTable(table,subTestResults);
+			else
+				doTraverse.interpretWholeTable(table,subTestResults);
 		}
 		colourReport(definedActionBody, row, testResults, subTestResults);
-		return lastResult;
 	}
 	private void colourReport(Tables body, IRow row,
 			TestResults testResults, TestResults subTestResults) {
-		if (doTraverse.toExpandDefinedActions() || subTestResults.problems() || testResults.isAbandoned()) {
-			if (testResults.isAbandoned())
-				; // Leave it to caller to ignore the row
-			else if (subTestResults.passed())
+		if (runtime.toExpandDefinedActions() || subTestResults.problems() || testResults.isAbandoned()) {
+			if (testResults.isAbandoned()) {
+				// Leave it to caller to ignore the row
+			} else if (subTestResults.passed())
 				row.passKeywords(testResults);
 			else if (subTestResults.errors())
 				for (int i = 0; i < row.size(); i += 2)

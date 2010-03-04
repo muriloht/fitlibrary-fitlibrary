@@ -7,30 +7,25 @@ package fitlibrary.suite;
 import java.io.IOException;
 
 import fit.Counts;
-import fit.FixtureBridge;
 import fitlibrary.dynamicVariable.RecordDynamicVariables;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.table.ParseNode;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
+import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class BatchFitLibrary {
-    private boolean first = true;
-	private SuiteRunner suiteRunner = new IndependentSuiteRunner(null);
 	private TableListener tableListener = new TableListener(TestResults.create(new Counts()));
-	private Reportage reportage;
-	private DoFlow doFlow = null; //new DoFlow();
+	private DoFlow doFlow = new DoFlow(new DoTraverse());
 
 	public BatchFitLibrary() {
-		this(new DefaultReportage());
-	}
-	public BatchFitLibrary(Reportage reportage) {
-		this.reportage = reportage;
+		//
 	}
 	public BatchFitLibrary(TableListener tableListener) {
+		this();
 		this.tableListener = tableListener;
 	}
 	public TestResults doStorytest(Tables theTables) {
@@ -39,25 +34,7 @@ public class BatchFitLibrary {
 	}
 	public TestResults doTables(Tables theTables) {
 		tableListener.clearTestResults();
-		if (doFlow != null) {
-			doFlow.runStorytest(theTables,tableListener);
-		} else if (first) {
-			first = false;
-			FixtureBridge fixtureBridge = new FixtureBridge();
-			fixtureBridge.counts = tableListener.getTestResults().getCounts();
-			Object firstObjectOfSuite = fixtureBridge.firstObject(theTables.parse(),tableListener.getTestResults());
-			if (firstObjectOfSuite == null) {
-				theTables.ignoreAndFinished(tableListener);
-				return tableListener.getTestResults();
-			}
-			if (firstObjectOfSuite instanceof SuiteEvaluator) {
-				suiteRunner = new IntegratedSuiteRunner((SuiteEvaluator)firstObjectOfSuite);
-				reportage.showAllReports();
-			} else
-				suiteRunner = new IndependentSuiteRunner(firstObjectOfSuite);
-			suiteRunner.runFirstStorytest(theTables,tableListener);
-		} else
-			suiteRunner.runStorytest(theTables,tableListener);
+		doFlow.runStorytest(theTables,tableListener);
 		if (RecordDynamicVariables.recording()) {
 			try {
 				RecordDynamicVariables.write();
@@ -74,8 +51,7 @@ public class BatchFitLibrary {
 		doStorytest(theTables);
 	}
 	public void exit() {
-		if (suiteRunner != null)
-			suiteRunner.exit();
+		doFlow.exit();
 	}
 	public static class DefaultReportage implements Reportage {
 		public void showAllReports() {

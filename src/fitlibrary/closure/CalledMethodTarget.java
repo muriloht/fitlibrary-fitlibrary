@@ -7,6 +7,7 @@ package fitlibrary.closure;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
+import fit.Fixture;
 import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
@@ -28,6 +29,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
+import fitlibrary.traverse.FitHandler;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
@@ -167,9 +169,12 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			if (RecordDynamicVariables.recording() && expectedCell.unresolved(evaluator)) {
             	String text = expectedCell.text();
             	String key = text.substring(2,text.length()-1);
-				evaluator.setDynamicVariable(key, result.toString());
-				RecordDynamicVariables.record(key, result.toString());
-            	expectedCell.pass(testResults,result.toString());
+            	String resultString = result.toString();
+				if (!resultString.contains("@{"+key+"}")) { // Don't record a self-reference.
+            		evaluator.setDynamicVariable(key, resultString);
+            		RecordDynamicVariables.record(key, resultString);
+            	}
+            	expectedCell.pass(testResults,resultString);
             	return;
             }
 			if (exceptionExpected)
@@ -320,17 +325,15 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		Object result = typedResult.getSubject();
 		if (result == null)
 			return null;
-		if (isPrimitiveReturnType())
-		    return result;
-		if (result instanceof String || result instanceof StringBuffer)
-		    return result;
+		if (notToBeAutoWrapped(result))
+			return result;
 		if (result instanceof Evaluator) {
 			Evaluator resultEvaluator = (Evaluator)result;
 			if (resultEvaluator != evaluator && resultEvaluator.getNextOuterContext() == null)
 				return withOuter(resultEvaluator);
-		    return result;
+		    return resultEvaluator;
 		}
-		if (Traverse.getAlienTraverseHandler().isAlienTraverse(result))
+		if (result instanceof Fixture)
 		    return result;
 		
 		Class<?> returnType = result.getClass();
@@ -345,12 +348,21 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		    return result;
 		return withOuter(new DoTraverse(typedResult));
 	}
+	public boolean notToBeAutoWrapped(Object result) {
+		return result instanceof String || result instanceof StringBuffer || isPrimitiveReturnType();
+	}
+	public static boolean canAutoWrap(Object result) {
+		return !(result instanceof String || result instanceof StringBuffer || isPrimitiveType(result.getClass()));
+	}
 	private Object withOuter(Evaluator inner) {
 		inner.setOuterContext(evaluator);
+		inner.setRuntimeContext(evaluator.getRuntimeContext());
 		return inner;
 	}
 	private boolean isPrimitiveReturnType() {
-	    Class<?> returnType = getReturnType();
+	    return isPrimitiveType(getReturnType());
+	}
+	private static boolean isPrimitiveType(Class<?> returnType) {
 		return returnType.isPrimitive() ||
 			   returnType == Boolean.class ||
 			   Number.class.isAssignableFrom(returnType) ||

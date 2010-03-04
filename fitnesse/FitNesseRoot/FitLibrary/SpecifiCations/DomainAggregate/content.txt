@@ -12,3 +12,5 @@ Nested tables may be used for checking of nested objects and collections, as in
  * ^DomainObjectFixture, for ''!-DomainObjectCheckFixture-!'';
  * the expected values in ^CalculateFixture
  * and the expected value of an action in ^WorkFlow
+
+!contents

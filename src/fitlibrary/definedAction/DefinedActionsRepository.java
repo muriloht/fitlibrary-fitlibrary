@@ -9,7 +9,7 @@ package fitlibrary.definedAction;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
@@ -20,7 +20,7 @@ public interface DefinedActionsRepository {
 	void define(Row parametersRow, String wikiClassName,
 			ParameterSubstitution parameterSubstitution, Evaluator evaluator, String absoluteFileName);
 	ParameterSubstitution lookupByCamel(String name, int argCount);
-	ParameterSubstitution lookupByClassByCamel(String className, String name, int argCount, RuntimeContext variables);
+	ParameterSubstitution lookupByClassByCamel(String className, String name, int argCount, RuntimeContextInternal variables);
 	void findPlainTextCall(String textCall, List<ValidCall> results);
 	void defineMultiDefinedAction(String name, ArrayList<String> formalParameters, 
 			Tables body, String absoluteFileName);

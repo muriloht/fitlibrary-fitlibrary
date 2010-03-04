@@ -68,7 +68,6 @@ public class NonGenericFinder implements Finder {
         Object[] args = new Object[]{ result };
 		if (showMethod != null)
             return showMethod.invoke(args).toString();
-//		throw new FitLibraryException(showExceptionMethod);
 		if (result == null)
 			return "";
 		return result.toString();

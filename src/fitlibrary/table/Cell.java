@@ -12,6 +12,7 @@ import fit.Parse;
 import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.SingleNestedTableExpected;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runtime.RuntimeContext;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
@@ -54,12 +55,25 @@ public class Cell extends ParseNode implements ICell {
 			setText(cell.fullText());
 	}
 	public String text(Evaluator evaluator) {
+		if (parse.body == null)
+			return "";
+		if (evaluator == null)
+			return parse.text();
+		if (evaluator.getRuntimeContext() == null)
+			throw new NullPointerException("Runtime is null");
+        String text = parse.text();
+		String resolve = evaluator.getRuntimeContext().dynamicVariables().resolve(text);
+		if (!text.equals(resolve))
+			parse.body = resolve;
+		return resolve;
+    }
+	public String text(RuntimeContext runtime) {
+		if (runtime == null)
+			throw new NullPointerException("Runtime is null");
         if (parse.body == null)
             return "";
-        if (evaluator == null)
-        	return parse.text();
         String text = parse.text();
-		String resolve = evaluator.runtime().dynamicVariables().resolve(text);
+		String resolve = runtime.dynamicVariables().resolve(text);
 		if (!text.equals(resolve))
 			parse.body = resolve;
 		return resolve;

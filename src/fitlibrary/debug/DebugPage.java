@@ -38,7 +38,7 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.AutoWrapWithDo.PojoInFirstTable"
+				"FitLibrary.SpecifiCations.DefinedActions.AbandonInDefinedAction"
 		};
 		run(pageNames);
 	}

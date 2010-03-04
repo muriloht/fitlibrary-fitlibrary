@@ -1,8 +1,6 @@
 !**< def
 !define testStrings {!|fitlibrary.specify.setParser.Parse|
 
-|''actions''|
-
 |''given set''||
 |''any header will do''|
 
@@ -16,10 +14,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${testStrings}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.setParser.Parse</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

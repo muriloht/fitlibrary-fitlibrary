@@ -86,7 +86,7 @@ public class Parse {
       int embeddedTagEnd = lc.indexOf("</" + tag, fromHere);
       // Which one is closer?
       if (embeddedTag < 0 && embeddedTagEnd < 0)
-        throw new FitParseException("Can't find end tag for embedded table", fromHere);
+        throw new FitParseException("Can't find end tag '"+tag+"' for embedded table", fromHere);
       if (embeddedTag < 0)
         embeddedTag = Integer.MAX_VALUE;
       if (embeddedTagEnd < 0)

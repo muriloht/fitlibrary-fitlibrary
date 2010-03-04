@@ -7,9 +7,9 @@ package fitlibrary.specify;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.DoFixture;
+import fitlibrary.object.DomainFixtured;
 
-public abstract class AbstractNestedLists extends DoFixture {
+public abstract class AbstractNestedLists implements DomainFixtured {
 	public static class Fruit {
 		private String name;
 		private List<Object> list = new ArrayList<Object>();

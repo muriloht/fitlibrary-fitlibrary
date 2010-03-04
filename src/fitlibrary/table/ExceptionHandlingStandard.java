@@ -15,6 +15,7 @@ import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ExceptionHandler;
+import fitlibrary.utility.HtmlUtils;
 
 public class ExceptionHandlingStandard implements ExceptionHandling {
 	public void mustBeThreadSafe() {
@@ -27,7 +28,7 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
         if (exception instanceof FitLibraryExceptionInHtml)
         	return "<hr/>" + Fixture.label(exception.getMessage());
         if (exception instanceof FitLibraryException)
-            return "<hr/>" + Fixture.label(Traverse.escapeHtml(exception.getMessage()));
+            return "<hr/>" + Fixture.label(HtmlUtils.escapeHtml(exception.getMessage()));
         final StringWriter buf = new StringWriter();
         exception.printStackTrace(new PrintWriter(buf));
         return "<hr><pre><div class=\"fit_stacktrace\">"

@@ -8,10 +8,8 @@ package fitlibrary.specify.missingMethod;
 
 import java.util.List;
 
-import fitlibrary.object.DomainFixtured;
-
 @SuppressWarnings({"unchecked","unused"})
-public class NestedFinderInJustSut implements DomainFixtured {
+public class NestedFinderInJustSut {
 	public void addToColourMix(List colours) {
 		//
 	}

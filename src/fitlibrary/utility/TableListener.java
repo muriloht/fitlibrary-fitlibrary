@@ -39,7 +39,6 @@ public class TableListener {
 	public TestResults getTestResults() {
 		return testResults;
 	}
-	@SuppressWarnings("unused")
 	public static class EmptyFixtureListener implements FixtureListener	{
 		public void tableFinished(Parse table) {
 			//

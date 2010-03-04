@@ -4,10 +4,9 @@
 */
 package fitlibrary.specify;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.parser.tagged.TaggedString;
 
-public class DoWithTags implements DomainFixtured {
+public class DoWithTags {
 	public TaggedString taggedText() {
 		return new TaggedString("<b>bold</b>");
 	}

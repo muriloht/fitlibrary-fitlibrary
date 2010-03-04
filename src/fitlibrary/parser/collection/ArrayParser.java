@@ -16,6 +16,7 @@ import fitlibrary.collection.array.ArrayTraverse;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.ICell;
 import fitlibrary.table.Table;
@@ -63,27 +64,27 @@ public class ArrayParser implements Parser {
     	if (results instanceof Object[]) {
     		Object[] array = (Object[])results;
     		if (array.getClass().getComponentType().isArray()) {
-    			Traverse nestingArray = new ArrayTraverse(array,true);
+    			Traverse nestingArray = new ArrayTraverse(array,true,evaluator.getRuntimeContext());
     			return nestingArray.doesTablePass(table,evaluator,testResults);
     		} 
-    		ArrayTraverse traverse = new ArrayTraverse(array);
+    		ArrayTraverse traverse = new ArrayTraverse(array,evaluator.getRuntimeContext());
     		return traverse.doesInnerTablePass(table,evaluator,testResults);
     	} 
-        Traverse traverse = selectPrimitiveArray(results);
+        Traverse traverse = selectPrimitiveArray(results,evaluator.getRuntimeContext());
 		return traverse.doesInnerTablePass(table,evaluator,testResults);
     }
 	@SuppressWarnings("unchecked")
-	public static Traverse selectPrimitiveArray(Object array) {
+	public static Traverse selectPrimitiveArray(Object array, RuntimeContextInternal runtime) {
 		if (array.getClass().isArray()) {
 			if (ClassUtility.isEffectivelyPrimitive(array.getClass().getComponentType()))
-				return new ArrayTraverse(array);
+				return new ArrayTraverse(array,runtime);
 			if (array.getClass().getComponentType().isArray())
-				return new ArrayTraverse(array);
+				return new ArrayTraverse(array,runtime);
 			List<?> asList = Arrays.asList((Object[])array);
-			return new ArrayTraverse(asArray(asList));
+			return new ArrayTraverse(asArray(asList),runtime);
 		}
 		if (array instanceof Collection)
-			return new ArrayTraverse(asArray((Collection<?>)array));
+			return new ArrayTraverse(asArray((Collection<?>)array),runtime);
 		throw new FitLibraryException("Object is not an array or collection, but is of "+array.getClass());
 	}
 	private static String[] asArray(Collection<?> collection) {
@@ -136,6 +137,6 @@ public class ArrayParser implements Parser {
     	};
     }
 	public Evaluator traverse(TypedObject object) {
-		return new ArrayTraverse(object.getSubject());
+		return new ArrayTraverse(object.getSubject(),evaluator.getRuntimeContext());
 	}
 }

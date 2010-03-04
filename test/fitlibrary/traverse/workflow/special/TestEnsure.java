@@ -24,7 +24,6 @@ public class TestEnsure extends TestSpecialAction {
 			allowing(initialRow).size();will(returnValue(3));
 			allowing(initialRow).cell(0);will(returnValue(firstCell));
 			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
-			one(actionContext).setExpectedResult(true);
 			one(actionContext).findMethodFromRow(initialRow,1,0);
 			   will(returnValue(target));
 		}

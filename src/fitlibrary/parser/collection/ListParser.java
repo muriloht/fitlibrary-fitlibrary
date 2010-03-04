@@ -34,6 +34,8 @@ public class ListParser implements Parser {
     private final Typed typed;
 	
 	public ListParser(Evaluator evaluator, Typed typed) {
+		if (evaluator.getRuntimeContext() == null)
+			throw new NullPointerException("Runtime is null");
 		this.evaluator = evaluator;
         this.typed = typed;
 		valueParser = Traverse.asTyped(String.class).resultParser(evaluator);

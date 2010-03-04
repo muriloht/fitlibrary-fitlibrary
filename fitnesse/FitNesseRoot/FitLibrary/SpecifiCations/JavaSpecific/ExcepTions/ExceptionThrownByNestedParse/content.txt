@@ -3,8 +3,6 @@
 )
 !define test (!|fitlibrary.specify.exception.ExceptionThrownByNestedParse|
 
-|''actions''|
-
 |'''check'''|''value''|${value}|
 
 |''expected test results''|0|''right''|0|''wrong''|0|''ignored''|1|''exceptions''|
@@ -13,10 +11,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.exception.ExceptionThrownByNestedParse</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

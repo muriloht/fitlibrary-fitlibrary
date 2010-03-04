@@ -7,20 +7,20 @@
 )
 !define test (
 !|fitlibrary.specify.set.AccessFields|
-----
-----
-|a set|${set}|
+
+|a set|'''is'''|${set}|
 )
 **!
 
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<br><table border="1" cellspacing="0">
+|${test}|!-<br/><table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.set.AccessFields</td>
 </tr>
 </table>
-<hr><br><hr><br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td>a set</td>
-<td><br><table border="1" cellspacing="0">
+<td><b>is</b></td>
+<td><br/><table border="1" cellspacing="0">
 <tr><td>field1</td>
 <td>field2</td>
 </tr>

@@ -5,12 +5,14 @@
 
 package fitlibrary.table;
 
+import fitlibrary.runtime.RuntimeContext;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.utility.TestResults;
 
 public interface ICell {
 	String text();
 	String text(Evaluator evaluator);
+	String text(RuntimeContext runtime);
 	String fullText();
 	boolean isBlank(Evaluator evaluator);
 	boolean hasEmbeddedTable();

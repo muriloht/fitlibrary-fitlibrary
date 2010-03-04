@@ -21,13 +21,7 @@
 <tr><td>fit.Summary</td></tr>
 <tr>
 <td> <span class="fit_grey">counts</span></td>
-<td class="pass"> <span class="fit_grey">0 right, 0 wrong, 0 ignored, 0 exceptions</span></td></tr>
-<tr>
-<td> <span class="fit_grey">run date</span></td>
-<td>IGNORE</td></tr>
-<tr>
-<td> <span class="fit_grey">run elapsed time</span></td>
-<td>IGNORE</td></tr></table>
+<td class="pass"> <span class="fit_grey">0 right, 0 wrong, 0 ignored, 0 exceptions</span></td></tr></table>
 <table border="1" cellspacing="0">
 <tr><td class="error">unknown<hr/> <span class="fit_label"></span></td></tr>
 </table>
@@ -39,10 +33,4 @@
 <tr><td>fit.Summary</td></tr>
 <tr>
 <td> <span class="fit_grey">counts</span></td>
-<td class="fail"> <span class="fit_grey">0 right, 0 wrong, 0 ignored, 2 exceptions</span></td></tr>
-<tr>
-<td> <span class="fit_grey">run date</span></td>
-<td>IGNORE</td></tr>
-<tr>
-<td> <span class="fit_grey">run elapsed time</span></td>
-<td>IGNORE</td></tr></table>-!|
+<td class="fail"> <span class="fit_grey">0 right, 0 wrong, 0 ignored, 2 exceptions</span></td></tr></table>-!|

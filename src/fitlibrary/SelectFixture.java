@@ -10,23 +10,24 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Row;
+import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedFactory;
 
 public class SelectFixture extends DoFixture {
-	private Map<String,DoEvaluator> nametoFixture = new HashMap<String,DoEvaluator>();
+	private Map<String,Object> nametoFixture = new HashMap<String,Object>();
 	
 	public void addAs(String doFixtureClassName, String name) {
 		try {
 			Object instance = ClassUtility.newInstance(doFixtureClassName);
 			if (instance instanceof DoEvaluator) {
 				DoEvaluator doEval = (DoEvaluator) instance;
-				doEval.setRuntimeContext(runtime()); // includes timeouts
-				doEval.setUp();
-				add(doEval,name);
-			} else
-				throw new FitLibraryException("Class must be a DoFixture or a DoTraverse");
+				doEval.setRuntimeContext(getRuntimeContext()); // includes timeouts
+			} 
+			add(instance,name);
+			callSetUpSutChain(instance);
 		} catch (FitLibraryException e) {
 			throw e;
 		} catch (Exception e) {
@@ -48,7 +49,7 @@ public class SelectFixture extends DoFixture {
 			throw new MissingCellsException("addNamedFixture");
 		Object result = findMethodFromRow(row,2,less).invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
 		if (result instanceof DoEvaluator)
-			add((DoEvaluator) result,row.text(1,this));
+			add(result,row.text(1,this));
 		else
 			row.cell(0).failHtml(testResults, "Action did not return a DoFixture/DoTraverse");
 	}
@@ -58,16 +59,16 @@ public class SelectFixture extends DoFixture {
 	private CalledMethodTarget findMethodByActionName(Row row, int allArgs) throws Exception {
 		return PlugBoard.lookupTarget.findMethodInEverySecondCell(this, row, allArgs);
 	}
-	protected void add(DoEvaluator eval, String name) {
-		nametoFixture.put(name,eval);
+	protected void add(Object sut, String name) {
+		nametoFixture.put(name,sut);
 	}
-	@Override
 	public void tearDown() {
 		List<Exception> errors = new ArrayList<Exception>();
 		for (String key : nametoFixture.keySet()) {
 			try {
-				DoEvaluator eval = nametoFixture.get(key);
-				eval.tearDown();
+				Object sut = nametoFixture.get(key);
+				if (sut != getSystemUnderTest())
+					callTearDownSutChain(sut);
 			} catch (Exception e) {
 				errors.add(e);
 			}
@@ -82,5 +83,25 @@ public class SelectFixture extends DoFixture {
 		list.add("select/1");
 		list.add("tearDown/0");
 		return list;
+	}
+	private void callSetUpSutChain(Object sut) throws Exception {
+		Object object = sut;
+		while (object instanceof DomainAdapter) {
+			callMethod(object,"setUp");
+			object = ((DomainAdapter)object).getSystemUnderTest();
+		}
+	}
+	private void callTearDownSutChain(Object sut) throws Exception {
+		Object object = sut;
+		while (object instanceof DomainAdapter) {
+			callMethod(object,"tearDown");
+			object = ((DomainAdapter)object).getSystemUnderTest();
+		}
+	}
+	private void callMethod(Object object, String methodName) throws Exception {
+			CalledMethodTarget methodTarget = new GenericTypedFactory().asTypedObject(object).
+				optionallyFindMethodOnTypedObject(methodName,0,this,false);
+			if (methodTarget != null)
+				methodTarget.invoke();
 	}
 }

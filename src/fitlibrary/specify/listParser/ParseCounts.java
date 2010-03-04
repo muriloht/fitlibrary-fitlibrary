@@ -7,11 +7,10 @@ package fitlibrary.specify.listParser;
 import java.util.Iterator;
 import java.util.List;
 
-import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Count;
 
 @SuppressWarnings("unchecked")
-public class ParseCounts implements DomainFixtured {
+public class ParseCounts {
 	public List givenCounts(List list) {
 		return list;
 	}

@@ -6,9 +6,7 @@
 
 package fitlibrary.specify.exception;
 
-import fitlibrary.object.DomainFixtured;
-
-public class AmbiguousActionMethod implements DomainFixtured {
+public class AmbiguousActionMethod {
 	public int overloaded(int i) {
 		return i;
 	}

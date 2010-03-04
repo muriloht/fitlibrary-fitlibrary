@@ -4,11 +4,11 @@
 */
 package fitlibrary;
 
-import fit.FixtureBridge;
+import fit.Fixture;
 import fit.Parse;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.parser.lookup.ParseDelegation;
-import fitlibrary.runtime.RuntimeContext;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -23,7 +23,7 @@ import fitlibrary.utility.TestResults;
  * needed here to avoid compiletime conflicts. It also has to be created 
  * reflectively, because we can't mention its name here, except in a String.
  */
-public abstract class FitLibraryFixture extends FixtureBridge implements Evaluator {
+public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	private Traverse traverse;
 	private TypedObject typedObjectUnderTest = Traverse.asTypedObject(null);
 
@@ -79,18 +79,10 @@ public abstract class FitLibraryFixture extends FixtureBridge implements Evaluat
     	Table table = new Table(parseTable);
     	TestResults testResults = createTestResults();
     	try {
-    		setUp(table, testResults);
     		interpretAfterFirstRow(table, testResults);
     	} catch (Exception e) {
     		table.error(testResults,e);
-    	} finally {
-    		tearDown(table, testResults);
     	}
-    }
-    public void doWithin(Table table, Evaluator evaluator, TestResults testResults) {
-        setOuterContext(evaluator);
-        counts = testResults.getCounts();
-        interpretAfterFirstRow(table,testResults);
     }
 	public boolean doEmbeddedTablePasses(Table table, Evaluator evaluator, TestResults testResults) {
 		return traverse().doesInnerTablePass(table,evaluator,testResults);
@@ -99,33 +91,18 @@ public abstract class FitLibraryFixture extends FixtureBridge implements Evaluat
 		return TestResults.create(counts);
 	}
     public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-    	traverse().setUp(table,testResults);
-    	Object result = traverse().interpretAfterFirstRow(table,testResults);
-    	traverse().tearDown(table,testResults);
-		return result;
+    	return traverse().interpretAfterFirstRow(table,testResults);
     }
-    public RuntimeContext runtime() {
-		return traverse().runtime();
+    public RuntimeContextInternal getRuntimeContext() {
+		return traverse().getRuntimeContext();
 	}
     public DynamicVariables getDynamicVariables() {
-    	return runtime().dynamicVariables();
+    	return getRuntimeContext().dynamicVariables();
     }
-	public void setRuntimeContext(RuntimeContext propertyValues) {
+	public void setRuntimeContext(RuntimeContextInternal propertyValues) {
 		traverse().setRuntimeContext(propertyValues);
 	}
 	public void setDynamicVariable(String key, Object value) {
 		traverse().setDynamicVariable(key, value);
-	}
-	public void setUp() throws Exception {
-		traverse().setUp();
-	}
-	public void setUp(Table firstTable, TestResults testResults) {
-		traverse().setUp(firstTable, testResults);
-	}
-	public void tearDown(Table firstTable, TestResults testResults) {
-		traverse().tearDown(firstTable, testResults);
-	}
-	public void tearDown() throws Exception {
-		traverse().tearDown();
 	}
 }

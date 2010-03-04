@@ -3,8 +3,6 @@
 !define test (
 !|fitlibrary.specify.calculate.DoubleUse|
 
-|''actions''|
-
 |''calculating''|
 |a|b||c|
 |1|2||3|
@@ -17,10 +15,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<br><table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.calculate.DoubleUse</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

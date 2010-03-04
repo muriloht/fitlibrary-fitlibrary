@@ -2,8 +2,6 @@ Wrap the current object with a ''!-CalculateTraverse-!'', which is applied to th
 !**< def
 !define test (!|fitlibrary.specify.workflow.SelectWrap|
 
-|''actions''|
-
 |'''calculate'''|
 |''a''|''b''||''+''|
 |1|2||3|
@@ -13,10 +11,6 @@ Wrap the current object with a ''!-CalculateTraverse-!'', which is applied to th
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.SelectWrap</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

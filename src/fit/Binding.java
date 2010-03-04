@@ -137,7 +137,8 @@ public abstract class Binding {
   public abstract void doCell(Fixture fixture, Parse cell) throws Throwable;
 
   public static class SaveBinding extends Binding {
-    public void doCell(Fixture fixture, Parse cell) {
+    @Override
+	public void doCell(Fixture fixture, Parse cell) {
       try {
         //TODO-MdM hmm... somehow this needs to regulated by the fixture.
         if (fixture instanceof ColumnFixture)
@@ -156,7 +157,8 @@ public abstract class Binding {
   }
 
   public static class RecallBinding extends Binding {
-    public void doCell(Fixture fixture, Parse cell) throws Exception {
+    @Override
+	public void doCell(Fixture fixture, Parse cell) throws Exception {
       String symbolName = cell.text();
       if (!Fixture.hasSymbol(symbolName))
         fixture.exception(cell, new FitFailureException("No such symbol: " + symbolName));

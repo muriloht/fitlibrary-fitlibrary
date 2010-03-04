@@ -3,8 +3,6 @@
 !define test (
 !|fitlibraryGeneric.specify.calculate.GenericCalculate|
 
-|''actions''|
-
 |''gen''|
 |''calculate''|
 |||''identity''|
@@ -15,10 +13,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<br><table border="1" cellspacing="0">
 <tr><td>fitlibraryGeneric.specify.calculate.GenericCalculate</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

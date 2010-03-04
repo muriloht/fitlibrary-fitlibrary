@@ -9,8 +9,6 @@
 )
 !define testInts (!|fitlibrary.specify.arrayParser.Parse|
 
-|''actions''|
-
 |''given ints''|${ints123}|
 |1|
 |2|
@@ -35,8 +33,6 @@
 )
 !define testIntsNested (!|fitlibrary.specify.arrayParser.Parse|
 
-|''actions''|
-
 |''given ints2D''|${outer}|
 |${inner1}|
 |${inner2}|
@@ -46,8 +42,6 @@
 |3|
 )
 !define testString (!|fitlibrary.specify.arrayParser.Parse|
-
-|''actions''|
 
 |''given strings''|${strings}|
 |1,2|
@@ -59,10 +53,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${testInts}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.arrayParser.Parse</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
@@ -115,10 +105,6 @@
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
 <tr><td><i>given ints2D</i></td>
 <td><table border="1" cellspacing="0">
 <tr><td><table border="1" cellspacing="0">
@@ -161,10 +147,6 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${testString}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.arrayParser.Parse</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

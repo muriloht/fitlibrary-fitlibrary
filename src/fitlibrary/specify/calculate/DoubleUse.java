@@ -7,9 +7,8 @@
 package fitlibrary.specify.calculate;
 
 import fitlibrary.CalculateFixture;
-import fitlibrary.object.DomainFixtured;
 
-public class DoubleUse implements DomainFixtured {
+public class DoubleUse {
 	private CalculateFixture calc = new LocalCalculateFixture();
 
 	public CalculateFixture calculating() {

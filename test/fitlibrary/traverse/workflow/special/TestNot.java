@@ -31,7 +31,6 @@ public class TestNot extends TestSpecialAction {
 
 			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
 			allowing(initialRow).cell(0);will(returnValue(firstCell));
-			one(actionContext).setExpectedResult(false);
 		}
 	}
 	@Test

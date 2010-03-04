@@ -1,8 +1,6 @@
 !**< def
 !define test {!|fitlibrary.specify.valueObject.ParseMyFixedPointAsStringWithSuperDelegate|
 
-|''actions''|
-
 |'''check'''|a fixed point|(12,34)|(12,34)|
 
 |'''check'''|a fixed point|(12,34)|(12,88)|
@@ -21,10 +19,6 @@ In the following, we choose to match fixed points purely on their x coordinate. 
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.valueObject.ParseMyFixedPointAsStringWithSuperDelegate</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

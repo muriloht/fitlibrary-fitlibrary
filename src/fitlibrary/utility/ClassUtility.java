@@ -118,7 +118,8 @@ public class ClassUtility {
 		return declaredConstructor.newInstance(new Object[]{});
 	}
 	public static Object newInstance(String className) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-		return newInstance(Class.forName(className));
+		Class<?> theClass = Class.forName(className);
+		return newInstance(theClass);
 	}
 	public static Object createElement(Class<?> type, Evaluator evaluator) throws Exception {
 		Object element = null;

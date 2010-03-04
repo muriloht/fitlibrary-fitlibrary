@@ -21,7 +21,8 @@
 )
 **!
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<br/><table border="1" cellspacing="0">
+|${test}|
+|!-<br/><table border="1" cellspacing="0">
 <tr><td>fitlibrary.DefineAction</td>
 </tr>
 <tr><td><table border="1" cellspacing="0">
@@ -60,13 +61,13 @@
 <tr><td class="error">aa fails<hr/> <span class="fit_label"></span></td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><table border="1" cellspacing="0">
-<tr><td class="error">object missing<hr/> <span class="fit_label">Missing methods</span></td>
+<tr><td class="error">object missing<hr/> <span class="fit_label">Missing class or Missing methods</span></td>
 </tr>
 </table>
 </td></tr>
 </table>
 </td></tr>
-<tr><td class="error"><i>get a</i><hr/> <span class="fit_label">Missing methods</span></td>
+<tr><td class="error"><i>get a</i><hr/> <span class="fit_label">Missing class or Missing methods</span></td>
 <td><b>is</b></td>
 <td>0</td>
 </tr>

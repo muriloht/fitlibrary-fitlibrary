@@ -13,3 +13,5 @@
   * ^ValueObjectParser
  * For an ${entity} -- which is identified by String key (using a ''find'' method), or it is constructed/checked with an embedded table
   * ^EntityParser
+
+!contents -R

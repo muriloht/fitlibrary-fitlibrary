@@ -7,7 +7,9 @@ package fitlibrary.closure;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
@@ -44,13 +46,20 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		return new CalledMethodTarget(findEntityMethod,evaluator);
 	}
 	public Closure findFixturingMethod(Evaluator evaluator, String name, Class<?>[] argTypes) {
+		return findFixturedMethod(evaluator, name, argTypes, new HashSet<Object>());
+	}
+	private Closure findFixturedMethod(Evaluator evaluator, String name, Class<?>[] argTypes, Set<Object> visitedObjects) {
+		if (visitedObjects.contains(evaluator))
+				return null;
+		visitedObjects.add(evaluator);
 		Closure method = asTypedObject(evaluator).findPublicMethodClosureForTypedObject(name,argTypes);
 		if (method == null && evaluator.getSystemUnderTest() instanceof Evaluator)
-			method = findFixturingMethod((Evaluator)evaluator.getSystemUnderTest(),name,argTypes);
+			method = findFixturedMethod((Evaluator)evaluator.getSystemUnderTest(),name,argTypes,visitedObjects);
 		if (method == null && evaluator.getSystemUnderTest() instanceof DomainAdapter)
 			method = evaluator.getTypedSystemUnderTest().findPublicMethodClosureForTypedObject(name,argTypes);
-		if (method == null && evaluator.getNextOuterContext() != null)
-			method = findFixturingMethod(evaluator.getNextOuterContext(),name,argTypes);
+		Evaluator nextOuterContext = evaluator.getNextOuterContext();
+		if (method == null && nextOuterContext != null)
+			method = findFixturedMethod(nextOuterContext,name,argTypes,visitedObjects);
 		return method;
 	}
 	private static TypedObject asTypedObject(Object subject) {
@@ -132,12 +141,17 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	private static void identifiedClassListInSutChain(Object firstObject, List<Class<?>> accumulatingClasses, boolean includeSut) {
 		Object object = firstObject;
 		while (object instanceof DomainAdapter) {
-			object = ((DomainAdapter)object).getSystemUnderTest();
-			if (object != null && (includeSut || object instanceof DomainAdapter) && 
-					!ClassUtility.aFitLibraryClass(object.getClass()) && 
-					!accumulatingClasses.contains(object.getClass()))
+			DomainAdapter domainAdapter = (DomainAdapter)object;
+			object = domainAdapter.getSystemUnderTest();
+			if (classToBeIncluded(accumulatingClasses, includeSut, object))
 				accumulatingClasses.add(object.getClass());
 		}
+	}
+	private static boolean classToBeIncluded(List<Class<?>> accumulatingClasses, boolean includeSut,
+			Object object) {
+		return object != null && (includeSut || object instanceof DomainAdapter) && 
+				!ClassUtility.aFitLibraryClass(object.getClass()) && 
+				!accumulatingClasses.contains(object.getClass());
 	}
 	public List<Class<?>> identifiedClassesInOutermostContext(Object firstObject, boolean includeSut) {
 		Object object = firstObject;

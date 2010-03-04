@@ -30,11 +30,9 @@ public class NonGenericTypedObject implements TypedObject {
 	public NonGenericTypedObject(Object subject) {
 		this.subject = subject;
 	}
-
 	public Object getSubject() {
 		return subject;
 	}
-
 	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name,
 			int argCount, Evaluator evaluator, List<String> signatures) throws Exception {
 		CalledMethodTarget result = optionallyFindMethodOnTypedObject(name,
@@ -50,13 +48,13 @@ public class NonGenericTypedObject implements TypedObject {
 		throw new MissingMethodException(signatures, PlugBoard.lookupTarget
 				.identifiedClassesInSUTChain(subject));
 	}
-
 	private List<String> signatures(String... signature) {
 		return Arrays.asList(signature);
 	}
-
 	public CalledMethodTarget findGetterOnTypedObject(String propertyName,
 			Evaluator evaluator) {
+		if (evaluator.getRuntimeContext() == null)
+			throw new NullPointerException("runtime is null");
 		CalledMethodTarget target = optionallyFindGetterOnTypedObject(
 				propertyName, evaluator);
 		if (target != null)
@@ -68,7 +66,6 @@ public class NonGenericTypedObject implements TypedObject {
 						+ "() { }"), PlugBoard.lookupTarget
 				.identifiedClassesInSUTChain(subject));
 	}
-
 	public CalledMethodTarget optionallyFindGetterOnTypedObject(
 			String propertyName, Evaluator evaluator) {
 		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
@@ -81,7 +78,6 @@ public class NonGenericTypedObject implements TypedObject {
 		}
 		return target;
 	}
-
 	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name,
 			int argCount, Evaluator evaluator, boolean includeSut) {
 		Closure methodClosure = findMethodClosure(name, argCount, includeSut);
@@ -89,7 +85,6 @@ public class NonGenericTypedObject implements TypedObject {
 			return null;
 		return new CalledMethodTarget(methodClosure, evaluator);
 	}
-
 	public void findMethodsFromPlainText(String textCall,
 			List<ValidCall> results) {
 		if (subject == null)
@@ -115,7 +110,6 @@ public class NonGenericTypedObject implements TypedObject {
 		}
 
 	}
-
 	public Closure findMethodClosure(String name, int argCount,
 			boolean includeSut) {
 		if (subject == null)
@@ -139,17 +133,14 @@ public class NonGenericTypedObject implements TypedObject {
 		}
 		return methodClosure;
 	}
-
 	protected TypedObject asTypedObject(Object sut) {
 		return new NonGenericTypedObject(sut);
 	}
-
 	public Closure findPublicMethodClosureForTypedObject(String name,
 			Class<?>[] argTypes) {
 		return PlugBoard.lookupClosure.findPublicMethodClosure(this, name,
 				argTypes);
 	}
-
 	public Closure findMethodForTypedObject(String name, int argCount) {
 		if (subject == null)
 			return null;
@@ -167,50 +158,41 @@ public class NonGenericTypedObject implements TypedObject {
 		}
 		return chosenMethod;
 	}
-
 	@Override
 	public String toString() {
 		return "NonGenericTypedObject[" + subject + "]";
 	}
-
 	public Class<?> getClassType() {
 		return subject.getClass();
 	}
-
 	public ResultParser resultParser(Evaluator evaluator, Method method) {
 		Typed resultTyped = resultTyped(method);
 		return new GetterParser(getTyped().on(evaluator, resultTyped, true),
 				method); // This doesn't handle String result case
 	}
-
 	public ResultParser resultParser(Evaluator evaluator, Field field) {
 		Typed resultTyped = resultTyped(field);
 		return new FieldParser(getTyped().on(evaluator, resultTyped, true),
 				field); // This doesn't handle String result case
 	}
-
 	public ResultParser resultParser(Evaluator evaluator, Method method,
 			Class<?> actualResultType) {
 		Typed resultTyped = new NonGenericTyped(actualResultType, true);
 		return new GetterParser(getTyped().on(evaluator, resultTyped, true),
 				method);
 	}
-
 	public ResultParser resultParser(Evaluator evaluator, Field field,
 			Class<?> actualResultType) {
 		Typed resultTyped = new NonGenericTyped(actualResultType, true);
 		return new FieldParser(getTyped().on(evaluator, resultTyped, true),
 				field);
 	}
-
 	protected Typed resultTyped(Method method) {
 		return new NonGenericTyped(method.getReturnType(), true);
 	}
-
 	protected Typed resultTyped(Field field) {
 		return new NonGenericTyped(field.getType(), true);
 	}
-
 	public Parser[] parameterParsers(Evaluator evaluator, Method method) {
 		Class<?>[] types = method.getParameterTypes();
 		Parser[] parameterParsers = new Parser[types.length];
@@ -221,26 +203,19 @@ public class NonGenericTypedObject implements TypedObject {
 		}
 		return parameterParsers;
 	}
-
 	public Typed getTyped() {
 		return new NonGenericTyped(subject.getClass());
 	}
-
 	protected Typed parameterTyped(Method method, int parameterNo) {
 		return new NonGenericTyped(method.getParameterTypes()[parameterNo],
 				true);
 	}
-
-	@SuppressWarnings("unused")
 	public TypedObject asReturnTypedObject(Object object, Method method) {
 		return new NonGenericTypedObject(object);
 	}
-
-	@SuppressWarnings("unused")
 	public TypedObject asReturnTypedObject(Object object, Field field) {
 		return new NonGenericTypedObject(object);
 	}
-
 	public Evaluator traverse(Evaluator evaluator) {
 		return getTyped().parser(evaluator).traverse(this);
 	}

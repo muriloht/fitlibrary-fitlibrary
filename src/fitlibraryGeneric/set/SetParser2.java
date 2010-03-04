@@ -51,7 +51,7 @@ public class SetParser2 extends SetParser {
 		nestingSetUp.interpretWithinContext(table,evaluator,testResults);
 		return new HashSet<Object>(nestingSetUp.getResults());
 	}
-    @SuppressWarnings({"unchecked", "static-access", "fallthrough"})
+    @SuppressWarnings({"unchecked", "fallthrough"})
 	@Override
     protected boolean tableMatches(Table table, Object resultInitial, TestResults testResults) {
     	Object result = resultInitial;

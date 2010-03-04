@@ -9,10 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import fitlibrary.DoFixture;
-
 @SuppressWarnings("unchecked")
-public class NestedCalculateFixture extends DoFixture{
+public class NestedCalculateFixture {
 	public Point pointXY(int x, int y) {
 		return new Point(x,y);
 	}

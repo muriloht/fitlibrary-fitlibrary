@@ -130,8 +130,8 @@ public class TestResults {
 	}
 	public boolean isAbandoned() {
 		if (parent != null)
-			return parent.isAbandoned();
-		return abandoned;
+			return parent.isAbandoned() || (getThreadLocalVersion().stopOnError && problems());
+		return abandoned || (getThreadLocalVersion().stopOnError && problems());
 	}
 	public static void setStopOnError(boolean stopOnError) {
 		getThreadLocalVersion().stopOnError = stopOnError;

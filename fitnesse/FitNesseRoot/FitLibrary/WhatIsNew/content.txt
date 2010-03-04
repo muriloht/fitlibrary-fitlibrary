@@ -5,7 +5,7 @@
 #
 !3 Fit included
 #
- * Fit is now included in the !-FitLibrary-! download. 
+ * Fit is now included in the !-FitLibrary-! download.
  * Fit will continue to run under !-FitNesse-! but !-FitNesse-! will no longer come with the Fit framework code included.
  * Fit variables can be accessed from !-FitLibrary-! - see below.
 #
@@ -27,7 +27,7 @@
 #
  * If the first table in a storytest creates an object that's not a fixture, it will be auto-wrapped with !-DoFixture-!
  * This means that it's not necessary to subclass fixtures for usual development
- * Bare objects used to be auto-wrapped by !-DomainFixture-!. If that behaviour is still required, include the following in a SuiteSetUp page:
+ * Bare objects used to be auto-wrapped by !-DomainFixture-!. If that behaviour is still required, include the following in a WasSuiteSetUp page:
 
 !|fitlibrary.Configuration|
 
@@ -59,7 +59,13 @@
  * !-DebugPage-!, a Java class that's handy for running a storytest from within a debugger, works again with !-FitNesse-!. It failed because of changes to the !-FitNesse-! code.
  * All subclasses of class ''Number'' are now treated as primitive types and are not ${autoWrapped} by !-DoFixture-!.
  * Checks are now made for blank parameters and for duplicated parameters in the definition of a defined action. See .FitLibrary.SpecifiCations.DefinedActions.BlankParameter and .FitLibrary.SpecifiCations.DefinedActions.DuplicatedParameter
-
+#
+!3 Removed
+#
+ * Obscure Functionality: It's no longer possible to have !-DoFixture-! fake the results it expects. This was added to record Selenium results several years ago, but was not effective. However, it's possible to record with dynamic variables.
+ * Templates have been removed, as they are now superceded by multi-defined actions.  See .FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters
+#
+#
 !1 October 2009 Version
 #
 ''!-FitLibrary-!'' now depends on Java 6.

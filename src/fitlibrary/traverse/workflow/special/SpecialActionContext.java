@@ -11,8 +11,6 @@ import fitlibrary.traverse.Evaluator;
 
 public interface SpecialActionContext extends Evaluator {
 	ICalledMethodTarget findMethodFromRow(IRow row, int start, int extrasCellsOnEnd) throws Exception ;
-	boolean isGatherExpectedForGeneration();
-	void setExpectedResult(Object result);
 	void showAfterTable(String s);
 	void setFitVariable(String variableName, Object result);
 	void show(IRow row, String text);

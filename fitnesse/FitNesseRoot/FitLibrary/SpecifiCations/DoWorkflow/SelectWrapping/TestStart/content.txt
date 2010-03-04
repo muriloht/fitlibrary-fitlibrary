@@ -2,8 +2,6 @@ A '''start''' special action creates an object of the specified class and carrie
 !**< def
 !define test (!|fitlibrary.specify.workflow.SelectWrap|
 
-|''actions''|
-
 !|start|fitlibrary.specify.eg.Rectangle|
 
 |'''check'''|''x''|0|
@@ -18,10 +16,6 @@ A '''start''' special action creates an object of the specified class and carrie
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.workflow.SelectWrap</td>
-</tr>
-</table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>actions</i></td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

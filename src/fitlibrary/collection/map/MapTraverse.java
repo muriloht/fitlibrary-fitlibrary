@@ -9,6 +9,7 @@ import java.util.Map;
 
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
@@ -22,8 +23,9 @@ public class MapTraverse extends Traverse {
 	public MapTraverse(Map<Object,Object> map) {
 		this.map = map;
 	}
-	public MapTraverse(Map<Object,Object> map, Typed keyTyped, Typed valueTyped) {
+	public MapTraverse(Map<Object,Object> map, Typed keyTyped, Typed valueTyped, RuntimeContextInternal runtimeContext) {
 		this(map);
+		this.runtimeContext = runtimeContext;
 		this.keyParser = keyTyped.parser(this);
 		this.valueParser = valueTyped.parser(this);
 	}

@@ -8,7 +8,6 @@ package fitlibrary.traverse.workflow.special;
 import java.lang.reflect.InvocationTargetException;
 
 import ognl.Ognl;
-
 import fit.Fixture;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.FitLibraryException;
@@ -19,7 +18,6 @@ import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
-import fitlibrary.traverse.workflow.caller.CallManager;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.TestResults;
@@ -43,8 +41,6 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				if (actionContext.isGatherExpectedForGeneration()) // This needs to use a copy of the row, otherwise duplicates error messages
-					actionContext.setExpectedResult(target.getResult(expectedCell,testResults));
 				target.invokeAndCheckForSpecial(row.rowFrom(2),expectedCell,testResults,row,row.cell(0));
 			}
 		};
@@ -110,7 +106,6 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				actionContext.setExpectedResult(true); // Has to be in 2nd stage
 				ICell firstCell = row.cell(0);
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,firstCell);
@@ -134,7 +129,6 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				actionContext.setExpectedResult(false); // Has to be in 2nd stage
 				ICell notCell = row.cell(0);
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,false,row.cell(0));
@@ -189,7 +183,6 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				actionContext.setExpectedResult(true); // Has to be in 2nd stage
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {
@@ -212,7 +205,6 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				actionContext.setExpectedResult(true); // Has to be in 2nd stage
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {

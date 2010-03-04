@@ -12,7 +12,7 @@ import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
-public class DomainTraverse extends DoTraverse implements SwitchingEvaluator {
+public class DomainTraverse extends DoTraverse implements DomainTraverser, SwitchingEvaluator {
 	private DomainInjectionTraverse domainInject = new DomainInjectionTraverse();
 	private DomainCheckTraverse domainCheck = new DomainCheckTraverse();
     private SwitchingEvaluator current;
@@ -35,7 +35,8 @@ public class DomainTraverse extends DoTraverse implements SwitchingEvaluator {
         if (domainInject != null)
         	domainInject.setSystemUnderTest(sut);
     }
-    public void checks(@SuppressWarnings("unused") Row row, @SuppressWarnings("unused") TestResults testResults) {
+	@SuppressWarnings("unused")
+    public void checks(Row row, TestResults testResults) {
     	setCurrentCheck();
     }
 	@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
+a * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 package fitlibrary.traverse.workflow;
@@ -17,8 +17,6 @@ import fitlibrary.DefineAction;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
-import fitlibrary.definedAction.DefinedActionTraverse;
-import fitlibrary.definedAction.UseTemplateTraverse;
 import fitlibrary.dynamicVariable.RecordDynamicVariables;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
@@ -32,6 +30,7 @@ import fitlibrary.parser.graphic.ObjectDotGraphic;
 import fitlibrary.table.Cell;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
+import fitlibrary.traverse.FitHandler;
 import fitlibrary.traverse.CommentTraverse;
 import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
@@ -48,7 +47,7 @@ import fitlibrary.utility.FileHandler;
 import fitlibrary.utility.TestResults;
 import fitlibrary.xref.CrossReferenceFixture;
 
-public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext {
+public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext, FlowEvaluator{
 	private final PrefixSpecialAction prefixSpecialAction = new PrefixSpecialAction(this);
 	private static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
@@ -71,16 +70,12 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		"addDynamicVariablesFromUnicodeFile/1", "file/1",
 		"xref/1", "harvestUsingPatternFrom/3",
 		"setSystemPropertyTo/2",
-		"startStopWatch/0", "stopWatch/0", "sleepFor/1"
-//		"actions/0", "checks/0"
+		"startStopWatch/0", "stopWatch/0", "sleepFor/1",
+		"autoWrapPojoWithDoFixture/0"
 	};
-	
-//	public void actions() {
-//		// Hack to .... (still needed???)
-//	}
-//	public void checks() {
-//		//
-//	}
+	public void autoWrapPojoWithDoFixture() {
+		//
+	}
 	public void startStopWatch() {
 		setDynamicVariable(STOP_WATCH, new StopWatch());
 	}
@@ -103,7 +98,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		return true;
 	}
 
-	protected DoTraverse() {
+	public DoTraverse() {
 		super();
 	}
 	public DoTraverse(Object sut) {
@@ -125,7 +120,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			traverse = new CalculateTraverse(getTypedSystemUnderTest());
 		else
 			traverse = new CalculateTraverse(this);
-		traverse.theSetUpTearDownAlreadyHandled();
 		return traverse;
 	}
     /** To allow for DoTraverse to be used without writing any fixturing code.
@@ -140,15 +134,12 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** To allow for a ConstraintTraverse to be used for the rest of the table.
      */
 	public ConstraintTraverse constraint() {
-		ConstraintTraverse traverse = new ConstraintTraverse(this);
-		traverse.theSetUpTearDownAlreadyHandled();
-		return traverse;
+		return new ConstraintTraverse(this);
 	}
 	/** To allow for a failing ConstraintTraverse to be used for the rest of the table.
      */
 	public ConstraintTraverse failingConstraint() {
 		ConstraintTraverse traverse = new ConstraintTraverse(this,false);
-		traverse.theSetUpTearDownAlreadyHandled();
 		return traverse;
 	}
 	public void becomesTimeout(int timeout) {
@@ -157,14 +148,14 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public int becomesTimeout() {
 		return runtimeContext.getTimeout(BECOMES_TIMEOUT,1000);
 	}
-	/** To support defined actions */
-	public UseTemplateTraverse useTemplate(String name) {
-		return new UseTemplateTraverse(name);
-	}
-	/** To support defined actions */
-	public DefinedActionTraverse template(@SuppressWarnings("unused") String name) {
-		return new DefinedActionTraverse();
-	}
+//	/** To support defined actions */
+//	public UseTemplateTraverse useTemplate(String name) {
+//		return new UseTemplateTraverse(name);
+//	}
+//	/** To support defined actions */
+//	public DefinedActionTraverse template(@SuppressWarnings("unused") String name) {
+//		return new DefinedActionTraverse();
+//	}
 	/** When (stopOnError), don't continue intepreting a table if there's been a problem */
 	public void setStopOnError(boolean stopOnError) {
 		TestResults.setStopOnError(stopOnError);
@@ -214,7 +205,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		return new DefineAction();
 	}
 	public DefineAction defineAction(String wikiClassName) {
-		return new DefineAction(wikiClassName);
+		DefineAction defineAction = new DefineAction(wikiClassName);
+		defineAction.setRuntimeContext(getRuntimeContext());
+		return defineAction;
 	}
 	public DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
 		return new DefineActionsOnPageSlowly(pageName);
@@ -233,11 +226,11 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	}
 	// FILE LOGGING
 	public void startLogging(String fileName) {
-		runtime().startLogging(fileName);
+		getRuntimeContext().startLogging(fileName);
 	}
 	public void logMessage(String s) {
 		try {
-			runtime().printToLog(s);
+			getRuntimeContext().printToLog(s);
 		} catch (IOException e) {
 			throw new FitLibraryException(e.getMessage());
 		}
@@ -301,8 +294,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseIs");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		if (gatherExpectedForGeneration)
-			expectedResult = target.getResult(expectedCell,testResults);
 		target.invokeAndCheckForSpecial(row.rowTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
 	public void equals(TestResults testResults, final Row row) throws Exception {
@@ -319,9 +310,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			if (gatherExpectedForGeneration)
-				expectedResult = target.getResult(expectedCell,testResults);
-			
 			Object result = target.invoke(row.rowTo(1,row.size()-2),testResults,true);
 			target.notResult(expectedCell, result, testResults);
         } catch (IgnoredException e) {
@@ -395,9 +383,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			if (gatherExpectedForGeneration)
-				expectedResult = target.getResult(expectedCell,testResults);
-			
 			Object result = target.invoke(row.rowTo(1,row.size()-2),testResults,true);
 			if (result instanceof Comparable) {
 				target.compare(expectedCell, (Comparable)result, testResults, compare);
@@ -434,8 +419,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			if (gatherExpectedForGeneration)
-				expectedResult = target.getResult(expectedCell,testResults);
 			String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches();
 			if (matches)
@@ -455,8 +438,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("eventuallyMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		if (gatherExpectedForGeneration)
-			expectedResult = target.getResult(expectedCell,testResults);
 		Pattern compile = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL);
 		
 		String result = "";
@@ -488,8 +469,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			if (gatherExpectedForGeneration)
-				expectedResult = target.getResult(expectedCell,testResults);
 			String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			if (!Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches())
 				expectedCell.pass(testResults);
@@ -510,8 +489,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("contains");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		if (gatherExpectedForGeneration)
-			expectedResult = target.getResult(expectedCell,testResults);
 		String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (matches)
@@ -528,8 +505,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("contains");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		if (gatherExpectedForGeneration)
-			expectedResult = target.getResult(expectedCell,testResults);
 		String result = "";
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
@@ -552,8 +527,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("doesNoContain");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		if (gatherExpectedForGeneration)
-			expectedResult = target.getResult(expectedCell,testResults);
 		String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (!matches)
@@ -708,10 +681,10 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		row.cell(0).pass(testResults);
 	}
 	public int getTimeout(String name) {
-		return runtime().getTimeout(name,1000);
+		return getRuntimeContext().getTimeout(name,1000);
 	}
 	protected void putTimeout(String name, int timeout) {
-		runtime().putTimeout(name,timeout);
+		getRuntimeContext().putTimeout(name,timeout);
 	}
 	@Override
 	public void setFitVariable(String variableName, Object result) {
@@ -724,5 +697,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void show(IRow row, String text) {
 		row.addCell(text).shown();
 		CallManager.addShow(row);
+	}
+	@Override
+	public FitHandler fitHandler() {
+		return getFitHandler();
 	}
 }
