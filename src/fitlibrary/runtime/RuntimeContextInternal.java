@@ -5,6 +5,7 @@
 package fitlibrary.runtime;
 
 import fitlibrary.dynamicVariable.DynamicVariables;
+import fitlibrary.suite.CollectObjectsForMethodLookup;
 
 public interface RuntimeContextInternal extends RuntimeContext {
 	RuntimeContextInternal freshCopy();
@@ -15,4 +16,6 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	void popLocal();
 	boolean toExpandDefinedActions();
 	void setExpandDefinedActions(boolean expandDefinedActions);
+	CollectObjectsForMethodLookup getObjectCollector();
+	void setObjectCollector(CollectObjectsForMethodLookup collector);
 }

@@ -13,12 +13,14 @@ import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.dynamicVariable.LocalDynamicVariables;
 import fitlibrary.log.FileLogger;
+import fitlibrary.suite.CollectObjectsForMethodLookup;
 
 public class RuntimeContextImplementation implements RuntimeContextInternal {
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";
 	private DynamicVariables dynamicVariables = new GlobalDynamicVariables();
 	private Map<String,Integer> timeouts = new HashMap<String, Integer>();
 	private FileLogger fileLogger = new FileLogger();
+	private CollectObjectsForMethodLookup objectCollector;
 
 	public RuntimeContextImplementation() {
 		//
@@ -73,5 +75,10 @@ public class RuntimeContextImplementation implements RuntimeContextInternal {
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		setDynamicVariable(EXPAND_DEFINED_ACTIONS, ""+expandDefinedActions);
 	}
-
+	public CollectObjectsForMethodLookup getObjectCollector() {
+		return objectCollector;
+	}
+	public void setObjectCollector(CollectObjectsForMethodLookup collector) {
+		this.objectCollector = collector;
+	}
 }

@@ -6,6 +6,9 @@
 package fitlibrary.suite;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 import fit.FitServerBridge;
@@ -43,7 +46,7 @@ import fitlibrary.utility.TestResults;
  * o DomainFixture flow, with switching for 3 phases: inject, do, check.
  * o SuiteFixture
  */
-public class DoFlow implements DomainTraverser, SwitchingEvaluator {
+public class DoFlow implements DomainTraverser, SwitchingEvaluator, CollectObjectsForMethodLookup {
 	public static final boolean IS_ACTIVE = true;
 	private DomainInjectionTraverse domainInject = null;
 	private DomainCheckTraverse domainCheck = null;
@@ -53,11 +56,15 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator {
 	private final FlowEvaluator flowEvaluator;
 	private RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
 	private final SetUpTearDownManager setUpTearDownManager = new SetUpTearDownManager();
+	
+	
+	// TO DO - pull out stack, etc management from here.
 
 	public DoFlow(FlowEvaluator flowEvaluator) {
 		this.flowEvaluator = flowEvaluator;
 		flowEvaluator.setRuntimeContext(runtimeContext);
 		runtimeContext.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
+		runtimeContext.setObjectCollector(this);
 	}
 	public void runStorytest(Tables tables, TableListener tableListener) {
 		reset();
@@ -236,5 +243,19 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator {
 	public void exit() {
 		if (suiteFixture != null)
 			callMethod(suiteFixture,"suiteTearDown",new Table(new Row()),new TestResults());
+	}
+	@Override
+	public Iterator<Object> getObjectsForMethodLookup() {
+		List<Object> objects = new ArrayList<Object>();
+		addObject(flowEvaluator,objects);
+		// Later can include runtime stack as well
+		return objects.iterator();
+	}
+	private void addObject(Object object, List<Object> accumulatingObjects) {
+		if (accumulatingObjects.contains(object))
+			return;
+		accumulatingObjects.add(object);
+		if (object instanceof DomainAdapter)
+			addObject(((DomainAdapter)object).getSystemUnderTest(),accumulatingObjects);
 	}
 }
