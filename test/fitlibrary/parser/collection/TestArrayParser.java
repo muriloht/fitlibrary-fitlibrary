@@ -6,20 +6,20 @@ package fitlibrary.parser.collection;
 
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
 import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
+import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
 
-public class TestArrayParser extends TestCase {
+public class TestArrayParser extends ParserTestCase {
 	public int[] aProp = {5,6,7};
 
 	public void testAdapterAlone() throws Exception {
 		int[] ints = {1,2,3};
-		Parser parser = Traverse.asTyped(ints).parser(new DoFixture());
+		Parser parser = Traverse.asTyped(ints).parser(evaluatorWithRuntime());
 		String cellText = "1, 2, 3";
 		Cell cell = new Cell(cellText);
 		int[] expectedResult = {1,2,3};
@@ -47,7 +47,7 @@ public class TestArrayParser extends TestCase {
 	}
 	public void testAdapterWithProperty() throws Exception {
 		int[] ints = {5,6,7};
-		Parser adapter = Traverse.asTyped(ints).parser(new DoFixture());
+		Parser adapter = Traverse.asTyped(ints).parser(evaluatorWithRuntime());
 		assertEquals("5, 6, 7",adapter.show(ints));
 		Object parse = adapter.parseTyped(new Cell("5,6,7"), new TestResults()).getSubject();
 		int[] results = (int[]) parse;

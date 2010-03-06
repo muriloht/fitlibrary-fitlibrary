@@ -7,8 +7,6 @@ package fitlibrary.closure;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
-import fit.Fixture;
-import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
 import fitlibrary.dynamicVariable.RecordDynamicVariables;
@@ -18,21 +16,13 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.parse.NoValueProvidedException;
 import fitlibrary.parser.Parser;
-import fitlibrary.parser.collection.ArrayParser;
-import fitlibrary.parser.collection.ListParser;
-import fitlibrary.parser.collection.MapParser;
-import fitlibrary.parser.collection.SetParser;
 import fitlibrary.parser.lookup.GetterParser;
-import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
 import fitlibrary.table.ICell;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
-import fitlibrary.traverse.FitHandler;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.Traverse;
-import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.DoTraverse.Comparison;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
@@ -84,12 +74,12 @@ public class CalledMethodTarget implements ICalledMethodTarget {
     	collectCell(cell,0,cell.text(evaluator),testResults,true);
     	return invoke(args);
     }
-    public TypedObject invokeTyped(IRow row, TestResults testResults, boolean catchParseError) throws Exception {
+    public TypedObject invokeTyped(IRow row, TestResults testResults) throws Exception {
 		try {
 			if (everySecond)
-				collectCells(row,2,testResults,catchParseError);
+				collectCells(row,2,testResults,true);
 			else
-				collectCells(row,1,testResults,catchParseError);
+				collectCells(row,1,testResults,true);
 		} catch (AbandonException e) {
 			throw new IgnoredException(e); // no more to do
 		} catch (Exception e) {
@@ -321,56 +311,6 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	public void setEverySecond(boolean everySecond) {
 		this.everySecond = everySecond;
 	}
-	private Object wrapObjectWithTraverse(TypedObject typedResult) {
-		Object result = typedResult.getSubject();
-		if (result == null)
-			return null;
-		if (notToBeAutoWrapped(result))
-			return result;
-		if (result instanceof Evaluator) {
-			Evaluator resultEvaluator = (Evaluator)result;
-			if (resultEvaluator != evaluator && resultEvaluator.getNextOuterContext() == null)
-				return withOuter(resultEvaluator);
-		    return resultEvaluator;
-		}
-		if (result instanceof Fixture)
-		    return result;
-		
-		Class<?> returnType = result.getClass();
-		if (MapParser.applicableType(returnType) || ArrayParser.applicableType(returnType))
-			return withOuter(typedResult.traverse(evaluator));
-		if (SetParser.applicableType(returnType) || ListParser.applicableType(returnType)) {
-			CollectionTraverse traverse = (CollectionTraverse) typedResult.traverse(evaluator);
-			traverse.setActualCollection(result);
-			return withOuter(traverse);
-		}
-		if (ParseDelegation.hasParseMethod(returnType))
-		    return result;
-		return withOuter(new DoTraverse(typedResult));
-	}
-	public boolean notToBeAutoWrapped(Object result) {
-		return result instanceof String || result instanceof StringBuffer || isPrimitiveReturnType();
-	}
-	public static boolean canAutoWrap(Object result) {
-		return !(result instanceof String || result instanceof StringBuffer || isPrimitiveType(result.getClass()));
-	}
-	private Object withOuter(Evaluator inner) {
-		inner.setOuterContext(evaluator);
-		inner.setRuntimeContext(evaluator.getRuntimeContext());
-		return inner;
-	}
-	private boolean isPrimitiveReturnType() {
-	    return isPrimitiveType(getReturnType());
-	}
-	private static boolean isPrimitiveType(Class<?> returnType) {
-		return returnType.isPrimitive() ||
-			   returnType == Boolean.class ||
-			   Number.class.isAssignableFrom(returnType) ||
-			   returnType == Character.class;
-	}
-	public Object invokeAndWrap(IRow row, TestResults testResults) throws Exception {
-        return wrapObjectWithTraverse(invokeTyped(row,testResults,true));
-    }
 	public String getResultString(Object result) throws Exception {
 		if (getReturnType() == String.class)
 			return (String)result;

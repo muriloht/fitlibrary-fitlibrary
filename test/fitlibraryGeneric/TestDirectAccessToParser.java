@@ -6,6 +6,7 @@ package fitlibraryGeneric;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import fitlibrary.DoFixture;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.parser.lookup.ParserSelectorForType;
+import fitlibrary.runtime.RuntimeContextImplementation;
 import fitlibraryGeneric.generic.LocalParameterizedType;
 
 public class TestDirectAccessToParser {
@@ -60,6 +62,9 @@ public class TestDirectAccessToParser {
 	}
 	
 	public static class MyFixture extends DoFixture {
+		public MyFixture() {
+			setRuntimeContext(new RuntimeContextImplementation());
+		}
 		public X findX(String s) {
 			return new X(s);
 		}

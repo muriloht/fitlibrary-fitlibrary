@@ -13,6 +13,7 @@ import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.ref.EntityReference;
+import fitlibrary.runtime.RuntimeContextImplementation;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
@@ -75,6 +76,9 @@ public class TestReferenceParser extends TestCase {
 		return list.get(2);
 	}
 	public class MyDoFixture extends DoFixture {
+		public MyDoFixture() {
+			setRuntimeContext(new RuntimeContextImplementation());
+		}
 		public MyClass findMyClass(int index) {
             return list.get(index);
         }

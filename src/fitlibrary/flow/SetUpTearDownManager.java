@@ -3,7 +3,7 @@
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 
-package fitlibrary.suite;
+package fitlibrary.flow;
 
 import java.util.HashMap;
 import java.util.Map;

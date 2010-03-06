@@ -9,6 +9,7 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
@@ -22,7 +23,7 @@ public class SequenceTraverse extends DoTraverse {
 		return PlugBoard.lookupTarget.findTheMethodMapped(row.text(0,this), allArgs, this);
 	}
     @Override
-	protected Option<Object> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
+	protected Option<TypedObject> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
 		return None.none();
     }
 }

@@ -3,7 +3,7 @@
  * Released under the terms of the GNU General Public License version 2 or later.
  */
 
-package fitlibrary.suite;
+package fitlibrary.flow;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,15 +16,16 @@ import fit.Fixture;
 import fitlibrary.DoFixture;
 import fitlibrary.DomainFixture;
 import fitlibrary.SetUpFixture;
-import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.collection.CollectionSetUpTraverse;
+import fitlibrary.flow.SetUpTearDownManager.MethodCaller;
 import fitlibrary.object.DomainCheckTraverse;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.object.DomainInjectionTraverse;
 import fitlibrary.object.DomainTraverser;
 import fitlibrary.runtime.RuntimeContextImplementation;
 import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.suite.SetUpTearDownManager.MethodCaller;
+import fitlibrary.suite.CollectObjectsForMethodLookup;
+import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
@@ -56,12 +57,11 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator, CollectObjec
 	private final FlowEvaluator flowEvaluator;
 	private RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
 	private final SetUpTearDownManager setUpTearDownManager = new SetUpTearDownManager();
+	private final DoAutoWrapper doAutoWrapper;
 	
-	
-	// TO DO - pull out stack, etc management from here.
-
 	public DoFlow(FlowEvaluator flowEvaluator) {
 		this.flowEvaluator = flowEvaluator;
+		doAutoWrapper = new DoAutoWrapper(flowEvaluator);
 		flowEvaluator.setRuntimeContext(runtimeContext);
 		runtimeContext.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 		runtimeContext.setObjectCollector(this);
@@ -112,7 +112,8 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator, CollectObjec
 			} else
 				try {
 //					System.out.println("DoFlow row "+row);
-					Object result = flowEvaluator.interpretRow(row,testResults,null);
+					TypedObject typedResult = flowEvaluator.interpretRow(row,testResults,null);
+					Object result = doAutoWrapper.wrapObjectWithTraverse(typedResult);
 //					System.out.println("DoFlow got "+result);
 					if (result == null) {
 						// Can't do anything useful with a null
@@ -160,7 +161,7 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator, CollectObjec
 						if (result instanceof Fixture) {
 							flowEvaluator.fitHandler().doTable(result,new Table(row),testResults,flowEvaluator);
 							return; // have finished table
-						} else if (CalledMethodTarget.canAutoWrap(result))
+						} else if (DoAutoWrapper.canAutoWrap(result))
 							pushSut(result,table,testResults);
 					} // But only when it comes from a class name!
 				} catch (Exception ex) {
@@ -248,7 +249,8 @@ public class DoFlow implements DomainTraverser, SwitchingEvaluator, CollectObjec
 	public Iterator<Object> getObjectsForMethodLookup() {
 		List<Object> objects = new ArrayList<Object>();
 		addObject(flowEvaluator,objects);
-		// Later can include runtime stack as well
+		for (TypedObject typedObject : tableStack)
+			addObject(typedObject.getSubject(),objects);
 		return objects.iterator();
 	}
 	private void addObject(Object object, List<Object> accumulatingObjects) {

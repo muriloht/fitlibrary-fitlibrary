@@ -10,7 +10,9 @@ import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class MultiDefinedActionCaller extends DoCaller {
 	private final DoTraverseInterpreter doTraverse;
@@ -33,7 +35,8 @@ public class MultiDefinedActionCaller extends DoCaller {
 		return furtherRows && multiParameterSubstitution != null;
 	}
 	@Override
-	public Object run(IRow row, TestResults testResults) throws Exception {
-		return new MultiDefinedActionTraverse(multiParameterSubstitution,doTraverse);
+	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+		return new GenericTypedObject(
+				new MultiDefinedActionTraverse(multiParameterSubstitution,doTraverse));
 	}
 }

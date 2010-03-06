@@ -10,10 +10,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 import fitlibrary.DoFixture;
+import fitlibrary.parser.ParserTestCase;
 
 public class TestRow {
 	Row row = new Row();
-	DoFixture evaluator = new DoFixture();
+	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
 	
 	@Test
 	public void sizeOfEmptyRow() {

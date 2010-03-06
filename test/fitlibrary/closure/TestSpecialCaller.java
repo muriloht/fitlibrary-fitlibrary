@@ -60,7 +60,7 @@ public class TestSpecialCaller {
 		}});
 		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);
 		assertThat(specialCaller.isValid(), is(true));
-		assertThat(specialCaller.run(row,testResults), is((Object)"result"));
+		assertThat(specialCaller.run(row,testResults).getSubject(), is((Object)"result"));
 	}
 	@Test
 	public void validButLazy() throws Exception {
@@ -73,6 +73,6 @@ public class TestSpecialCaller {
 		}});
 		SpecialCaller specialCaller = new SpecialCaller(row,evaluator,lookupMethodTarget);
 		assertThat(specialCaller.isValid(), is(true));
-		assertThat(specialCaller.run(row,testResults), is((Object)null));
+		assertThat(specialCaller.run(row,testResults).getSubject(), is((Object)null));
 	}
 }

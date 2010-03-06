@@ -18,6 +18,8 @@ import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.typed.NonGenericTypedObject;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
 public class DefinedActionCaller extends DoCaller {
@@ -58,7 +60,7 @@ public class DefinedActionCaller extends DoCaller {
 		return parameterSubstitution != null;
 	}
 	@Override
-	public Object run(IRow row, TestResults testResults) {
+	public TypedObject run(IRow row, TestResults testResults) {
 		CallManager.startCall(parameterSubstitution);
 		try {
 			Object oldThisValue = runtime.getDynamicVariable("this");
@@ -71,7 +73,7 @@ public class DefinedActionCaller extends DoCaller {
 		}
 		if (!runtime.toExpandDefinedActions() && CallManager.readyToShow() && !testResults.isAbandoned())
 			row.addCell(new Cell(new Tables(CallManager.getShowsTable())));
-		return null;
+		return new NonGenericTypedObject(null);
 	}
 	@Override
 	public String ambiguityErrorMessage() {

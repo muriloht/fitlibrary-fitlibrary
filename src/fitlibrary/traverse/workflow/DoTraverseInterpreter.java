@@ -56,7 +56,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		Object result = null;
+		TypedObject result = null;
 		for (int rowNo = 1; rowNo < table.size(); rowNo++) {
 			Row row = table.row(rowNo);
 			if (testResults.isAbandoned())
@@ -82,7 +82,9 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 					row.error(testResults,ex);
 				}
 		}
-		return result;
+		if (result == null)
+			return null;
+		return result.getSubject();
 	}
 	// overridden in DomainTraverse (with quite separate code)
     public Object interpretWholeTable(Table table, TableListener tableListener) {
@@ -93,7 +95,10 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			Fixture fixtureByName = fixtureOrDoTraverseByName(table,testResults);
 			if (fixtureByName != null && fixtureByName.getClass() == Fixture.class)
 				fixtureByName = null;
-			Object result = interpretRow(table.row(0),testResults,fixtureByName);
+			TypedObject typedResult = interpretRow(table.row(0),testResults,fixtureByName);
+			Object result = null;
+			if (typedResult != null)
+				result = typedResult.getSubject();
 			if (testResults.isAbandoned()) {
 				interpretInFlow(table,testResults);
 				return null;
@@ -151,7 +156,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     public Object interpretInFlow(Table table, TestResults testResults) {
     	return interpretAfterFirstRow(table,testResults);
     }
-    public Object interpretRow(Row row, TestResults testResults, Fixture fixtureByName) {
+    public TypedObject interpretRow(Row row, TestResults testResults, Fixture fixtureByName) {
     	if (testResults.isAbandoned()) {
 			row.ignore(testResults);
 			return null;
@@ -163,7 +168,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     	}
     	try {
     		DoCaller[] actions = createDoCallers(row, fixtureByName);
-    		Option<Object> result = interpretSimpleRow(row,testResults,actions,fixtureByName);
+    		Option<TypedObject> result = interpretSimpleRow(row,testResults,actions,fixtureByName);
     		if (result.isSome())
     			return result.get();
     		methodsAreMissing(actions,possibleSeq(row));
@@ -176,30 +181,30 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     	}
     	return null;
     }
-    public Option<Object> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
-		Option<Object> result = pickCaller(actions, row, testResults);
+    public Option<TypedObject> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
+		Option<TypedObject> result = pickCaller(actions, row, testResults);
 		if (result.isSome())
 			return result;
 		if (row.size() > 2) {
-			Option<Object> seqResult = trySequenceCall(row, testResults, fixtureByName);
+			Option<TypedObject> seqResult = trySequenceCall(row, testResults, fixtureByName);
 			if (seqResult.isSome())
 				return seqResult;
 		}
 		return None.none();
     }
     // The following is overridden in SequenceTraverse, so it doesn't try again (repeatedly)
-    protected Option<Object> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
+    protected Option<TypedObject> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
     	SequenceTraverse sequenceTraverse = new SequenceTraverse(this);
     	sequenceTraverse.setRuntimeContext(runtimeContext);
 		return sequenceTraverse.interpretSimpleRow(row, testResults, sequenceTraverse.createDoCallers(row, fixtureByName),fixtureByName);
     }
-    private Option<Object> pickCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
+    private Option<TypedObject> pickCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
 		for (int i = 0; i < actions.length; i++)
 			if (actions[i].isValid()) {
-				Object result = actions[i].run(row, testResults);
+				TypedObject result = actions[i].run(row, testResults);
 				if (testResults.isAbandoned() && !testResults.problems())
 					row.ignore(testResults);
-				return new Some<Object>(result);
+				return new Some<TypedObject>(result);
 			}
 		return None.none();
     }

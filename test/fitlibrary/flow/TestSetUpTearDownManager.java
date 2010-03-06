@@ -3,7 +3,7 @@
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 
-package fitlibrary.suite;
+package fitlibrary.flow;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -11,7 +11,7 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.suite.SetUpTearDownManager.MethodCaller;
+import fitlibrary.flow.SetUpTearDownManager.MethodCaller;
 import fitlibrary.traverse.DomainAdapter;
 
 @RunWith(JMock.class)

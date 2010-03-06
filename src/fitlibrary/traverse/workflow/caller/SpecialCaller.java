@@ -12,7 +12,9 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.table.IRow;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class SpecialCaller extends DoCaller {
 	private String methodName;
@@ -42,12 +44,12 @@ public class SpecialCaller extends DoCaller {
 		return specialMethod != null;
 	}
 	@Override
-	public Object run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(IRow row, TestResults testResults) throws Exception {
 		if (twoStageSpecial != null) {
 			twoStageSpecial.run(testResults);
-			return null;
+			return new GenericTypedObject(null);
 		}
-		return specialMethod.invoke(new Object[] { row, testResults });
+		return new GenericTypedObject(specialMethod.invoke(new Object[] { row, testResults }));
 	}
 	@Override
 	public String ambiguityErrorMessage() {

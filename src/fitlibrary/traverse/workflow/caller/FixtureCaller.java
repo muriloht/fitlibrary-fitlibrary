@@ -7,7 +7,9 @@ package fitlibrary.traverse.workflow.caller;
 import fit.Fixture;
 import fitlibrary.table.IRow;
 import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class FixtureCaller extends DoCaller {
 	private Fixture fixtureByName;
@@ -20,8 +22,8 @@ public class FixtureCaller extends DoCaller {
 		return fixtureByName != null;
 	}
 	@Override
-	public Object run(IRow row, TestResults testResults) throws Exception {
-		return fixtureByName;
+	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+		return new GenericTypedObject(fixtureByName);
 	}
 	@Override
 	public String ambiguityErrorMessage() {

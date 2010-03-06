@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
+import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Traverse;
@@ -23,10 +24,11 @@ import fitlibrary.utility.TestResults;
 
 @SuppressWarnings("unchecked")
 public class TestCollectionParser {
+	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
 	Collection list;
 	public Collection aProp;
 
-    @Before
+	@Before
 	public void setUp() {
         list = new ArrayList();
         list.add("1");
@@ -39,7 +41,7 @@ public class TestCollectionParser {
     }
     @Test
 	public void parserAlone() throws Exception {
-		Parser parser = Traverse.asTyped(list).parser(new DoFixture());
+		Parser parser = Traverse.asTyped(list).parser(evaluator);
 		String cellText = "1, 2, 3";
 		Cell cell = new Cell(cellText);
 		TestResults testResults = new TestResults();
@@ -50,7 +52,7 @@ public class TestCollectionParser {
     @Test
 	public void parserWithMethod() throws Exception {
 		Method method = getClass().getMethod("aMethod", new Class[] {});
-		ResultParser adapter = Traverse.asTypedObject(this).resultParser(new DoFixture(), method);
+		ResultParser adapter = Traverse.asTypedObject(this).resultParser(evaluator, method);
 		adapter.setTarget(this);
 		assertThat(adapter.getResult(),is((Object)aProp));
 		assertThat(adapter.show(adapter.getResult()),is("4, 5, 6"));

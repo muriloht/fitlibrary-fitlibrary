@@ -10,8 +10,10 @@ import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PostFixSpecialCaller extends DoCaller {
 	private String methodName;
@@ -42,8 +44,8 @@ public class PostFixSpecialCaller extends DoCaller {
 		return specialMethod != null && !isProblem();
 	}
 	@Override
-	public Object run(IRow row, TestResults testResults) throws Exception {
-		return specialMethod.invoke(new Object[] { testResults, row });
+	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+		return new GenericTypedObject(specialMethod.invoke(new Object[] { testResults, row }));
 	}
 	@Override
 	public String ambiguityErrorMessage() {

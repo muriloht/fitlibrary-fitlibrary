@@ -16,13 +16,17 @@ import org.junit.Test;
 
 import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefineActionsOnPage;
+import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextImplementation;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.TestResults;
 
 public class TestDefineActionsOnPage {
+	RuntimeContextImplementation runtime = new RuntimeContextImplementation();
+	DefinedActionsRepository definedActions = TemporaryPlugBoardForRuntime.definedActionsRepository();
 	protected File fitNesseDir;
+	
 	@Before
 	public void setFitNesseDirectory() {
 		fitNesseDir = new File("fitnesse");
@@ -41,9 +45,9 @@ public class TestDefineActionsOnPage {
 			}
 		};
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());
-		assertThat(TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel("addressIsAt", 1),is(notNullValue()));
-		assertThat(TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel("addressIs", 1),is(nullValue()));
-		assertThat(TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel("Person", "addressIs", 1, new RuntimeContextImplementation()),is(notNullValue()));
+		assertThat(definedActions.lookupByCamel("addressIsAt", 1),is(notNullValue()));
+		assertThat(definedActions.lookupByCamel("addressIs", 1),is(nullValue()));
+		assertThat(definedActions.lookupByClassByCamel("Person", "addressIs", 1, runtime),is(notNullValue()));
 	}
 	@Test public void actionsAreDefinedThroughFileSystemExample2() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.DefinedActions";
@@ -56,7 +60,7 @@ public class TestDefineActionsOnPage {
 			}
 		};
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());
-		assertThat(TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel("nameIs", 1),is(notNullValue()));
-		assertThat(TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByClassByCamel("Person", "nameIs", 1, new RuntimeContextImplementation()),is(notNullValue()));
+		assertThat(definedActions.lookupByCamel("nameIs", 1),is(notNullValue()));
+		assertThat(definedActions.lookupByClassByCamel("Person", "nameIs", 1, runtime),is(notNullValue()));
 	}
 }

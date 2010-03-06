@@ -657,7 +657,8 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		if (className == null || "".equals(className))
 			className = object; // then use the object name as a class name
 		Row macroRow = row.rowFrom(2);
-		return new DefinedActionCaller(object,className.toString(),macroRow,this).run(row, testResults);
+		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,this).run(row, testResults);
+		return typedObject.getSubject();
 	}
 	public void runPlain(final Row row, TestResults testResults) throws Exception {
 		PlainText plainText = new PlainText(row,testResults,this);

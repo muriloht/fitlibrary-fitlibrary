@@ -5,13 +5,14 @@
 package fitlibrary.traverse.workflow;
 
 import fitlibrary.table.IRow;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
 public abstract class DoCaller {
 	private Exception problem = null;
 	
 	public abstract boolean isValid();
-	public abstract Object run(IRow row, TestResults testResults) throws Exception;
+	public abstract TypedObject run(IRow row, TestResults testResults) throws Exception;
 	public abstract String ambiguityErrorMessage();
 
 	public Exception problem() {

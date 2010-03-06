@@ -9,10 +9,11 @@ import fit.Fixture;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.FitHandler;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
 public interface FlowEvaluator extends DoEvaluator {
-	Object interpretRow(Row row, TestResults testResults, Fixture fixtureByName);
+	TypedObject interpretRow(Row row, TestResults testResults, Fixture fixtureByName);
 	Fixture fixtureOrDoTraverseByName(Table table, TestResults testResults);
 	FitHandler fitHandler();
 	void setSystemUnderTest(Object sut);

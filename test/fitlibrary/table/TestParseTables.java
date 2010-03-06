@@ -9,6 +9,7 @@ import fit.Counts;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.DoFixture;
+import fitlibrary.parser.ParserTestCase;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -19,7 +20,7 @@ public class TestParseTables extends TestCase {
     private Tables tables;
     private Counts counts;
     private TestResults testResults;
-    private DoFixture doFixture = new DoFixture();
+    private DoFixture doFixture = ParserTestCase.evaluatorWithRuntime();
     
     @Override
 	public void setUp() throws FitParseException {
@@ -121,7 +122,7 @@ public class TestParseTables extends TestCase {
     }
     public void testRow0Exception() {
         Row row0 = getRow(0,0);
-        DoFixture doFixture2 = new DoFixture();
+        DoFixture doFixture2 = ParserTestCase.evaluatorWithRuntime();
         doFixture2.counts = counts;
         row0.error(testResults,new RuntimeException("Forced"));
         assertTrue(row0.cell(0).hadError());
@@ -130,7 +131,7 @@ public class TestParseTables extends TestCase {
     }
 
     public void testCell0Text() {
-        assertEquals("1",getCell(0,0,0).text(new DoFixture()));
+        assertEquals("1",getCell(0,0,0).text(doFixture));
         assertEquals("0 right, 0 wrong, 0 ignored, 0 exceptions",counts.toString());
     }
     public void testCell0Right() {
@@ -149,7 +150,7 @@ public class TestParseTables extends TestCase {
         Cell cell0 = getCell(0,0,0);
         cell0.expectedElementMissing(testResults);
         assertTrue(cell0.didFail());
-        assertEquals("1 missing",cell0.text(new DoFixture()));
+        assertEquals("1 missing",cell0.text(doFixture));
         assertEquals("0 right, 1 wrong, 0 ignored, 0 exceptions",counts.toString());
     }
     public void testCell0Ignored() {
@@ -160,7 +161,7 @@ public class TestParseTables extends TestCase {
     }
     public void testCell0Exception() {
         Cell cell0 = getCell(0,0,0);
-        DoFixture doFixture2 = new DoFixture();
+        DoFixture doFixture2 = ParserTestCase.evaluatorWithRuntime();
         doFixture2.counts = counts;
         cell0.error(testResults,new RuntimeException("Forced"));
         assertTrue(cell0.hadError());

@@ -12,14 +12,16 @@ import java.util.Set;
 import fit.Fixture;
 import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
-import fitlibrary.suite.DoFlow;
+import fitlibrary.flow.DoFlow;
 import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class CreateFromClassNameCaller extends DoCaller {
 	private static final ThreadLocal<Set<String>> packages = 
@@ -90,22 +92,19 @@ public class CreateFromClassNameCaller extends DoCaller {
 	private void handleArgs(Fixture fixture, Row row) {
 		fixture.getArgsForTable(new Table(row).parse());
 	}
-
 	@Override
 	public boolean isValid() {
 		return object != null || exceptionToThrow != null;
 	}
-
 	@Override
 	public String ambiguityErrorMessage() {
 		return "class " + className;
 	}
-
 	@Override
-	public Object run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(IRow row, TestResults testResults) throws Exception {
 		if (exceptionToThrow != null)
 			throw exceptionToThrow;
-		return object;
+		return new GenericTypedObject(object);
 	}
 	public static void addDefaultPackage(String name) {
 		packages.get().add(name+".");

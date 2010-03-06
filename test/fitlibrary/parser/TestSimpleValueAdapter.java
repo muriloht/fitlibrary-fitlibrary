@@ -6,19 +6,17 @@ package fitlibrary.parser;
 
 import java.lang.reflect.Method;
 
-import junit.framework.TestCase;
 import fitlibrary.DoFixture;
-import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
 
-public class TestSimpleValueAdapter extends TestCase {
+public class TestSimpleValueAdapter extends ParserTestCase {
 	public int aProp = 567;
 
 	public void testParseAlone() throws Exception {
-		Parser parser = Traverse.asTyped(int.class).parser(new DoFixture());
+		Parser parser = Traverse.asTyped(int.class).parser(evaluatorWithRuntime());
 		String cellText = "12";
 		Cell cell = new Cell(cellText);
 		Integer expectedResult = new Integer(12);

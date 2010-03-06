@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import fit.Counts;
 import fitlibrary.dynamicVariable.RecordDynamicVariables;
+import fitlibrary.flow.DoFlow;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.table.ParseNode;
 import fitlibrary.table.Row;
