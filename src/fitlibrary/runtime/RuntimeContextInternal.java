@@ -4,18 +4,33 @@
 */
 package fitlibrary.runtime;
 
-import fitlibrary.dynamicVariable.DynamicVariables;
-import fitlibrary.suite.CollectObjectsForMethodLookup;
+import fitlibrary.dynamicVariable.DynamicVariablesRecording;
+import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.IScope;
+import fitlibrary.table.Table;
+import fitlibrary.traverse.TableEvaluator;
+import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
+import fitlibrary.utility.TestResults;
 
 public interface RuntimeContextInternal extends RuntimeContext {
 	RuntimeContextInternal freshCopy();
-	DynamicVariables dynamicVariables();
 	void putTimeout(String name, int timeout);
 	int getTimeout(String name, int defaultTimeout);
-	void pushLocal();
-	void popLocal();
+	void pushLocalDynamicVariables();
+	void popLocalDynamicVariables();
 	boolean toExpandDefinedActions();
 	void setExpandDefinedActions(boolean expandDefinedActions);
-	CollectObjectsForMethodLookup getObjectCollector();
-	void setObjectCollector(CollectObjectsForMethodLookup collector);
+	boolean hasScope();
+	IScope getScope();
+	TableEvaluator getTableEvaluator();
+	GlobalScope getGlobal();
+	boolean abandonedStorytest();
+	void addAccumulatedFoldingText(Table table);
+	void showAsAfterTable(String title, String s);
+	void recordToFile(String fileName);
+	DynamicVariablesRecording getDynamicVariableRecorder();
+	void setAbandon(boolean b);
+	boolean isAbandoned(TestResults testResults);
+	void setStopOnError(boolean stop);
+	DefinedActionCallManager getDefinedActionCallManager();
 }

@@ -22,7 +22,6 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.NoSuchPropertyException;
 import fitlibrary.object.DomainObjectSetUpTraverse;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
@@ -170,7 +169,7 @@ public abstract class CollectionTraverse extends Traverse {
     			return null;
     		return new ConstantMethodTarget(value,this);
     	}
-		return typedObject.optionallyFindGetterOnTypedObject(name,this);
+		return typedObject.new_optionallyFindGetterOnTypedObject(name,this);
 	}
     protected final boolean matchRow(Row row, MethodTarget[] columnBindings, TestResults testResults) throws Exception {
         boolean matchedAlready = false;
@@ -206,7 +205,7 @@ public abstract class CollectionTraverse extends Traverse {
         	return;
         }
         for (int i = 0; i < values.length; i++) {
-        	ICell addCell = row.addCell("&nbsp;");
+        	Cell addCell = row.addCell("&nbsp;");
             Object value = values[i];
             if (value == null)
             	addCell.ignore(testResults);

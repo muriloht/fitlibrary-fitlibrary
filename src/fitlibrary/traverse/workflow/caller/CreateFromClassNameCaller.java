@@ -13,18 +13,17 @@ import fit.Fixture;
 import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.flow.DoFlow;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
-import fitlibrary.table.Table;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
-import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class CreateFromClassNameCaller extends DoCaller {
-	private static final ThreadLocal<Set<String>> packages = 
+	private static final ThreadLocal<Set<String>> packages = // Put into Runtime
 		new ThreadLocal<Set<String>> () {
 		@Override
 		protected Set<String> initialValue() {
@@ -37,7 +36,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 	private Object object = null;
 	private Exception exceptionToThrow = null;
 
-	public CreateFromClassNameCaller(Row row, DoTraverseInterpreter doTraverse) {
+	public CreateFromClassNameCaller(Row row, Evaluator doTraverse) {
 		String name = row.text(0,doTraverse).trim();
 		this.className = substituteName(name);
 		// Later, the following will handle constructor arguments, and etc
@@ -90,7 +89,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 		throw new ClassNotFoundException(className);
 	}
 	private void handleArgs(Fixture fixture, Row row) {
-		fixture.getArgsForTable(new Table(row).parse());
+		fixture.getArgsForTable(new TableOnParse(row).parse());
 	}
 	@Override
 	public boolean isValid() {
@@ -101,7 +100,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 		return "class " + className;
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		if (exceptionToThrow != null)
 			throw exceptionToThrow;
 		return new GenericTypedObject(object);

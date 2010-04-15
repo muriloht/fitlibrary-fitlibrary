@@ -8,41 +8,38 @@ import java.lang.reflect.Array;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
-import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 /** Handle checking of int[], Object[], etc
  */
 public class ArrayTraverse extends Traverse {
-    private final Object array;
-    private final Parser parser;
+    private final TypedObject typedArray;
+    private Parser parser;
     private boolean embedded = false;
     
-    public ArrayTraverse(Object array, RuntimeContextInternal runtime) {
-    	this.runtimeContext = runtime;
-    	this.array = array;
-        this.parser = asTyped(array).getComponentTyped().parser(this);
+    public ArrayTraverse(Object array) {
+    	this.typedArray = new GenericTypedObject(array);
     }
-    public ArrayTraverse(TypedObject typedArray, RuntimeContextInternal runtime) {
-    	this.runtimeContext = runtime;
-    	this.array = typedArray.getSubject();
-        this.parser = typedArray.getTyped().getComponentTyped().parser(this);
+    public ArrayTraverse(TypedObject typedArray) {
+    	this.typedArray = typedArray;
     }
-    public ArrayTraverse(Object array, boolean embedded, RuntimeContextInternal runtime) {
-    	this(array,runtime);
+    public ArrayTraverse(Object array, boolean embedded) {
+    	this(array);
         this.embedded = embedded;
     }
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+		this.parser = typedArray.getTyped().getComponentTyped().parser(this);
 		int offset = 0;
 		if (!embedded)
 			offset = 1;
-        int arrayLength = Array.getLength(array);
+        int arrayLength = Array.getLength(typedArray.getSubject());
         int tableSize = table.size();
         if (tableSize == offset && arrayLength == 0 && offset == 1)
         	table.row(0).cell(0).pass(testResults);
@@ -75,9 +72,9 @@ public class ArrayTraverse extends Traverse {
                 cell.error(testResults,e);
             }
         }
-        return array;
+        return typedArray.getSubject();
     }
     private Object get(int rowNo) {
-        return Array.get(array,rowNo);
+        return Array.get(typedArray.getSubject(),rowNo);
     }
 }

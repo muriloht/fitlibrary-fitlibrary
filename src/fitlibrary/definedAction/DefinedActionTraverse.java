@@ -18,17 +18,20 @@ import java.util.Set;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.suite.BatchFitLibrary;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class DefinedActionTraverse extends Traverse {
-	private Tables body;
+	private TablesOnParse body;
 
 	public DefinedActionTraverse() {
 		//
@@ -54,26 +57,26 @@ public class DefinedActionTraverse extends Traverse {
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
 		for (int c = 0; c < header.size(); c++)
 			mapToRef.put(header.text(c,this),paramRef(c));
-		body = new Tables(ParseUtility.copyParse(defTable.row(2).cell(0).innerTables().parse()));
+		body = new TablesOnParse(ParseUtility.copyParse(defTable.row(2).cell(0).getEmbeddedTables().parse()));
 		macroReplace(body,mapToRef);
 	}
-	public Tables call(List<Object> parameters, TestResults results) {
-		Tables copy = new Tables(ParseUtility.copyParse(body.parse()));
+	public TablesOnParse call(List<Object> parameters, TestResults results) {
+		TablesOnParse copy = new TablesOnParse(ParseUtility.copyParse(body.parse()));
 		substitute(parameters, copy);
 		executeInstantiatedAction(results, copy);
 		return copy;
 	}
 	// Added for Jacques Morel
-	protected void executeInstantiatedAction(TestResults results, Tables copy) {
+	protected void executeInstantiatedAction(TestResults results, TablesOnParse copy) {
 		new BatchFitLibrary(new TableListener(results)).doTables(copy);
 	}
-	private void substitute(List<Object> parameters, Tables copy) {
+	private void substitute(List<Object> parameters, TablesOnParse copy) {
 		Map<String,Object> mapFromRef = new HashMap<String,Object>();
 		for (int i = 0; i < parameters.size(); i++)
 			mapFromRef.put(paramRef(i), parameters.get(i));
 		macroReplace(copy, mapFromRef);
 	}
-	private void macroReplace(Tables tables, Map<String,Object> mapToRef) {
+	private void macroReplace(TablesOnParse tables, Map<String,Object> mapToRef) {
 		List<String> reverseSortOrder = new ArrayList<String>(mapToRef.keySet());
 		Collections.sort(reverseSortOrder,new Comparator<String>() {
 			public int compare(String arg0, String arg1) {
@@ -81,17 +84,17 @@ public class DefinedActionTraverse extends Traverse {
 			}
 		});
 		for (int t = 0; t < tables.size(); t++) {
-			Table table = tables.table(t);
+			TableOnParse table = tables.table(t);
 			for (int r = 0 ; r < table.size(); r++) {
-				Row row = table.row(r);
+				RowOnParse row = table.row(r);
 				for (int c = 0; c < row.size(); c++) {
 					Cell cell = row.cell(c);
 					String text = cell.text(this);
 					for (String key : reverseSortOrder) {
 						if (text.contains(key)) {
 							Object value = mapToRef.get(key);
-							if (value instanceof Table) {
-								cell.setInnerTables(new Tables((Table) value));
+							if (value instanceof TableOnParse) {
+								cell.setInnerTables(new TablesOnParse((TableOnParse) value));
 							}
 							else  {
 								text = text.replaceAll(key,(String) value);

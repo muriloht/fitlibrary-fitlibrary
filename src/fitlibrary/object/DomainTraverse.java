@@ -7,15 +7,17 @@ package fitlibrary.object;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.traverse.SwitchingEvaluator;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
-import fitlibrary.utility.TableListener;
+import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
-public class DomainTraverse extends DoTraverse implements DomainTraverser, SwitchingEvaluator {
+public class DomainTraverse extends DoTraverse implements DomainTraverser, TableEvaluator {
 	private DomainInjectionTraverse domainInject = new DomainInjectionTraverse();
 	private DomainCheckTraverse domainCheck = new DomainCheckTraverse();
-    private SwitchingEvaluator current;
+    private TableEvaluator current;
 	
 	public DomainTraverse(Object sut) {
 		super(sut);
@@ -24,7 +26,7 @@ public class DomainTraverse extends DoTraverse implements DomainTraverser, Switc
     	domainCheck.setDomainTraverse(this);
     	setSystemUnderTest(sut);
 	}
-    public void runTable(Table table, TableListener tableListener) {
+    public void runTable(Table table, ITableListener tableListener) {
         super.interpretWholeTable(table,tableListener);
     }
 	@Override
@@ -36,11 +38,11 @@ public class DomainTraverse extends DoTraverse implements DomainTraverser, Switc
         	domainInject.setSystemUnderTest(sut);
     }
 	@SuppressWarnings("unused")
-    public void checks(Row row, TestResults testResults) {
+    public void checks(RowOnParse row, TestResults testResults) {
     	setCurrentCheck();
     }
 	@Override
-	public Object interpretWholeTable(Table table, TableListener tableListener) {
+	public Object interpretWholeTable(Table table, ITableListener tableListener) {
         if (current == null)
             throw new NoSystemUnderTestException();
         int phaseBreaks = table.phaseBoundaryCount();
@@ -62,5 +64,15 @@ public class DomainTraverse extends DoTraverse implements DomainTraverser, Switc
 	}
 	public void setCurrentAction() {
 		this.current = this;
+	}
+	@Override
+	public void addNamedObject(String text, TypedObject typedObject, Row row, TestResults testResults) {
+		// TODO Auto-generated method stub
+		// Remove this later
+	}
+	@Override
+	public void select(String name) {
+		// TODO Auto-generated method stub
+		// Remove this later
 	}
 }

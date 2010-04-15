@@ -6,22 +6,23 @@ package fitlibrary.parser.collection;
 
 import java.lang.reflect.Method;
 
-import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
-import fitlibrary.table.Cell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.traverse.Traverse;
+import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class TestArrayParser extends ParserTestCase {
 	public int[] aProp = {5,6,7};
 
 	public void testAdapterAlone() throws Exception {
 		int[] ints = {1,2,3};
-		Parser parser = Traverse.asTyped(ints).parser(evaluatorWithRuntime());
+		Parser parser = new NonGenericTyped(ints.getClass()).parser(evaluatorWithRuntime());
 		String cellText = "1, 2, 3";
-		Cell cell = new Cell(cellText);
+		CellOnParse cell = new CellOnParse(cellText);
 		int[] expectedResult = {1,2,3};
 		assertArrayEquals(expectedResult,(int[])parser.parseTyped(cell,new TestResults()).getSubject());
 		assertTrue(parser.matches(cell, expectedResult,new TestResults()));
@@ -35,7 +36,7 @@ public class TestArrayParser extends ParserTestCase {
 	public void testAdapterWithMethod() throws Exception {
 		int[] ints = {4,5,6};
 		Method method = getClass().getMethod("aMethod", new Class[] {});
-		ResultParser adapter = Traverse.asTypedObject(this).resultParser(new DoFixture(), method);
+		ResultParser adapter = new GenericTypedObject(this).resultParser(evaluatorWithRuntime(), method);
 		adapter.setTarget(this);
 		Object actual = adapter.getResult();
 		assertEquals(ints.getClass(),actual.getClass());
@@ -49,7 +50,7 @@ public class TestArrayParser extends ParserTestCase {
 		int[] ints = {5,6,7};
 		Parser adapter = Traverse.asTyped(ints).parser(evaluatorWithRuntime());
 		assertEquals("5, 6, 7",adapter.show(ints));
-		Object parse = adapter.parseTyped(new Cell("5,6,7"), new TestResults()).getSubject();
+		Object parse = adapter.parseTyped(new CellOnParse("5,6,7"), new TestResults()).getSubject();
 		int[] results = (int[]) parse;
 		assertArrayEquals(results,ints);
 	}

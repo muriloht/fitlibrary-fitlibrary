@@ -41,7 +41,7 @@ public class GenericFinder implements Finder {
 		String findMethodSignature = "public "+shortClassName+" find"+shortClassName+"(String key) { } ";
 		String genericFindMethodSignature = "public "+shortClassName+" find"+shortClassName+"(String key, Type type) { } ";
 		final String showMethodName = ExtendedCamelCase.camel(SHOW+" "+shortClassName);
-		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.identifiedClassesInOutermostContext(evaluator, true);
+		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.possibleClasses(evaluator);
 		
 		findExceptionMessage = "Either "+shortClassName+
 			" is <ul><li>A <b>Value Object</b>. So missing parse method: "+

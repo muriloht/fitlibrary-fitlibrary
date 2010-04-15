@@ -10,7 +10,7 @@ import java.util.List;
 import fit.Parse;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.FileIO;
 import fitlibrary.utility.SimpleWikiTranslator;
 import fitlibrary.utility.TestResults;
@@ -47,7 +47,7 @@ public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 			try {
 				if (html.contains("<table")) {
 					String fileName = file.getAbsolutePath().replaceAll("/",".").replaceAll("\\\\",".");
-					parseDefinitions(new Tables(new Parse(html)),determineClassName("",fileName),fileToPageName(file));
+					parseDefinitions(new TablesOnParse(new Parse(html)),determineClassName("",fileName),fileToPageName(file));
 				}
 			} catch (Exception e) {
 				errors += "<li>"+e.getMessage()+"</li>\n";

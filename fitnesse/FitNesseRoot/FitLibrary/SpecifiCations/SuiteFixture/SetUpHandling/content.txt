@@ -227,7 +227,7 @@
 <td class="pass">0</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><b>check</b></td>
 <td><i>total local set ups</i></td>
 <td class="pass">2</td>
@@ -237,29 +237,29 @@
 <td class="pass">2</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td class="ignore"><i>keywords</i></td>
-<td class="ignore">underway</td>
+<br/><table border="1" cellspacing="0">
+<tr><td><i>keywords</i></td>
+<td>underway</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>a fixture</i></td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="ignore"><i>a fixture</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><b>check</b></td>
-<td><i>local set up count</i></td>
-<td>1</td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="ignore"><b>check</b></td>
+<td class="ignore"><i>local set up count</i></td>
+<td class="ignore">1</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><i>and some immediate action</i></td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="ignore"><i>and some immediate action</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
-<tr><td><b>check</b></td>
-<td><i>local set up count</i></td>
-<td>1</td>
+<br/><table border="1" cellspacing="0">
+<tr><td class="ignore"><b>check</b></td>
+<td class="ignore"><i>local set up count</i></td>
+<td class="ignore">1</td>
 </tr>
 </table>-!|''Test Two is not selected''|
 |${c4}|!-<br><table border="1" cellspacing="0">

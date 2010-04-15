@@ -4,7 +4,7 @@
 */
 package fitlibrary.parser;
 
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
@@ -19,8 +19,8 @@ import fitlibrary.utility.TestResults;
  * others are reused with different targets (such as those used in SetUpTraverse).
  */
 public interface Parser {
-    TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception;
-	boolean matches(ICell cell, Object result, TestResults testResults) throws Exception;
+    TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception;
+	boolean matches(Cell cell, Object result, TestResults testResults) throws Exception;
 	String show(Object result) throws Exception;
 	Evaluator traverse(TypedObject typedObject);
 }

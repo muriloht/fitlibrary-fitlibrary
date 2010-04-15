@@ -7,6 +7,6 @@
 ^SpecifyDoFixtureClassName
 
 ^SetUpHandling
-^SetUpWithDomainFixture
+^SuiteActionIsUsefulWhenOnlyNeedDynamicVariablesFromSuite
 
 ^DynamicVariablesPassedFromSuite

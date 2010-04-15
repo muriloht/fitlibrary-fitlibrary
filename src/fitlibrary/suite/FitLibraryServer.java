@@ -9,8 +9,7 @@ import java.util.Date;
 import fit.FitServerBridge;
 import fit.Parse;
 import fit.exception.FitParseException;
-import fitlibrary.table.Tables;
-import fitlibrary.utility.ParseUtility;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
@@ -26,13 +25,13 @@ public class FitLibraryServer extends FitServerBridge implements Reportage {
 	@Override
 	public void doTables(String html) {
 		try {
-			String translated = ParseUtility.tabulize(html); //ParseUtility.translate(html);
-			fixture.counts = doTables(new Tables(new Parse(translated))).getCounts();
+			String translated = html; //ParseUtility.tabulize(html); //ParseUtility.translate(html);
+			fixture.counts = doTables(new TablesOnParse(new Parse(translated))).getCounts();
 		} catch (FitParseException e) {
 			e.printStackTrace();
 		}
 	}
-	public TestResults doTables(Tables theTables) {
+	public TestResults doTables(TablesOnParse theTables) {
 		TableListener tableListener = new TableListener(fixtureListener);
 		batching.doTables(theTables,tableListener);
 		return tableListener.getTestResults();

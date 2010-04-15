@@ -10,12 +10,13 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.traverse.SwitchingEvaluator;
+import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TableListener;
+import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
-public class DomainInjectionTraverse extends Traverse implements SwitchingEvaluator {
+public class DomainInjectionTraverse extends Traverse implements TableEvaluator {
 	private DomainTraverser domainTraverser = null;
 
     public DomainInjectionTraverse() {
@@ -27,7 +28,7 @@ public class DomainInjectionTraverse extends Traverse implements SwitchingEvalua
 	public void setDomainTraverse(DomainTraverser domainTraverser) {
         this.domainTraverser = domainTraverser;
 	}
-    public void runTable(Table table, TableListener tableListener) {
+    public void runTable(Table table, ITableListener tableListener) {
         if (switchOnActions(table)) {
             domainTraverser.setCurrentAction();
             return;
@@ -59,7 +60,7 @@ public class DomainInjectionTraverse extends Traverse implements SwitchingEvalua
     	for (int i = 0; i < row.size(); i += 2) {
     		Cell cell = row.cell(i);
     		try {
-    			CalledMethodTarget target = PlugBoard.lookupTarget.findSetter(cell.text(this), this);
+    			CalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
     			Cell nextCell = row.cell(i+1);
     			try {
     				target.invoke(nextCell,testResults);
@@ -77,5 +78,15 @@ public class DomainInjectionTraverse extends Traverse implements SwitchingEvalua
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
         table.error(testResults,new RuntimeException("Don't expect to have this called!"));
         return null;
+	}
+	@Override
+	public void addNamedObject(String text, TypedObject typedObject, Row row, TestResults testResults) {
+		// TODO Auto-generated method stub
+		// Remove this later
+	}
+	@Override
+	public void select(String name) {
+		// TODO Auto-generated method stub
+		// Remove this later
 	}
 }

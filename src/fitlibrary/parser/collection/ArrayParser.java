@@ -16,9 +16,8 @@ import fitlibrary.collection.array.ArrayTraverse;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -42,20 +41,20 @@ public class ArrayParser implements Parser {
 			(ClassUtility.isEffectivelyPrimitive(type.getComponentType()) ||
 			 type.getComponentType().isArray());
 	}
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return componentType.typedObject(parse(cell,testResults));
 	}
-	private Object parse(ICell cell, TestResults testResults) throws Exception {
+	private Object parse(Cell cell, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
 	}
     protected Object parseTable(Table table, TestResults testResults) {
         ArraySetUpTraverse setUp = new ArraySetUpTraverse(componentType.asClass(),componentParser);
-        setUp.interpretWithinContext(table,evaluator,testResults);
+        setUp.interpretWithinScope(table,evaluator,testResults);
         return setUp.getResults();
     }
-    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTable())
     		return tableMatches(cell.getEmbeddedTable(),result,testResults);
     	return equals(parse(cell,testResults),result,testResults);
@@ -64,27 +63,27 @@ public class ArrayParser implements Parser {
     	if (results instanceof Object[]) {
     		Object[] array = (Object[])results;
     		if (array.getClass().getComponentType().isArray()) {
-    			Traverse nestingArray = new ArrayTraverse(array,true,evaluator.getRuntimeContext());
+    			Traverse nestingArray = new ArrayTraverse(array,true);
     			return nestingArray.doesTablePass(table,evaluator,testResults);
     		} 
-    		ArrayTraverse traverse = new ArrayTraverse(array,evaluator.getRuntimeContext());
+    		ArrayTraverse traverse = new ArrayTraverse(array);
     		return traverse.doesInnerTablePass(table,evaluator,testResults);
     	} 
-        Traverse traverse = selectPrimitiveArray(results,evaluator.getRuntimeContext());
+        Traverse traverse = selectPrimitiveArray(results);
 		return traverse.doesInnerTablePass(table,evaluator,testResults);
     }
 	@SuppressWarnings("unchecked")
-	public static Traverse selectPrimitiveArray(Object array, RuntimeContextInternal runtime) {
+	public static Traverse selectPrimitiveArray(Object array) {
 		if (array.getClass().isArray()) {
 			if (ClassUtility.isEffectivelyPrimitive(array.getClass().getComponentType()))
-				return new ArrayTraverse(array,runtime);
+				return new ArrayTraverse(array);
 			if (array.getClass().getComponentType().isArray())
-				return new ArrayTraverse(array,runtime);
+				return new ArrayTraverse(array);
 			List<?> asList = Arrays.asList((Object[])array);
-			return new ArrayTraverse(asArray(asList),runtime);
+			return new ArrayTraverse(asArray(asList));
 		}
 		if (array instanceof Collection)
-			return new ArrayTraverse(asArray((Collection<?>)array),runtime);
+			return new ArrayTraverse(asArray((Collection<?>)array));
 		throw new FitLibraryException("Object is not an array or collection, but is of "+array.getClass());
 	}
 	private static String[] asArray(Collection<?> collection) {
@@ -99,7 +98,7 @@ public class ArrayParser implements Parser {
 		Object array = Array.newInstance(componentType.asClass(), t.countTokens());
 		for (int i = 0; t.hasMoreTokens(); i++)
 			Array.set(array, i, componentParser.parseTyped(
-					new Cell(t.nextToken()),testResults).getSubject());
+					new CellOnParse(t.nextToken()),testResults).getSubject());
 		return array;
 	}
 	public String show(Object o) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
@@ -121,7 +120,7 @@ public class ArrayParser implements Parser {
 			return false;
 		for (int i = 0; i < length; i++) {
 			try {
-				if (!componentParser.matches(new Cell(Array.get(a, i).toString()), Array.get(b, i),testResults))
+				if (!componentParser.matches(new CellOnParse(Array.get(a, i).toString()), Array.get(b, i),testResults))
 					return false;
 			} catch (Exception e) {
 				return false;
@@ -137,6 +136,6 @@ public class ArrayParser implements Parser {
     	};
     }
 	public Evaluator traverse(TypedObject object) {
-		return new ArrayTraverse(object.getSubject(),evaluator.getRuntimeContext());
+		return new ArrayTraverse(object.getSubject());
 	}
 }

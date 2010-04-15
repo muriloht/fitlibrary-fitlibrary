@@ -5,6 +5,7 @@
 package fitlibrary.traverse;
 
 import fitlibrary.parser.Parser;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -19,10 +20,10 @@ public class GridTraverse extends Traverse {
 	}
 	public void setGrid(Object[][] grid) {
 		this.grid = grid;
-		parser = asTyped(grid).getComponentTyped().getComponentTyped().parser(this);
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+		parser = asTyped(grid).getComponentTyped().getComponentTyped().parser(this);
 		if (grid.length == 0 && table.size() == 1)
 			table.pass(testResults);
 		else if (!rowsMatch(grid,table,testResults))
@@ -88,8 +89,8 @@ public class GridTraverse extends Traverse {
 		for (int i = 0; i < actuals.length; i++)
 			row.addCell(cellWithValue(actuals[i]));
 	}
-	private Cell cellWithValue(Object object) {
-		Cell cell = new Cell();
+	private CellOnParse cellWithValue(Object object) {
+		CellOnParse cell = new CellOnParse();
 		try {
 			cell.setUnvisitedText(parser.show(object));
 		} catch (Exception e) {

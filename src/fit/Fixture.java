@@ -145,7 +145,7 @@ public class Fixture {
     for (; parameters != null; parameters = parameters.more)
       argumentList.add(parameters.text());
 
-    args = (String[]) argumentList.toArray(new String[0]);
+    args = argumentList.toArray(new String[0]);
   }
 
   public void doTable(Parse table) {
@@ -397,7 +397,7 @@ public class Fixture {
       } catch (ParseException e) {
     	  //
       } catch (Exception e) {
-        e.printStackTrace();
+        // e.printStackTrace();
       }
       return new Unparseable();
     }

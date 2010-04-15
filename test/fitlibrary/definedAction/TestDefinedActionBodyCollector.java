@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.SimpleWikiTranslator;
 
 @RunWith(JMock.class)
@@ -90,9 +90,9 @@ public class TestDefinedActionBodyCollector {
 	private void check(String wiki) {
 		collector.parseDefinitions(makeTables(wiki), consumer);
 	}
-	protected Tables makeTables(String wiki) {
+	protected TablesOnParse makeTables(String wiki) {
 		try {
-			return new Tables(new Parse(SimpleWikiTranslator.translate(wiki)));
+			return new TablesOnParse(new Parse(SimpleWikiTranslator.translate(wiki)));
 		} catch (FitParseException e) {
 			throw new RuntimeException(e.toString());
 		}

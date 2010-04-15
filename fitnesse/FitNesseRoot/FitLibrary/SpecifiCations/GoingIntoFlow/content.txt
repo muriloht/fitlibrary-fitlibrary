@@ -1,7 +1,4 @@
-!2 If we start in non-flow, when we hit a !-DoFixture-! table later in the storytest, it will switch into flow
-That first !-DoFixture-! will run the rest of the storytest, in flow.
-
-The second !-DoFixture-!  does not take over flow.
+!2 If we start in non-flow, such as with a column fixture, when we hit a table later in the storytest that can be used in flow, it will be
 
 !**< def
 !define test (!|fit.specify.MyColumnFixture|
@@ -9,11 +6,11 @@ The second !-DoFixture-!  does not take over flow.
 |0|0|
 |1|1|
 
-!|fitlibrary.specify.DoFixtureFlowUnderTest|
+!|fitlibrary.specify.SystemUnderTest|
 
 |int property|is|2|
 
-!|fitlibrary.specify.DoFixtureUnderTest|
+!|fitlibrary.specify.SystemUnderTest|
 
 |int property|is|2|
 )
@@ -33,7 +30,7 @@ The second !-DoFixture-!  does not take over flow.
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.DoFixtureFlowUnderTest</td>
+<tr><td>fitlibrary.specify.SystemUnderTest</td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
@@ -43,7 +40,7 @@ The second !-DoFixture-!  does not take over flow.
 </tr>
 </table>
 <br><table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.DoFixtureUnderTest</td>
+<tr><td>fitlibrary.specify.SystemUnderTest</td>
 </tr>
 </table>
 <br><table border="1" cellspacing="0">

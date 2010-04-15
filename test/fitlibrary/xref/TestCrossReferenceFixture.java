@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import fit.Parse;
 import fit.exception.FitParseException;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.SimpleWikiTranslator;
 import fitlibrary.utility.TestResults;
 import fitlibrary.xref.CrossReferenceFixture;
@@ -24,7 +24,7 @@ public class TestCrossReferenceFixture
 			}
 		};
 		String wiki =  "||";
-		Tables tables = new Tables(new Parse(SimpleWikiTranslator.translate(wiki))); 
+		TablesOnParse tables = new TablesOnParse(new Parse(SimpleWikiTranslator.translate(wiki))); 
 		xref.interpretAfterFirstRow(tables.table(0), new TestResults());
 	}
 }

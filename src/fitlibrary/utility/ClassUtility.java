@@ -15,8 +15,9 @@ import java.util.List;
 import fitlibrary.CompareFilesFixture;
 import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.flow.GlobalScope;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.CompareFilesTraverse;
 import fitlibrary.traverse.Evaluator;
 
@@ -31,7 +32,7 @@ public class ClassUtility {
 		return result;
 	}
 	public static boolean aFitLibraryClass(Class<?> declaringClass) {
-		if (declaringClass == CompareFilesFixture.class ||
+		if (declaringClass == GlobalScope.class || declaringClass == CompareFilesFixture.class ||
 				declaringClass == CompareFilesTraverse.class)
 			return false;
 		Package thePackage = declaringClass.getPackage();
@@ -53,7 +54,7 @@ public class ClassUtility {
 		);
 	}
 	private static boolean isSpecial(Class<?>[] parameterTypes, int p0, int p1) {
-		return parameterTypes[p0] == Row.class
+		return parameterTypes[p0] == RowOnParse.class
 			&& parameterTypes[p1] == TestResults.class;
 	}
 	public static String allElementClassNames(Collection<Object> actuals) {

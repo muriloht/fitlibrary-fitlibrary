@@ -13,7 +13,6 @@ import fit.Fixture;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.exception.IgnoredException;
-import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.HtmlUtils;
 

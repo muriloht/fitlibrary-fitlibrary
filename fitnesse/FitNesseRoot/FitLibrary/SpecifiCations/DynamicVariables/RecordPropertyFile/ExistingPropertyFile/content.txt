@@ -1,6 +1,6 @@
 If we try recording to a property file that already exists, we make use of the properties already defined in it. However, any undefined properties that are used in the storytest (with '''is''', '''check''', and '''becomes''') are added to the property file.
 !**< def
-!define suite1 (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
+!define suite1 (!|fitlibrary.DoFixture|
 
 |''remove file''|testPropertyFile.txt|
 
@@ -12,7 +12,7 @@ If we try recording to a property file that already exists, we make use of the p
 
 |'''check'''|''get''|@{c}|c-value|
 )
-!define suite2 (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
+!define suite2 (!|fitlibrary.DoFixture|
 
 |''record to file''|testPropertyFile.txt|
 
@@ -22,7 +22,7 @@ If we try recording to a property file that already exists, we make use of the p
 
 |'''check'''|''get''|@{c}|c-value|
 )
-!define suite3 (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
+!define suite3 (!|fitlibrary.DoFixture|
 
 |''add dynamic variables from file''|testPropertyFile.txt|
 
@@ -36,7 +36,7 @@ If we try recording to a property file that already exists, we make use of the p
 
 |!-fitlibrary.spec.SpecifySuiteFixture-!|
 |${suite1}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
+<tr><td>fitlibrary.DoFixture</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -71,7 +71,7 @@ If we try recording to a property file that already exists, we make use of the p
 </tr>
 </table>-!|
 |${suite2}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
+<tr><td>fitlibrary.DoFixture</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -101,7 +101,7 @@ If we try recording to a property file that already exists, we make use of the p
 </tr>
 </table>-!|
 |${suite3}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
+<tr><td>fitlibrary.DoFixture</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

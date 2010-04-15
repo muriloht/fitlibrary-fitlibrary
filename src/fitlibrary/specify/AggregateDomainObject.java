@@ -11,13 +11,13 @@ import fitlibrary.DomainObjectCheckFixture;
 import fitlibrary.DomainObjectSetUpFixture;
 
 public class AggregateDomainObject {
-	Book description = new Book();
+	Book book = new Book();
 
 	public DomainObjectSetUpFixture createBook() {
-		return new DomainObjectSetUpFixture(description);
+		return new DomainObjectSetUpFixture(book);
 	}
 	public DomainObjectCheckFixture checkBook() { 
-		return new DomainObjectCheckFixture(description);
+		return new DomainObjectCheckFixture(book);
 	}
     public KeyValue nameValue(String name, String value) { 
 		return new KeyValue(name,value);

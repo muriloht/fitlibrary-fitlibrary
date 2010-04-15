@@ -19,13 +19,13 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.AmbiguousActionException;
 import fitlibrary.exception.method.AmbiguousNameException;
 import fitlibrary.exception.method.MissingMethodException;
+import fitlibrary.flow.DoAutoWrapper;
+import fitlibrary.flow.IDoAutoWrapper;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.suite.InFlowPageRunner;
 import fitlibrary.table.Cell;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TableOnParse;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.CreateFromClassNameCaller;
@@ -35,16 +35,19 @@ import fitlibrary.traverse.workflow.caller.FixtureCaller;
 import fitlibrary.traverse.workflow.caller.MultiDefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.PostFixSpecialCaller;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
-import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TableListener;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public abstract class DoTraverseInterpreter extends Traverse implements DoEvaluator {
+	private IDoAutoWrapper doAutoWrapper = new DoAutoWrapper(this);
+	protected boolean sequencing = false;
+
 	public DoTraverseInterpreter() {
 		//
 	}
@@ -59,24 +62,27 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		TypedObject result = null;
 		for (int rowNo = 1; rowNo < table.size(); rowNo++) {
 			Row row = table.row(rowNo);
-			if (testResults.isAbandoned())
+			if (getRuntimeContext().isAbandoned(testResults))
 				row.ignore(testResults);
 			else
 				try {
 					result = interpretRow(row,testResults,null);
-					if (result instanceof DoEvaluator) {
-						DoEvaluator doEvaluator = (DoEvaluator)result;
-						doEvaluator.setRuntimeContext(runtimeContext);
-						doEvaluator.interpretInFlow(new Table(row),testResults);
-						break;
-					} else if (result instanceof Evaluator) {
-						Evaluator evaluator = (Evaluator)result;
-						evaluator.setRuntimeContext(runtimeContext);
-						interpretEvaluator(evaluator,new Table(row),testResults);
-						break;
-					} else if (result instanceof Fixture) {
-						getFitHandler().doTable(result, new Table(row),testResults,this);
-						break;
+					if (result != null) {
+						Object subject = result.getSubject();
+						if (subject instanceof DoEvaluator) {
+							DoEvaluator doEvaluator = (DoEvaluator)subject;
+							doEvaluator.setRuntimeContext(runtimeContext);
+							doEvaluator.interpretInFlow(new TableOnParse(row),testResults);
+							break;
+						} else if (subject instanceof Evaluator) {
+							Evaluator evaluator = (Evaluator)subject;
+							evaluator.setRuntimeContext(runtimeContext);
+							interpretEvaluator(evaluator,new TableOnParse(row),testResults);
+							break;
+						} else if (subject instanceof Fixture) {
+							getFitHandler().doTable(subject, new TableOnParse(row),testResults,this);
+							break;
+						}
 					}
 				} catch (Exception ex) {
 					row.error(testResults,ex);
@@ -87,10 +93,11 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		return result.getSubject();
 	}
 	// overridden in DomainTraverse (with quite separate code)
-    public Object interpretWholeTable(Table table, TableListener tableListener) {
+    public Object interpretWholeTable(Table table, ITableListener tableListener) {
     	return interpretWholeTable(table, tableListener.getTestResults());
 	}
 	public Object interpretWholeTable(Table table, TestResults testResults) {
+		System.out.println("DTI.interpretWholeTable used in "+this);
 		try {
 			Fixture fixtureByName = fixtureOrDoTraverseByName(table,testResults);
 			if (fixtureByName != null && fixtureByName.getClass() == Fixture.class)
@@ -99,10 +106,11 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			Object result = null;
 			if (typedResult != null)
 				result = typedResult.getSubject();
-			if (testResults.isAbandoned()) {
+			if (getRuntimeContext().isAbandoned(testResults)) {
 				interpretInFlow(table,testResults);
 				return null;
-			} if (result instanceof Evaluator) {
+			}
+			if (result instanceof Evaluator) {
 				Evaluator evaluator = (Evaluator)result;
 				evaluator.setRuntimeContext(runtimeContext);
 				interpretEvaluator(evaluator, table, testResults);
@@ -126,7 +134,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		if (className.equals(""))
             return null;
 		try {
-			return new OpenFixture(testResults.getCounts()).getLinkedFixtureWithArgs(table.parse);
+			return new OpenFixture(testResults.getCounts()).getLinkedFixtureWithArgs(table.parse());
 		} catch (Throwable e) {
 			if (table.row(0).size() == 1) {
 				try {
@@ -156,16 +164,10 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     public Object interpretInFlow(Table table, TestResults testResults) {
     	return interpretAfterFirstRow(table,testResults);
     }
+    public TypedObject interpretRow(Row row, TestResults testResults) {
+    	return doAutoWrapper.wrap(interpretRow(row,testResults,null));
+    }
     public TypedObject interpretRow(Row row, TestResults testResults, Fixture fixtureByName) {
-    	if (testResults.isAbandoned()) {
-			row.ignore(testResults);
-			return null;
-		}
-    	final Cell cell = row.cell(0);
-    	if (cell.hasEmbeddedTable()) {
-    		interpretInnerTables(cell.innerTables(),testResults);
-    		return null;
-    	}
     	try {
     		DoCaller[] actions = createDoCallers(row, fixtureByName);
     		Option<TypedObject> result = interpretSimpleRow(row,testResults,actions,fixtureByName);
@@ -179,9 +181,9 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     	} catch (Exception ex) {
     		row.error(testResults, ex);
     	}
-    	return null;
+    	return GenericTypedObject.NULL;
     }
-    public Option<TypedObject> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
+    protected Option<TypedObject> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
 		Option<TypedObject> result = pickCaller(actions, row, testResults);
 		if (result.isSome())
 			return result;
@@ -192,17 +194,21 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		}
 		return None.none();
     }
-    // The following is overridden in SequenceTraverse, so it doesn't try again (repeatedly)
     protected Option<TypedObject> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
-    	SequenceTraverse sequenceTraverse = new SequenceTraverse(this);
-    	sequenceTraverse.setRuntimeContext(runtimeContext);
-		return sequenceTraverse.interpretSimpleRow(row, testResults, sequenceTraverse.createDoCallers(row, fixtureByName),fixtureByName);
+    	if (sequencing)
+    		return None.none();
+    	sequencing = true;
+    	try {
+    		return interpretSimpleRow(row, testResults, createDoCallers(row, fixtureByName),fixtureByName);
+    	} finally {
+    		sequencing = false;
+    	}
     }
     private Option<TypedObject> pickCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
 		for (int i = 0; i < actions.length; i++)
 			if (actions[i].isValid()) {
 				TypedObject result = actions[i].run(row, testResults);
-				if (testResults.isAbandoned() && !testResults.problems())
+				if (getRuntimeContext().isAbandoned(testResults) && !testResults.problems())
 					row.ignore(testResults);
 				return new Some<TypedObject>(result);
 			}
@@ -212,11 +218,11 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		DoCaller[] actions = { 
 				new DefinedActionCaller(row, this),
 				new MultiDefinedActionCaller(row, this),
-				new SpecialCaller(row,switchSetUp(),PlugBoard.lookupTarget),
-				new PostFixSpecialCaller(row,switchSetUp()),
+				new SpecialCaller(row,this,PlugBoard.lookupTarget),
+				new PostFixSpecialCaller(row,this),
 				new FixtureCaller(fixtureByName),
-				new CreateFromClassNameCaller(row,switchSetUp()),
-				new DoActionCaller(row,switchSetUp()) };
+				new CreateFromClassNameCaller(row,this),
+				new DoActionCaller(row,this) };
 		checkForAmbiguity(actions);
 		return actions;
 	}
@@ -230,19 +236,15 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			result += ", Type p"+i;
 		return result+") {}";
 	}
-	public ICalledMethodTarget findMethodFromRow(IRow row, int from, int extrasCellsOnEnd) throws Exception {
+	public ICalledMethodTarget findMethodFromRow(Row row, int from, int extrasCellsOnEnd) throws Exception {
 		return findMethodByActionName(row.rowFrom(from), row.size() - from - extrasCellsOnEnd - 1);
 	}
-	public ICalledMethodTarget findMethodFromRow222(IRow row, int from, int less) throws Exception {
-		return findMethodByActionName(row.rowFrom(from), row.size() - less);
+	public ICalledMethodTarget findMethodFromRow222(Row row, int from, int less) throws Exception {
+		return findMethodFromRow(row,from,less-from-1);
 	}
-	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
-		asTypedObject(this).findMethodsFromPlainText(textCall,results);
-	}
-	/** Is overridden in subclass SequenceTraverse to process arguments differently
-	 * @throws Exception 
-	 */
-	public CalledMethodTarget findMethodByActionName(IRow row, int allArgs) throws Exception {
+	public CalledMethodTarget findMethodByActionName(Row row, int allArgs) throws Exception {
+		if (sequencing)
+			return PlugBoard.lookupTarget.findTheMethodMapped(row.text(0,this), allArgs, this);
 		return PlugBoard.lookupTarget.findMethodInEverySecondCell(this, row, allArgs);
 	}
 	private static void checkForAmbiguity(DoCaller[] actions) {
@@ -298,19 +300,10 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			message += "<hr/>Possibly in class:"+MissingMethodException.htmlListOfClassNames(possibleClasses);
 		throw new FitLibraryExceptionInHtml(message.trim());
 	}
-	private void interpretInnerTables(Tables tables, TestResults testResults) {
-		new InFlowPageRunner(this,testResults).run(tables,0,new TableListener(testResults));
-	}
 	public DoTraverseInterpreter switchSetUp() {
 		return this;
 	}
 	protected Object callMethodInRow(Row row, TestResults testResults, boolean catchError, Cell operatorCell) throws Exception {
 		return findMethodFromRow222(row,1, 2).invokeForSpecial(row.rowFrom(2),testResults,catchError,operatorCell);
-	}
-	public boolean toExpandDefinedActions() {
-		return getRuntimeContext().toExpandDefinedActions();
-	}
-	public void setExpandDefinedActions(boolean expandDefinedActions) {
-		getRuntimeContext().setExpandDefinedActions(expandDefinedActions);
 	}
 }

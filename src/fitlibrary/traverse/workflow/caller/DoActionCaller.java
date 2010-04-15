@@ -10,7 +10,6 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -35,7 +34,7 @@ public class DoActionCaller extends DoCaller {
 		return target != null;
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		try {
 			TypedObject typedResult = target.invokeTyped(row.rowFrom(1),testResults);
 			Object result = null;

@@ -13,14 +13,16 @@ import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.ref.EntityReference;
-import fitlibrary.runtime.RuntimeContextImplementation;
-import fitlibrary.table.Cell;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.traverse.Traverse;
+import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.utility.TestResults;
 
 public class TestReferenceParser extends TestCase {
     List<MyClass> list;
 	public MyClass aProp;
+	DoFixture doFixture = ParserTestCase.evaluatorWithRuntime(new MyDoFixture());
 	
 	@Override
 	public void setUp() {
@@ -31,7 +33,7 @@ public class TestReferenceParser extends TestCase {
         aProp = list.get(1);
 	}
 	public void testParseAlone() throws Exception {
-		Parser parser = Traverse.asTyped(MyClass.class).parser(new MyDoFixture());
+		Parser parser = new NonGenericTyped(MyClass.class).parser(doFixture);
         Object first = list.get(0);
         checkReference(parser, "the", first);
         checkReference(parser, "the first", first);
@@ -42,14 +44,14 @@ public class TestReferenceParser extends TestCase {
         assertEquals("the third MyClass",parser.show(list.get(2)));
 	}
     private void checkReference(Parser adapter, String text, Object element) throws Exception {
-        Cell cell = new Cell(text);
+        CellOnParse cell = new CellOnParse(text);
         TestResults testResults = new TestResults();
 		assertEquals(element,adapter.parseTyped(cell,testResults).getSubject());
         assertTrue(adapter.matches(cell, element,testResults));
         assertEquals("the first MyClass",adapter.show(element));
     }
     public void testParseFails() throws Exception {
-        Parser parser = Traverse.asTyped(MyClass.class).parser(new MyDoFixture());
+        Parser parser = Traverse.asTyped(MyClass.class).parser(doFixture);
         checkReferenceFails(parser, "th");
         checkReferenceFails(parser, "the forst");
         checkReferenceFails(parser, "the first My Class");
@@ -58,7 +60,7 @@ public class TestReferenceParser extends TestCase {
     }
     private void checkReferenceFails(Parser adapter, String text) {
         try {
-            Cell cell = new Cell(text);
+            CellOnParse cell = new CellOnParse(text);
             adapter.parseTyped(cell,new TestResults());
             fail("Should throw and exception with '"+text+"'");
         } catch (Exception e) {
@@ -67,7 +69,7 @@ public class TestReferenceParser extends TestCase {
     }
 	public void testParseWithMethod() throws Exception {
 		Method method = getClass().getMethod("aMethod", new Class[] {});
-		ResultParser adapter = Traverse.asTypedObject(this).resultParser(new MyDoFixture(), method);
+		ResultParser adapter = Traverse.asTypedObject(this).resultParser(doFixture, method);
 		adapter.setTarget(this);
 		assertEquals(list.get(2),adapter.getResult());
 		assertEquals("the third MyClass",adapter.show(adapter.getResult()));
@@ -77,7 +79,7 @@ public class TestReferenceParser extends TestCase {
 	}
 	public class MyDoFixture extends DoFixture {
 		public MyDoFixture() {
-			setRuntimeContext(new RuntimeContextImplementation());
+			setRuntimeContext(new RuntimeContextContainer());
 		}
 		public MyClass findMyClass(int index) {
             return list.get(index);

@@ -18,7 +18,7 @@ import fitlibrary.collection.list.ListTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.FitLibrarySelector;
@@ -46,10 +46,10 @@ public class ListParser implements Parser {
 		       Iterator.class.isAssignableFrom(type) ||
 		       type.isArray();
 	}
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	private Object parse(ICell cell, TestResults testResults) throws Exception {
+	private Object parse(Cell cell, TestResults testResults) throws Exception {
 		List<Object> results = null;
 		if (cell.hasEmbeddedTable())
 			results = parseTable(cell.getEmbeddedTable(),testResults);
@@ -67,7 +67,7 @@ public class ListParser implements Parser {
 	protected List<Object> parseTable(Table table, TestResults testResults) {
 		List<Object> list = new ArrayList<Object>();
 		CollectionSetUpTraverse setUp = new CollectionSetUpTraverse(evaluator,list,true);
-		setUp.interpretInnerTable(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
 		return list;
 	}
     private Object asArray(Class<?> componentType, List<Object> results) {
@@ -77,7 +77,7 @@ public class ListParser implements Parser {
     		Array.set(array, i++, it.next());
 		return array;
 	}
-	public boolean matches(ICell cell, Object actual, TestResults testResults) throws Exception {
+	public boolean matches(Cell cell, Object actual, TestResults testResults) throws Exception {
 		if (actual == null)
 			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
     	if (cell.hasEmbeddedTable())
@@ -98,7 +98,7 @@ public class ListParser implements Parser {
         List<Object> list = new ArrayList<Object>();
 		while (tokeniser.hasMoreTokens())
 			list.add(valueParser.parseTyped(
-					new Cell(tokeniser.nextToken()),testResults).getSubject());
+					new CellOnParse(tokeniser.nextToken()),testResults).getSubject());
 		return list;
 	}
 	@SuppressWarnings("unchecked")

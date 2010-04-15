@@ -8,8 +8,8 @@ import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.UnknownClassException;
 import fitlibrary.table.Cell;
-import fitlibrary.table.Row;
-import fitlibrary.table.Table;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
 
@@ -18,11 +18,11 @@ import fitlibrary.utility.TestResults;
 public class FixtureBridge extends Fixture {
 	public Object firstObject(Parse tables, TestResults results) {
 		if (tables != null) {
-			return getFixture(new Table(tables.at(0)),results);
+			return getFixture(new TableOnParse(tables.at(0)),results);
 		}
 		return null;
 	}
-	public Object getFixture(Table table, TestResults results) {
+	public Object getFixture(TableOnParse table, TestResults results) {
 		Cell headingCell = table.row(0).cell(0);
 		try {
 			String className = headingCell.text().replaceAll(" ","");
@@ -54,7 +54,7 @@ public class FixtureBridge extends Fixture {
 		}
 	}
 
-    String[] getArgsForTable(Row row) {
+    String[] getArgsForTable(RowOnParse row) {
         String[] arguments = new String[row.size()-1];
         for (int i = 1; i < row.size(); i++)
         	arguments[i-1] = row.text(i,null);

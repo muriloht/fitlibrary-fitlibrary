@@ -12,47 +12,47 @@ import org.junit.Test;
 public class TestRuntimeContext {
 	@Test(expected=RuntimeException.class)
 	public void cannotPutParameterWithGlobal() {
-		new RuntimeContextImplementation().dynamicVariables().putParameter("k", "v");
+		new RuntimeContextContainer().getDynamicVariables().putParameter("k", "v");
 	}
 	@Test
 	public void canPutParameterOncePushedLocal() {
-		RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
-		runtimeContext.pushLocal();
-		runtimeContext.dynamicVariables().putParameter("k", "v");
-		assertThat(runtimeContext.dynamicVariables().get("k"),is((Object)"v"));
+		RuntimeContextInternal runtimeContext = new RuntimeContextContainer();
+		runtimeContext.pushLocalDynamicVariables();
+		runtimeContext.getDynamicVariables().putParameter("k", "v");
+		assertThat(runtimeContext.getDynamicVariables().get("k"),is((Object)"v"));
 	}
 	@Test
 	public void canPopLocalOncePushedLocal() {
-		RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
-		runtimeContext.pushLocal();
-		runtimeContext.popLocal();
+		RuntimeContextInternal runtimeContext = new RuntimeContextContainer();
+		runtimeContext.pushLocalDynamicVariables();
+		runtimeContext.popLocalDynamicVariables();
 	}
 	@Test(expected=RuntimeException.class)
 	public void cannotPopLocalIfNotPushedLocal() {
-		RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
-		runtimeContext.popLocal();
+		RuntimeContextInternal runtimeContext = new RuntimeContextContainer();
+		runtimeContext.popLocalDynamicVariables();
 	}
 	@Test
 	public void parameterBindingsAreDiscardedOnPop() {
-		RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
-		runtimeContext.pushLocal();
-		runtimeContext.dynamicVariables().putParameter("k", "v");
-		assertThat(runtimeContext.dynamicVariables().get("k"),is((Object)"v"));
-		runtimeContext.popLocal();
-		assertThat(runtimeContext.dynamicVariables().get("k") == null,is(true));
+		RuntimeContextInternal runtimeContext = new RuntimeContextContainer();
+		runtimeContext.pushLocalDynamicVariables();
+		runtimeContext.getDynamicVariables().putParameter("k", "v");
+		assertThat(runtimeContext.getDynamicVariables().get("k"),is((Object)"v"));
+		runtimeContext.popLocalDynamicVariables();
+		assertThat(runtimeContext.getDynamicVariables().get("k") == null,is(true));
 	}
 	@Test
 	public void previousParameterBindingsAreAvailableOnPop() {
-		RuntimeContextInternal runtimeContext = new RuntimeContextImplementation();
-		runtimeContext.pushLocal();
-		runtimeContext.dynamicVariables().putParameter("k", "v");
-		runtimeContext.pushLocal();
-		assertThat(runtimeContext.dynamicVariables().get("k"),is((Object)"v"));
-		runtimeContext.dynamicVariables().putParameter("k", "V");
-		assertThat(runtimeContext.dynamicVariables().get("k"),is((Object)"V"));
-		runtimeContext.popLocal();
-		assertThat(runtimeContext.dynamicVariables().get("k"),is((Object)"v"));
-		runtimeContext.popLocal();
-		assertThat(runtimeContext.dynamicVariables().get("k") == null,is(true));
+		RuntimeContextInternal runtimeContext = new RuntimeContextContainer();
+		runtimeContext.pushLocalDynamicVariables();
+		runtimeContext.getDynamicVariables().putParameter("k", "v");
+		runtimeContext.pushLocalDynamicVariables();
+		assertThat(runtimeContext.getDynamicVariables().get("k"),is((Object)"v"));
+		runtimeContext.getDynamicVariables().putParameter("k", "V");
+		assertThat(runtimeContext.getDynamicVariables().get("k"),is((Object)"V"));
+		runtimeContext.popLocalDynamicVariables();
+		assertThat(runtimeContext.getDynamicVariables().get("k"),is((Object)"v"));
+		runtimeContext.popLocalDynamicVariables();
+		assertThat(runtimeContext.getDynamicVariables().get("k") == null,is(true));
 	}
 }

@@ -1,11 +1,15 @@
 !**< def
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
+|''clear defined actions''|
+
 |''define actions at''|.FitLibrary.SpecifiCations.PlainTextInsteadOfTables.DefinedActions|
 
 |'''set'''|address|'''to'''|Waimauku|
 
-- address is at Waimauku
+![
+address is at Waimauku
+]!
 )
 **!
 
@@ -13,6 +17,10 @@ If the dynamic variable ''this'' is set, it's treated as the default object. Thi
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><i>clear defined actions</i></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -27,9 +35,7 @@ If the dynamic variable ''this'' is set, it's treated as the default object. Thi
 <td>Waimauku</td>
 </tr>
 </table>
-<br/>
-<table><tr>
+<br/><table class="plain_text_table">
+<tr>
 <td class="pass"><i>address is at</i></td>
-<td>Waimauku</td></tr>
-</table>
-<br/>-!|
+<td>Waimauku</td></tr></table>-!|

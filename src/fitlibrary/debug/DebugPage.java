@@ -15,7 +15,7 @@ import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
@@ -63,7 +63,7 @@ public class DebugPage {
 		String html = new ParallelFitNesseRepository("fitnesse").getTest(pageName).getContent();
 		System.out.println("\n----------\nHTML for "+pageName+"\n----------\n"+html);
 		Parse parse = new Parse(html);
-		Tables tables = new Tables(parse);
+		TablesOnParse tables = new TablesOnParse(parse);
 		expectedTablesFinished += tables.size();
 		FitServerBridge.setFitNesseUrl(FITNESSE_URL); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);

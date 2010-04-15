@@ -7,7 +7,7 @@ package fitlibrary.traverse.workflow.caller;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.traverse.workflow.DoTraverse;
+import fitlibrary.flow.GlobalScope;
 import fitlibrary.utility.ExtendedCamelCase;
 
 public class ValidCall {
@@ -116,10 +116,10 @@ public class ValidCall {
 			return "";
 		return methodName.substring(wordLength,wordLength+1).toLowerCase()+methodName.substring(wordLength+1);
 	}
-	public void possibility(DoTraverse doTraverse) {
+	public void possibility(GlobalScope globalScope) {
 		String result = "<table><tr>";
 		for (String s : getList())
 			result += "<td>"+s+"</td>";
-		doTraverse.showAfterTable(result+"</tr></table>");
+		globalScope.showAsAfterTable("plain text",result+"</tr></table>");
 	}
 }

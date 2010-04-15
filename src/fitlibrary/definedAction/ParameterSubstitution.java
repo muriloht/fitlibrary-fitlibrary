@@ -16,6 +16,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.StringUtility;
 
 public class ParameterSubstitution {
@@ -81,11 +82,11 @@ public class ParameterSubstitution {
 				return;
 			Tables addedTables = valueTables.deepCopy();
 			if (cell.hasEmbeddedTable())
-				cell.getEmbeddedTables().parse.last().more = addedTables.parse;
+				cell.getEmbeddedTables().parse().last().more = addedTables.parse();
 			else
 				cell.setInnerTables(addedTables);
-			cell.getEmbeddedTables().parse.leader = text.substring(0,at);
-			cell.getEmbeddedTables().parse.last().trailer = text.substring(at+key.length());
+			cell.getEmbeddedTables().parse().leader = text.substring(0,at);
+			cell.getEmbeddedTables().parse().last().trailer = text.substring(at+key.length());
 		}
 	}
 	private static String paramRef(int c) {

@@ -9,8 +9,8 @@ import fitlibrary.object.DomainObjectCheckTraverse;
 public class DomainObjectCheckFixture extends FitLibraryFixture {
 	
     public DomainObjectCheckFixture(Object sut) {
+    	setSystemUnderTest(sut);
     	DomainObjectCheckTraverse domainObjectCheckTraverse = new DomainObjectCheckTraverse(this);
 		setTraverse(domainObjectCheckTraverse);
-        setSystemUnderTest(sut);
     }
 }

@@ -17,40 +17,44 @@ import org.junit.Test;
 import fitlibrary.DoFixture;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.parse.BadNumberException;
+import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ParserSelectorForType;
-import fitlibrary.runtime.RuntimeContextImplementation;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibraryGeneric.generic.LocalParameterizedType;
 
 public class TestDirectAccessToParser {
-	@Test
+    private DoEvaluator doFixture = ParserTestCase.evaluatorWithRuntime(new MyFixture());
+
+    @Test
 	public void testParseInt() throws Exception {
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), int.class, "3"),is((Object)3));
+		assertThat(ParserSelectorForType.evaluate(doFixture, int.class, "3"),is((Object)3));
 	}
 	@Test(expected=BadNumberException.class)
 	public void testParseIntFails() throws Exception {
-		ParserSelectorForType.evaluate(new MyFixture(), int.class, "three");
+		ParserSelectorForType.evaluate(doFixture, int.class, "three");
 	}
 	@Test
 	public void testParseWithFinder() throws Exception {
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), X.class, "3"),is((Object)new X("3")));
+		assertThat(ParserSelectorForType.evaluate(doFixture, X.class, "3"),is((Object)new X("3")));
 	}
 	@Test(expected=FitLibraryException.class)
 	public void testParseWithOutFinder() throws Exception {
-		ParserSelectorForType.evaluate(new MyFixture(), Y.class, "3");
+		ParserSelectorForType.evaluate(doFixture, Y.class, "3");
 	}
 	@Test
 	public void testParseWithEnumFinder() throws Exception {
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), En.class, "a"),is((Object)En.A));
+		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
 	}
 	@Test
 	public void testParseWithGenericFinder() throws Exception {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, Integer.class);
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), type, "3"),is((Object)new Gen<Integer>(3)));
+		assertThat(ParserSelectorForType.evaluate(doFixture, type, "3"),is((Object)new Gen<Integer>(3)));
 	}
 	@Test
 	public void testParseWithGenericEnumFinder() throws Exception {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, En.class);
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), type, "A"),is((Object)new Gen<En>(En.A)));
+		assertThat(ParserSelectorForType.evaluate(doFixture, type, "A"),is((Object)new Gen<En>(En.A)));
 	}
 	public void testParseWithGenericListEnumFinder() throws Exception {
 		LocalParameterizedType innerType = new LocalParameterizedType(TestDirectAccessToParser.class, List.class, En.class);
@@ -58,12 +62,12 @@ public class TestDirectAccessToParser {
 		List<En> expectedList = new ArrayList<En>();
 		expectedList.add(En.A);
 		expectedList.add(En.B);
-		assertThat(ParserSelectorForType.evaluate(new MyFixture(), type, "a, b"),is((Object)new Gen<List<En>>(expectedList)));
+		assertThat(ParserSelectorForType.evaluate(doFixture, type, "a, b"),is((Object)new Gen<List<En>>(expectedList)));
 	}
 	
 	public static class MyFixture extends DoFixture {
 		public MyFixture() {
-			setRuntimeContext(new RuntimeContextImplementation());
+			setRuntimeContext(new RuntimeContextContainer());
 		}
 		public X findX(String s) {
 			return new X(s);

@@ -25,7 +25,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import fit.Counts;
 import fit.Parse;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.TestResults;
 
 /**
@@ -57,7 +57,7 @@ public class SpreadsheetRunner {
                 parse.leader = report.addLinks(parse.leader,inFile);
             }
             Parse tables = customRunner.getTables();
-			TestResults testResults = batchFitLibrary.doStorytest(new Tables(tables));
+			TestResults testResults = batchFitLibrary.doStorytest(new TablesOnParse(tables));
 			tables.print(output);
 			output.close();
 			return testResults.getCounts();

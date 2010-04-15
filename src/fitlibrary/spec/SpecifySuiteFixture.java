@@ -9,9 +9,9 @@ import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
-import fitlibrary.table.Row;
-import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
@@ -24,25 +24,25 @@ import fitlibrary.utility.TestResults;
 public class SpecifySuiteFixture extends SpecifyFixture {
 	@Override
 	public void doTable(Parse table) {
-		doTable(new Table(table));
+		doTable(new TableOnParse(table));
 	}
-    private void doTable(Table theTable) {
-        TestResults testResults = TestResults.create(counts);
+    private void doTable(TableOnParse theTable) {
+        TestResults testResults = new TestResults(counts);
         BatchFitLibrary batch = new BatchFitLibrary();
     	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
-            Row row = theTable.row(rowNo);
+            RowOnParse row = theTable.row(rowNo);
             if (row.size() < 2)
-				theTable.error(testResults, new RowWrongWidthException(2));
+				row.error(testResults, new RowWrongWidthException(2));
             Cell test = row.cell(0);
             Cell report = row.cell(1);
             if (!test.hasEmbeddedTable()) {
-                theTable.error(testResults, new NestedTableExpectedException());
+            	row.error(testResults, new NestedTableExpectedException());
                 return;
             }
             Parse actual = test.getEmbeddedTables().parse();
             Parse expected = report.getEmbeddedTables().parse();
             
-            batch.doStorytest(new Tables(actual));
+            batch.doStorytest(new TablesOnParse(actual));
 			if (reportsEqual(actual, expected))
                 report.pass(testResults);
             else {

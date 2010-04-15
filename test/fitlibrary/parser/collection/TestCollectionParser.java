@@ -14,17 +14,17 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 
-import fitlibrary.DoFixture;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
-import fitlibrary.table.Cell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.traverse.Traverse;
+import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.utility.TestResults;
 
 @SuppressWarnings("unchecked")
 public class TestCollectionParser {
-	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
+	DoEvaluator evaluator = ParserTestCase.evaluatorWithRuntime();
 	Collection list;
 	public Collection aProp;
 
@@ -43,7 +43,7 @@ public class TestCollectionParser {
 	public void parserAlone() throws Exception {
 		Parser parser = Traverse.asTyped(list).parser(evaluator);
 		String cellText = "1, 2, 3";
-		Cell cell = new Cell(cellText);
+		CellOnParse cell = new CellOnParse(cellText);
 		TestResults testResults = new TestResults();
 		assertThat(parser.parseTyped(cell,testResults).getSubject(), is((Object)list));
 		assertThat(parser.matches(cell, list,testResults),is(true));

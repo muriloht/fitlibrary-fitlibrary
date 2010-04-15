@@ -22,7 +22,7 @@ import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.table.TableParser;
 import fitlibrary.parser.tagged.TaggedStringParser;
 import fitlibrary.parser.tree.TreeParser;
-import fitlibrary.table.Cell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.utility.TestResults;
@@ -107,7 +107,7 @@ public class ParserSelectorForType {
 	public static Object evaluate(Evaluator evaluator, Type type, String text) throws Exception {
 		Parser parserFor = new ParserSelectorForType().parserFor(evaluator,new GenericTyped(type),false);
 		TestResults testResults = new TestResults();
-		Cell cell = new Cell(text);
+		CellOnParse cell = new CellOnParse(text);
 		Object subject = parserFor.parseTyped(cell,testResults).getSubject();
 		if (testResults.problems())
 			throw new RuntimeException("Unable to parse '"+text+"' as a "+type+": "+cell.fullText());

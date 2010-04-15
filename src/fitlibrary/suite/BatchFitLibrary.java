@@ -7,47 +7,68 @@ package fitlibrary.suite;
 import java.io.IOException;
 
 import fit.Counts;
-import fitlibrary.dynamicVariable.RecordDynamicVariables;
+import fit.FitServerBridge;
+import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
+import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.ScopeStack;
 import fitlibrary.parser.lookup.ParseDelegation;
+import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.ParseNode;
-import fitlibrary.table.Row;
-import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
+import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
+import fitlibrary.traverse.workflow.FlowEvaluator;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class BatchFitLibrary {
-	private TableListener tableListener = new TableListener(TestResults.create(new Counts()));
-	private DoFlow doFlow = new DoFlow(new DoTraverse());
+	private TableListener tableListener = new TableListener(new TestResults(new Counts()));
+	private DoFlow doFlow = wiredUpDoFlow();
 
 	public BatchFitLibrary() {
 		//
 	}
 	public BatchFitLibrary(TableListener tableListener) {
-		this();
 		this.tableListener = tableListener;
 	}
-	public TestResults doStorytest(Tables theTables) {
+	public TestResults doStorytest(TablesOnParse theTables) {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		return doTables(theTables);
 	}
-	public TestResults doTables(Tables theTables) {
+	private static DoFlow wiredUpDoFlow() {
+		FlowEvaluator flowEvaluator = new DoTraverse();
+		GlobalScope global = new GlobalScope();
+		TypedObject globalTO = new GenericTypedObject(global);
+		ScopeStack scopeStack = new ScopeStack(flowEvaluator,globalTO);
+		RuntimeContextContainer runtime = new RuntimeContextContainer(scopeStack,global);
+		runtime.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
+		global.setRuntimeContext(runtime);
+		flowEvaluator.setRuntimeContext(runtime);
+		DoFlow doFlow2 = new DoFlow(flowEvaluator,scopeStack,runtime);
+		runtime.SetTableEvaluator(doFlow2);
+		return doFlow2;
+	}
+	public TestResults doTables(TablesOnParse theTables) {
 		tableListener.clearTestResults();
 		doFlow.runStorytest(theTables,tableListener);
-		if (RecordDynamicVariables.recording()) {
+		DynamicVariablesRecording recorder = doFlow.getRuntimeContext().getDynamicVariableRecorder();
+		if (recorder.isRecording()) {
 			try {
-				RecordDynamicVariables.write();
+				recorder.write();
 			} catch (IOException e) {
-				Table errorTable = new Table(new Row("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
+				TableOnParse errorTable = new TableOnParse(new RowOnParse("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
 				errorTable.row(0).cell(1).error(tableListener.getTestResults());
 				theTables.add(errorTable );
 			}
 		}
 		return tableListener.getTestResults();
 	}
-	public void doTables(Tables theTables, TableListener listener) {
+	public void doTables(TablesOnParse theTables, TableListener listener) {
 		this.tableListener = listener;
 		doStorytest(theTables);
 	}

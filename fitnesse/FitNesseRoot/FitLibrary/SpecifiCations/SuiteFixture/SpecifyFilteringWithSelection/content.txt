@@ -45,10 +45,10 @@
 <tr><td><i>a fixture</i></td></tr>
 <tr><td><i>and some immediate action</i></td></tr>
 </table>-!|!-<table>
-<tr><td class="ignore"><i>keywords</i></td><td class="ignore">underway</td></tr>
+<tr><td><i>keywords</i></td><td>underway</td></tr>
 </table>
 <table>
-<tr><td><i>a fixture</i></td></tr>
-<tr><td><i>and some immediate action</i></td></tr>
+<tr><td class="ignore"><i>a fixture</i></td></tr>
+<tr><td class="ignore"><i>and some immediate action</i></td></tr>
 </table>-!|''Test Two is not selected''|
 

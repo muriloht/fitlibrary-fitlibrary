@@ -13,150 +13,88 @@ import java.util.List;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
-import fitlibrary.exception.method.MissingMethodException;
+import fitlibrary.closure.LookupClosure;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.FieldParser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
-import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.ExtendedCamelCase;
+import fitlibrary.utility.option.None;
+import fitlibrary.utility.option.Option;
+import fitlibrary.utility.option.Some;
 
 public class NonGenericTypedObject implements TypedObject {
-	protected Object subject;
+	protected final Object subject;
+	protected final LookupClosure lookupClosure;
+	protected final MethodTargetFactory methodTargetFactory;
 
+	public interface MethodTargetFactory {
+		CalledMethodTarget createCalledMethodTarget(Closure closure, Evaluator evaluator);
+	}
 	public NonGenericTypedObject(Object subject) {
+		this(subject,PlugBoard.lookupClosure, new MethodTargetFactory(){
+			@Override
+			public CalledMethodTarget createCalledMethodTarget(Closure closure, Evaluator evaluator) {
+				return new CalledMethodTarget(closure,evaluator);
+			}});
+	}
+	public NonGenericTypedObject(Object subject, LookupClosure lookupClosure, MethodTargetFactory methodTargetFactory) { // Allows test injection
 		this.subject = subject;
+		this.lookupClosure = lookupClosure;
+		this.methodTargetFactory = methodTargetFactory;
 	}
 	public Object getSubject() {
 		return subject;
 	}
-	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name,
-			int argCount, Evaluator evaluator, List<String> signatures) throws Exception {
-		CalledMethodTarget result = optionallyFindMethodOnTypedObject(name,
-				argCount, evaluator, true);
-		if (result != null)
-			return result;
-		try {
-			if (argCount == 0)
-				return findGetterOnTypedObject(name, evaluator);
-		} catch (MissingMethodException e) {
-			// Provide a more general error message
-		}
-		throw new MissingMethodException(signatures, PlugBoard.lookupTarget
-				.identifiedClassesInSUTChain(subject));
+	public Option<CalledMethodTarget> new_findSpecificMethod(String name, int argCount, Evaluator evaluator) {
+		Option<Closure> methodClosureOption = new_findMethodClosure(name, argCount);
+		if (methodClosureOption.isSome())
+			return new Some<CalledMethodTarget>(methodTargetFactory.createCalledMethodTarget(methodClosureOption.get(), evaluator));
+		return None.none();
 	}
-	private List<String> signatures(String... signature) {
-		return Arrays.asList(signature);
-	}
-	public CalledMethodTarget findGetterOnTypedObject(String propertyName,
-			Evaluator evaluator) {
-		if (evaluator.getRuntimeContext() == null)
-			throw new NullPointerException("runtime is null");
-		CalledMethodTarget target = optionallyFindGetterOnTypedObject(
-				propertyName, evaluator);
-		if (target != null)
-			return target;
-		throw new MissingMethodException(signatures("public ResultType "
-				+ ExtendedCamelCase.camel("get " + propertyName) + "() { }",
-				"public ResultType "
-						+ ExtendedCamelCase.camel("is " + propertyName)
-						+ "() { }"), PlugBoard.lookupTarget
-				.identifiedClassesInSUTChain(subject));
-	}
-	public CalledMethodTarget optionallyFindGetterOnTypedObject(
-			String propertyName, Evaluator evaluator) {
-		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
-		CalledMethodTarget target = optionallyFindMethodOnTypedObject(
-				getMethodName, 0, evaluator, true);
-		if (target == null) {
-			String isMethodName = ExtendedCamelCase.camel("is " + propertyName);
-			target = optionallyFindMethodOnTypedObject(isMethodName, 0,
-					evaluator, true);
-		}
-		return target;
-	}
-	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name,
-			int argCount, Evaluator evaluator, boolean includeSut) {
-		Closure methodClosure = findMethodClosure(name, argCount, includeSut);
+	private Option<Closure> new_findMethodClosure(String name, int argCount) {
+		Closure methodClosure = lookupClosure.findMethodClosure(this,name, argCount);
 		if (methodClosure == null)
-			return null;
-		return new CalledMethodTarget(methodClosure, evaluator);
+			return None.none();
+		return new Some<Closure>(methodClosure);
 	}
-	public void findMethodsFromPlainText(String textCall,
-			List<ValidCall> results) {
-		if (subject == null)
-			return;
+	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
+		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
+		Option<CalledMethodTarget> target = new_findSpecificMethod(getMethodName, 0, evaluator);
+		if (target.isSome())
+			return target.get();
+		String isMethodName = ExtendedCamelCase.camel("is " + propertyName);
+		target = new_findSpecificMethod(isMethodName, 0, evaluator);
+		if (target.isSome())
+			return target.get();
+		return null;
+	}
+	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name, int argCount, Evaluator evaluator, boolean includeSut) {
+		Option<CalledMethodTarget> targetOption = new_findSpecificMethod(name,argCount,evaluator);
+		if (targetOption.isSome())
+			return targetOption.get();
+		return null;
+	}
+	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
 		List<String> words = Arrays.asList(textCall.split(" "));
 		Method[] methods = subject.getClass().getMethods();
-		int size = results.size();
 		for (Method method : methods) {
 			int argCount = method.getParameterTypes().length;
 			if (method.getDeclaringClass() != Object.class
-					&& !PlugBoard.lookupClosure.fitLibrarySystemMethod(method,
-							argCount, subject)) {
-				ValidCall.parseAction(words, method.getName(), argCount,
-						results);
+					&& !PlugBoard.lookupClosure.fitLibrarySystemMethod(method,argCount, subject)) {
+				ValidCall.parseAction(words, method.getName(), argCount,results);
 			}
 		}
-		if (results.size() == size && subject instanceof DomainAdapter) {
-			DomainAdapter domainAdapter = (DomainAdapter) subject;
-			Object nestedSystemUnderTest = domainAdapter.getSystemUnderTest();
-			if (nestedSystemUnderTest != null)
-				asTypedObject(nestedSystemUnderTest).findMethodsFromPlainText(
-						textCall, results);
-		}
-
 	}
-	public Closure findMethodClosure(String name, int argCount,
-			boolean includeSut) {
-		if (subject == null)
-			return null;
-		Closure methodClosure = PlugBoard.lookupClosure.findMethodClosure(this,
-				name, argCount);
-		if (methodClosure == null && subject instanceof Evaluator) {
-			Evaluator evaluator = (Evaluator) subject;
-			Object sut = evaluator.getSystemUnderTest();
-			if (sut != null && (includeSut || sut instanceof DomainAdapter))
-				methodClosure = evaluator.getTypedSystemUnderTest()
-						.findMethodClosure(name, argCount, includeSut);
-		}
-		if (methodClosure == null && subject instanceof DomainAdapter) {
-			DomainAdapter domainAdapter = (DomainAdapter) subject;
-			Object nestedSystemUnderTest = domainAdapter.getSystemUnderTest();
-			if (nestedSystemUnderTest != null
-					&& (includeSut || nestedSystemUnderTest instanceof DomainAdapter))
-				return asTypedObject(nestedSystemUnderTest).findMethodClosure(
-						name, argCount, includeSut);
-		}
-		return methodClosure;
-	}
+	// Overridden in subclass
 	protected TypedObject asTypedObject(Object sut) {
 		return new NonGenericTypedObject(sut);
 	}
-	public Closure findPublicMethodClosureForTypedObject(String name,
-			Class<?>[] argTypes) {
-		return PlugBoard.lookupClosure.findPublicMethodClosure(this, name,
-				argTypes);
-	}
-	public Closure findMethodForTypedObject(String name, int argCount) {
-		if (subject == null)
-			return null;
-		Closure chosenMethod = PlugBoard.lookupClosure.findMethodClosure(this,
-				name, argCount);
-		if (chosenMethod == null && subject instanceof DomainAdapter) {
-			DomainAdapter domainAdapter = (DomainAdapter) subject;
-			chosenMethod = asTypedObject(domainAdapter.getSystemUnderTest())
-					.findMethodForTypedObject(name, argCount);
-		}
-		if (chosenMethod == null && subject instanceof Evaluator) {
-			Evaluator evaluator = (Evaluator) subject;
-			chosenMethod = asTypedObject(evaluator.getNextOuterContext())
-					.findMethodForTypedObject(name, argCount);
-		}
-		return chosenMethod;
+	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] argTypes) {
+		return PlugBoard.lookupClosure.findPublicMethodClosure(this, name, argTypes);
 	}
 	@Override
 	public String toString() {
@@ -218,5 +156,23 @@ public class NonGenericTypedObject implements TypedObject {
 	}
 	public Evaluator traverse(Evaluator evaluator) {
 		return getTyped().parser(evaluator).traverse(this);
+	}
+	@Override
+	public boolean equals(Object arg) {
+		if (!(arg instanceof NonGenericTypedObject))
+			return false;
+		if (subject == null)
+			return ((NonGenericTypedObject)arg).subject == null;
+		return subject.equals(((NonGenericTypedObject)arg).subject);
+	}
+	@Override
+	public int hashCode() {
+		if (subject == null)
+			return -123;
+		return subject.hashCode();
+	}
+	@Override
+	public boolean isNull() {
+		return subject == null;
 	}
 }

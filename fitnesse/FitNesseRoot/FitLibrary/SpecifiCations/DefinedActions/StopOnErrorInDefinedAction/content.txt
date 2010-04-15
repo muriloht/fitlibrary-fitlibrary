@@ -33,8 +33,8 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td class="ignore"><i>act</i></td>
-<td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
+<tr><td class="fail"><i>act</i></td>
+<td bgcolor=#DADAFF> <span class="fit_label">Defined action call <a href='FitLibrary.SpecifiCations.DefinedActions.StopOnErrorDefinedAction'>.FitLibrary.SpecifiCations.DefinedActions.StopOnErrorDefinedAction</a>:</span>
 <br/><br/>
 <table>
 <tr><td>get</td><td>1</td><td>is</td><td class="fail">2 <span class="fit_label">expected</span><hr>1 <span class="fit_label">actual</span></td></tr>

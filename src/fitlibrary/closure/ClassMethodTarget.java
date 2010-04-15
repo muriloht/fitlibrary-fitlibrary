@@ -20,7 +20,7 @@ public class ClassMethodTarget implements MethodTarget {
 		this.evaluator = evaluator;
 		this.actualType = typedObject.getClassType();
 	}
-	public void setTypedSubject(@SuppressWarnings("unused") TypedObject typedObject) {
+	public void setTypedSubject(TypedObject typedObject) {
 		//
 	}
 	public String getResult() throws Exception {

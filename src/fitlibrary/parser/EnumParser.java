@@ -6,10 +6,10 @@
 
 package fitlibrary.parser;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.runtime.RuntimeContext;
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
@@ -19,17 +19,15 @@ import fitlibraryGeneric.typed.GenericTyped;
 
 public class EnumParser implements Parser {
 	private GenericTyped typed;
-	private RuntimeContext runtime;
+	private VariableResolver resolver;
 
-	public EnumParser(GenericTyped typed, RuntimeContext runtime) {
-		if (runtime == null)
-			throw new NullPointerException("Runtime is null");
+	public EnumParser(GenericTyped typed, VariableResolver resolver) {
 		this.typed = typed;
-		this.runtime = runtime;
+		this.resolver = resolver;
 	}
 	@SuppressWarnings("unchecked")
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
-		String text = cell.text(runtime);
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
+		String text = cell.text(resolver);
 		if (text.equals(""))
 			return  typed.typedObject(null);
 		Class asClass = typed.asClass();
@@ -43,12 +41,12 @@ public class EnumParser implements Parser {
 			}
 		}
 	}
-	public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) {
 			cell.unexpected(testResults,"collection");
 			return false;
 		}
-		if (cell.text(runtime).equals(""))
+		if (cell.text(resolver).equals(""))
 			return result == null;
 		Object parsed = parseTyped(cell,testResults).getSubject();
 		return parsed.equals(result);
@@ -59,7 +57,7 @@ public class EnumParser implements Parser {
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
     		public Parser parser(Evaluator evaluator, Typed typed) {
-    			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext());
+    			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext().getResolver());
     		}
     	};
     }

@@ -10,6 +10,7 @@ import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableOnParse;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
@@ -59,15 +60,6 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	public TypedObject getTypedSystemUnderTest() {
 		return typedObjectUnderTest;
 	}
-	public void setOuterContext(Evaluator outerContext) {
-		traverse().setOuterContext(outerContext);
-	}
-	public Evaluator getNextOuterContext() {
-		return traverse().getNextOuterContext();
-	}
-	public Object getOutermostContext() {
-		return traverse().getOutermostContext();
-	}
     public final Traverse traverse() {
     	return traverse;
     }
@@ -76,7 +68,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     }
     @Override
     public void doTable(Parse parseTable) {
-    	Table table = new Table(parseTable);
+    	TableOnParse table = new TableOnParse(parseTable);
     	TestResults testResults = createTestResults();
     	try {
     		interpretAfterFirstRow(table, testResults);
@@ -84,11 +76,11 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     		table.error(testResults,e);
     	}
     }
-	public boolean doEmbeddedTablePasses(Table table, Evaluator evaluator, TestResults testResults) {
+	public boolean doEmbeddedTablePasses(TableOnParse table, Evaluator evaluator, TestResults testResults) {
 		return traverse().doesInnerTablePass(table,evaluator,testResults);
 	}
 	public TestResults createTestResults() {
-		return TestResults.create(counts);
+		return new TestResults(counts);
 	}
     public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	return traverse().interpretAfterFirstRow(table,testResults);
@@ -97,7 +89,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 		return traverse().getRuntimeContext();
 	}
     public DynamicVariables getDynamicVariables() {
-    	return getRuntimeContext().dynamicVariables();
+    	return getRuntimeContext().getDynamicVariables();
     }
 	public void setRuntimeContext(RuntimeContextInternal propertyValues) {
 		traverse().setRuntimeContext(propertyValues);
@@ -105,4 +97,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	public void setDynamicVariable(String key, Object value) {
 		traverse().setDynamicVariable(key, value);
 	}
+    public String resolve(String key) {
+    	return traverse().resolve(key);
+    }
 }

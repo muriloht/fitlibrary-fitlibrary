@@ -1,35 +1,35 @@
 package fitlibrary.definedAction;
 
 import fit.Parse;
-import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 
 public class DefinedActionBodyCollector {
 	// Warning: 'orrible code due to Parse!
-	public void parseDefinitions(Tables tables, DefineActionBodyConsumer consumer) {
-		Tables innerTables = tables;
+	public void parseDefinitions(TablesOnParse tables, DefineActionBodyConsumer consumer) {
+		TablesOnParse innerTables = tables;
 		// Process the first and last tables differently
 		// (Ignore the first & (also) handle last outside loop)
 		for (int i = 1; i < tables.size(); i++) {
-			Table table = tables.table(i);
-			Table previousTable = tables.table(i-1);
+			TableOnParse table = tables.table(i);
+			TableOnParse previousTable = tables.table(i-1);
 			if (isHR(table.parse.leader) || isHR(previousTable.parse.trailer)) {
 				table.parse.leader = "";
 				previousTable.parse.more = null;
 				previousTable.parse.trailer = "";
 				consumer.addAction(innerTables);
 				previousTable.parse.more = table.parse;
-				innerTables = new Tables(table);
+				innerTables = new TablesOnParse(table);
 			}
 		}
 		consumer.addAction(innerTables);
 	}
-	public void parseDefinitions22222(Tables tables, DefineActionBodyConsumer consumer) {
-		Tables innerTables = tables; // Assume all of the tables for now
+	public void parseDefinitions22222(TablesOnParse tables, DefineActionBodyConsumer consumer) {
+		TablesOnParse innerTables = tables; // Assume all of the tables for now
 		for (int i = 0; i < tables.size(); i++) {
-			Table nextTable = tables.table(i);
+			TableOnParse nextTable = tables.table(i);
 			if (i > 0 && isHR(nextTable.parse.leader)) {
-				Table lastTableInDefinition = tables.table(i-1);
+				TableOnParse lastTableInDefinition = tables.table(i-1);
 				Parse more = lastTableInDefinition.parse.more;
 				String trailer = lastTableInDefinition.parse.trailer;
 				lastTableInDefinition.parse.more = null;
@@ -37,7 +37,7 @@ public class DefinedActionBodyCollector {
 				consumer.addAction(innerTables);
 				lastTableInDefinition.parse.more = more;
 				lastTableInDefinition.parse.trailer = trailer;
-				innerTables = new Tables(nextTable);
+				innerTables = new TablesOnParse(nextTable);
 			} else if (isHR(nextTable.parse.trailer) || i == tables.size() - 1)
 				consumer.addAction(innerTables);
 		}
@@ -46,6 +46,6 @@ public class DefinedActionBodyCollector {
 		return s != null && (s.contains("<hr>") || s.contains("<hr/>"));
 	}
 	public interface DefineActionBodyConsumer {
-		void addAction(Tables innerTables);
+		void addAction(TablesOnParse innerTables);
 	}
 }

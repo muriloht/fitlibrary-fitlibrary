@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
-import fitlibrary.dynamicVariable.RecordDynamicVariables;
+import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
@@ -19,8 +19,6 @@ import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoTraverse.Comparison;
@@ -74,7 +72,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
     	collectCell(cell,0,cell.text(evaluator),testResults,true);
     	return invoke(args);
     }
-    public TypedObject invokeTyped(IRow row, TestResults testResults) throws Exception {
+    public TypedObject invokeTyped(Row row, TestResults testResults) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,true);
@@ -91,7 +89,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			throw new IgnoredException(); // no more to do
 		}
 	}
-    public Object invoke(IRow row, TestResults testResults, boolean catchParseError) throws Exception {
+    public Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -102,7 +100,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 		return invoke(args);
 	}
-    public Object invokeForSpecial(IRow row, TestResults testResults, boolean catchParseError, ICell operatorCell) throws Exception {
+    public Object invokeForSpecial(Row row, TestResults testResults, boolean catchParseError, Cell operatorCell) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -120,13 +118,13 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			throw e;
 		}
 	}
-    private void collectCells(IRow row, int step, TestResults testResults, boolean catchParseError) throws Exception {
+    private void collectCells(Row row, int step, TestResults testResults, boolean catchParseError) throws Exception {
 		for (int argNo = 0; argNo < args.length; argNo++) {
-			ICell cell = row.cell(argNo*step);
+			Cell cell = row.cell(argNo*step);
 			collectCell(cell, argNo,cell.text(evaluator),testResults,catchParseError);
 		}
 	}
-	private void collectCell(ICell cell, int argNo, String text, TestResults testResults, boolean catchParseError) throws Exception {
+	private void collectCell(Cell cell, int argNo, String text, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (!text.equals(repeatString))
 				args[argNo] = parameterParsers[argNo].parseTyped(cell,testResults).getSubject();
@@ -152,17 +150,18 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
         }
     }
-    public void invokeAndCheckForSpecial(IRow row, ICell expectedCell, TestResults testResults, IRow fullRow, ICell specialCell) {
+    public void invokeAndCheckForSpecial(Row row, Cell expectedCell, TestResults testResults, Row fullRow, Cell specialCell) {
         boolean exceptionExpected = exceptionIsExpected(expectedCell);
         try {
             Object result = invoke(row,testResults,true);
-			if (RecordDynamicVariables.recording() && expectedCell.unresolved(evaluator)) {
+			DynamicVariablesRecording recorder = evaluator.getRuntimeContext().getDynamicVariableRecorder();
+			if (recorder.isRecording() && expectedCell.unresolved(evaluator)) {
             	String text = expectedCell.text();
             	String key = text.substring(2,text.length()-1);
             	String resultString = result.toString();
 				if (!resultString.contains("@{"+key+"}")) { // Don't record a self-reference.
             		evaluator.setDynamicVariable(key, resultString);
-            		RecordDynamicVariables.record(key, resultString);
+            		recorder.record(key,resultString);
             	}
             	expectedCell.pass(testResults,resultString);
             	return;
@@ -184,7 +183,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
         }
     }
-	private boolean exceptionIsExpected(ICell expectedCell) {
+	private boolean exceptionIsExpected(Cell expectedCell) {
 		return exceptionString != null && exceptionString.equals(expectedCell.text(evaluator));
 	}
 	public String getResult() throws Exception {
@@ -208,7 +207,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			return false;
 		}
 	}
-	public boolean checkResult(ICell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
+	public boolean checkResult(Cell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
 		ResultParser valueParser = resultParser;
 		if (handleSubtype && closure != null)
 			valueParser = closure.specialisedResultParser(resultParser,result,evaluator);
@@ -287,14 +286,14 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			expectedCell.error(testResults,e);
 		}
 	}
-	public Object getResult(ICell expectedCell, TestResults testResults) {
+	public Object getResult(Cell expectedCell, TestResults testResults) {
 		try {
 			return resultParser.parseTyped(expectedCell,testResults).getSubject();
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	public void color(IRow row, boolean right, TestResults testResults) throws Exception {
+	public void color(Row row, boolean right, TestResults testResults) throws Exception {
 		if (!everySecond && row.cellExists(0))
 			row.cell(0).passOrFail(testResults,right);
 		else
@@ -340,5 +339,16 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
 	public boolean returnsBoolean() {
 		return getReturnType() == boolean.class;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CalledMethodTarget))
+			return false;
+		CalledMethodTarget other = (CalledMethodTarget) obj;
+		return closure == other.closure && evaluator == other.evaluator;
+	}
+	@Override
+	public int hashCode() {
+		return evaluator.hashCode();
 	}
 }

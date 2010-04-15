@@ -4,15 +4,13 @@
 */
 package fitlibrary.traverse;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
-public interface Evaluator extends RuntimeContextual {
-	Object getOutermostContext();
-	Evaluator getNextOuterContext();
-	void setOuterContext(Evaluator outerContext);
+public interface Evaluator extends RuntimeContextual, VariableResolver {
 	Object interpretAfterFirstRow(Table table, TestResults testResults);
 	TypedObject getTypedSystemUnderTest();
     RuntimeContextInternal getRuntimeContext();

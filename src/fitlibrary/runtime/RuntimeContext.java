@@ -8,11 +8,13 @@ package fitlibrary.runtime;
 import java.io.IOException;
 
 import fitlibrary.dynamicVariable.DynamicVariables;
+import fitlibrary.dynamicVariable.VariableResolver;
 
 public interface RuntimeContext {
 	Object getDynamicVariable(String key);
 	void setDynamicVariable(String key, Object value);
-	DynamicVariables dynamicVariables();
+	DynamicVariables getDynamicVariables();
 	void startLogging(String fileName);
 	void printToLog(String s) throws IOException;
+	VariableResolver getResolver();
 }

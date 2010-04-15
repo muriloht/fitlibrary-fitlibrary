@@ -5,7 +5,7 @@
 package fitlibrary;
 
 import fitlibrary.object.DomainTraverse;
-import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.utility.TestResults;
 
 public class DomainFixture extends DoFixture {
@@ -19,7 +19,7 @@ public class DomainFixture extends DoFixture {
     	setSystemUnderTest(sut);
     }
     @SuppressWarnings("unused")
-    public void checks(Row row, TestResults testResults) {
+    public void checks(RowOnParse row, TestResults testResults) {
     	domainTraverse.setCurrentCheck();
     }
 }

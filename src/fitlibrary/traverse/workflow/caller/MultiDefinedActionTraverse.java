@@ -7,12 +7,15 @@ package fitlibrary.traverse.workflow.caller;
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.table.Cell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
+import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
+import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class MultiDefinedActionTraverse extends Traverse {
@@ -30,51 +33,53 @@ public class MultiDefinedActionTraverse extends Traverse {
 		try {
 			if (table.size() < 3)
 				throw new FitLibraryException("Missing data rows in table");
-			getRuntimeContext().pushLocal();
+			getRuntimeContext().pushLocalDynamicVariables();
 			Row parameterRow = table.row(1);
 			multiParameterSubstitution.verifyParameters(parameterRow,this);
 			parameterRow.pass(testResults);
 			for (int r = 2; r < table.size(); r++) {
 				Row row = table.row(r);
-				if (testResults.isAbandoned())
+				if (runtime.isAbandoned(testResults))
 					row.ignore(testResults);
 				else
 					try {
-						Tables body = multiParameterSubstitution.getCopyOfBody();
-						TestResults subTestResults = new TestResults(testResults);
-						try {
-							CallManager.startCall(multiParameterSubstitution);
-							multiParameterSubstitution.bind(parameterRow,row,getDynamicVariables(),this);
-							runBody(body,testResults,subTestResults);
-							colourReport(row, testResults, subTestResults);
-						} finally {
-							CallManager.endCall(multiParameterSubstitution);
-						}
-						if (runtime.toExpandDefinedActions() || subTestResults.problems() || testResults.isAbandoned())
-							row.addCell(new Cell("Defined action call:",body));
-						else if (CallManager.readyToShow())
-							row.addCell(new Cell(new Tables(CallManager.getShowsTable())));
+						runRow(row, parameterRow, testResults);
 					} catch (Exception e) {
 						row.error(testResults, e);
 					}
 			}
-			getRuntimeContext().popLocal();
+			getRuntimeContext().popLocalDynamicVariables();
 		} catch (Exception e) {
 			table.error(testResults, e);
 		}
 		return null;
 	}
-	private void runBody(Tables body, TestResults testResults, TestResults subTestResults) {
+	private void runRow(Row row, Row parameterRow, TestResults testResults) {
+		Tables body = multiParameterSubstitution.getCopyOfBody();
+		TestResults subTestResults = new TestResults();
+		DefinedActionCallManager definedActionCallManager = doTraverse.getRuntimeContext().getDefinedActionCallManager();
+		try {
+			definedActionCallManager.startCall(multiParameterSubstitution);
+			multiParameterSubstitution.bind(parameterRow,row,getDynamicVariables(),this);
+			runBody(body,subTestResults);
+			colourReport(row, testResults, subTestResults);
+		} finally {
+			definedActionCallManager.endCall(multiParameterSubstitution);
+		}
+		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults))
+			row.addCell(new CellOnParse("Defined action call:",body));
+		else if (definedActionCallManager.readyToShow())
+			row.addCell(new CellOnParse(new TablesOnParse(definedActionCallManager.getShowsTable())));
+	}
+	private void runBody(Tables body, TestResults subTestResults) {
+		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
 		for (int t = 0; t < body.size(); t++) {
 			Table table = body.table(t);
-			if (testResults.isAbandoned())
-				table.ignore(subTestResults);
-			else
-				doTraverse.interpretWholeTable(table,subTestResults);
+			tableEvaluator.runTable(table, new TableListener(subTestResults));
 		}
 	}
 	private void colourReport(Row row, TestResults testResults, TestResults subTestResults) {
-		if (testResults.isAbandoned())
+		if (runtime.isAbandoned(testResults))
 			row.ignore(testResults);
 		else if (runtime.toExpandDefinedActions() || subTestResults.problems()) {
 			if (subTestResults.passed())

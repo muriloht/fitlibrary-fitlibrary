@@ -1,7 +1,5 @@
 !**< def
-!define test (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
-
-|''record to file''|pleaseThrowAnExceptionOnThisFile|
+!define test (|''record to file''|pleaseThrowAnExceptionOnThisFile|
 
 |''get''|a-value|'''is'''|@{a}|
 
@@ -10,10 +8,6 @@
 **!
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
 <tr><td><i>record to file</i></td>
 <td>pleaseThrowAnExceptionOnThisFile</td>
 </tr>

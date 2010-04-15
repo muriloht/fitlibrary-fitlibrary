@@ -4,9 +4,9 @@
 */
 package fitlibrary.parser;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.runtime.RuntimeContext;
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
@@ -19,24 +19,24 @@ import fitlibrary.utility.TestResults;
  * It may end up being inconsistent with references, but let's wait ans see.
  */
 public class ByStringParser implements Parser {
-	private RuntimeContext runtime;
+	private VariableResolver resolver;
 	
-	public ByStringParser(RuntimeContext runtime) {
-		this.runtime = runtime;
+	public ByStringParser(VariableResolver resolver) {
+		this.resolver = resolver;
 	}
 	public String show(Object actual) {
     	if (actual == null)
     		return "null";
         return actual.toString();
     }
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return Traverse.asTypedObject(parse(cell,testResults));
 	}
 	@SuppressWarnings("unused")
-   private Object parse(ICell cell, TestResults testResults) throws Exception {
-        return cell.text(runtime);
+   private Object parse(Cell cell, TestResults testResults) throws Exception {
+        return cell.text(resolver);
     }
-    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
         return equals(parse(cell,testResults),result);
     }
     private boolean equals(Object a, Object b) { // a will be a String
@@ -49,7 +49,7 @@ public class ByStringParser implements Parser {
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
 			public Parser parser(Evaluator evaluator, Typed typed) {
-				return new ByStringParser(evaluator.getRuntimeContext());
+				return new ByStringParser(evaluator.getRuntimeContext().getResolver());
 			}
     	};
     }

@@ -13,7 +13,7 @@ import fit.Fixture;
 import fitlibrary.DoFixture;
 import fitlibrary.specify.eg.MyPoint;
 import fitlibrary.table.Cell;
-import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.utility.TestResults;
 
 public class DoFixtureFlowUnderTest extends DoFixture {
@@ -30,7 +30,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 	public MyPoint copyAPoint(MyPoint point) { 
 		return point;
 	}
-	public void specialAction(Row row, TestResults testResults) {
+	public void specialAction(RowOnParse row, TestResults testResults) {
 		Cell cell = row.cell(1);
 		String text = cell.text(this);
 		if (text.equals("right"))
@@ -42,7 +42,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 		throw new RuntimeException("Ambiguity with fit.ColumnFixture");
 	}
 	@SuppressWarnings("unused")
-	public boolean Action(Row row, TestResults testResults) {
+	public boolean Action(RowOnParse row, TestResults testResults) {
 		throw new RuntimeException("Ambiguity of special action with fit.ActionFixture");
 	}
 //	@SuppressWarnings("unused")

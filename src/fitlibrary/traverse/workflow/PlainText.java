@@ -7,21 +7,25 @@ package fitlibrary.traverse.workflow;
 import java.util.ArrayList;
 import java.util.List;
 
+import fit.Fixture;
+import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
-import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
 
+// This us not being used now.
+// But keep it in case we reintroduce plain text for fixture methods too.
 public class PlainText {
-	private final Row row;
+	private final RowOnParse row;
 	private final TestResults testResults;
 	private final DoTraverse doTraverse;
 	private String prefixAction = "";
 	private String infixAction = "";
 	private String infixPart = "";
 
-	public PlainText(Row row, TestResults testResults, DoTraverse doTraverse) {
+	public PlainText(RowOnParse row, TestResults testResults, DoTraverse doTraverse) {
 		this.row = row;
 		this.testResults = testResults;
 		this.doTraverse = doTraverse;
@@ -46,7 +50,7 @@ public class PlainText {
 			error("Ambiguous action (see details in logs after table)");
 			doTraverse.showAfterTable("Possible action tables:<br/>");
 			for (ValidCall call: results)
-				call.possibility(doTraverse);
+				call.possibility(doTraverse.getRuntimeContext().getGlobal());
 			return;
 		}
 		row.removeAllCells();
@@ -59,14 +63,14 @@ public class PlainText {
 			row.addCell("<b>"+infixAction+"</b>");
 			row.addCell(infixPart);
 		}
-		doTraverse.interpretRow(row,testResults,null);
+		doTraverse.interpretRow(row,testResults,(Fixture)null);
 	}
 	private void findDefinedActionCallsFromPlainText(String textCall, List<ValidCall> results) {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().findPlainTextCall(textCall, results);
 		
 	}
 	private void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
-		doTraverse.switchSetUp().findMethodsFromPlainText(textCall,results);
+		PlugBoard.lookupTarget.findMethodsFromPlainText(textCall,results,doTraverse.getRuntimeContext().getScope());
 	}
 	private void error(String message) {
 		row.cell(0).error(testResults, message);

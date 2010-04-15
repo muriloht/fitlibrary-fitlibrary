@@ -6,11 +6,14 @@
 
 |!3 ^UserGuide|''User guide for FitLibrary''|
 |!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
+|!3 ^ReferenCe|''Reference for FitLibrary''|
+
+|!3 ^WhatIsNew|''What's new in this release.''|
+
 |!3 ^SuiteFixture|''Details of suite fixtures''|
 |!3 ^SpecifiCations.CoreFitSpecifications|''Storytests that specify the core parts of Fit''|
 |!3 ^FitBook|''Example storytests from the [[Fit Book][.FitLibrary.GlosSary.FitBook]]''|
 |!3 ^RentEz|''An extended example of storytests for an application. These build on the example in the [[Fit Book][.FitLibrary.GlosSary.FitBook]].''|
-|!3 ^WhatIsNew|''What's new in this release.''|
 |!3 ^GlosSary|''Glossary of terms used in FitLibrary''|
 |!3 ^CrossReference|''A way of getting cross reference information about actions used by storytest''|
 !c !img http://files/images/fitBookCover.jpeg

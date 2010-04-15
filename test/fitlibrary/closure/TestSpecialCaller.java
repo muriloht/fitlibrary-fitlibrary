@@ -14,7 +14,7 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.table.IRow;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
@@ -25,7 +25,7 @@ public class TestSpecialCaller {
 	Mockery context = new Mockery();
 	Evaluator evaluator = context.mock(Evaluator.class);
 	LookupMethodTarget lookupMethodTarget  = context.mock(LookupMethodTarget.class);
-	IRow row = context.mock(IRow.class);
+	Row row = context.mock(Row.class);
 	TwoStageSpecial lazySpecial = context.mock(TwoStageSpecial.class);
 	ICalledMethodTarget specialMethod = context.mock(ICalledMethodTarget.class);
 	TestResults testResults = new TestResults();

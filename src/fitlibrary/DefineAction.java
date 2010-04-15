@@ -10,6 +10,9 @@ import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.utility.TestResults;
@@ -54,7 +57,7 @@ public class DefineAction extends Traverse {
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain nested tables.");
     	if (hasClass)
     		wikiClassName = table.row(1).text(0,this);
-    	processDefinition(table.row(1).cell(0).innerTables(), testResults);
+    	processDefinition(table.row(1).cell(0).getEmbeddedTables(), testResults);
     	return null;
 	}
     public String getPageName() {
@@ -71,10 +74,10 @@ public class DefineAction extends Traverse {
 			error("Unexpected rows in first table of defined action",parametersRow);
 		parametersRow.passKeywords(testResults);
 		Tables body = tables.followingTables();
-		if (body.parse == null) {
-			Row row = new Row();
+		if (body.parse() == null) {
+			RowOnParse row = new RowOnParse();
 			row.addCell("comment");
-			body = new Tables(new Table(row));
+			body = new TablesOnParse(new TableOnParse(row));
 		}
 		
 		List<String> formalParameters = getDefinedActionParameters(parametersRow);

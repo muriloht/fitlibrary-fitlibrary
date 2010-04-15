@@ -9,6 +9,8 @@
 |''name''|''full address''|
 |adam|paradise|
 |eve|paradise|
+
+|should be ignored|
 )
 
 *!
@@ -33,8 +35,8 @@
 <tr class="pass"><td><i>name</i></td>
 <td><i>full address</i></td>
 </tr>
-<tr><td class="ignore">adam</td>
-<td class="ignore">paradise</td>
+<tr><td class="fail">adam</td>
+<td class="fail">paradise</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
 <table>
@@ -47,5 +49,9 @@
 <br/></html></td></tr>
 <tr><td class="ignore">eve</td>
 <td class="ignore">paradise</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td class="ignore">should be ignored</td>
 </tr>
 </table>-!|

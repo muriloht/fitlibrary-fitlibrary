@@ -10,6 +10,7 @@ import java.util.Set;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;

@@ -5,14 +5,29 @@
 
 package fitlibrary.parser;
 
-import fitlibrary.DoFixture;
-import fitlibrary.runtime.RuntimeContextImplementation;
 import junit.framework.TestCase;
+import fitlibrary.DoFixture;
+import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.ScopeStack;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.traverse.workflow.DoTraverse;
+import fitlibrary.traverse.workflow.FlowEvaluator;
+import fitlibrary.typed.TypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public abstract class ParserTestCase extends TestCase {
+	static GlobalScope global = new GlobalScope();
+	static TypedObject globalTO = new GenericTypedObject(global);
+	
 	public static DoFixture evaluatorWithRuntime() {
-		DoFixture evaluator = new DoFixture();
-		evaluator.setRuntimeContext(new RuntimeContextImplementation());
+		return evaluatorWithRuntime(new DoFixture());
+	}
+	public static DoFixture evaluatorWithRuntime(DoFixture evaluator) {
+		evaluator.setRuntimeContext(new RuntimeContextContainer(new ScopeStack((FlowEvaluator)evaluator.traverse(),globalTO),global));
+		return evaluator;
+	}
+	public static DoTraverse evaluatorWithRuntime(DoTraverse evaluator) {
+		evaluator.setRuntimeContext(new RuntimeContextContainer(new ScopeStack(evaluator,globalTO),global));
 		return evaluator;
 	}
 }

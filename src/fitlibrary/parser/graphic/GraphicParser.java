@@ -8,7 +8,7 @@ import fitlibrary.differences.LocalFile;
 import fitlibrary.parser.HtmlStructureParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
@@ -49,7 +49,7 @@ public class GraphicParser extends HtmlStructureParser {
     	return Traverse.getLocalFile(fileName);
     }
     @Override
-	public Object parse(ICell cell, TestResults testResults) throws Exception {
+	public Object parse(Cell cell, TestResults testResults) throws Exception {
         return parse(cell.fullText());
     }
     public static ParserFactory parserFactory() {

@@ -65,7 +65,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
             Cell cell = firstRow.cell(i);
             if (!DomainObjectSetUpTraverse.givesClass(cell,this)) {
                 try {
-                	targets[i] = PlugBoard.lookupTarget.findSetter(cell.text(getRuntimeContext()), this);
+                	targets[i] = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
                 } catch (Exception e) {
                     row.cell(i).error(testResults,e);
                 }

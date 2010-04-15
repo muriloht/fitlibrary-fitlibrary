@@ -18,7 +18,7 @@ import fit.Counts;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 
 public class HtmlRunner {
@@ -48,7 +48,7 @@ public class HtmlRunner {
         try {
             Parse tables = new Parse(fileContents);
             Parse whole = integrateSetUpAndTearDown(tables, setUp, tearDown);
-            Counts counts = batchFitLibrary.doStorytest(new Tables(whole)).getCounts();
+            Counts counts = batchFitLibrary.doStorytest(new TablesOnParse(whole)).getCounts();
             whole.print(output);
             return counts;
         } catch (FitParseException e) {

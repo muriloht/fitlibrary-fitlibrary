@@ -4,25 +4,29 @@
 
 |^ReadingSpecifications|''The format of the storytests/specifications''|
 
-||!3 ''Storytests for specifying:''|
-|^DomainWorkflow|''As with ^DoWorkflow, but with support for three phases of ${workflow}'': ${setup}, ${actions} and ${checks}|
+!3 ''Storytests for specifying:''
+
 |^DoWorkflow|''A sequence of actions on a system, starting in some state (!-DoFixture-!)''|
-|^AutoWrapWithDo|''A nopn-fixture object created in the first table with be auto-wrapped with !-DoFixture-!''|
+|^AutoWrapWithDo|''A non-fixture object created in the first table with be auto-wrapped with !-DoFixture-!''|
+|>MultipleFlowObjects|''More than one flow object can be current at once.''|
+|^GoingIntoFlow|''Using !-FitLibraryServer-!, it's not necessary for the first table to have a !-DoFixture-! table in order to be in flow''|
+|[[!-ShowAfter-!][>DoWorkflow.SpecialActions.TestShowAfter]]|''Logging useful information after the current table''|
+|^PlainTextInsteadOfTables|''Flow actions can be written in plain text, instead of in tables''|
+
 |^CollectionSpecifications|''Various collections of elements, such as lists, sets, maps, arrays, etc (both checking and setup)''|
 |^BusinessRules|''Calculation rules, constraints, and combinations''|
 |^DomainObject|''The property values of ${domainObject}s (both checking and setup)''|
 |^DomainAggregate|''The aggregate structure of ${domainObject}s''|
+
+|^DomainWorkflow|''As with ^DoWorkflow, but with support for three phases of ${workflow}'': ${setup}, ${actions} and ${checks}|
 |^SpecialisedTables|''Grids of values, images, HTML lists, file comparisons, etc''|
 |>FileHandler|''Provides a way to read and write files in a storytest''|
 
 |^SuiteFixture|''How the same suite of storytests can be used to test a system in very different ways''|
+
 |^DynamicVariables|''How variables can be used in storytests at runtime''|
 |^DefinedActions|''Parameterised actions can be defined within storytests''|
 |^DefinedActionsWithNamedParameters|''(Multi Defined Actions) Parameterised actions with optional named parameters''|
-|>SelectFixture|''Switches between several named do fixtures''|
-|^GoingIntoFlow|''Using !-FitLibraryServer-!, it's not necessary for the first table to have a !-DoFixture-! table in order to be in flow''|
-|[[!-ShowAfter-!][>DoWorkflow.SpecialActions.TestShowAfter]]|''Logging useful information after the current table''|
-|^PlainTextInsteadOfTables|''${doFixture} actions can be written in plain text, instead of in tables''|
 
 |^ParserSpecifications|''How values are parsed from strings and embedded tables into valus and objects''|
 |^FitLibraryGeneric|''Support for Java generics and enums''|

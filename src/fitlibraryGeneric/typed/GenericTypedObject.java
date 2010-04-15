@@ -19,7 +19,8 @@ import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 
 public class GenericTypedObject extends NonGenericTypedObject {
-	private GenericTyped typed;
+	public final static GenericTypedObject NULL = new GenericTypedObject(null);
+	private final GenericTyped typed;
 
 	public GenericTypedObject(Object subject, GenericTyped typed) {
 		super(subject);
@@ -92,4 +93,5 @@ public class GenericTypedObject extends NonGenericTypedObject {
 	private String describe(Field field) {
 		return "in "+field.getName();
 	}
+
 }

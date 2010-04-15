@@ -9,9 +9,12 @@ import java.util.List;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Cell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
 
@@ -23,10 +26,10 @@ public class UseTemplateTraverse extends Traverse {
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		Tables tables = table.getTables();
+		TablesOnParse tables = table.getTables();
 		for (int t = 0; t < tables.size(); t++) {
-			Table defTable = tables.table(t);
-			Row firstRow = defTable.row(0);
+			TableOnParse defTable = tables.table(t);
+			RowOnParse firstRow = defTable.row(0);
 			if (firstRow.size() == 2 && firstRow.text(0,this).equals("template") && firstRow.text(1,this).equals(templateName)) {
 				interpret(defTable, table, testResults);
 				return null;
@@ -49,11 +52,11 @@ public class UseTemplateTraverse extends Traverse {
 					parameters.add(row.text(c,this));
 			}
 			TestResults results = new TestResults();
-			Tables resultingTables = defineTemplateTraverse.call(parameters,results);
+			TablesOnParse resultingTables = defineTemplateTraverse.call(parameters,results);
 			if (results.passed())
 				row.pass(testResults);
 			else {
-				Row argsRow = appendTableToReport(callingTable, actualParameterNames, errors, parameters, resultingTables);
+				RowOnParse argsRow = appendTableToReport(callingTable, actualParameterNames, errors, parameters, resultingTables);
 				passOnColourings(testResults, row, argsRow, results);
 				errors++;
 			}
@@ -63,27 +66,27 @@ public class UseTemplateTraverse extends Traverse {
 	protected DefinedActionTraverse createDefinedActionTraverse(Table definingTable, int parameterCount) {
 		return new DefinedActionTraverse(definingTable,parameterCount);
 	}
-	private Row appendTableToReport(Table callingTable, Row actualParameterNames, int errors, List<Object> parameters, Tables resultingTables) {
-		Table commentTable = new Table();
+	private RowOnParse appendTableToReport(Table callingTable, Row actualParameterNames, int errors, List<Object> parameters, TablesOnParse resultingTables) {
+		Table commentTable = new TableOnParse();
 		commentTable.newRow().addCell("comment");
-		Table paramsTable = new Table();
-		Row templateRow = paramsTable.newRow();
+		TableOnParse paramsTable = new TableOnParse();
+		RowOnParse templateRow = paramsTable.newRow();
 		templateRow.addCell("use template");
 		templateRow.addCell(templateName);
-		Row paramsRow = paramsTable.newRow();
+		RowOnParse paramsRow = paramsTable.newRow();
 		for (int c = 0; c < actualParameterNames.size(); c++)
-			paramsRow.addCell(new Cell(actualParameterNames.text(c,this)));
-		Row argsRow = paramsTable.newRow();
+			paramsRow.addCell(new CellOnParse(actualParameterNames.text(c,this)));
+		RowOnParse argsRow = paramsTable.newRow();
 		for (Object paramValue: parameters) {
-			if (paramValue instanceof Table) {
+			if (paramValue instanceof TableOnParse) {
 				Cell newCell = argsRow.addCell();
-				newCell.setInnerTables(new Tables((Table) paramValue));
+				newCell.setInnerTables(new TablesOnParse((TableOnParse) paramValue));
 			} else
 				argsRow.addCell((String) paramValue);
 		}
 		paramsTable.evenUpRows();
-		commentTable.newRow().addCell(new Cell(paramsTable));
-		commentTable.newRow().addCell(new Cell(resultingTables));
+		commentTable.newRow().addCell(new CellOnParse(paramsTable));
+		commentTable.newRow().addCell(new CellOnParse(resultingTables));
 		callingTable.insertTable(errors,commentTable);
 		return argsRow;
 	}

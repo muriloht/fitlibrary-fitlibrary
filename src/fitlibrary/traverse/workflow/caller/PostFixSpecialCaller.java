@@ -6,7 +6,6 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -44,7 +43,7 @@ public class PostFixSpecialCaller extends DoCaller {
 		return specialMethod != null && !isProblem();
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		return new GenericTypedObject(specialMethod.invoke(new Object[] { testResults, row }));
 	}
 	@Override

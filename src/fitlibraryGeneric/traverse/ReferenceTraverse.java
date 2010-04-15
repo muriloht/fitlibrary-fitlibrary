@@ -15,8 +15,9 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
-import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
 
@@ -43,7 +44,7 @@ public class ReferenceTraverse extends Traverse {
 		table.error(results, new FitFailureException("Not expected"));
 		return null;
 	}
-    public static boolean applicable(Table table) {
+    public static boolean applicable(TableOnParse table) {
         if (table.size() == 1)
             return isUses(table.row(0).cell(0).text());
         return false;
@@ -51,15 +52,15 @@ public class ReferenceTraverse extends Traverse {
     private static boolean isUses(String text) {
         return text.toLowerCase().equals("use");
     }
-    public Object interpretReference(Table table, TestResults testResults) throws Exception {
+    public Object interpretReference(TableOnParse table, TestResults testResults) throws Exception {
         return getObject(table.row(0),1,getSystemUnderTest(),testResults);
     }
-    private Object getObject(Row row, int cellNo, Object initialObject, TestResults testResults) {
+    private Object getObject(RowOnParse row, int cellNo, Object initialObject, TestResults testResults) {
     	Object object = initialObject;
         boolean last = false;
         if (row.cellExists(cellNo+1)) {
             Cell nextCell = row.cell(cellNo+1);
-			if (!nextCell.matchesText("of",this) && !nextCell.matchesText("in",this)) {
+            if (!nextCell.matchesText("of",this) && !nextCell.matchesText("in",this)) {
                 nextCell.fail(testResults,"'of' or 'in' expected",this);
                 throw new IgnoredException();
             }

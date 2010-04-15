@@ -10,7 +10,7 @@ import fit.FixtureListener;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
@@ -30,7 +30,7 @@ public class RunDirectly {
 		String html = html(wiki);
 		Parse parse = new Parse(html);
 		System.out.println("\n----------\nHTML\n----------\n"+html);
-		Tables tables = new Tables(parse);
+		TablesOnParse tables = new TablesOnParse(parse);
 		FitServerBridge.setFitNesseUrl(""); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);
 		System.out.println("\n----------\nHTML Report\n----------\n"+ParseUtility.toString(parse));

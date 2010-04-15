@@ -13,8 +13,8 @@ import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
 public interface FlowEvaluator extends DoEvaluator {
-	TypedObject interpretRow(Row row, TestResults testResults, Fixture fixtureByName);
+	TypedObject interpretRow(Row row, TestResults testResults);
 	Fixture fixtureOrDoTraverseByName(Table table, TestResults testResults);
 	FitHandler fitHandler();
-	void setSystemUnderTest(Object sut);
+	void setTypedSystemUnderTest(TypedObject typedResult);
 }

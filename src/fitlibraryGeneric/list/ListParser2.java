@@ -54,7 +54,7 @@ public class ListParser2 extends ListParser {
     		if (CollectionSetUpTraverse.hasObjectFactoryMethodFor(table,evaluator))
     			return super.parseTable(table,testResults);
     		ListSetUpTraverse2 setUp = new ListSetUpTraverse2(componentTyped.asClass());
-    		setUp.interpretWithinContext(table,evaluator,testResults);
+    		setUp.interpretWithinScope(table,evaluator,testResults);
     		return setUp.getResults();
     	case PARAMETERIZED_TYPE:
     		return parseNested(table, testResults);
@@ -64,7 +64,7 @@ public class ListParser2 extends ListParser {
     }
 	private List<Object> parseNested(Table table, TestResults testResults) {
 		NestingListSetUpTraverse nestedSetUp = new NestingListSetUpTraverse(componentTyped);
-		nestedSetUp.interpretWithinContext(table,evaluator,testResults);
+		nestedSetUp.interpretWithinScope(table,evaluator,testResults);
 		return nestedSetUp.getResults();
 	}
     @SuppressWarnings({"fallthrough", "unchecked"})
@@ -84,8 +84,7 @@ public class ListParser2 extends ListParser {
 				Object arrayResult = Array.newInstance(componentTyped.asClass(), listResult.size());
     			for (int i = 0; i < listResult.size(); i++)
     				Array.set(arrayResult,i,listResult.get(i));
-				ArrayTraverse arrayTraverse = new ArrayTraverse(new GenericTypedObject(arrayResult, new GenericTyped(arrayResult.getClass())),
-						evaluator.getRuntimeContext());
+				ArrayTraverse arrayTraverse = new ArrayTraverse(new GenericTypedObject(arrayResult, new GenericTyped(arrayResult.getClass())));
     			return arrayTraverse.doesInnerTablePass(table,evaluator,testResults);
     		}
     		if (result.getClass().isArray())

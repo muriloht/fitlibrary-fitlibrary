@@ -8,7 +8,7 @@
 
 |''submit''|//form|
 
-|'''show after'''|get|Logged in USER with password "PASSWORD"|
+|''show after as''|login|get|Logged in USER with password "PASSWORD"|
 ----
 |''login2''|USER|''with''|PASSWORD|
 

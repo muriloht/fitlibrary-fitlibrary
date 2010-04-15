@@ -16,8 +16,8 @@ import fitlibrary.exception.NotRejectedException;
 import fitlibrary.exception.parse.ParseException;
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.table.ICell;
-import fitlibrary.table.IRow;
+import fitlibrary.table.Cell;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.TestResults;
@@ -33,11 +33,11 @@ public class PrefixSpecialAction {
 	public PrefixSpecialAction(SpecialActionContext actionContext) {
 		this.actionContext = actionContext;
 	}
-	public TwoStageSpecial check(final IRow row) throws Exception {
+	public TwoStageSpecial check(final Row row) throws Exception {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,1);
-		final ICell expectedCell = row.last();
+		final Cell expectedCell = row.last();
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
@@ -45,16 +45,16 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	public TwoStageSpecial show(final IRow row) throws Exception {
+	public TwoStageSpecial show(final Row row) throws Exception {
 		return show(row,PrefixSpecialAction.ShowSyle.ORDINARY);
 	}
-	public TwoStageSpecial showEscaped(final IRow row) throws Exception {
+	public TwoStageSpecial showEscaped(final Row row) throws Exception {
 		return show(row,PrefixSpecialAction.ShowSyle.ESCAPED);
 	}
-	public TwoStageSpecial log(final IRow row) throws Exception {
+	public TwoStageSpecial log(final Row row) throws Exception {
 		return show(row,PrefixSpecialAction.ShowSyle.LOGGED);
 	}
-	private TwoStageSpecial show(final IRow row, final ShowSyle showStyle) throws Exception {
+	private TwoStageSpecial show(final Row row, final ShowSyle showStyle) throws Exception {
 		if (row.size() <= 1)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
@@ -83,8 +83,9 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	public TwoStageSpecial showAfter(final IRow row) throws Exception {
-		if (row.size() <= 1)
+	// |show after|...action|
+	public TwoStageSpecial showAfter(final Row row) throws Exception {
+		if (row.size() < 2)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
@@ -99,14 +100,31 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	public TwoStageSpecial ensure(final IRow row) throws Exception {
+	// |show after as|folding title|...action|
+	public TwoStageSpecial showAfterAs(final Row row) throws Exception {
+		if (row.size() < 3)
+			throw new MissingCellsException("Do");
+		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,2,0);
+		return new TwoStageSpecial() {
+			@Override
+			public void run(TestResults testResults) {
+				try {
+					Object result = target.invokeForSpecial(row.rowFrom(3),testResults,true,row.cell(0));
+					actionContext.showAsAfterTable(row.text(1,actionContext),target.getResultString(result));
+				} catch (Exception e) {
+					// No result, so ignore it
+				}
+			}
+		};
+	}
+	public TwoStageSpecial ensure(final Row row) throws Exception {
 		if (row.size() <= 1)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				ICell firstCell = row.cell(0);
+				Cell firstCell = row.cell(0);
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,true,firstCell);
 				    Boolean resultBoolean = result == null ? Boolean.TRUE : (Boolean) result;
@@ -122,14 +140,14 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	public TwoStageSpecial not(final IRow row, final NotSyle notStyle) throws Exception {
+	public TwoStageSpecial not(final Row row, final NotSyle notStyle) throws Exception {
 		if (row.size() <= 1)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				ICell notCell = row.cell(0);
+				Cell notCell = row.cell(0);
 				try {
 					Object result = target.invokeForSpecial(row.rowFrom(2),testResults,false,row.cell(0));
 				    if (!(result instanceof Boolean))
@@ -166,7 +184,7 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	private Option<ICalledMethodTarget> getTarget(final IRow row) throws Exception {
+	private Option<ICalledMethodTarget> getTarget(final Row row) throws Exception {
 		if (row.text(2,actionContext).equals("=")) {
 			if (row.size() < 4)
 				throw new MissingCellsException("Do");
@@ -176,7 +194,7 @@ public class PrefixSpecialAction {
 		}
 		return new Some<ICalledMethodTarget>(actionContext.findMethodFromRow(row,2,0));
 	}
-	public TwoStageSpecial set(final IRow row) throws Exception {
+	public TwoStageSpecial set(final Row row) throws Exception {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);
@@ -198,7 +216,7 @@ public class PrefixSpecialAction {
 			}
 		};
 	}
-	public TwoStageSpecial setSymbolNamed(final IRow row) throws Exception {
+	public TwoStageSpecial setSymbolNamed(final Row row) throws Exception {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);

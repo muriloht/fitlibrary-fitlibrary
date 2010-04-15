@@ -9,26 +9,25 @@ import fit.FixtureListener;
 import fit.Parse;
 import fitlibrary.table.Table;
 
-public class TableListener {
+public class TableListener implements ITableListener {
 	private FixtureListener listener;
 	private TestResults testResults;
 
 	public TableListener() {
-		this(new EmptyFixtureListener(),TestResults.create(new Counts()));
+		this(new EmptyFixtureListener(),new TestResults(new Counts()));
 	}
 	public TableListener(TestResults testResults) {
 		this(new EmptyFixtureListener(),testResults);
 	}
 	public TableListener(FixtureListener listener) {
-		this(listener,TestResults.create(new Counts()));
+		this(listener,new TestResults(new Counts()));
 	}
 	public TableListener(FixtureListener listener, TestResults testResults) {
 		this.listener = listener;
 		this.testResults = testResults;
 	}
 	public void tableFinished(Table table) {
-		testResults.addAccumulatedFoldingText(table);
-		listener.tableFinished(table.parse);
+		listener.tableFinished(table.parse());
 	}
 	public FixtureListener getListener() {
 		return listener;

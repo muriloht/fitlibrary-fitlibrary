@@ -5,3 +5,11 @@
 |address is at|NAME|
 
 |get|@{place.address}|'''is'''|NAME|
+----
+|address is|NAME|in|COUNTRY|
+
+|get|@{place.address}|'''is'''|NAME|
+----
+|address is|NAME|in|COUNTRY|in|YEAR|
+
+|get|@{place.address}|'''is'''|NAME|

@@ -8,12 +8,11 @@ import java.util.List;
 
 import fit.Fixture;
 import fit.Parse;
-import fitlibrary.suite.InFlowPageRunner;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
-import fitlibrary.utility.TableListener;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
 /** An alternative to fit.ActionFixture
@@ -39,8 +38,8 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     // Dispatched to from Fixture when a DoFixture is the first fixture in a storytest
     @Override
 	final public void interpretTables(Parse tables) {
-    	TestResults testResults = createTestResults();
-		new InFlowPageRunner(this,testResults).run(new Tables(tables),0,new TableListener(listener,testResults));
+    	new TablesOnParse(tables).table(0).error(createTestResults(),
+    			new RuntimeException("Please use FitLibraryServer instead of FitServer."));
     }
     // Dispatched to from Fixture when Fixture is doTabling the tables one by one (not in flow)
 	@Override
@@ -52,13 +51,16 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	 * as there's been a problem
 	 */
 	public void setStopOnError(boolean stopOnError) {
-		TestResults.setStopOnError(stopOnError);
+		doTraverse.setStopOnError(stopOnError);
 	}
 	protected void abandon() {
-		TestResults.setAbandoned();
+		doTraverse.abandonStorytest();
 	}
 	protected void showAfterTable(String s) {
 		doTraverse.showAfterTable(s);
+	}
+	public void showAsAfterTable(String title,String s) {
+		doTraverse.showAsAfterTable(title,s);
 	}
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
@@ -69,7 +71,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	public Object interpretInFlow(Table firstTable, TestResults testResults) {
 		return doTraverse.interpretInFlow(firstTable,testResults);
 	}
-	final public Object interpretWholeTable(Table table, TableListener tableListener) {
+	final public Object interpretWholeTable(Table table, ITableListener tableListener) {
 		return doTraverse.interpretWholeTable(table,tableListener);
 	}
 	// --------- Interpretation ---------------------------------------

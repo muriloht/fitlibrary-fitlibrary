@@ -6,13 +6,14 @@
 package fitlibrary.traverse.workflow.special;
 
 import fitlibrary.closure.ICalledMethodTarget;
-import fitlibrary.table.IRow;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 
 public interface SpecialActionContext extends Evaluator {
-	ICalledMethodTarget findMethodFromRow(IRow row, int start, int extrasCellsOnEnd) throws Exception ;
+	ICalledMethodTarget findMethodFromRow(Row row, int start, int extrasCellsOnEnd) throws Exception ;
 	void showAfterTable(String s);
 	void setFitVariable(String variableName, Object result);
-	void show(IRow row, String text);
+	void show(Row row, String text);
 	void logMessage(String text);
+	void showAsAfterTable(String title, String s);
 }

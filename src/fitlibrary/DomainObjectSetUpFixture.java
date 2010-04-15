@@ -8,8 +8,8 @@ import fitlibrary.object.DomainObjectSetUpTraverse;
 
 public class DomainObjectSetUpFixture extends FitLibraryFixture {
     public DomainObjectSetUpFixture(Object sut) {
+    	setSystemUnderTest(sut);
         DomainObjectSetUpTraverse domainObjectSetUpTraverse = new DomainObjectSetUpTraverse(this);
 		setTraverse(domainObjectSetUpTraverse);
-        setSystemUnderTest(sut);
     }
 }

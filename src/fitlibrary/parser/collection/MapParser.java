@@ -14,7 +14,7 @@ import fitlibrary.exception.parse.InvalidMapString;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
@@ -47,21 +47,21 @@ public class MapParser implements Parser {
 		parser = Traverse.asTyped(String.class).resultParser(evaluator);
 		showParser = Traverse.asTyped(Object.class).resultParser(evaluator);
 	}
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	private Object parse(ICell cell, TestResults testResults) throws Exception {
+	private Object parse(Cell cell, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
 	}
 	protected Object parseTable(Table table, TestResults testResults) {
 		MapSetUpTraverse setUp = new MapSetUpTraverse(keyTyped,valueTyped,evaluator.getRuntimeContext());
-		setUp.interpretInnerTable(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
 		return setUp.getResults();
 	}
 	@SuppressWarnings("unchecked")
-	public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
 			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
 		Map<Object,Object> map = (Map<Object,Object>) result;
@@ -81,8 +81,8 @@ public class MapParser implements Parser {
 			String[] split = mapString.split("->");
 			if (split.length != 2)
 				throw new InvalidMapString(mapString);
-			map.put(parser.parseTyped(new Cell(split[0]),testResults).getSubject(),
-					parser.parseTyped(new Cell(split[1]),testResults).getSubject());
+			map.put(parser.parseTyped(new CellOnParse(split[0]),testResults).getSubject(),
+					parser.parseTyped(new CellOnParse(split[1]),testResults).getSubject());
 		}
 		return map;
 	}

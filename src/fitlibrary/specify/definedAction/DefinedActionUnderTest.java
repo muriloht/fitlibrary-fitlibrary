@@ -1,8 +1,7 @@
 package fitlibrary.specify.definedAction;
 
-import fitlibrary.DoFixture;
 
-public class DefinedActionUnderTest extends DoFixture {
+public class DefinedActionUnderTest {
 	public boolean withEnterText(String location, String s) {
 		return !(location.indexOf("password") >= 0 && !s.equals(""));
 	}

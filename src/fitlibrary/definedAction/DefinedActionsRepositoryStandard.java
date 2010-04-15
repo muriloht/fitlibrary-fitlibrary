@@ -50,7 +50,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 			if (macroSubstitution != null)
 				return macroSubstitution;
 		}
-		String superClass = variables.dynamicVariables().getAsString(
+		String superClass = variables.getDynamicVariables().getAsString(
 				(className + ".super"));
 		if (superClass != null && !"".equals(superClass))
 			return TemporaryPlugBoardForRuntime
@@ -95,8 +95,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	protected void defineCamel(Row parametersRow, String wikiClassName,
 			ParameterSubstitution parameterSubstitution, Evaluator evaluator, String absoluteFileName) {
 		String name = parametersRow.methodNameForCamel(evaluator);
-		DefinedAction definedAction = new DefinedAction(name, parametersRow
-				.argumentCount());
+		DefinedAction definedAction = new DefinedAction(name, parametersRow.argumentCount());
 		Map<DefinedAction, ParameterSubstitution> map = getClassMapForCamel(wikiClassName);
 		if (map.get(definedAction) != null)
 			throw new FitLibraryException("Duplicate defined action: " + name

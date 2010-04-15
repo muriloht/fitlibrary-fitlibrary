@@ -16,17 +16,14 @@ import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
+import fitlibrary.utility.option.Option;
 
 public interface TypedObject {
 	public Object getSubject();
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] args);
-	public Closure findMethodForTypedObject(String name, int argCount);
 	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name, int argCount, Evaluator evaluator, boolean includeSut);
-	public CalledMethodTarget optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
-	public CalledMethodTarget findGetterOnTypedObject(String propertyName, Evaluator evaluator);
-	public CalledMethodTarget findSpecificMethodOrPropertyGetter(String name, int argCount, Evaluator evaluator, List<String> signatures) throws Exception;
+	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
 	public Class<?> getClassType();
-	public Closure findMethodClosure(String name, int argCount, boolean includeSut);
 	public Parser[] parameterParsers(Evaluator evaluator, Method method);
 	public ResultParser resultParser(Evaluator evaluator, Method method);
 	public ResultParser resultParser(Evaluator evaluator, Field field);
@@ -37,4 +34,8 @@ public interface TypedObject {
 	public Evaluator traverse(Evaluator evaluator);
 	public Typed getTyped();
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results);
+	
+	Option<CalledMethodTarget> new_findSpecificMethod(String methodName,
+			int argCount, Evaluator evaluator);
+	public boolean isNull();
 }

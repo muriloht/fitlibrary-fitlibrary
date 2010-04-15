@@ -8,33 +8,28 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import fit.Fixture;
 import fitlibrary.DefineAction;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
-import fitlibrary.dynamicVariable.RecordDynamicVariables;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.MissingCellsException;
+import fitlibrary.flow.GlobalScope;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.graphic.ObjectDotGraphic;
 import fitlibrary.table.Cell;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.FitHandler;
-import fitlibrary.traverse.CommentTraverse;
 import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
-import fitlibrary.traverse.workflow.caller.CallManager;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.traverse.workflow.special.PrefixSpecialAction;
@@ -43,61 +38,22 @@ import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.FileHandler;
 import fitlibrary.utility.TestResults;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext, FlowEvaluator{
 	private final PrefixSpecialAction prefixSpecialAction = new PrefixSpecialAction(this);
-	private static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
 	// Methods that can be called within DoTraverse.
 	// Each element is of the form "methodName/argCount"
 	private final static String[] methodsThatAreVisibleAsActions = {
 		"calculate/0", "start/1", "constraint/0", "failingConstraint/0",
-		"useTemplate/1", "template/1", "abandonStorytest/0", "setStopOnError/1",
-		"becomesTimeout/0", "becomesTimeout/1", "getTimeout/1",
-		"comment/0", "ignore/0", "ignored/0", "ignoreTable/0",
-		"clearDynamicVariables/0", "addDynamicVariablesFromFile/1", "recordToFile/1",
-		"setVariables/0", "to/1", "get/1", "getDynamicVariables/0", 
-		"getSymbolNamed/1", "setSymbolNamed/1",
-		"setExpandDefinedActions/1", // defined in superclass
-		"selectRandomly/1",
-		"defineAction/0", "defineAction/1", "defineActionsAt/1",
-		"defineActionsAtFrom/2",
-		"defineActionsSlowlyAt/1", "clearDefinedActions/0", 
-		"startLogging/1", "logMessage/1", "showAfterTable/1",
-		"addDynamicVariablesFromUnicodeFile/1", "file/1",
-		"xref/1", "harvestUsingPatternFrom/3",
-		"setSystemPropertyTo/2",
-		"startStopWatch/0", "stopWatch/0", "sleepFor/1",
-		"autoWrapPojoWithDoFixture/0"
-	};
-	public void autoWrapPojoWithDoFixture() {
-		//
+		"addAs/2"
+	}; // The rest of the methods that used to be here are now in GlobalScope
+	//------------------- Methods that are visible as actions (the rest are hidden):
+	public List<String> methodsThatAreVisible() {
+		return Arrays.asList(methodsThatAreVisibleAsActions);
 	}
-	public void startStopWatch() {
-		setDynamicVariable(STOP_WATCH, new StopWatch());
-	}
-	public long stopWatch() {
-		return getStopWatch().delay();
-	}
-	private StopWatch getStopWatch() {
-		StopWatch stopWatch = (StopWatch) getDynamicVariable(STOP_WATCH);
-		if (stopWatch == null)
-			throw new FitLibraryException("No stopwatch started");
-		return stopWatch;
-	}
-	// SLEEP
-	public boolean sleepFor(int milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			// Nothing to do
-		}
-		return true;
-	}
-
 	public DoTraverse() {
 		super();
 	}
@@ -108,10 +64,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		super(typedObject);
 	}
 
-	//------------------- Methods that are visible as actions (the rest are hidden):
-	public List<String> methodsThatAreVisible() {
-		return Arrays.asList(methodsThatAreVisibleAsActions);
-	}
+	//--- FIXTURE WRAPPERS FOR THIS (and so not available in GlobalScope):
 	/** To allow for a CalculateTraverse to be used for the rest of the table.
      */
 	public CalculateTraverse calculate() {
@@ -142,153 +95,128 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		ConstraintTraverse traverse = new ConstraintTraverse(this,false);
 		return traverse;
 	}
-	public void becomesTimeout(int timeout) {
-		runtimeContext.putTimeout(BECOMES_TIMEOUT,timeout);
+
+	//------ THE FOLLOWING ARE HERE SO THAT THEY'RE STILL ACCESSIBLE FROM A SUBCLASS:
+	
+	//--- BECOMES, ETC TIMEOUTS:
+	protected void becomesTimeout(int timeout) {
+		global().becomesTimeout(timeout);
 	}
-	public int becomesTimeout() {
-		return runtimeContext.getTimeout(BECOMES_TIMEOUT,1000);
+	protected int becomesTimeout() {
+		return global().becomesTimeout();
 	}
-//	/** To support defined actions */
-//	public UseTemplateTraverse useTemplate(String name) {
-//		return new UseTemplateTraverse(name);
-//	}
-//	/** To support defined actions */
-//	public DefinedActionTraverse template(@SuppressWarnings("unused") String name) {
-//		return new DefinedActionTraverse();
-//	}
-	/** When (stopOnError), don't continue intepreting a table if there's been a problem */
+	protected int getTimeout(String name) {
+		return global().getTimeout(name);
+	}
+	protected void putTimeout(String name, int timeout) {
+		global().putTimeout(name,timeout);
+	}
+	//--- STOP ON ERROR AND ABANDON:
+	/** When (stopOnError), don't continue interpreting a table if there's been a problem */
 	public void setStopOnError(boolean stopOnError) {
-		TestResults.setStopOnError(stopOnError);
+		global().setStopOnError(stopOnError);
 	}
 	public void abandonStorytest() {
-		TestResults.setAbandoned();
+		global().abandonStorytest();
 	}
-    /** The rest of the table is ignored (and not coloured) */
-	public CommentTraverse comment() {
-		return new CommentTraverse();
+	//--- DYNAMIC VARIABLES:
+	protected boolean addDynamicVariablesFromFile(String fileName) {
+		return global().addDynamicVariablesFromFile(fileName);
 	}
-    /** The rest of the table is ignored (and the first row is coloured as ignored) */
-	public CommentTraverse ignored() {
-		return ignore();
+	protected void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
+		global().addDynamicVariablesFromUnicodeFile(fileName);
 	}
-	public CommentTraverse ignore() {
-		return new CommentTraverse(true);
+	protected boolean clearDynamicVariables() {
+		return global().clearDynamicVariables();
 	}
-	public CommentTraverse ignoreTable() {
-		return new CommentTraverse(true);
+	protected boolean setSystemPropertyTo(String property, String value) {
+		return global().setSystemPropertyTo(property, value);
 	}
-	public boolean clearDynamicVariables() {
-		getDynamicVariables().clearAll();
-		return true;
+	public void setFitVariable(String variableName, Object result) {
+		global().setFitVariable(variableName, result);
 	}
-	public boolean addDynamicVariablesFromFile(String fileName) {
-		return getDynamicVariables().addFromPropertiesFile(fileName);
+	protected Object getSymbolNamed(String fitSymbolName) {
+		return global().getSymbolNamed(fitSymbolName);
 	}
-	public void recordToFile(String fileName) {
-		RecordDynamicVariables.recordToFile(fileName);
-		try {
-			addDynamicVariablesFromFile(fileName);
-		} catch (Exception e) {
-			//
-		}
+	//--- SLEEP & STOPWATCH:
+	protected boolean sleepFor(int milliseconds) {
+		return global().sleepFor(milliseconds);
 	}
-	public SetVariableTraverse setVariables() {
-		return new SetVariableTraverse();
+	protected void startStopWatch() {
+		global().startStopWatch();
 	}
-	public String to(String s) {
-		return s;
+	protected long stopWatch() {
+		return global().stopWatch();
 	}
-	public String get(String s) {
-		return s;
+	//--- FIXTURE SELECTION
+	protected SetVariableTraverse setVariables() {
+		return global().setVariables();
 	}
-	public DefineAction defineAction() {
-		return new DefineAction();
+	protected DoTraverse file(String fileName) {
+		return global().file(fileName);
 	}
-	public DefineAction defineAction(String wikiClassName) {
-		DefineAction defineAction = new DefineAction(wikiClassName);
-		defineAction.setRuntimeContext(getRuntimeContext());
-		return defineAction;
+	protected CrossReferenceFixture xref(String suiteName) {
+		return global().xref(suiteName);
 	}
-	public DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
-		return new DefineActionsOnPageSlowly(pageName);
+	//--- DEFINED ACTIONS
+	protected DefineAction defineAction(String wikiClassName) {
+		return global().defineAction(wikiClassName);
 	}
-	public DefineActionsOnPage defineActionsAt(String pageName) {
-		return new DefineActionsOnPage(pageName);
+	protected DefineAction defineAction() {
+		return global().defineAction();
 	}
-	public DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
-		return new DefineActionsOnPage(pageName,rootLocation);
+	protected DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
+		return global().defineActionsSlowlyAt(pageName);
 	}
-	public void clearDefinedActions() {
-		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();
+	protected DefineActionsOnPage defineActionsAt(String pageName) {
+		return global().defineActionsAt(pageName);
 	}
-	public RandomSelectTraverse selectRandomly(String var) {
-		return new RandomSelectTraverse(var);
+	protected DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
+		return global().defineActionsAtFrom(pageName,rootLocation);
 	}
-	// FILE LOGGING
-	public void startLogging(String fileName) {
-		getRuntimeContext().startLogging(fileName);
+	protected void clearDefinedActions() {
+		global().clearDefinedActions();
+	}
+	protected boolean toExpandDefinedActions() {
+		return global().toExpandDefinedActions();
+	}
+	public void setExpandDefinedActions(boolean expandDefinedActions) {
+		global().setExpandDefinedActions(expandDefinedActions);
+	}
+	//--- RANDOM, TO, GET, FILE, HARVEST
+	protected RandomSelectTraverse selectRandomly(String var) {
+		return global().selectRandomly(var);
+	}
+	protected boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
+		return global().harvestUsingPatternFrom(vars, pattern, text);
+	}
+	//--- FILE LOGGING
+	protected void recordToFile(String fileName) {
+		global().recordToFile(fileName);
+	}
+	protected void startLogging(String fileName) {
+		global().startLogging(fileName);
 	}
 	public void logMessage(String s) {
-		try {
-			getRuntimeContext().printToLog(s);
-		} catch (IOException e) {
-			throw new FitLibraryException(e.getMessage());
-		}
+		global().logMessage(s);
+	}
+	//--- SHOW
+	@Override
+	public void show(Row row, String text) {
+		global().show(row, text);
 	}
 	public void showAfterTable(String s) {
-		TestResults.logAfterTable(s+"\n");
+		showAsAfterTable("Logs",s);
 	}
-	public void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
-		getDynamicVariables().addFromUnicodePropertyFile(fileName);
+	public void showAsAfterTable(String title,String s) {
+		global().showAsAfterTable(title,s);
 	}
-	public DoTraverse file(String fileName) {
-		return new DoTraverse(new FileHandler(fileName));
-	}
-//	private Object getLeafSut() {
-//		Object sut = this;
-//		while (sut instanceof Evaluator) {
-//			Object sut2 = ((Evaluator)sut).getSystemUnderTest();
-//			if (sut2 != null)
-//				sut = sut2;
-//			else
-//				break;
-//		}
-//		return sut;
-//	}
-	public CrossReferenceFixture xref(String suiteName) {
-		return new CrossReferenceFixture(suiteName);
-	}
-	public boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
-		Matcher matcher = Pattern.compile(pattern).matcher(text);
-	    if (!matcher.find())
-	    	throw new FitLibraryException("Pattern doesn't match");
-	    int groups = matcher.groupCount();
-		if (vars.length > groups)
-			throw new FitLibraryException("Expected " + expectedGroups(vars) + ", but there " + actualGroups(groups));
-		for (int v = 0; v < vars.length && v < groups; v++)
-			setDynamicVariable(vars[v], matcher.group(v+1));
-		return true;
-	}
-	private String expectedGroups(String[] vars) {
-		if (vars.length == 1)
-			return "1 bracketed group";
-		return vars.length + " bracketed groups";
-	}
-	private String actualGroups(int groups) {
-		if (groups == 1)
-			return "is only 1";
-		return "are only "+groups;
-	}
-	public boolean setSystemPropertyTo(String property, String value) {
-		System.setProperty(property,value);
-		setDynamicVariable(property, value);
-		return true;
-	}
+
 	//------------------- Postfix Special Actions:
 	/** Check that the result of the action in the first part of the row is the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	public void is(TestResults testResults, final Row row) throws Exception {
+	public void is(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -296,13 +224,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		target.invokeAndCheckForSpecial(row.rowTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
-	public void equals(TestResults testResults, final Row row) throws Exception {
+	public void equals(TestResults testResults, final RowOnParse row) throws Exception {
 		is(testResults,row);
 	}
 	/** Check that the result of the action in the first part of the row is not the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	public void isNot(TestResults testResults, final Row row) throws Exception {
+	public void isNot(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -328,7 +256,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is less than
 	 *  the expected value in the last cell of the row.
 	 */
-	public void lessThan(TestResults testResults, final Row row) throws Exception {
+	public void lessThan(TestResults testResults, final RowOnParse row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -340,7 +268,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is less than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	public void lessThanEquals(TestResults testResults, final Row row) throws Exception {
+	public void lessThanEquals(TestResults testResults, final RowOnParse row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -352,7 +280,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  the expected value in the last cell of the row.
 	 */
-	public void greaterThan(TestResults testResults, final Row row) throws Exception {
+	public void greaterThan(TestResults testResults, final RowOnParse row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -364,7 +292,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	public void greaterThanEquals(TestResults testResults, final Row row) throws Exception {
+	public void greaterThanEquals(TestResults testResults, final RowOnParse row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -374,7 +302,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		comparison(testResults, row, compare);
 	}
 	@SuppressWarnings("unchecked")
-	private void comparison(TestResults testResults, final Row row,
+	private void comparison(TestResults testResults, final RowOnParse row,
 			Comparison compare) {
 		int less = 3;
 		if (row.size() < less)
@@ -405,13 +333,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		@SuppressWarnings("unchecked")
 		boolean compares(Comparable actual, Comparable expected);
 	}
-	private Cell operatorCell(final Row row) {
+	private Cell operatorCell(final RowOnParse row) {
 		return row.cell(row.size()-2);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void matches(TestResults testResults, final Row row) throws Exception {
+	public void matches(TestResults testResults, final RowOnParse row) throws Exception {
 		try
 		{
 			int less = 3;
@@ -432,7 +360,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, eventually matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void eventuallyMatches(TestResults testResults, final Row row) throws Exception {
+	public void eventuallyMatches(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("eventuallyMatches");
@@ -461,7 +389,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, does not match
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void doesNotMatch(TestResults testResults, final Row row) throws Exception {
+	public void doesNotMatch(TestResults testResults, final RowOnParse row) throws Exception {
 		try
 		{
 			int less = 3;
@@ -483,7 +411,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void contains(TestResults testResults, final Row row) throws Exception {
+	public void contains(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
@@ -499,7 +427,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void eventuallyContains(TestResults testResults, final Row row) throws Exception {
+	public void eventuallyContains(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
@@ -521,7 +449,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void doesNotContain(TestResults testResults, final Row row) throws Exception {
+	public void doesNotContain(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("doesNoContain");
@@ -537,13 +465,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string becomes equals
 	 *  to the given value within the timeout period.
 	 */
-	public void becomes(TestResults testResults, final Row row) throws Exception {
+	public void becomes(TestResults testResults, final RowOnParse row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		Row actionPartOfRow = row.rowTo(1,row.size()-2);
+		RowOnParse actionPartOfRow = row.rowTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
@@ -563,58 +491,63 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the rest of the row matches
 	 *  the expected value in the last cell of the row.
 	 */
-	public TwoStageSpecial check(final IRow row) throws Exception {
+	public TwoStageSpecial check(final Row row) throws Exception {
 		return prefixSpecialAction.check(row);
 	}
-	public TwoStageSpecial reject(final IRow row) throws Exception {
+	public TwoStageSpecial reject(final Row row) throws Exception {
 		return not(row);
 	}
     /** Same as reject()
      * @param testResults 
      */
-	public TwoStageSpecial not(final IRow row) throws Exception {
+	public TwoStageSpecial not(final Row row) throws Exception {
 		return prefixSpecialAction.not(row,NotSyle.PASSES_ON_EXCEPION);
 	}
-	public TwoStageSpecial notTrue(final IRow row) throws Exception {
+	public TwoStageSpecial notTrue(final Row row) throws Exception {
 		return prefixSpecialAction.not(row,NotSyle.ERROR_ON_EXCEPION);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is not altered, so it can be viewed directly.
      */
-	public TwoStageSpecial show(final IRow row) throws Exception {
+	public TwoStageSpecial show(final Row row) throws Exception {
 		return prefixSpecialAction.show(row);
 	}
 	/** Adds the result of the action in the rest of the row to a folding area after the table.
      */
-	public TwoStageSpecial showAfter(final IRow row) throws Exception {
+	public TwoStageSpecial showAfter(final Row row) throws Exception {
 		return prefixSpecialAction.showAfter(row);
+	}
+	/** Adds the result of the action in the rest of the row to a folding area after the table.
+     */
+	public TwoStageSpecial showAfterAs(final Row row) throws Exception {
+		return prefixSpecialAction.showAfterAs(row);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is escaped so that the underlying layout text can be viewed.
      */
-	public TwoStageSpecial showEscaped(final IRow row) throws Exception {
+	public TwoStageSpecial showEscaped(final Row row) throws Exception {
 		return prefixSpecialAction.showEscaped(row);
 	}
 	/** Log result to a file
 	 */
-	public TwoStageSpecial log(final IRow row) throws Exception {
+	public TwoStageSpecial log(final Row row) throws Exception {
 		return prefixSpecialAction.log(row);
 	}
 	/** Set the dynamic variable name to the result of the action, or to the string if there's no action.
 	 */
-	public TwoStageSpecial set(final IRow row) throws Exception {
+	public TwoStageSpecial set(final Row row) throws Exception {
 		return prefixSpecialAction.set(row);
 	}
 	/** Set the named FIT symbol to the result of the action, or to the string if there's no action.
 	 */
-	public TwoStageSpecial setSymbolNamed(final IRow row) throws Exception {
+	public TwoStageSpecial setSymbolNamed(final Row row) throws Exception {
 		return prefixSpecialAction.setSymbolNamed(row);
 	}
 	/** Add a cell containing the result of the rest of the row,
      *  shown as a Dot graphic.
 	 * @param testResults 
      */
-	public void showDot(Row row, TestResults testResults) throws Exception {
+	public void showDot(RowOnParse row, TestResults testResults) throws Exception {
 		Parser adapter = new GraphicParser(new NonGenericTyped(ObjectDotGraphic.class));
 		try {
 		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
@@ -628,18 +561,18 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
 	 * @param testResults 
      */
-	public TwoStageSpecial ensure(final IRow row) throws Exception {
+	public TwoStageSpecial ensure(final Row row) throws Exception {
 		return prefixSpecialAction.ensure(row);
 	}
 
 	/** The rest of the row is ignored. 
      */
 	@SuppressWarnings("unused")
-	public void note(Row row, TestResults testResults) throws Exception {
+	public void note(RowOnParse row, TestResults testResults) throws Exception {
 		//		Nothing to do
 	}
 	/** To allow for example storytests in user guide to pass overall, even if they have failures within them. */
-	public void expectedTestResults(Row row, TestResults testResults) throws Exception {
+	public void expectedTestResults(RowOnParse row, TestResults testResults) throws Exception {
 		if (testResults.matches(row.text(1,this),row.text(3,this),row.text(5,this),row.text(7,this))) {
 			testResults.clear();
 			row.cell(0).pass(testResults);
@@ -649,58 +582,49 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			row.cell(0).fail(testResults,results,this);
 		}
 	}
-	public Object oo(final Row row, TestResults testResults) throws Exception {
+	public Object oo(final RowOnParse row, TestResults testResults) throws Exception {
 		if (row.size() < 3)
 			throw new MissingCellsException("DoTraverseOO");
 		String object = row.text(1,this);
 		Object className = getDynamicVariable(object+".class");
 		if (className == null || "".equals(className))
 			className = object; // then use the object name as a class name
-		Row macroRow = row.rowFrom(2);
+		RowOnParse macroRow = row.rowFrom(2);
 		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,this).run(row, testResults);
 		return typedObject.getSubject();
 	}
-	public void runPlain(final Row row, TestResults testResults) throws Exception {
-		PlainText plainText = new PlainText(row,testResults,this);
-		plainText.analyse();
-	}
 	/** Don't mind that the action succeeds or not, just as long as it's not a FitLibraryException (such as action unknown) 
      */
-	public void optionally(Row row, TestResults testResults) throws Exception {
+	public void optionally(RowOnParse row, TestResults testResults) throws Exception {
 		try {
 		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
 		    if (result instanceof Boolean && !((Boolean)result).booleanValue()) {
 		    	row.addCell("false").shown();
-		    	CallManager.addShow(row);
+		    	getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		    }
 		} catch (FitLibraryException e) {
 			row.cell(0).error(testResults,e);
 		} catch (Exception e) {
 			row.addCell(PlugBoard.exceptionHandling.exceptionMessage(e)).shown();
-			CallManager.addShow(row);
+			getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		}
 		row.cell(0).pass(testResults);
 	}
-	public int getTimeout(String name) {
-		return getRuntimeContext().getTimeout(name,1000);
-	}
-	protected void putTimeout(String name, int timeout) {
-		getRuntimeContext().putTimeout(name,timeout);
-	}
-	@Override
-	public void setFitVariable(String variableName, Object result) {
-		Fixture.setSymbol(variableName, result);
-	}
-	public Object getSymbolNamed(String fitSymbolName) {
-		return Fixture.getSymbol(fitSymbolName);
-	}
-	@Override
-	public void show(IRow row, String text) {
-		row.addCell(text).shown();
-		CallManager.addShow(row);
+	/*
+	 * |''add named''|name|...action or fixture|
+	 */
+	public void addNamed(RowOnParse row, TestResults testResults) throws Exception {
+		int less = 3;
+		if (row.size() < less)
+			throw new MissingCellsException("addNamed");
+		TypedObject typedObject = interpretRow(row.rowFrom(2), testResults);
+		getRuntimeContext().getTableEvaluator().addNamedObject(row.text(1,this),typedObject,row,testResults);
 	}
 	@Override
 	public FitHandler fitHandler() {
 		return getFitHandler();
+	}
+	private GlobalScope global() {
+		return getRuntimeContext().getGlobal();
 	}
 }

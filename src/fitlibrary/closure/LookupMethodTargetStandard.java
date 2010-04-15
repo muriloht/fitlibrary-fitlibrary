@@ -7,21 +7,22 @@ package fitlibrary.closure;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
-import fitlibrary.table.IRow;
+import fitlibrary.flow.IScope;
 import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.Traverse;
+import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.option.Option;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public void mustBeThreadSafe() {
@@ -30,9 +31,9 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class, TestResults.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ RowOnParse.class, TestResults.class });
 		if (findEntityMethod == null)
-			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ IRow.class });
+			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
@@ -40,32 +41,21 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findPostfixSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ TestResults.class, Row.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ TestResults.class, RowOnParse.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
 	}
 	public Closure findFixturingMethod(Evaluator evaluator, String name, Class<?>[] argTypes) {
-		return findFixturedMethod(evaluator, name, argTypes, new HashSet<Object>());
+		IScope scope = scopeOf(evaluator);
+		for (TypedObject typedObject : scope.objectsForLookup()) {
+			Closure target = typedObject.findPublicMethodClosureForTypedObject(name,argTypes);
+			if (target != null)
+				return target;
+		}
+		return null;
 	}
-	private Closure findFixturedMethod(Evaluator evaluator, String name, Class<?>[] argTypes, Set<Object> visitedObjects) {
-		if (visitedObjects.contains(evaluator))
-				return null;
-		visitedObjects.add(evaluator);
-		Closure method = asTypedObject(evaluator).findPublicMethodClosureForTypedObject(name,argTypes);
-		if (method == null && evaluator.getSystemUnderTest() instanceof Evaluator)
-			method = findFixturedMethod((Evaluator)evaluator.getSystemUnderTest(),name,argTypes,visitedObjects);
-		if (method == null && evaluator.getSystemUnderTest() instanceof DomainAdapter)
-			method = evaluator.getTypedSystemUnderTest().findPublicMethodClosureForTypedObject(name,argTypes);
-		Evaluator nextOuterContext = evaluator.getNextOuterContext();
-		if (method == null && nextOuterContext != null)
-			method = findFixturedMethod(nextOuterContext,name,argTypes,visitedObjects);
-		return method;
-	}
-	private static TypedObject asTypedObject(Object subject) {
-		return Traverse.asTypedObject(subject);
-	}
-	public CalledMethodTarget findMethodInEverySecondCell(Evaluator evaluator, IRow row, int allArgs) throws Exception {
+	public CalledMethodTarget findMethodInEverySecondCell(Evaluator evaluator, Row row, int allArgs) throws Exception {
 		int parms = allArgs / 2 + 1;
 		int argCount = (allArgs + 1) / 2;
 		String name = row.text(0,evaluator);
@@ -76,7 +66,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		return target;
 	}
 	public CalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
-		return findTheMethod(camel(name), unknownParameterNames(argCount),"Type",evaluator);
+		return findMethodOrGetter(camel(name), unknownParameterNames(argCount),"Type",evaluator);
 	}
 	private static List<String> unknownParameterNames(int argCount) {
 		List<String> methodArgs = new ArrayList<String>();
@@ -84,91 +74,104 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			methodArgs.add("arg"+(i+1));
 		return methodArgs;
 	}
-	public CalledMethodTarget findTheMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
+	public CalledMethodTarget findMethodOrGetter(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
+		int argCount = methodArgs.size();
+		IScope scope = scopeOf(evaluator);
+		for (TypedObject typedObject : scope.objectsForLookup()) {
+			Option<CalledMethodTarget> target =
+				typedObject.new_findSpecificMethod(name,argCount,evaluator);
+			if (target.isSome())
+				return target.get();
+			if (argCount == 0) {
+				String getMethodName = ExtendedCamelCase.camel("get " + name);
+				target = typedObject.new_findSpecificMethod(getMethodName, argCount, evaluator);
+				if (target.isSome())
+					return target.get();
+				String isMethodName = ExtendedCamelCase.camel("is " + name);
+				target = typedObject.new_findSpecificMethod(isMethodName, argCount, evaluator);
+				if (target.isSome())
+					return target.get();
+			}
+		}
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
-		TypedObject typedObject = asTypedObject(evaluator);
-		return typedObject.findSpecificMethodOrPropertyGetter(name,methodArgs.size(),evaluator,signatures);
+		throw new MissingMethodException(signatures,scope.possibleClasses());
+	}
+	private IScope scopeOf(Evaluator evaluator) {
+		if (evaluator.getRuntimeContext().hasScope())
+			return evaluator.getRuntimeContext().getScope();
+		throw new RuntimeException("No scope in runtime");
 	}
 	public CalledMethodTarget findMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) {
-		Closure result = asTypedObject(evaluator).findMethodForTypedObject(name,methodArgs.size());
-		if (result != null)
-			return new CalledMethodTarget(result,evaluator);
+		int argCount = methodArgs.size();
+		IScope scope = scopeOf(evaluator);
+		for (TypedObject typedObject : scope.objectsForLookup()) {
+			Option<CalledMethodTarget> target = typedObject.new_findSpecificMethod(name,argCount,evaluator);
+			if (target.isSome())
+				return target.get();
+		}
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
-		throw new MissingMethodException(signatures,identifiedClassesInOutermostContext(evaluator, true));
+		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
-	public CalledMethodTarget findSetter(String propertyName, Evaluator evaluator) {
-		String methodName = ExtendedCamelCase.camel("set "+propertyName);
-		String arg = camel(propertyName);
-		TypedObject typedSubject = evaluator.getTypedSystemUnderTest();
-    	if (typedSubject == null)
-    		throw new NoSystemUnderTestException();
-		CalledMethodTarget target = typedSubject.optionallyFindMethodOnTypedObject(methodName,1,evaluator, true);
-		if (target != null)
-			return target;
-		throw new MissingMethodException(signatures("public void "+methodName+"(ArgType "+arg+") { }"),identifiedClassesInSUTChain(typedSubject.getSubject()));
+	public CalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
+		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName));
+	}
+	public CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator) {
+		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"");
+	}
+	private CalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg) {
+		TypedObject typedObject = evaluator.getTypedSystemUnderTest();
+		while (true) {
+			if (typedObject.isNull())
+				throw new NoSystemUnderTestException();
+			Option<CalledMethodTarget> targetOption = typedObject.new_findSpecificMethod(methodName,argCount,evaluator);
+			if (targetOption.isSome())
+				return targetOption.get();
+			if (typedObject instanceof Evaluator) {
+				typedObject = ((Evaluator)typedObject).getTypedSystemUnderTest();
+			}
+			else if (typedObject.getSubject() instanceof DomainAdapter) {
+				typedObject = new GenericTypedObject(((DomainAdapter)typedObject.getSubject()).getSystemUnderTest());
+			}
+			else break;
+		}
+		throw new MissingMethodException(signatures("public void "+methodName+"("+arg+") { }"),scopeOf(evaluator).possibleClasses());
 	}
 	public CalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, String propertyName, boolean considerContext) {
-		CalledMethodTarget target = typedObject.optionallyFindGetterOnTypedObject(propertyName,evaluator);
-		if (considerContext && target == null)
-			target = searchForMethodTargetUpOuterContext(propertyName,evaluator.getNextOuterContext(),evaluator);
+		CalledMethodTarget target;
+		if (considerContext)
+			target = searchForMethodTargetUpOuterContext(propertyName,evaluator);
+		else
+			target =  typedObject.new_optionallyFindGetterOnTypedObject(propertyName,evaluator);
 		if (target != null)
 			return target;
-		String getMethodName = ExtendedCamelCase.camel("get "+propertyName);
-		throw new MissingMethodException(signatures("public ResultType "+ getMethodName+"() { }"),identifiedClassesInSUTChain(typedObject.getSubject()));
+		List<Class<?>> possibleClasses = new ArrayList<Class<?>>();
+		if (considerContext)
+			possibleClasses = scopeOf(evaluator).possibleClasses();
+		else
+			possibleClasses.add(typedObject.getSubject().getClass());
+		throw new MissingMethodException(signatures("public ResultType "+ camel("get "+propertyName)+"() { }"),possibleClasses);
 	}
 	private List<String> signatures(String... signature) {
 		return Arrays.asList(signature);
 	}
-    private static CalledMethodTarget searchForMethodTargetUpOuterContext(String name, Evaluator outerContext, Evaluator evaluator) {
-        if (outerContext == null)
-            return null;
-        CalledMethodTarget target = null;
-        if (outerContext.getSystemUnderTest() != null) {
-            TypedObject typedObject = outerContext.getTypedSystemUnderTest();
-			target = typedObject.optionallyFindGetterOnTypedObject(name,evaluator);
-        }
-        if (target == null)
-            return searchForMethodTargetUpOuterContext(name,outerContext.getNextOuterContext(),evaluator);
-        return target;
-    }
-	public List<Class<?>> identifiedClassesInSUTChain(Object firstObject) {
-		List<Class<?>> accumulatingClasses = new ArrayList<Class<?>>();
-		identifiedClassListInSutChain(firstObject,accumulatingClasses,true);
-		if (accumulatingClasses.isEmpty())
-			accumulatingClasses.add(firstObject.getClass());
-		return accumulatingClasses;
-	}
-	private static void identifiedClassListInSutChain(Object firstObject, List<Class<?>> accumulatingClasses, boolean includeSut) {
-		Object object = firstObject;
-		while (object instanceof DomainAdapter) {
-			DomainAdapter domainAdapter = (DomainAdapter)object;
-			object = domainAdapter.getSystemUnderTest();
-			if (classToBeIncluded(accumulatingClasses, includeSut, object))
-				accumulatingClasses.add(object.getClass());
+    private CalledMethodTarget searchForMethodTargetUpOuterContext(String name, Evaluator evaluator) {
+		IScope scope = scopeOf(evaluator);
+		for (TypedObject typedObject : scope.objectsForLookup()) {
+			CalledMethodTarget target = typedObject.new_optionallyFindGetterOnTypedObject(name,evaluator);
+			if (target != null)
+				return target;
 		}
-	}
-	private static boolean classToBeIncluded(List<Class<?>> accumulatingClasses, boolean includeSut,
-			Object object) {
-		return object != null && (includeSut || object instanceof DomainAdapter) && 
-				!ClassUtility.aFitLibraryClass(object.getClass()) && 
-				!accumulatingClasses.contains(object.getClass());
-	}
-	public List<Class<?>> identifiedClassesInOutermostContext(Object firstObject, boolean includeSut) {
-		Object object = firstObject;
-		if (firstObject instanceof Evaluator)
-			object = ((Evaluator)firstObject).getOutermostContext();
-		List<Class<?>> accumulatingClasses = new ArrayList<Class<?>>();
-		identifiedClassListInSutChain(object,accumulatingClasses,includeSut);
-		if (accumulatingClasses.isEmpty())
-			accumulatingClasses.add(firstObject.getClass());
-		return accumulatingClasses;
+		return null;
+    }
+	public List<Class<?>> possibleClasses(Evaluator evaluator) {
+		return scopeOf(evaluator).possibleClasses();
 	}
 	public Class<?> findClassFromFactoryMethod(Evaluator evaluator, Class<?> type, String typeName) throws IllegalAccessException, InvocationTargetException {
 		String methodName = "concreteClassOf"+ClassUtility.simpleClassName(type);
 		Closure method = findFixturingMethod(evaluator, methodName, new Class[] { String.class});
 		if (method == null) {
 			throw new MissingMethodException(signatures("public Class "+methodName+"(String typeName) { }"),
-					identifiedClassesInOutermostContext(evaluator, true));
+					scopeOf(evaluator).possibleClasses());
 		}
 		return (Class<?>)method.invoke(new Object[]{ typeName });
 	}
@@ -177,5 +180,13 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	}
 	private static String camel(String name) {
 		return ExtendedCamelCase.camel(name);
+	}
+	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope) {
+		int size = results.size();
+		for (TypedObject typedObject : scope.objectsForLookup()) {
+			typedObject.findMethodsFromPlainText(textCall, results);
+			if (results.size() > size)
+				return;
+		}
 	}
 }

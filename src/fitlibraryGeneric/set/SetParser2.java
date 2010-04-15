@@ -38,7 +38,7 @@ public class SetParser2 extends SetParser {
     		if (CollectionSetUpTraverse.hasObjectFactoryMethodFor(table,evaluator))
     			return super.parseTable(table,testResults);
     		ListSetUpTraverse2 setUp = new ListSetUpTraverse2(componentTyped.asClass());
-    		setUp.interpretWithinContext(table,evaluator,testResults);
+    		setUp.interpretWithinScope(table,evaluator,testResults);
     		return new HashSet<Object>(setUp.getResults());
     	case PARAMETERIZED_TYPE:
     		return parseNested(table, testResults);
@@ -48,7 +48,7 @@ public class SetParser2 extends SetParser {
     }
 	private Object parseNested(Table table, TestResults testResults) {
 		NestingListSetUpTraverse nestingSetUp = new NestingListSetUpTraverse(componentTyped);
-		nestingSetUp.interpretWithinContext(table,evaluator,testResults);
+		nestingSetUp.interpretWithinScope(table,evaluator,testResults);
 		return new HashSet<Object>(nestingSetUp.getResults());
 	}
     @SuppressWarnings({"unchecked", "fallthrough"})

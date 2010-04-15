@@ -28,7 +28,7 @@ public class SimpleWikiTranslator {
 	public static String translate(String wiki) {
 		final StringBuilder result = new StringBuilder();
 		HtmlReceiver accumulatingReceiver = new HtmlReceiver() {
-			public void take(@SuppressWarnings("unused") File file, String html) {
+			public void take(File file, String html) {
 				result.append(html);
 			}
 		};
@@ -57,9 +57,9 @@ public class SimpleWikiTranslator {
 				return line;
 			if (line.startsWith("!"))
 				line = line.substring(1);
-			if (line.startsWith("#"))
-				; // ignore it
-			else if (line.startsWith("|!contents|"))
+			if (line.startsWith("#")) {
+				// ignore it
+			} else if (line.startsWith("|!contents|"))
 				result.append("<br/>\n");
 			else if (line.startsWith("|"))
 				return line;

@@ -6,9 +6,9 @@
 package fitlibrary.utility.option;
 
 public class None<T> implements Option<T> {
-	private static None none = new None();
+	private static None NONE = new None();
 	public static <S> None<S> none() {
-		return none;
+		return NONE;
 	}
 	private None() {
 		//
@@ -23,6 +23,6 @@ public class None<T> implements Option<T> {
 	}
 	@Override
 	public T get() {
-		throw new RuntimeException("Unable to access an element inside None");
+		throw new NullPointerException("There is no element inside None");
 	}
 }

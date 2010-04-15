@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2010 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
-*/
+ */
 
 package fitlibrary.flow;
 
 import fit.Fixture;
 import fitlibrary.collection.CollectionTraverse;
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.parser.collection.ArrayParser;
 import fitlibrary.parser.collection.ListParser;
 import fitlibrary.parser.collection.MapParser;
@@ -15,59 +16,49 @@ import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.typed.TypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class DoAutoWrapper {
+public class DoAutoWrapper implements IDoAutoWrapper {
 	private final Evaluator evaluator;
-	
+
 	public DoAutoWrapper(Evaluator evaluator) {
 		this.evaluator = evaluator;
 	}
-	public Object wrapObjectWithTraverse(TypedObject typedResult) {
+	public TypedObject wrap(TypedObject typedResult) {
 		if (typedResult == null)
-			return null;
+			return GenericTypedObject.NULL;
 		Object result = typedResult.getSubject();
 		if (result == null)
-			return null;
+			return typedResult;
 		if (notToBeAutoWrapped(result))
-			return result;
-		if (result instanceof Evaluator) {
-			Evaluator resultEvaluator = (Evaluator)result;
-			if (resultEvaluator != evaluator && resultEvaluator.getNextOuterContext() == null)
-				return withOuter(resultEvaluator);
-		    return resultEvaluator;
-		}
-		if (result instanceof Fixture)
-		    return result;
-		
+			return typedResult;
+		if (result instanceof Evaluator || result instanceof Fixture)
+			return typedResult;
+
 		Class<?> returnType = result.getClass();
 		if (MapParser.applicableType(returnType) || ArrayParser.applicableType(returnType))
-			return withOuter(typedResult.traverse(evaluator));
+			return new GenericTypedObject(typedResult.traverse(evaluator));
 		if (SetParser.applicableType(returnType) || ListParser.applicableType(returnType)) {
-			CollectionTraverse traverse = (CollectionTraverse) typedResult.traverse(evaluator);
+			CollectionTraverse traverse = (CollectionTraverse)typedResult.traverse(evaluator);
 			traverse.setActualCollection(result);
-			return withOuter(traverse);
+			return new GenericTypedObject(traverse);
 		}
 		if (ParseDelegation.hasParseMethod(returnType))
-		    return result;
-		return withOuter(new DoTraverse(typedResult));
+			return typedResult;
+		return new GenericTypedObject(new DoTraverse(typedResult));
 	}
-	public static boolean canAutoWrap(Object result) {
-		return !(result instanceof String || result instanceof StringBuffer || isPrimitiveType(result.getClass()));
-	}
-	private boolean notToBeAutoWrapped(Object result) {
-		return result instanceof String || result instanceof StringBuffer || 
-			isPrimitiveType(result.getClass());
+	public boolean canAutoWrap(Object result) {
+		return !notToBeAutoWrapped(result);
 	}
 
-	private Object withOuter(Evaluator inner) {
-		inner.setOuterContext(evaluator);
-		inner.setRuntimeContext(evaluator.getRuntimeContext());
-		return inner;
+	private boolean notToBeAutoWrapped(Object result) {
+		return result instanceof String || result instanceof StringBuffer
+			|| result instanceof DomainFixtured
+			|| isPrimitiveType(result.getClass());
 	}
 	private static boolean isPrimitiveType(Class<?> returnType) {
-		return returnType.isPrimitive() ||
-			   returnType == Boolean.class ||
-			   Number.class.isAssignableFrom(returnType) ||
-			   returnType == Character.class;
+		return returnType.isPrimitive() || returnType == Boolean.class
+			|| Number.class.isAssignableFrom(returnType)
+			|| returnType == Character.class;
 	}
 }

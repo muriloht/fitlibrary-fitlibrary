@@ -17,7 +17,7 @@ import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.batch.trinidad.TestEngine;
 import fitlibrary.batch.trinidad.TestResult;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 
@@ -53,7 +53,7 @@ public class FitLibraryTestEngine implements TestEngine {
 			return new SingleTestResult(new Counts(),test.getName()," contains no tables");
         try {
 			Parse parse = new Parse(ParseUtility.tabulize(content));
-			Tables tables = new Tables(parse);
+			TablesOnParse tables = new TablesOnParse(parse);
 			TableListener listener = new TableListener();
 			batching.doTables(tables,listener);
 			String report = ParseUtility.toString(parse);
@@ -81,7 +81,7 @@ public class FitLibraryTestEngine implements TestEngine {
 	static class FitLibraryBatchingImp implements FitLibraryBatching {
 		BatchFitLibrary batching = new BatchFitLibrary();
 
-		public void doTables(Tables tables, TableListener listener) {
+		public void doTables(TablesOnParse tables, TableListener listener) {
 			batching.doTables(tables,listener);
 		}
 	}

@@ -1,7 +1,5 @@
 !**< def
-!define suite1 (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
-
-|''remove file''|testPropertyFile.txt|
+!define suite1 (|''remove file''|testPropertyFile.txt|
 
 |''record to file''|testPropertyFile.txt|
 
@@ -17,9 +15,7 @@
 
 |'''check'''|''get''|@{c}|@{c}|
 )
-!define suite2 (!|fitlibrary.specify.dynamicVariable.RecordingDynamicVariables|
-
-|''add dynamic variables from file''|testPropertyFile.txt|
+!define suite2 (|''add dynamic variables from file''|testPropertyFile.txt|
 
 |''get''|@{a}|'''is'''|@{a}|
 
@@ -33,10 +29,6 @@
 
 |!-fitlibrary.spec.SpecifySuiteFixture-!|
 |${suite1}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
 <tr><td><i>remove file</i></td>
 <td>testPropertyFile.txt</td>
 </tr>
@@ -89,10 +81,6 @@
 </tr>
 </table>-!|
 |${suite2}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.specify.dynamicVariable.RecordingDynamicVariables</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
 <tr><td class="pass"><i>add dynamic variables from file</i></td>
 <td>testPropertyFile.txt</td>
 </tr>
@@ -101,21 +89,21 @@
 <tr><td><i>get</i></td>
 <td>@{a}</td>
 <td><b>is</b></td>
-<td class="pass">@{a}</td>
+<td class="pass">@{a}<hr>@{a} <span class="fit_label">actual</span></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
 <td>@{b}</td>
 <td><b>becomes</b></td>
-<td class="pass">@{b}</td>
+<td class="pass">@{b}<hr>@{b} <span class="fit_label">actual</span></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><b>check</b></td>
 <td><i>get</i></td>
 <td>@{c}</td>
-<td class="pass">@{c}</td>
+<td class="pass">@{c}<hr>@{c} <span class="fit_label">actual</span></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

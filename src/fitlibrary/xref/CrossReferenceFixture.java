@@ -15,9 +15,10 @@ import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
-import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
@@ -41,12 +42,12 @@ public class CrossReferenceFixture extends Traverse {
 					break;
 				String html = test.getContent();
 				if (html.contains("<table"))
-					xref(test.getName(),new Tables(new Parse(html)));
+					xref(test.getName(),new TablesOnParse(new Parse(html)));
 			}
-			table.addRow(new Row("<h1>Action calls</h1>","(The ones that start with ~ may be due to data rows)"));
+			table.addRow(new RowOnParse("<h1>Action calls</h1>","(The ones that start with ~ may be due to data rows)"));
 			addMapDataToTable(xref,table);
 			if (!definedActions.isEmpty())
-				table.addRow(new Row("<h1>Defined Actions</h1>",""));
+				table.addRow(new RowOnParse("<h1>Defined Actions</h1>",""));
 			addMapDataToTable(definedActions,table);
 			table.row(0).cell(0).pass(testResults);
 		} catch (Exception e) {
@@ -57,9 +58,9 @@ public class CrossReferenceFixture extends Traverse {
 	protected String fitNesseDiry() {
 		return ".";
 	}
-	private void xref(String pageName, Tables tables) throws FitParseException, InterruptedException, IOException {
+	private void xref(String pageName, TablesOnParse tables) throws FitParseException, InterruptedException, IOException {
 		for (int t = 0; t < tables.size(); t++) {
-			Table table = tables.table(t);
+			TableOnParse table = tables.table(t);
 			for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 				String action = actionOf(table.row(rowNo));
 				if (action != null)
@@ -105,7 +106,7 @@ public class CrossReferenceFixture extends Traverse {
 	private boolean numberChar(char ch) {
 		return Character.isDigit(ch) || ch == '.' || ch == ' ';
 	}
-	private String actionOf(Row row) throws FitParseException, InterruptedException, IOException {
+	private String actionOf(RowOnParse row) throws FitParseException, InterruptedException, IOException {
 		int start = 0;
 		int pastEnd = row.size();
 		String first = ExtendedCamelCase.camel(row.text(0, this));
@@ -133,7 +134,7 @@ public class CrossReferenceFixture extends Traverse {
 			result+= " "+row.text(i, this);
 		return result.trim();
 	}
-	private String postFixActionName(Row row, int pastEnd) {
+	private String postFixActionName(RowOnParse row, int pastEnd) {
 		if (pastEnd > 2)
 			return ExtendedCamelCase.camel(row.text(pastEnd-2, this));
 		return "";
@@ -160,10 +161,10 @@ public class CrossReferenceFixture extends Traverse {
 				break;
 			String html = test.getContent();
 			if (html.contains("<table")) {
-				Tables tables = new Tables(new Parse(html));
+				TablesOnParse tables = new TablesOnParse(new Parse(html));
 				boolean header = true;
 				for (int t = 0; t < tables.size(); t++) {
-					Table table = tables.table(t);
+					TableOnParse table = tables.table(t);
 					String pageName = definitionsName+"."+test.getName();
 					if (pageName.endsWith("."))
 						pageName = definitionsName;
@@ -188,7 +189,7 @@ public class CrossReferenceFixture extends Traverse {
 			String list = "";
 			for (String page : map.get(key))
 				list += ", <a href=\""+page+"\">"+page+"</a>";
-			table.addRow(new Row(key,list.substring(2)));
+			table.addRow(new RowOnParse(key,list.substring(2)));
 		}
 	}
 }

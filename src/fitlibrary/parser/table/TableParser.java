@@ -9,7 +9,7 @@ import fitlibrary.exception.table.MissingTableException;
 import fitlibrary.parser.HtmlStructureParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
@@ -23,7 +23,7 @@ public class TableParser extends HtmlStructureParser {
 		return  fitlibrary.parser.table.TableInterface.class.isAssignableFrom(type);
 	}
 	@Override
-	protected Object parse(ICell cell, TestResults testResults) throws Exception {
+	protected Object parse(Cell cell, TestResults testResults) throws Exception {
 		if (!cell.hasEmbeddedTable())
 			throw new MissingTableException();
         Parse parse = cell.getEmbeddedTable().parse();

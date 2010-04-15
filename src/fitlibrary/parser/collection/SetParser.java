@@ -15,7 +15,7 @@ import fitlibrary.collection.set.SetTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.FitLibrarySelector;
@@ -38,10 +38,10 @@ public class SetParser implements Parser {
 		parser = Traverse.asTyped(String.class).resultParser(evaluator);
 		showParser = Traverse.asTyped(Object.class).resultParser(evaluator);
 	}
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	private Object parse(ICell cell, TestResults testResults) throws Exception {
+	private Object parse(Cell cell, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTable()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
@@ -49,10 +49,10 @@ public class SetParser implements Parser {
 	protected Object parseTable(Table table, TestResults testResults) {
 		Set<Object> set = new HashSet<Object>();
 		CollectionSetUpTraverse setUp = new CollectionSetUpTraverse(evaluator,set,true);
-		setUp.interpretInnerTable(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
 		return set;
 	}
-	public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
 			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
 		if (cell.hasEmbeddedTable())
@@ -67,7 +67,7 @@ public class SetParser implements Parser {
 		StringTokenizer t = new StringTokenizer(s, ",");
         Set<Object> set = new HashSet<Object>();
 		while (t.hasMoreTokens())
-			set.add(parser.parseTyped(new Cell(t.nextToken()),testResults).getSubject());
+			set.add(parser.parseTyped(new CellOnParse(t.nextToken()),testResults).getSubject());
 		return set;
 	}
 	public String show(Object object) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {

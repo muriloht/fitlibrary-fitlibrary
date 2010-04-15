@@ -22,6 +22,8 @@ public class LookupClosureStandard implements LookupClosure{
 		//
 	}
 	public Closure findMethodClosure(TypedObject typedObject, String methodName, int argCount) {
+		if (typedObject.isNull())
+			return null;
 		Method chosenMethod = findMethod(typedObject.getSubject().getClass(), methodName, argCount, typedObject.getSubject());
 		if (chosenMethod == null && aGetter(methodName, argCount))
 			return findField(typedObject,extractFieldName(methodName));

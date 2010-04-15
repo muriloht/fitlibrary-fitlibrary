@@ -12,7 +12,7 @@ public class FailingDelegateParser extends DelegateParser {
 		super(type);
 	}
 	@Override
-	public Object parse(String s, @SuppressWarnings("unused") Typed typed) throws Exception {
+	public Object parse(String s, Typed typed) throws Exception {
 		throw new CouldNotParseException(type,s);
 	}
 }

@@ -7,7 +7,7 @@ package fitlibrary.parser.tree;
 import fitlibrary.parser.HtmlStructureParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
-import fitlibrary.table.ICell;
+import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
@@ -42,7 +42,7 @@ public class TreeParser extends HtmlStructureParser {
     }
     // Is registered in ValueAdapter.on()
     @Override
-	public Object parse(ICell cell, TestResults testResults) throws Exception {
+	public Object parse(Cell cell, TestResults testResults) throws Exception {
         return parse(cell.fullText());
     }
     public static ParserFactory parserFactory() {

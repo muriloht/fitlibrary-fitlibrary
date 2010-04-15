@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Cell;
-import fitlibrary.table.ICell;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
@@ -50,12 +49,12 @@ public abstract class HtmlStructureParser implements HtmlParser {
                 " of class "+typed.asClass().getName()+": "+ex;
         throw new FitLibraryException(problem);
     }
-	public TypedObject parseTyped(ICell cell, TestResults testResults) throws Exception {
+	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
-	protected abstract Object parse(ICell cell, TestResults testResults) throws Exception;
+	protected abstract Object parse(Cell cell, TestResults testResults) throws Exception;
 	
-    public boolean matches(ICell cell, Object result, TestResults testResults) throws Exception {
+    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
         return areEqual(parseTyped(cell,testResults).getSubject(),result);
     }
     // Overridden

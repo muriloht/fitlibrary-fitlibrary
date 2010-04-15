@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.exception.method.MissingMethodException;
-import fitlibrary.table.IRow;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
@@ -21,7 +21,7 @@ public class SpecialCaller extends DoCaller {
 	private ICalledMethodTarget specialMethod;
 	private TwoStageSpecial twoStageSpecial = null;
 
-	public SpecialCaller(IRow row, Evaluator evaluator, LookupMethodTarget lookupTarget) {
+	public SpecialCaller(Row row, Evaluator evaluator, LookupMethodTarget lookupTarget) {
 		methodName = row.text(0,evaluator);
 		specialMethod = lookupTarget.findSpecialMethod(evaluator, methodName);
 		if (specialMethod != null && TwoStageSpecial.class.isAssignableFrom(specialMethod.getReturnType())) {
@@ -44,7 +44,7 @@ public class SpecialCaller extends DoCaller {
 		return specialMethod != null;
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		if (twoStageSpecial != null) {
 			twoStageSpecial.run(testResults);
 			return new GenericTypedObject(null);

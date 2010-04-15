@@ -89,7 +89,7 @@ public class CalculateTraverse extends FunctionTraverse {
         List<String> arguments = new ArrayList<String>();
         for (int i = 0; i < rowLength; i++) {
             Cell cell = row.cell(i);
-            String name = cell.text(getRuntimeContext());
+            String name = cell.text(this);
             try {
                 if (name.equals("")) {
                     if (pastDoubleColumn && notesPermitted) {
@@ -107,7 +107,7 @@ public class CalculateTraverse extends FunctionTraverse {
                         String methodName = camelCase(name+argNames);
                         if (arguments.size() > argCount) // Blank separating column is not an arg
                             arguments.remove(arguments.size()-1);
-                        CalledMethodTarget target = PlugBoard.lookupTarget.findTheMethod(methodName, arguments, "TypeOfResult", this);
+                        CalledMethodTarget target = PlugBoard.lookupTarget.findMethodOrGetter(methodName, arguments, "TypeOfResult", this);
                         if (target.returnsVoid())
                             throw new VoidMethodException(methodName,
                                     "CalculateTraverse");

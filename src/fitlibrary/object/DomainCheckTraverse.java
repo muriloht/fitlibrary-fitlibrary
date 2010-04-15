@@ -10,14 +10,15 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
+import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
-import fitlibrary.traverse.SwitchingEvaluator;
+import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TableListener;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
-public class DomainCheckTraverse extends Traverse implements SwitchingEvaluator {
+public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	private DomainTraverse domainTraverse;
 	
 	public DomainCheckTraverse() {
@@ -34,7 +35,7 @@ public class DomainCheckTraverse extends Traverse implements SwitchingEvaluator 
 	public void setDomainTraverse(DomainTraverse domainTraverse) {
 		this.domainTraverse = domainTraverse;
 	}
-	public void runTable(Table table, TableListener tableListener) {
+	public void runTable(Table table, ITableListener tableListener) {
         if (switchOnExpected(table)) {
             domainTraverse.setCurrentAction();
             return;
@@ -61,13 +62,9 @@ public class DomainCheckTraverse extends Traverse implements SwitchingEvaluator 
 //				ClassMethodTarget target = new ClassMethodTarget(getSystemUnderTest());
 //				target.invokeAndCheckCell(cell2,true,testResults);
 			} else {
-				String name = cell.text(this);
 				try {
-					TypedObject typedSystemUnderTest = getTypedSystemUnderTest();
-			    	if (typedSystemUnderTest == null)
-			    		throw new NoSystemUnderTestException();
-					CalledMethodTarget target = typedSystemUnderTest.findGetterOnTypedObject(name,this);
-					target.invokeAndCheck(new Row(),cell2,testResults,false);
+			    	CalledMethodTarget target =PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
+			    	target.invokeAndCheck(new RowOnParse(),cell2,testResults,false);
 				} catch (MissingMethodException ex) {
 					cell.error(testResults,ex);
 				}
@@ -91,4 +88,14 @@ public class DomainCheckTraverse extends Traverse implements SwitchingEvaluator 
                 table.row(0).size() == 1 && 
                 table.row(0).cell(0).matchesText("expected",this);
     }
+	@Override
+	public void addNamedObject(String text, TypedObject typedObject, Row row, TestResults testResults) {
+		// TODO Auto-generated method stub
+		// Remove this later
+	}
+	@Override
+	public void select(String name) {
+		// TODO Auto-generated method stub
+		// Remove this later
+	}
 }

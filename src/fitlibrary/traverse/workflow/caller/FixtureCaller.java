@@ -5,7 +5,7 @@
 package fitlibrary.traverse.workflow.caller;
 
 import fit.Fixture;
-import fitlibrary.table.IRow;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
@@ -22,7 +22,7 @@ public class FixtureCaller extends DoCaller {
 		return fixtureByName != null;
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) throws Exception {
+	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		return new GenericTypedObject(fixtureByName);
 	}
 	@Override

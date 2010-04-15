@@ -8,11 +8,11 @@ import java.util.List;
 
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.utility.TableListener;
+import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
 public interface DoEvaluator extends Evaluator {
 	Object interpretInFlow(Table table, TestResults testResults);
-	Object interpretWholeTable(Table table, TableListener tableListener);
+	Object interpretWholeTable(Table table, ITableListener tableListener);
 	List<String> methodsThatAreVisible();
 }

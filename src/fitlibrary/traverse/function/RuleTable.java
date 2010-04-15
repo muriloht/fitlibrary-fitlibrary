@@ -59,10 +59,9 @@ public class RuleTable extends Traverse {
 				}
 				String fn = ExtendedCamelCase.camel(name);
 				if (input)
-					columnTargets.add(new InputColumnTarget(PlugBoard.lookupTarget.findSetter(fn, this)));
+					columnTargets.add(new InputColumnTarget(PlugBoard.lookupTarget.findSetterOnSut(fn, this)));
 				else {
-					CalledMethodTarget target = PlugBoard.lookupTarget.
-					  findGetterUpContextsToo(asTypedObject(getSystemUnderTest()), this, fn,false);
+					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(fn,this);
 					if (target.returnsVoid())
 						throw new VoidMethodException(fn,"RuleTable");
 					columnTargets.add(new OutputColumnTarget(target));

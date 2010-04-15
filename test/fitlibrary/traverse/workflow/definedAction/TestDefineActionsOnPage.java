@@ -18,12 +18,12 @@ import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
-import fitlibrary.runtime.RuntimeContextImplementation;
-import fitlibrary.table.Tables;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.TestResults;
 
 public class TestDefineActionsOnPage {
-	RuntimeContextImplementation runtime = new RuntimeContextImplementation();
+	RuntimeContextContainer runtime = new RuntimeContextContainer();
 	DefinedActionsRepository definedActions = TemporaryPlugBoardForRuntime.definedActionsRepository();
 	protected File fitNesseDir;
 	
@@ -37,13 +37,14 @@ public class TestDefineActionsOnPage {
 	@Test public void actionsAreDefinedThroughFileSystem() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.PlainTextInsteadOfTables.DefinedActions";
 		String wiki = "|''define actions at''|"+pageName+"|";
-		Tables tables = Tables.fromWiki(wiki);
+		TablesOnParse tables = TablesOnParse.fromWiki(wiki);
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
 				return fitNesseDir;
 			}
 		};
+		defineActionsOnPage.setRuntimeContext(runtime);
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());
 		assertThat(definedActions.lookupByCamel("addressIsAt", 1),is(notNullValue()));
 		assertThat(definedActions.lookupByCamel("addressIs", 1),is(nullValue()));
@@ -52,13 +53,14 @@ public class TestDefineActionsOnPage {
 	@Test public void actionsAreDefinedThroughFileSystemExample2() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.DefinedActions";
 		String wiki = "|''define actions at''|"+pageName+"|";
-		Tables tables = Tables.fromWiki(wiki);
+		TablesOnParse tables = TablesOnParse.fromWiki(wiki);
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
 				return fitNesseDir;
 			}
 		};
+		defineActionsOnPage.setRuntimeContext(runtime);
 		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), new TestResults());
 		assertThat(definedActions.lookupByCamel("nameIs", 1),is(notNullValue()));
 		assertThat(definedActions.lookupByClassByCamel("Person", "nameIs", 1, runtime),is(notNullValue()));

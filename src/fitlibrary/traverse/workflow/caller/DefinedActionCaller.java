@@ -11,15 +11,19 @@ import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
-import fitlibrary.table.IRow;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
+import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TablesOnParse;
+import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.NonGenericTypedObject;
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class DefinedActionCaller extends DoCaller {
@@ -45,7 +49,7 @@ public class DefinedActionCaller extends DoCaller {
 			}
 		}
 	}
-	public DefinedActionCaller(String object, String className, Row row, DoTraverseInterpreter doTraverse) {
+	public DefinedActionCaller(String object, String className, RowOnParse row, DoTraverseInterpreter doTraverse) {
 		this.doTraverse = doTraverse;
 		this.runtime = doTraverse.getRuntimeContext();
 		methodName = row.methodNameForCamel(doTraverse);
@@ -60,8 +64,9 @@ public class DefinedActionCaller extends DoCaller {
 		return parameterSubstitution != null;
 	}
 	@Override
-	public TypedObject run(IRow row, TestResults testResults) {
-		CallManager.startCall(parameterSubstitution);
+	public TypedObject run(Row row, TestResults testResults) {
+		DefinedActionCallManager definedActionCallManager = doTraverse.getRuntimeContext().getDefinedActionCallManager();
+		definedActionCallManager.startCall(parameterSubstitution);
 		try {
 			Object oldThisValue = runtime.getDynamicVariable("this");
 			if (!actualArgs.isEmpty())
@@ -69,10 +74,10 @@ public class DefinedActionCaller extends DoCaller {
 			processDefinedAction(parameterSubstitution.substitute(actualArgs),row,testResults);
 			runtime.setDynamicVariable("this", oldThisValue);
 		} finally {
-			CallManager.endCall(parameterSubstitution);
+			definedActionCallManager.endCall(parameterSubstitution);
 		}
-		if (!runtime.toExpandDefinedActions() && CallManager.readyToShow() && !testResults.isAbandoned())
-			row.addCell(new Cell(new Tables(CallManager.getShowsTable())));
+		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
+			row.addCell(new CellOnParse(new TablesOnParse(definedActionCallManager.getShowsTable())));
 		return new NonGenericTypedObject(null);
 	}
 	@Override
@@ -88,25 +93,23 @@ public class DefinedActionCaller extends DoCaller {
 			if (cell.hasEmbeddedTable())
 				result.add(cell.getEmbeddedTables());
 			else
-				result.add(cell.text(runtime));
+				result.add(cell.text(runtime.getResolver()));
 		}
 		return result;
 	}
-	private void processDefinedAction(Tables definedActionBody, IRow row, TestResults testResults) {
-		TestResults subTestResults = new TestResults(testResults);
+	private void processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
+		TestResults subTestResults = new TestResults();
+		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
 		for (int i = 0; i < definedActionBody.size(); i++) {
 			Table table = definedActionBody.table(i);
-			if (testResults.isAbandoned())
-				table.ignore(subTestResults);
-			else
-				doTraverse.interpretWholeTable(table,subTestResults);
+			tableEvaluator.runTable(table, new TableListener(subTestResults));
 		}
 		colourReport(definedActionBody, row, testResults, subTestResults);
 	}
-	private void colourReport(Tables body, IRow row,
+	private void colourReport(Tables body, Row row,
 			TestResults testResults, TestResults subTestResults) {
-		if (runtime.toExpandDefinedActions() || subTestResults.problems() || testResults.isAbandoned()) {
-			if (testResults.isAbandoned()) {
+		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults)) {
+			if (runtime.isAbandoned(testResults)) {
 				// Leave it to caller to ignore the row
 			} else if (subTestResults.passed())
 				row.passKeywords(testResults);
@@ -120,8 +123,8 @@ public class DefinedActionCaller extends DoCaller {
 				for (int i = 0; i < row.size(); i += 2)
 					row.cell(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
-			row.addCell(new Cell(link(pageName),body));
-		} else if (!testResults.isAbandoned())
+			row.addCell(new CellOnParse(link(pageName),body));
+		} else if (!runtime.isAbandoned(testResults))
 			row.passKeywords(testResults);
 	}
 	public static String link(String pageName) {

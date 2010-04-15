@@ -8,7 +8,7 @@ import fit.Fixture;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.StringUtility;
 
@@ -30,7 +30,7 @@ public class SpecifyFixture extends Fixture {
 			expectedCell = firstRow.parts.more;
 		Parse expected = expectedCell.parts;
 
-		new BatchFitLibrary().doStorytest(new Tables(actual));
+		new BatchFitLibrary().doStorytest(new TablesOnParse(actual));
 		if (reportsEqual(actual,expected)) {
 			right(expectedCell);
 			counts.right += cellCount(actual) - 1;
