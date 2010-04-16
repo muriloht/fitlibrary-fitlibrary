@@ -31,7 +31,16 @@ public class TableFactory {
 		return new RowOnParse();
 	}
 	public static Row row(String... cellTexts) {
-		return new RowOnParse(cellTexts);
+		Row row = row();
+		for (String cellText: cellTexts)
+			row.add(cell(cellText));
+		return row;
+	}
+	public static Row row(Cell... cells) {
+		Row row = row();
+		for (Cell cell: cells)
+			row.add(cell);
+		return row;
 	}
 	public static Cell cell(String cellText) {
 		return new CellOnParse(cellText);

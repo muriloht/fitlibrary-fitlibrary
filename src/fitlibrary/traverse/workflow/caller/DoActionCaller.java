@@ -48,7 +48,7 @@ public class DoActionCaller extends DoCaller {
 		} catch (InvocationTargetException e) {
 			Throwable throwable = PlugBoard.exceptionHandling.unwrapThrowable(e);
 			if (throwable instanceof FitLibraryShowException)
-				row.cell(0).error(testResults);
+				row.elementAt(0).error(testResults);
 			throw e;
 		}
 	}

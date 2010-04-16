@@ -36,13 +36,13 @@ public class MapTraverse extends Traverse {
 				table.pass(testResults);
 			else
 				for (int rowNo = 1; rowNo < table.size(); rowNo++)
-					table.row(rowNo).missing(testResults);
+					table.elementAt(rowNo).missing(testResults);
 		} else {
 			// Base the parsing on some element of the map
 			determineTypes();
 			Map<Object,Object> copiedMap = new HashMap<Object,Object>(map);
 			for (int rowNo = 1; rowNo < table.size(); rowNo++) {
-				interpret(table.row(rowNo), copiedMap, keyParser, testResults);
+				interpret(table.elementAt(rowNo), copiedMap, keyParser, testResults);
 			}
 			addSurplusRows(table,copiedMap,testResults);
 		}
@@ -59,16 +59,16 @@ public class MapTraverse extends Traverse {
 		try {
 			if (row.size() > 2)
 				throw new ExtraCellsException("MapTraverse");
-			Object key = keyParser2.parseTyped(row.cell(0),testResults).getSubject();
+			Object key = keyParser2.parseTyped(row.elementAt(0),testResults).getSubject();
 			Object value = copiedMap.get(key);
 			if (value == null)
-				row.cell(0).expectedElementMissing(testResults);
+				row.elementAt(0).expectedElementMissing(testResults);
 			else {
 				Parser valueParser3 = asTyped(value).parser(this);
-				if (valueParser3.matches(row.cell(1),value,testResults))
+				if (valueParser3.matches(row.elementAt(1),value,testResults))
 					row.pass(testResults);
 				else
-					row.cell(1).fail(testResults,valueParser3.show(value),this);
+					row.elementAt(1).fail(testResults,valueParser3.show(value),this);
 			}
 			copiedMap.remove(key);
 		} catch (Exception e) {
@@ -83,7 +83,7 @@ public class MapTraverse extends Traverse {
 			try {
 				row.addCell(keyParser.show(key));
 				row.addCell(valueParser.show(value));
-				row.cell(0).actualElementMissing(testResults);
+				row.elementAt(0).actualElementMissing(testResults);
 			} catch (Exception e) {
 				if (row.isEmpty())
 					table.error(testResults, e);

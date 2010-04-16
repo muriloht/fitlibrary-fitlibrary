@@ -34,11 +34,11 @@ public class MultiDefinedActionTraverse extends Traverse {
 			if (table.size() < 3)
 				throw new FitLibraryException("Missing data rows in table");
 			getRuntimeContext().pushLocalDynamicVariables();
-			Row parameterRow = table.row(1);
+			Row parameterRow = table.elementAt(1);
 			multiParameterSubstitution.verifyParameters(parameterRow,this);
 			parameterRow.pass(testResults);
 			for (int r = 2; r < table.size(); r++) {
-				Row row = table.row(r);
+				Row row = table.elementAt(r);
 				if (runtime.isAbandoned(testResults))
 					row.ignore(testResults);
 				else
@@ -67,16 +67,14 @@ public class MultiDefinedActionTraverse extends Traverse {
 			definedActionCallManager.endCall(multiParameterSubstitution);
 		}
 		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults))
-			row.addCell(TableFactory.cell("Defined action call:",body));
+			row.add(TableFactory.cell("Defined action call:",body));
 		else if (definedActionCallManager.readyToShow())
-			row.addCell(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
+			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
 		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
-		for (int t = 0; t < body.size(); t++) {
-			Table table = body.table(t);
+		for (Table table: body)
 			tableEvaluator.runTable(table, new TableListener(subTestResults));
-		}
 	}
 	private void colourReport(Row row, TestResults testResults, TestResults subTestResults) {
 		if (runtime.isAbandoned(testResults))
@@ -86,13 +84,13 @@ public class MultiDefinedActionTraverse extends Traverse {
 				row.passKeywords(testResults);
 			else if (subTestResults.errors())
 				for (int i = 0; i < row.size(); i++)
-					row.cell(i).error(testResults, new FitLibraryException(""));
+					row.elementAt(i).error(testResults, new FitLibraryException(""));
 			else if (subTestResults.failed())
 				for (int i = 0; i < row.size(); i++)
-					row.cell(i).fail(testResults);
+					row.elementAt(i).fail(testResults);
 			else
 				for (int i = 0; i < row.size(); i++)
-					row.cell(i).pass(testResults);
+					row.elementAt(i).pass(testResults);
 		} else
 			row.pass(testResults);
 	}

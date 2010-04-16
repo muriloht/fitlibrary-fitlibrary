@@ -28,9 +28,8 @@ public class UseTemplateTraverse extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		TablesOnParse tables = table.getTables();
-		for (int t = 0; t < tables.size(); t++) {
-			Table defTable = tables.table(t);
-			Row firstRow = defTable.row(0);
+		for (Table defTable: tables) {
+			Row firstRow = defTable.elementAt(0);
 			if (firstRow.size() == 2 && firstRow.text(0,this).equals("template") && firstRow.text(1,this).equals(templateName)) {
 				interpret(defTable, table, testResults);
 				return null;
@@ -39,16 +38,16 @@ public class UseTemplateTraverse extends Traverse {
 		throw new FitLibraryException("Missing definition for template "+templateName);
 	}
 	private void interpret(Table definingTable, Table callingTable, TestResults testResults) {
-		Row actualParameterNames = callingTable.row(1);
+		Row actualParameterNames = callingTable.elementAt(1);
 		int parameterCount = actualParameterNames.size();
 		DefinedActionTraverse defineTemplateTraverse = createDefinedActionTraverse(definingTable, parameterCount);
 		int errors = 0;
 		for (int r = 2; r < callingTable.size(); r++) {
-			Row row = callingTable.row(r);
+			Row row = callingTable.elementAt(r);
 			List<Object> parameters = new ArrayList<Object>();
 			for (int c = 0; c < row.size(); c++) {
-				if (row.cell(c).hasEmbeddedTable())
-					parameters.add(row.cell(c).getEmbeddedTable());
+				if (row.elementAt(c).hasEmbeddedTable())
+					parameters.add(row.elementAt(c).getEmbeddedTable());
 				else
 					parameters.add(row.text(c,this));
 			}
@@ -76,7 +75,7 @@ public class UseTemplateTraverse extends Traverse {
 		templateRow.addCell(templateName);
 		Row paramsRow = paramsTable.newRow();
 		for (int c = 0; c < actualParameterNames.size(); c++)
-			paramsRow.addCell(TableFactory.cell(actualParameterNames.text(c,this)));
+			paramsRow.add(TableFactory.cell(actualParameterNames.text(c,this)));
 		Row argsRow = paramsTable.newRow();
 		for (Object paramValue: parameters) {
 			if (paramValue instanceof TableOnParse) {
@@ -86,8 +85,8 @@ public class UseTemplateTraverse extends Traverse {
 				argsRow.addCell((String) paramValue);
 		}
 		paramsTable.evenUpRows();
-		commentTable.newRow().addCell(TableFactory.cell(TableFactory.tables(paramsTable)));
-		commentTable.newRow().addCell(TableFactory.cell(resultingTables));
+		commentTable.newRow().add(TableFactory.cell(TableFactory.tables(paramsTable)));
+		commentTable.newRow().add(TableFactory.cell(resultingTables));
 		callingTable.insertTable(errors,commentTable);
 		return argsRow;
 	}

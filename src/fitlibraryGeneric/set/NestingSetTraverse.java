@@ -31,11 +31,11 @@ public class NestingSetTraverse extends Traverse {
         Parser parser = typed.parser(this);
         List<Object> listOfActuals = new ArrayList<Object>(set);
         for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-            Row row = table.row(rowNo);
+            Row row = table.elementAt(rowNo);
             try {
                 if (row.size() != 1)
                     throw new RowWrongWidthException(1);
-                matchActual(row.cell(0),parser,listOfActuals,table.size(),testResults);
+                matchActual(row.elementAt(0),parser,listOfActuals,table.size(),testResults);
             } catch (Exception e) {
 				row.error(testResults,e);
             }
@@ -59,7 +59,7 @@ public class NestingSetTraverse extends Traverse {
         }
         for (int i = 0; i < listOfActuals.size(); i++) {
             Object element = listOfActuals.get(i);
-            if (adapter.matches(cell.copy(),element,testResults)) {
+            if (adapter.matches(cell.deepCopy(),element,testResults)) {
                 adapter.matches(cell,element,testResults);
                 listOfActuals.remove(i);
                 return;

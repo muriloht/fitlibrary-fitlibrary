@@ -46,7 +46,7 @@ public class TestDefineActionsOnPage {
 			}
 		};
 		defineActionsOnPage.setRuntimeContext(runtime);
-		defineActionsOnPage.interpretAfterFirstRow(tables.table(0),TestResultsFactory.testResults());
+		defineActionsOnPage.interpretAfterFirstRow(tables.elementAt(0),TestResultsFactory.testResults());
 		assertThat(definedActions.lookupByCamel("addressIsAt", 1),is(notNullValue()));
 		assertThat(definedActions.lookupByCamel("addressIs", 1),is(nullValue()));
 		assertThat(definedActions.lookupByClassByCamel("Person", "addressIs", 1, runtime),is(notNullValue()));
@@ -62,7 +62,7 @@ public class TestDefineActionsOnPage {
 			}
 		};
 		defineActionsOnPage.setRuntimeContext(runtime);
-		defineActionsOnPage.interpretAfterFirstRow(tables.table(0), TestResultsFactory.testResults());
+		defineActionsOnPage.interpretAfterFirstRow(tables.elementAt(0), TestResultsFactory.testResults());
 		assertThat(definedActions.lookupByCamel("nameIs", 1),is(notNullValue()));
 		assertThat(definedActions.lookupByClassByCamel("Person", "nameIs", 1, runtime),is(notNullValue()));
 	}

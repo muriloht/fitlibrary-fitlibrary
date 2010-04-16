@@ -23,6 +23,6 @@ public class TestCrossReferenceFixture
 		};
 		String wiki =  "||";
 		Tables tables = SimpleWikiTranslator.translateToTables(wiki); 
-		xref.interpretAfterFirstRow(tables.table(0), TestResultsFactory.testResults());
+		xref.interpretAfterFirstRow(tables.elementAt(0), TestResultsFactory.testResults());
 	}
 }

@@ -23,14 +23,14 @@ public class FixtureBridge extends Fixture {
 		return null;
 	}
 	public Object getFixture(TableOnParse table, TestResults results) {
-		Cell headingCell = table.row(0).cell(0);
+		Cell headingCell = table.elementAt(0).elementAt(0);
 		try {
 			String className = headingCell.text().replaceAll(" ","");
 			try {
 		        Fixture fixture = loadFixture(className);
 		        fixture.counts = counts;
 		        fixture.summary = summary;
-		        fixture.args = getArgsForTable(table.row(0));
+		        fixture.args = getArgsForTable(table.elementAt(0));
 		        return fixture;
 			} catch (Exception e) {
 				try {

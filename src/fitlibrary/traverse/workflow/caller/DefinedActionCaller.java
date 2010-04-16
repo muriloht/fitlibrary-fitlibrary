@@ -77,7 +77,7 @@ public class DefinedActionCaller extends DoCaller {
 			definedActionCallManager.endCall(parameterSubstitution);
 		}
 		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
-			row.addCell(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
+			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 		return new NonGenericTypedObject(null);
 	}
 	@Override
@@ -89,7 +89,7 @@ public class DefinedActionCaller extends DoCaller {
 	}
 	private List<Object> actualArgs(Row row, List<Object> result) {
 		for (int i = 1; i < row.size(); i += 2) {
-			Cell cell = row.cell(i);
+			Cell cell = row.elementAt(i);
 			if (cell.hasEmbeddedTable())
 				result.add(cell.getEmbeddedTables());
 			else
@@ -100,10 +100,8 @@ public class DefinedActionCaller extends DoCaller {
 	private void processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
 		TestResults subTestResults = TestResultsFactory.testResults();
 		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
-		for (int i = 0; i < definedActionBody.size(); i++) {
-			Table table = definedActionBody.table(i);
+		for (Table table: definedActionBody)
 			tableEvaluator.runTable(table, new TableListener(subTestResults));
-		}
 		colourReport(definedActionBody, row, testResults, subTestResults);
 	}
 	private void colourReport(Tables body, Row row,
@@ -115,15 +113,15 @@ public class DefinedActionCaller extends DoCaller {
 				row.passKeywords(testResults);
 			else if (subTestResults.errors())
 				for (int i = 0; i < row.size(); i += 2)
-					row.cell(i).error(testResults, new FitLibraryException(""));
+					row.elementAt(i).error(testResults, new FitLibraryException(""));
 			else if (subTestResults.failed())
 				for (int i = 0; i < row.size(); i += 2)
-					row.cell(i).fail(testResults);
+					row.elementAt(i).fail(testResults);
 			else
 				for (int i = 0; i < row.size(); i += 2)
-					row.cell(i).ignore(testResults);
+					row.elementAt(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
-			row.addCell(TableFactory.cell(link(pageName),body));
+			row.add(TableFactory.cell(link(pageName),body));
 		} else if (!runtime.isAbandoned(testResults))
 			row.passKeywords(testResults);
 	}

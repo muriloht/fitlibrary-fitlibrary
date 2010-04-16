@@ -33,7 +33,7 @@ public class MapSetUpTraverse extends Traverse {
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	try {
     		for (int rowNo = 1; rowNo < table.size(); rowNo++)
-    			processRow(table.row(rowNo), testResults);
+    			processRow(table.elementAt(rowNo), testResults);
     	} catch (Exception e) {
     		table.error(testResults,e);
     	}
@@ -43,8 +43,8 @@ public class MapSetUpTraverse extends Traverse {
         try {
             if (row.size() != 2)
                 throw new RowWrongWidthException(2);
-            theMap.put(keyParser.parseTyped(row.cell(0),testResults).getSubject(),
-            		valueParser.parseTyped(row.cell(1),testResults).getSubject());
+            theMap.put(keyParser.parseTyped(row.elementAt(0),testResults).getSubject(),
+            		valueParser.parseTyped(row.elementAt(1),testResults).getSubject());
         } catch (Exception e) {
             row.error(testResults,e);
         }

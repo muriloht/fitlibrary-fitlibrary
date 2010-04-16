@@ -31,11 +31,11 @@ public class SpecifySuiteFixture extends SpecifyFixture {
         TestResults testResults = TestResultsFactory.testResults(counts);
         BatchFitLibrary batch = new BatchFitLibrary();
     	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
-            Row row = theTable.row(rowNo);
+            Row row = theTable.elementAt(rowNo);
             if (row.size() < 2)
 				row.error(testResults, new RowWrongWidthException(2));
-            Cell test = row.cell(0);
-            Cell report = row.cell(1);
+            Cell test = row.elementAt(0);
+            Cell report = row.elementAt(1);
             if (!test.hasEmbeddedTable()) {
             	row.error(testResults, new NestedTableExpectedException());
                 return;

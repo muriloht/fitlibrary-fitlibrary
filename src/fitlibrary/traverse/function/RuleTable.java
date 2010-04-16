@@ -42,14 +42,13 @@ public class RuleTable extends Traverse {
 		} catch (IgnoredException e) {
 			//
 		} catch (Exception e) {
-			table.row(1).error(testResults, e);
+			table.elementAt(1).error(testResults, e);
 		}
 		return null;
 	}
 	private void header(Table table, TestResults testResults) {
-		Row headerRow = table.row(1);
-		for (int i = 0; i < headerRow.size(); i++) {
-			Cell cell = headerRow.cell(i);
+		Row headerRow = table.elementAt(1);
+		for (Cell cell : headerRow) {
 			try {
 				String name = cell.text(this);
 				boolean input = true;
@@ -74,7 +73,7 @@ public class RuleTable extends Traverse {
 	}
 	private void body(Table table, TestResults testResults) {
 		for (int r = 2; r < table.size(); r++) {
-			Row row = table.row(r);
+			Row row = table.elementAt(r);
 			try {
 				if (resetMethod.isSome())
 					resetMethod.get().invoke();
@@ -87,7 +86,7 @@ public class RuleTable extends Traverse {
 	private void row(TestResults testResults, Row row) throws Exception {
 		boolean haveCalledExecuteForThisRow = executeMethod.isNone();
 		for (int i = 0; i < row.size(); i++) {
-			Cell cell = row.cell(i);
+			Cell cell = row.elementAt(i);
 			try {
 				ColumnTarget columnTarget = columnTargets.get(i);
 				if (!haveCalledExecuteForThisRow && columnTarget.isOutput()) {
@@ -102,11 +101,11 @@ public class RuleTable extends Traverse {
 		}
 	}
 	private void basicCheck(Table table, TestResults testResults) {
-		int width = table.row(1).size();
+		int width = table.elementAt(1).size();
 		for (int r = 2; r < table.size(); r++) {
-			Row row = table.row(r);
+			Row row = table.elementAt(r);
 			if (width != row.size()) {
-				row.cell(0).error(testResults,"Irregular shaped: This row differs in width from the header");
+				row.elementAt(0).error(testResults,"Irregular shaped: This row differs in width from the header");
 				throw new IgnoredException();
 			}
 		}

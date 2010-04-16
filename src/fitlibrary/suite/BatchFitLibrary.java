@@ -26,7 +26,7 @@ import fitlibrary.utility.TestResults;
 import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class BatchFitLibrary {
+public class BatchFitLibrary implements StorytestRunner {
 	private TableListener tableListener = new TableListener(TestResultsFactory.testResults());
 	private DoFlow doFlow = wiredUpDoFlow();
 
@@ -62,7 +62,7 @@ public class BatchFitLibrary {
 				recorder.write();
 			} catch (IOException e) {
 				Table errorTable = TableFactory.table(TableFactory.row("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
-				errorTable.row(0).cell(1).error(tableListener.getTestResults());
+				errorTable.elementAt(0).elementAt(1).error(tableListener.getTestResults());
 				theTables.add(errorTable );
 			}
 		}

@@ -61,7 +61,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		TypedObject result = null;
 		for (int rowNo = 1; rowNo < table.size(); rowNo++) {
-			Row row = table.row(rowNo);
+			Row row = table.elementAt(rowNo);
 			if (getRuntimeContext().isAbandoned(testResults))
 				row.ignore(testResults);
 			else
@@ -102,7 +102,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			Fixture fixtureByName = fixtureOrDoTraverseByName(table,testResults);
 			if (fixtureByName != null && fixtureByName.getClass() == Fixture.class)
 				fixtureByName = null;
-			TypedObject typedResult = interpretRow(table.row(0),testResults,fixtureByName);
+			TypedObject typedResult = interpretRow(table.elementAt(0),testResults,fixtureByName);
 			Object result = null;
 			if (typedResult != null)
 				result = typedResult.getSubject();
@@ -130,13 +130,13 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		evaluator.interpretAfterFirstRow(table,testResults);
 	}
 	public Fixture fixtureOrDoTraverseByName(Table table, TestResults testResults) {
-        String className = table.row(0).text(0,this).trim();
+        String className = table.elementAt(0).text(0,this).trim();
 		if (className.equals(""))
             return null;
 		try {
 			return new OpenFixture(testResults.getCounts()).getLinkedFixtureWithArgs(table.parse());
 		} catch (Throwable e) {
-			if (table.row(0).size() == 1) {
+			if (table.elementAt(0).size() == 1) {
 				try {
 					Object traverse = Class.forName(className).newInstance();
 					if (traverse instanceof DoTraverse) {

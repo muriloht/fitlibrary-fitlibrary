@@ -31,9 +31,9 @@ public class CombinationTraverse extends FunctionTraverse {
     }
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		bindFirstRowToTarget(table.row(1),testResults);
+		bindFirstRowToTarget(table.elementAt(1),testResults);
 		for (int i = 2; i < table.size(); i++)
-			processRow(table.row(i),testResults);
+			processRow(table.elementAt(i),testResults);
 		return null;
 	}
 	public void bindFirstRowToTarget(Row row, TestResults testResults) {
@@ -49,7 +49,7 @@ public class CombinationTraverse extends FunctionTraverse {
 		}
         int rowLength = row.size();
         for (int i = 1; i < rowLength; i++) {
-            Cell cell = row.cell(i);
+            Cell cell = row.elementAt(i);
             try {
                 topValues.add(secondParser.parseTyped(cell,testResults).getSubject());
             } catch (Exception e) {
@@ -65,14 +65,14 @@ public class CombinationTraverse extends FunctionTraverse {
 			return;
 		}
 		try {
-			Object arg1 = firstParser.parseTyped(row.cell(0),testResults).getSubject();
+			Object arg1 = firstParser.parseTyped(row.elementAt(0),testResults).getSubject();
 			if (row.size()-1 < topValues.size())
 				throw new MissingCellsException("CombinationTraverse");
 			if (row.size()-1 > topValues.size())
 				throw new ExtraCellsException("CombinationTraverse");
             for (int i = 1; i < row.size(); i++) {
                 Object result = methodTarget.invoke(new Object[]{arg1,topValues.get(i-1)});
-                methodTarget.checkResult(row.cell(i),result,true,false, testResults);
+                methodTarget.checkResult(row.elementAt(i),result,true,false, testResults);
             }
 		} catch (Exception e) {
 			row.error(testResults,e);

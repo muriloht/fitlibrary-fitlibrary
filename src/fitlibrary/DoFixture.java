@@ -38,7 +38,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     // Dispatched to from Fixture when a DoFixture is the first fixture in a storytest
     @Override
 	final public void interpretTables(Parse tables) {
-    	new TablesOnParse(tables).table(0).error(createTestResults(),
+    	new TablesOnParse(tables).elementAt(0).error(createTestResults(),
     			new RuntimeException("Please use FitLibraryServer instead of FitServer."));
     }
     // Dispatched to from Fixture when Fixture is doTabling the tables one by one (not in flow)

@@ -20,7 +20,7 @@ public class TestSetSymbolNamed extends TestSpecialAction {
 		public SetExpectations(String eq) throws Exception {
 			allowing(initialRow).size(); will(returnValue(4));
 			allowing(initialRow).text(2,actionContext); will(returnValue(eq));
-			allowing(initialRow).cell(0); will(returnValue(firstCell));
+			allowing(initialRow).elementAt(0); will(returnValue(firstCell));
 			allowing(initialRow).text(1,actionContext); will(returnValue("2nd"));
 			allowing(initialRow).rowFrom(3);will(returnValue(subRow));
 		}

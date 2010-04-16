@@ -9,9 +9,7 @@ import fit.Parse;
 import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
 
-public interface Table {
-	int size();
-	Row row(int rowNo);
+public interface Table extends TableElement<Table,Row> {
 	void error(TestResults testResults, Throwable e);
 	void error(ITableListener tableListener, Throwable e);
 	Parse parse();
@@ -19,7 +17,6 @@ public interface Table {
 	Row newRow();
 	boolean rowExists(int i);
 	void ignore(TestResults testResults);
-	void addRow(Row row);
 	void pass(TestResults testResults);
 	TablesOnParse getTables();
 	void insertTable(int offset, Table table);
@@ -28,7 +25,6 @@ public interface Table {
 	void addFoldingText(String foldingText);
 	boolean isPlainTextTable();
 	void replaceAt(int r, Row newRow);
-	Table copy();
 	void setLeader(String leader);
 	void setTrailer(String trailer);
 	String getLeader();

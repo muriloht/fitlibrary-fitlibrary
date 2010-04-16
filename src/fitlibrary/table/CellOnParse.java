@@ -4,6 +4,7 @@
 */
 package fitlibrary.table;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,7 +80,7 @@ public class CellOnParse extends ParseNode implements Cell {
     public boolean hasEmbeddedTable() {
         return parse.parts != null;
     }
-    public CellOnParse copy() {
+    public CellOnParse deepCopy() {
         return new CellOnParse(ParseUtility.copyParse(parse));
     }
     @Override
@@ -211,7 +212,7 @@ public class CellOnParse extends ParseNode implements Cell {
         TablesOnParse tables = getEmbeddedTables();
         if (tables.size() != 1)
         	throw new SingleNestedTableExpected();
-		return tables.table(0);
+		return tables.elementAt(0);
     }
     public TablesOnParse getEmbeddedTables() {
         if (!hasEmbeddedTable())
@@ -296,5 +297,27 @@ public class CellOnParse extends ParseNode implements Cell {
 	}
 	private static String getColspanHtml(int colspan) {
 		return " colspan=\""+colspan+"\"";
+	}
+	@Override
+	public Table elementAt(int i) {
+		return getEmbeddedTables().elementAt(i);
+	}
+	@Override
+	public boolean isEmpty() {
+		return !hasEmbeddedTable() || getEmbeddedTables().isEmpty() ;
+	}
+	@Override
+	public int size() {
+		return getEmbeddedTables().size();
+	}
+	@Override
+	public Iterator<Table> iterator() {
+		return getEmbeddedTables().iterator();
+	}
+	@Override
+	public void add(Table table) {
+		if (!hasEmbeddedTable())
+			parse().parts = TableFactory.tables().parse();
+		getEmbeddedTables().add(table);
 	}
 }

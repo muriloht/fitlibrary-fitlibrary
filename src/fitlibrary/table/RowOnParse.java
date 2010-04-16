@@ -4,6 +4,10 @@
 */
 package fitlibrary.table;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryShowException;
@@ -22,11 +26,6 @@ public class RowOnParse extends ParseNode implements Row {
     public RowOnParse() {
         this(new Parse("tr","",null,null));
     }
-    public RowOnParse(String... ss) {
-    	this();
-    	for (String s : ss)
-    		addCell(s);
-    }
     public Parse parse() {
     	return parse;
     }
@@ -35,7 +34,7 @@ public class RowOnParse extends ParseNode implements Row {
     		return 0;
         return parse.parts.size();
     }
-    public Cell cell(int i) {
+    public Cell elementAt(int i) {
         if (!cellExists(i))
             throw new MissingCellsException("");
         return new CellOnParse(parse.parts.at(i));
@@ -65,7 +64,7 @@ public class RowOnParse extends ParseNode implements Row {
 		if (e instanceof FitLibraryShowException)
         	handleShow((FitLibraryShowException) e);
         else
-        	cell(0).error(testResults,e);
+        	elementAt(0).error(testResults,e);
     }
     private void handleShow(FitLibraryShowException exception) {
     	Cell cell = addCell();
@@ -73,34 +72,33 @@ public class RowOnParse extends ParseNode implements Row {
     	cell.shown();
     }
     public String text(int i, VariableResolver resolver) {
-        return cell(i).text(resolver);
+        return elementAt(i).text(resolver);
     }
    public void missing(TestResults testResults) {
-        cell(0).expectedElementMissing(testResults);
+        elementAt(0).expectedElementMissing(testResults);
     }
     public Cell addCell() {
     	Cell cell = TableFactory.cell("");
-		addCell(cell);
+		add(cell);
 		return cell;
     }
-    public Row addCell(Cell cell) {
+    public void add(Cell cell) {
     	if (rowIsHidden)
     		System.out.println("Bug: Adding a cell to a hidden row in a table");
         if (parse.parts == null)
             parse.parts = cell.parse();
         else
             parse.parts.last().more = cell.parse();
-        return this;
     }
 	public Cell addCell(String text) {
         Cell cell = TableFactory.cell(text);
-        addCell(cell);
+        add(cell);
         return cell;
 	}
     public Cell addCell(String text, int cols) {
         Cell cell = new CellOnParse(text);
         cell.setColumnSpan(cols);
-        addCell(cell);
+        add(cell);
         return cell;
     }
     @Override
@@ -111,7 +109,7 @@ public class RowOnParse extends ParseNode implements Row {
         if (other.size() != size())
             return false;
         for (int i = 0; i < size(); i++)
-            if (!cell(i).equals(other.cell(i)))
+            if (!elementAt(i).equals(other.elementAt(i)))
                 return false;
         return true;
     }
@@ -120,11 +118,11 @@ public class RowOnParse extends ParseNode implements Row {
 		return new RowOnParse(new Parse("tr","",parse.parts.at(i),null));
 	}
 	public Cell last() {
-		return cell(size()-1);
+		return elementAt(size()-1);
 	}
 	public void ignore(TestResults testResults) {
 		for (int i = 0; i < size(); i++)
-			cell(i).ignore(testResults);
+			elementAt(i).ignore(testResults);
 	}
 	public boolean isEmpty() {
 		return size() == 0;
@@ -132,15 +130,15 @@ public class RowOnParse extends ParseNode implements Row {
 	public void setIsHidden() {
 		this.rowIsHidden  = true;
 		for (int i = 0; i < size(); i++)
-			cell(i).setIsHidden();
+			elementAt(i).setIsHidden();
 	}
 	public Cell lastCell() {
-		return cell(size()-1);
+		return elementAt(size()-1);
 	}
 	public void addCommentRow(CellOnParse cell) {
 		RowOnParse commentRow = new RowOnParse();
 		commentRow.addCell("note");
-		commentRow.addCell(cell);
+		commentRow.add(cell);
 		Parse next = parse.more;
 		parse.more = commentRow.parse;
 		commentRow.parse.more = next;
@@ -148,17 +146,17 @@ public class RowOnParse extends ParseNode implements Row {
 	public Row rowTo(int from, int upto) {
 		Row row = TableFactory.row();
 		for (int i = from; i < upto; i++)
-			row.addCell(TableFactory.cell(cell(i)));
+			row.add(TableFactory.cell(elementAt(i)));
 		return row;
 	}
 	public void passKeywords(TestResults testResults) {
 		for (int i = 0; i < size(); i += 2)
-			cell(i).pass(testResults);
+			elementAt(i).pass(testResults);
 	}
-	public Row copy() {
+	public Row deepCopy() {
 		Row rowCopy = TableFactory.row();
 		for (int i = 0; i < size(); i++)
-			rowCopy.addCell(TableFactory.cell(cell(i).fullText()));
+			rowCopy.add(TableFactory.cell(elementAt(i).fullText()));
 		return rowCopy;
 	}
 	public void removeFirstCell() {
@@ -191,7 +189,7 @@ public class RowOnParse extends ParseNode implements Row {
 	public int getColumnSpan() {
 		int col = 0;
 		for (int i = 0; i < size(); i++)
-			col += cell(i).getColumnSpan();
+			col += elementAt(i).getColumnSpan();
 		return col;
 	}
 	public void setColumnSpan(int span) {
@@ -205,7 +203,18 @@ public class RowOnParse extends ParseNode implements Row {
 	}
 	@Override
 	public void removeCell(int i) {
-		cell(i-1).parse().more = null;
-		cell(i-1).parse().trailer = "";
+		elementAt(i-1).parse().more = null;
+		elementAt(i-1).parse().trailer = "";
 	}
+	@Override
+	public Iterator<Cell> iterator() {
+		List<Cell> list = new ArrayList<Cell>();
+		for (int i = 0; i < size(); i++)
+			list.add(elementAt(i));
+		return list.iterator();
+	}
+//	@Override
+//	public Cell elementAt(int i) {
+//		return cell(i);
+//	}
 }

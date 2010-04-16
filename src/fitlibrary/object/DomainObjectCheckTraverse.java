@@ -36,20 +36,20 @@ public class DomainObjectCheckTraverse extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		for (int rowNo = 1; rowNo < table.size(); rowNo++)
-			interpret(table.row(rowNo),testResults);
+			interpret(table.elementAt(rowNo),testResults);
 		return getSystemUnderTest();
 	}
 	public void interpret(Row row, TestResults testResults) {
 		for (int i = 0; i < row.size(); i += 2) {
-			Cell cell = row.cell(i);
+			Cell cell = row.elementAt(i);
 			if (DomainObjectSetUpTraverse.givesClass(cell,this)) {
 				if (getSystemUnderTest() == null)
 					throw new NoSystemUnderTestException();
-				checkClass(testResults, cell, row.cell(i+1));
+				checkClass(testResults, cell, row.elementAt(i+1));
 			} else {
 				try {
 					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
-					target.invokeAndCheck(TableFactory.row(),row.cell(i+1),testResults,false);
+					target.invokeAndCheck(TableFactory.row(),row.elementAt(i+1),testResults,false);
 				} catch (Exception e) {
 					cell.error(testResults,e);
 				}

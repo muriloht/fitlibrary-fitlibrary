@@ -77,10 +77,10 @@ public class SetParser2 extends SetParser {
     	}
     }
     private boolean keyed(Table table) {
-    	return (table.row(0).cellExists(0) &&
-    			table.row(0).text(0,evaluator).toLowerCase().equals("key")) ||
-    			( table.row(0).cellExists(1) &&
-    					table.row(0).text(1,evaluator).toLowerCase().equals("key"));
+    	return (table.elementAt(0).cellExists(0) &&
+    			table.elementAt(0).text(0,evaluator).toLowerCase().equals("key")) ||
+    			( table.elementAt(0).cellExists(1) &&
+    					table.elementAt(0).text(1,evaluator).toLowerCase().equals("key"));
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {

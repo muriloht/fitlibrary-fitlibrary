@@ -4,6 +4,10 @@
 */
 package fitlibrary.table;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import fit.Parse;
 import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.utility.ITableListener;
@@ -23,7 +27,7 @@ public class TableOnParse extends ParseNode implements Table {
     public TableOnParse(Row... rows) {
     	this();
     	for (Row row: rows)
-    		addRow(row);
+    		add(row);
 	}
 	public Parse parse() {
 		return parse;
@@ -33,7 +37,7 @@ public class TableOnParse extends ParseNode implements Table {
 			return 0;
         return parse.parts.size();
     }
-    public Row row(int i) {
+    public Row elementAt(int i) {
         if (!rowExists(i))
             throw new MissingRowException("");
         return new RowOnParse(parse.parts.at(i));
@@ -47,25 +51,25 @@ public class TableOnParse extends ParseNode implements Table {
     }
     @Override
 	public void pass(TestResults testResults) {
-        row(firstErrorRow).pass(testResults);
+        elementAt(firstErrorRow).pass(testResults);
     }
     public void wrong(TestResults testResults, String msg) {
-        row(firstErrorRow).cell(0).fail(testResults,msg);
+        elementAt(firstErrorRow).elementAt(0).fail(testResults,msg);
     }
     public void ignore(TestResults testResults) {
-        row(firstErrorRow).ignore(testResults);
+        elementAt(firstErrorRow).ignore(testResults);
     }
     @Override
 	public void error(TestResults testResults, Throwable e) {
-        row(firstErrorRow).error(testResults,e);
+        elementAt(firstErrorRow).error(testResults,e);
     }
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
     public Row lastRow() {
-        return row(size()-1);
+        return elementAt(size()-1);
     }
-    public void addRow(Row row) {
+    public void add(Row row) {
         if (parse.parts == null)
             parse.parts = row.parse();
         else
@@ -73,7 +77,7 @@ public class TableOnParse extends ParseNode implements Table {
     }
     public Row newRow() {
         Row row = TableFactory.row();
-        addRow(row);
+        add(row);
         return row;
     }
 	public TableOnParse withDummyFirstRow() {
@@ -85,7 +89,7 @@ public class TableOnParse extends ParseNode implements Table {
 	}
 	private void setFirstRowIsHidden() {
 		this.firstErrorRow  = 1;
-		row(0).setIsHidden();
+		elementAt(0).setIsHidden();
 	}
 	public int phaseBoundaryCount() {
 		int count = (parse.leader).split("<hr>").length-1;
@@ -146,17 +150,15 @@ public class TableOnParse extends ParseNode implements Table {
 	 */
 	public void evenUpRows() {
 		int maxRowLength = getMaxRowColumnSpan();
-		for (int rowNo = 0; rowNo < size(); rowNo++) {
-			row(rowNo).setColumnSpan(maxRowLength);
+		for (Row row : this) {
+			row.setColumnSpan(maxRowLength);
 		}
 	}
 
 	private int getMaxRowColumnSpan() {
 		int maxLength = 0;
-		for (int rowNo = 0; rowNo < size(); rowNo++) {
-			Row row = row(rowNo);
+		for (Row row : this)
 			maxLength = Math.max(maxLength, row.getColumnSpan());
-		}
 		return maxLength;
 	}
 	// Following is only needed for TestDefinedActionBodyCollector -- remove it when that is gone.
@@ -168,7 +170,7 @@ public class TableOnParse extends ParseNode implements Table {
 		if (size() != other.size())
 			return false;
 		for (int i = 0; i < size(); i++)
-			if (!row(i).equals(other.row(i)))
+			if (!elementAt(i).equals(other.elementAt(i)))
 				return false;
 		return true;
 	}
@@ -184,10 +186,10 @@ public class TableOnParse extends ParseNode implements Table {
 		else
 			parse().parts.at(t-1).more = row.parse();
 	}
-	public Table copy() {
+	public Table deepCopy() {
 		Table copy = TableFactory.table();
-		for (int i = 0; i < size(); i++)
-			copy.addRow(row(i).copy());
+		for (Row row : this)
+			copy.add(row.deepCopy());
 		copy.setLeader(getLeader());
 		copy.setTrailer(getTrailer());
 		return copy;
@@ -205,5 +207,20 @@ public class TableOnParse extends ParseNode implements Table {
 	@Override
 	public void setTrailer(String trailer) {
 		parse().trailer = trailer;
+	}
+	@Override
+	public Iterator<Row> iterator() {
+		List<Row> list = new ArrayList<Row>();
+		for (int i = 0; i < size(); i++)
+			list.add(elementAt(i));
+		return list.iterator();
+	}
+//	@Override
+//	public Row elementAt(int i) {
+//		return row(i);
+//	}
+	@Override
+	public boolean isEmpty() {
+		return parse.more == null;
 	}
 }

@@ -183,18 +183,18 @@ public class TestDoFlow {
 	private void expectTwoRowsInOneTableAndOneInAnother() {
 		context.checking(new Expectations() {{
 			allowing(tables).size(); will(returnValue(2));
-			allowing(tables).table(0); will(returnValue(table1));
-			allowing(tables).table(1); will(returnValue(table1));
+			allowing(tables).elementAt(0); will(returnValue(table1));
+			allowing(tables).elementAt(1); will(returnValue(table1));
 			allowing(tables).last(); will(returnValue(table1));
 			allowing(table1).size(); will(returnValue(2));
 			allowing(table1).isPlainTextTable(); will(returnValue(false));
-			allowing(table1).row(0); will(returnValue(row1));
-			allowing(table1).row(1); will(returnValue(row2));
-			allowing(row1).cell(0); will(returnValue(cell1));
+			allowing(table1).elementAt(0); will(returnValue(row1));
+			allowing(table1).elementAt(1); will(returnValue(row2));
+			allowing(row1).elementAt(0); will(returnValue(cell1));
 			allowing(row1).size(); will(returnValue(2));
 			allowing(row2).size(); will(returnValue(2));
 			allowing(cell1).hasEmbeddedTable(); will(returnValue(false));
-			allowing(row2).cell(0); will(returnValue(cell1));
+			allowing(row2).elementAt(0); will(returnValue(cell1));
 			allowing(cell1).hadError(); will(returnValue(false));
 		}});
 	}

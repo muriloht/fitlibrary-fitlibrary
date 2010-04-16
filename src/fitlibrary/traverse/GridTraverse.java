@@ -35,13 +35,13 @@ public class GridTraverse extends Traverse {
         for (int rowNo = 0; rowNo < actual.length; rowNo++) {
             if (!table.rowExists(rowNo+1))
                 return false;
-            Row row = table.row(rowNo+1);
+            Row row = table.elementAt(rowNo+1);
             if (!cellsMatch(actual[rowNo],row,testResults))
                 matched = false;
         }
         for (int rowNo = actual.length+1; rowNo < table.size(); rowNo++) {
             matched = false;
-            table.row(rowNo).fail(testResults);
+            table.elementAt(rowNo).fail(testResults);
         }
         return matched;
     }
@@ -50,12 +50,12 @@ public class GridTraverse extends Traverse {
         for (int i = 0; i < actual.length; i++) {
             if (!row.cellExists(i))
                 return false;
-        	if (!cellMatches(actual[i], row.cell(i),testResults))
+        	if (!cellMatches(actual[i], row.elementAt(i),testResults))
         		matched = false;
         }
         for (int cellNo = actual.length; cellNo < row.size(); cellNo++) {
         	matched = false;
-        	row.cell(cellNo).fail(testResults);
+        	row.elementAt(cellNo).fail(testResults);
         }
         return matched;
     }
@@ -74,8 +74,8 @@ public class GridTraverse extends Traverse {
     }
     private void addActualRows(Table table, Object[][] actual) {
 		int cols = 0;
-		for (int rowNo = 0; rowNo < table.size(); rowNo++)
-			cols = Math.max(cols,table.row(rowNo).size());
+		for (Row row : table)
+			cols = Math.max(cols,row.size());
 		for (int i = 0; i < actual.length; i++)
 			cols = Math.max(cols,actual[i].length);
 		table.newRow().addCell("<i>Actuals:</i>",cols);
@@ -87,7 +87,7 @@ public class GridTraverse extends Traverse {
 		if (actuals.length == 0)
 			throw new RuntimeException("Actuals row empty");
 		for (int i = 0; i < actuals.length; i++)
-			row.addCell(cellWithValue(actuals[i]));
+			row.add(cellWithValue(actuals[i]));
 	}
 	private Cell cellWithValue(Object object) {
 		Cell cell = TableFactory.cell("");

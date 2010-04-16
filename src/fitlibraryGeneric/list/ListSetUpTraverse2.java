@@ -33,14 +33,14 @@ public class ListSetUpTraverse2 extends DoTraverse {
     @Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
         try {
-            Row firstRow = table.row(0);
+            Row firstRow = table.elementAt(0);
             int classColumn = findClassColumn(firstRow);
             if (classColumn < 0) {
                 Object element = ClassUtility.createElement(componentType,this); // Only used to bind setters
 				bindFirstRowToTargetsForObject(element,firstRow,firstRow,testResults);
             }
             for (int rowNo = 1; rowNo < table.size(); rowNo++)
-                processRow(firstRow,classColumn,table.row(rowNo),testResults);
+                processRow(firstRow,classColumn,table.elementAt(rowNo),testResults);
         } catch (IgnoredException e) {
         	//
         } catch (NoSuchMethodException e) {
@@ -52,7 +52,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
     }
 	private int findClassColumn(Row row) {
         for (int cellNo = 0; cellNo < row.size(); cellNo++) {
-            Cell cell = row.cell(cellNo);
+            Cell cell = row.elementAt(cellNo);
             if (DomainObjectSetUpTraverse.givesClass(cell,this))
                 return cellNo;
         }
@@ -62,12 +62,12 @@ public class ListSetUpTraverse2 extends DoTraverse {
         setSystemUnderTest(element);
         targets = new CalledMethodTarget[firstRow.size()];
         for (int i = 0; i < firstRow.size(); i++) {
-            Cell cell = firstRow.cell(i);
+            Cell cell = firstRow.elementAt(i);
             if (!DomainObjectSetUpTraverse.givesClass(cell,this)) {
                 try {
                 	targets[i] = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
                 } catch (Exception e) {
-                    row.cell(i).error(testResults,e);
+                    row.elementAt(i).error(testResults,e);
                 }
             }
         }
@@ -80,7 +80,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
         for (int i = 0; i < row.size(); i++) {
             if (i != classColumn && targets[i] != null) {
                 targets[i].setTypedSubject(Traverse.asTypedObject(element));
-                Cell cell = row.cell(i);
+                Cell cell = row.elementAt(i);
                 try {
                     targets[i].invoke(cell,testResults);
                 } catch (Exception e) {
@@ -107,7 +107,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
     		row.error(testResults, new NoNullaryConstructor(findClass));
     		throw new IgnoredException();
     	} catch (Exception e) {
-    		row.cell(0).error(testResults, e);
+    		row.elementAt(0).error(testResults, e);
     		throw new IgnoredException();
     	}
     }

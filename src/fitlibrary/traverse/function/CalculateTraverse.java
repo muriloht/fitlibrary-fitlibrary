@@ -57,9 +57,9 @@ public class CalculateTraverse extends FunctionTraverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		methods = 0;
-		bindFirstRowToTarget(table.row(1),testResults);
+		bindFirstRowToTarget(table.elementAt(1),testResults);
 		for (int i = 2; i < table.size(); i++)
-			processRow(table.row(i),testResults);
+			processRow(table.elementAt(i),testResults);
 		return null;
 	}
     public void processRow(Row row, TestResults testResults) {
@@ -80,7 +80,7 @@ public class CalculateTraverse extends FunctionTraverse {
             return;
         }
         for (int i = 0; i < methods; i++)
-            targets[i].invokeAndCheck(row,row.cell(i+argCount+1),testResults,true);
+            targets[i].invokeAndCheck(row,row.elementAt(i+argCount+1),testResults,true);
     }
     public void bindFirstRowToTarget(Row row, TestResults testResults) {
         boolean pastDoubleColumn = false;
@@ -88,7 +88,7 @@ public class CalculateTraverse extends FunctionTraverse {
         String argNames = "";
         List<String> arguments = new ArrayList<String>();
         for (int i = 0; i < rowLength; i++) {
-            Cell cell = row.cell(i);
+            Cell cell = row.elementAt(i);
             String name = cell.text(this);
             try {
                 if (name.equals("")) {

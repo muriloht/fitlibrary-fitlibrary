@@ -37,10 +37,10 @@ public class DefinedActionTraverse extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		// Just check the parameter names here. Things happen in the call...
-		Row header = table.row(1);
+		Row header = table.elementAt(1);
 		Set<String> parameterNames = new HashSet<String>();
 		for (int c = 0; c < header.size(); c++) {
-			Cell parameterCell = header.cell(c);
+			Cell parameterCell = header.elementAt(c);
 			String parameterName = parameterCell.text(this);
 			if (parameterNames.contains(parameterName))
 				parameterCell.error(testResults, new FitLibraryException("Duplicate parameter names"));
@@ -49,13 +49,13 @@ public class DefinedActionTraverse extends Traverse {
 		return null;
 	}
 	protected DefinedActionTraverse(Table defTable, int parameterCount) {
-		Row header = defTable.row(1);
+		Row header = defTable.elementAt(1);
 		if (header.size() != parameterCount)
 			throw new FitLibraryException("Mismatch in number of parameters to template");
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
 		for (int c = 0; c < header.size(); c++)
 			mapToRef.put(header.text(c,this),paramRef(c));
-		body = TableFactory.tables(defTable.row(2).cell(0).getEmbeddedTables());
+		body = TableFactory.tables(defTable.elementAt(2).elementAt(0).getEmbeddedTables());
 		macroReplace(body,mapToRef);
 	}
 	public Tables call(List<Object> parameters, TestResults results) {
@@ -81,12 +81,9 @@ public class DefinedActionTraverse extends Traverse {
 				return arg1.compareTo(arg0);
 			}
 		});
-		for (int t = 0; t < tables.size(); t++) {
-			Table table = tables.table(t);
-			for (int r = 0 ; r < table.size(); r++) {
-				Row row = table.row(r);
-				for (int c = 0; c < row.size(); c++) {
-					Cell cell = row.cell(c);
+		for (Table table: tables) {
+			for (Row row: table) {
+				for (Cell cell: row) {
 					String text = cell.text(this);
 					for (String key : reverseSortOrder) {
 						if (text.contains(key)) {

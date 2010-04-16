@@ -11,7 +11,6 @@ import java.util.List;
 import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.caller.ValidCall;
@@ -27,21 +26,21 @@ public class PlainTextAnalyser {
 	}
 	public void analyseAndReplaceRowsIn(Table table, TestResults testResults) {
 		for (int r = 0; r < table.size(); r++) {
-			Row newRow = analyse(table.row(r), testResults);
+			Row newRow = analyse(table.elementAt(r), testResults);
 			table.replaceAt(r,newRow);
 		}
 	}
 	private Row analyse(Row row, TestResults testResults) {
-		String textCall = row.cell(0).fullText();
+		String textCall = row.elementAt(0).fullText();
 		List<ValidCall> results = new ArrayList<ValidCall>();
 		definedActionsRepository.findPlainTextCall(textCall, results);
 		if (results.isEmpty()) {
-			row.cell(0).error(testResults, "Unknown action");
+			row.elementAt(0).error(testResults, "Unknown action");
 			return row;
 		}
 		removeShorterMatches(results);
 		if (results.size() > 1) {
-			row.cell(0).error(testResults, "Ambiguous action (see details in logs after table)");
+			row.elementAt(0).error(testResults, "Ambiguous action (see details in logs after table)");
 			runtime.showAsAfterTable("plain text","Possible action tables:<br/>");
 			for (ValidCall call: results)
 				call.possibility(runtime.getGlobal());

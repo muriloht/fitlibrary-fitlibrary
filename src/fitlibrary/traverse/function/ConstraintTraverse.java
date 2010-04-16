@@ -32,9 +32,9 @@ public class ConstraintTraverse extends FunctionTraverse {
     }
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		bindFirstRowToTarget(table.row(1),testResults);
+		bindFirstRowToTarget(table.elementAt(1),testResults);
 		for (int i = 2; i < table.size(); i++)
-			processRow(table.row(i),testResults);
+			processRow(table.elementAt(i),testResults);
 		return null;
 	}
     public void bindFirstRowToTarget(Row row, TestResults testResults) {

@@ -46,20 +46,20 @@ public class ReferenceTraverse extends Traverse {
 	}
     public static boolean applicable(TableOnParse table) {
         if (table.size() == 1)
-            return isUses(table.row(0).cell(0).text());
+            return isUses(table.elementAt(0).elementAt(0).text());
         return false;
     }
     private static boolean isUses(String text) {
         return text.toLowerCase().equals("use");
     }
     public Object interpretReference(TableOnParse table, TestResults testResults) throws Exception {
-        return getObject(table.row(0),1,getSystemUnderTest(),testResults);
+        return getObject(table.elementAt(0),1,getSystemUnderTest(),testResults);
     }
     private Object getObject(Row row, int cellNo, Object initialObject, TestResults testResults) {
     	Object object = initialObject;
         boolean last = false;
         if (row.cellExists(cellNo+1)) {
-            Cell nextCell = row.cell(cellNo+1);
+            Cell nextCell = row.elementAt(cellNo+1);
             if (!nextCell.matchesText("of",this) && !nextCell.matchesText("in",this)) {
                 nextCell.fail(testResults,"'of' or 'in' expected",this);
                 throw new IgnoredException();
@@ -72,7 +72,7 @@ public class ReferenceTraverse extends Traverse {
         }
         else
             last = true;
-        return getReferencedObject(row.cell(cellNo),object,last,testResults);
+        return getReferencedObject(row.elementAt(cellNo),object,last,testResults);
     }
     @SuppressWarnings("unchecked")
 	private Object getReferencedObject(Cell cell, Object object, boolean last, TestResults testResults) {

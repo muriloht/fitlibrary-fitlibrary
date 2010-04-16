@@ -27,11 +27,11 @@ public class NestingListTraverse extends Traverse {
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
         Parser parser = typed.parser(this);
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-            Row row = table.row(rowNo);
+            Row row = table.elementAt(rowNo);
             try {
                 if (row.size() != 1)
                     throw new RowWrongWidthException(1);
-                Cell cell = row.cell(0);
+                Cell cell = row.elementAt(0);
                 if (list.size() > rowNo)
                 	parser.matches(cell,list.get(rowNo),testResults);
                 else

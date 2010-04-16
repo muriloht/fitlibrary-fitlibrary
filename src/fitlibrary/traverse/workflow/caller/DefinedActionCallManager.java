@@ -31,9 +31,9 @@ public class DefinedActionCallManager {
 	public void addShow(Row row) {
 		if (callsInProgress.isEmpty())
 			return;
-		Row copy = row.copy();
+		Row copy = row.deepCopy();
 		copy.last().shown();
-		shows.addRow(copy);
+		shows.add(copy);
 	}
 	public boolean readyToShow() {
 		return hasNoOutstandingCalls() && hasShows();

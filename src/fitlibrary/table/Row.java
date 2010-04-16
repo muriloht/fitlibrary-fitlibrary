@@ -9,14 +9,12 @@ import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.utility.TestResults;
 
-public interface Row {
+public interface Row extends TableElement<Row,Cell> {
 	int size();
 	boolean isEmpty();
 	Cell last();
 	boolean hasFurtherRows();
-	Cell cell(int i);
 	boolean cellExists(int i);
-	Row addCell(Cell cell);
 	Cell addCell();
 	Cell addCell(String s);
 	Cell addCell(String text, int cols);
@@ -30,7 +28,6 @@ public interface Row {
 	void ignore(TestResults testResults);
 	void missing(TestResults testResults);
 	void shown();
-	Row copy();
 	Row rowFrom(int i);
 	
 	int argumentCount();

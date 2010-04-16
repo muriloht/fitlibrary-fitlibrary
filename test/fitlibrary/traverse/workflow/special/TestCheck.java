@@ -22,7 +22,7 @@ public class TestCheck extends TestSpecialAction {
 			one(actionContext).findMethodFromRow(initialRow,1,1);will(returnValue(target));
 			allowing(initialRow).last();will(returnValue(expectedCell));
 			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
-			allowing(initialRow).cell(0);will(returnValue(firstCell));
+			allowing(initialRow).elementAt(0);will(returnValue(firstCell));
 			one(target).invokeAndCheckForSpecial(subRow,expectedCell,testResults,initialRow,firstCell);
 		}});
 		TwoStageSpecial lazySpecial = special.check(initialRow);

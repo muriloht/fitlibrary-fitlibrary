@@ -81,10 +81,10 @@ public class DefineActionsOnPageSlowly extends Traverse {
 		Table defineActionTable = TableFactory.table();
 		Row row = TableFactory.row();
 		row.addCell("DefineAction");
-		defineActionTable.addRow(row);
+		defineActionTable.add(row);
 		row = TableFactory.row();
-		row.addCell(TableFactory.cell(innerTables));
-		defineActionTable.addRow(row);
+		row.add(TableFactory.cell(innerTables));
+		defineActionTable.add(row);
 		return defineActionTable;
 	}
 	protected File fitNesseDiry() {

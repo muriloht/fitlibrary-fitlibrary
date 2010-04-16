@@ -16,7 +16,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.StringUtility;
 
 public class ParameterSubstitution {
@@ -57,12 +56,10 @@ public class ParameterSubstitution {
 			macroReplaceTables(tables, key, mapToRef.get(key));
 	}
 	private static void macroReplaceTables(Tables tables, String key, Object value) {
-		for (int t = 0; t < tables.size(); t++) {
-			Table table = tables.table(t);
-			for (int r = 0 ; r < table.size(); r++) {
-				Row row = table.row(r);
-				for (int c = 0; c < row.size(); c++)
-					macroReplaceCell(row.cell(c), key, value);
+		for (Table table: tables) {
+			for (Row row : table) {
+				for (Cell cell: row)
+					macroReplaceCell(cell, key, value);
 			}
 		}
 	}

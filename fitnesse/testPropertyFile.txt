@@ -1,2 +1,5 @@
-#Recorded on Fri Apr 16 17:08:49 NZST 2010
-#Fri Apr 16 17:08:49 NZST 2010
+#Recorded on Sat Apr 17 10:33:31 NZST 2010
+#Sat Apr 17 10:33:31 NZST 2010
+b=b-value
+a=a-value
+c=c-value

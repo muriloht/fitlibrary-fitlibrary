@@ -9,7 +9,7 @@ import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.utility.TestResults;
 
-public interface Cell {
+public interface Cell extends TableElement<Cell,Table> {
 	String text();
 	String text(VariableResolver resolver);
 	String textLower(VariableResolver resolver);
@@ -54,7 +54,6 @@ public interface Cell {
 	void shown();
 	
 	boolean unresolved(VariableResolver resolver);
-	Cell copy();
 	int getColumnSpan();
 	void setColumnSpan(int span);
 	void setIsHidden();

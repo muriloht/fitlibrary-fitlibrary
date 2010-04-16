@@ -31,7 +31,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 		return point;
 	}
 	public void specialAction(RowOnParse row, TestResults testResults) {
-		Cell cell = row.cell(1);
+		Cell cell = row.elementAt(1);
 		String text = cell.text(this);
 		if (text.equals("right"))
 			cell.pass(testResults);

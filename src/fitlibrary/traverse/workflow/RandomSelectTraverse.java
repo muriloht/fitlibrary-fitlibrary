@@ -21,9 +21,9 @@ public class RandomSelectTraverse extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		int select = 1+random.nextInt(table.size()-1);
-		setDynamicVariable(var, table.row(select).text(0,this));
+		setDynamicVariable(var, table.elementAt(select).text(0,this));
 		for (int i = 1; i < table.size(); i++)
-			table.row(i).text(0,this);
+			table.elementAt(i).text(0,this);
 		return null;
 	}
 

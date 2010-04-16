@@ -42,19 +42,19 @@ public class TestRowOnParse {
 	@Test public void setColumnSpanWithNoCellsHadsOneCell() {
 		row.setColumnSpan(4);
 		assertThat(row.getColumnSpan(),is(4));
-		assertThat(row.cell(0).getColumnSpan(),is(4));
+		assertThat(row.elementAt(0).getColumnSpan(),is(4));
 	}
 	@Test public void setColumnSpanWithOneCellWithNoColumnSpanSet() {
 		row.addCell("1");
 		row.setColumnSpan(4);
 		assertThat(row.getColumnSpan(),is(4));
-		assertThat(row.cell(0).getColumnSpan(),is(4));
+		assertThat(row.elementAt(0).getColumnSpan(),is(4));
 	}
 	@Test public void setColumnSpanWithOneCellWithColumnSpanSet() {
 		row.addCell("1", 3);
 		row.setColumnSpan(4);
 		assertThat(row.getColumnSpan(),is(4));
-		assertThat(row.cell(0).getColumnSpan(),is(4));
+		assertThat(row.elementAt(0).getColumnSpan(),is(4));
 	}
 	@Test public void setColumnSpanWithMultipleCellsWithAndWithoutColumnSpanSetAddToTheColumnSpanOfLastCell() throws Exception {
 		row.addCell("1", 4);
@@ -63,10 +63,10 @@ public class TestRowOnParse {
 		row.addCell("4",4);
 		row.setColumnSpan(15);
 		assertThat(row.getColumnSpan(),is(15));
-		assertThat(row.cell(0).getColumnSpan(),is(4));
-		assertThat(row.cell(1).getColumnSpan(), is(1));
-		assertThat(row.cell(2).getColumnSpan(),is(2));
-		assertThat(row.cell(3).getColumnSpan(),is(8));
+		assertThat(row.elementAt(0).getColumnSpan(),is(4));
+		assertThat(row.elementAt(1).getColumnSpan(), is(1));
+		assertThat(row.elementAt(2).getColumnSpan(),is(2));
+		assertThat(row.elementAt(3).getColumnSpan(),is(8));
 	}
 	@Test
 	public void plainMethodNameNoArg() {
@@ -104,13 +104,13 @@ public class TestRowOnParse {
 		Row row1 = TableFactory.row("x","y");
 		Row row2 = TableFactory.row("m","n");
 		Table table = TableFactory.table();
-		table.addRow(row0);
-		table.addRow(row1);
-		assertThat(table.row(0),is(row0));
-		assertThat(table.row(1),is(row1));
+		table.add(row0);
+		table.add(row1);
+		assertThat(table.elementAt(0),is(row0));
+		assertThat(table.elementAt(1),is(row1));
 		table.replaceAt(0, row2);
-		assertThat(table.row(0),is(row2));
-		assertThat(table.row(1),is(row1));
+		assertThat(table.elementAt(0),is(row2));
+		assertThat(table.elementAt(1),is(row1));
 	}
 	@Test
 	public void canReplaceRowAtEnd() {
@@ -118,10 +118,10 @@ public class TestRowOnParse {
 		Row row1 = TableFactory.row("x","y");
 		Row row2 = TableFactory.row("m","n");
 		Table table = TableFactory.table();
-		table.addRow(row0);
-		table.addRow(row1);
+		table.add(row0);
+		table.add(row1);
 		table.replaceAt(1, row2);
-		assertThat(table.row(0),is(row0));
-		assertThat(table.row(1),is(row2));
+		assertThat(table.elementAt(0),is(row0));
+		assertThat(table.elementAt(1),is(row2));
 	}
 }

@@ -334,7 +334,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		boolean compares(Comparable actual, Comparable expected);
 	}
 	private Cell operatorCell(final RowOnParse row) {
-		return row.cell(row.size()-2);
+		return row.elementAt(row.size()-2);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
@@ -550,7 +550,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void showDot(RowOnParse row, TestResults testResults) throws Exception {
 		Parser adapter = new GraphicParser(new NonGenericTyped(ObjectDotGraphic.class));
 		try {
-		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
+		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
 		    row.addCell(adapter.show(new ObjectDotGraphic(result)));
 		} catch (IgnoredException e) { // No result, so ignore
 		}
@@ -575,11 +575,11 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void expectedTestResults(RowOnParse row, TestResults testResults) throws Exception {
 		if (testResults.matches(row.text(1,this),row.text(3,this),row.text(5,this),row.text(7,this))) {
 			testResults.clear();
-			row.cell(0).pass(testResults);
+			row.elementAt(0).pass(testResults);
 		} else {
 			String results = testResults.toString();
 			testResults.clear();
-			row.cell(0).fail(testResults,results,this);
+			row.elementAt(0).fail(testResults,results,this);
 		}
 	}
 	public Object oo(final RowOnParse row, TestResults testResults) throws Exception {
@@ -597,18 +597,18 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      */
 	public void optionally(RowOnParse row, TestResults testResults) throws Exception {
 		try {
-		    Object result = callMethodInRow(row,testResults, true,row.cell(0));
+		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
 		    if (result instanceof Boolean && !((Boolean)result).booleanValue()) {
 		    	row.addCell("false").shown();
 		    	getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		    }
 		} catch (FitLibraryException e) {
-			row.cell(0).error(testResults,e);
+			row.elementAt(0).error(testResults,e);
 		} catch (Exception e) {
 			row.addCell(PlugBoard.exceptionHandling.exceptionMessage(e)).shown();
 			getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		}
-		row.cell(0).pass(testResults);
+		row.elementAt(0).pass(testResults);
 	}
 	/*
 	 * |''add named''|name|...action or fixture|
