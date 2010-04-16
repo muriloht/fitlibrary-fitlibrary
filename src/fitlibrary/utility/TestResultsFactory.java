@@ -9,9 +9,9 @@ import fit.Counts;
 
 public class TestResultsFactory {
 	public static TestResults testResults() {
-		return new TestResults();
+		return new TestResultsOnCounts();
 	}
 	public static TestResults testResults(Counts counts) {
-		return new TestResults(counts);
+		return new TestResultsOnCounts(counts);
 	}
 }
