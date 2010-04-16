@@ -6,11 +6,12 @@ package fitlibrary.parser;
 
 import java.lang.reflect.Method;
 
-import fitlibrary.DoFixture;
 import fitlibrary.parser.lookup.ResultParser;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.table.Cell;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public class TestSimpleValueAdapter extends ParserTestCase {
 	public int aProp = 567;
@@ -18,9 +19,9 @@ public class TestSimpleValueAdapter extends ParserTestCase {
 	public void testParseAlone() throws Exception {
 		Parser parser = Traverse.asTyped(int.class).parser(evaluatorWithRuntime());
 		String cellText = "12";
-		CellOnParse cell = new CellOnParse(cellText);
+		Cell cell = TableFactory.cell(cellText);
 		Integer expectedResult = new Integer(12);
-		TestResults testResults = new TestResults();
+		TestResults testResults = TestResultsFactory.testResults();
 		assertEquals(expectedResult,parser.parseTyped(cell,testResults).getSubject());
 		assertTrue(parser.matches(cell, expectedResult,testResults));
 		assertEquals(cellText,parser.show(expectedResult));

@@ -25,6 +25,7 @@ import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
@@ -128,13 +129,13 @@ public abstract class Traverse implements Evaluator {
 		return evaluator.getRuntimeContext().getScope();
 	}
 	public boolean doesInnerTablePass(Table table, Evaluator evaluator, TestResults testResults) {
-		TestResults innerResults = new TestResults();
+		TestResults innerResults = TestResultsFactory.testResults();
 		interpretInnerTableWithInScope(table,evaluator,innerResults);
         testResults.add(innerResults);
 		return innerResults.passed();
 	}
 	public boolean doesTablePass(Table table, Evaluator evaluator, TestResults testResults) {
-		TestResults innerResults = new TestResults();
+		TestResults innerResults = TestResultsFactory.testResults();
 		interpretWithinScope(table,evaluator,innerResults);
         testResults.add(innerResults);
 		return innerResults.passed();

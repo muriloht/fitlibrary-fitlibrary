@@ -37,7 +37,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td class="ignore"><i>no body</i></td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
-<table>
+<table border="1" cellspacing="0">
 <tr>
 <td>comment</td></tr></table></td></tr>
 </table>

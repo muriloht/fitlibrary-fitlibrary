@@ -56,9 +56,9 @@ public class SpreadsheetRunner {
                 Parse parse = customRunner.getTables();
                 parse.leader = report.addLinks(parse.leader,inFile);
             }
-            Parse tables = customRunner.getTables();
-			TestResults testResults = batchFitLibrary.doStorytest(new TablesOnParse(tables));
-			tables.print(output);
+            Parse parseTables = customRunner.getTables();
+			TestResults testResults = batchFitLibrary.doStorytest(new TablesOnParse(parseTables));
+			parseTables.print(output);
 			output.close();
 			return testResults.getCounts();
          } catch (CustomRunnerException e) {

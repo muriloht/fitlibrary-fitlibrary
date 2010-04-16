@@ -7,16 +7,16 @@ package fitlibrary.traverse.workflow.caller;
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public class MultiDefinedActionTraverse extends Traverse {
 	private MultiParameterSubstitution multiParameterSubstitution;
@@ -56,7 +56,7 @@ public class MultiDefinedActionTraverse extends Traverse {
 	}
 	private void runRow(Row row, Row parameterRow, TestResults testResults) {
 		Tables body = multiParameterSubstitution.getCopyOfBody();
-		TestResults subTestResults = new TestResults();
+		TestResults subTestResults = TestResultsFactory.testResults();
 		DefinedActionCallManager definedActionCallManager = doTraverse.getRuntimeContext().getDefinedActionCallManager();
 		try {
 			definedActionCallManager.startCall(multiParameterSubstitution);
@@ -67,9 +67,9 @@ public class MultiDefinedActionTraverse extends Traverse {
 			definedActionCallManager.endCall(multiParameterSubstitution);
 		}
 		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults))
-			row.addCell(new CellOnParse("Defined action call:",body));
+			row.addCell(TableFactory.cell("Defined action call:",body));
 		else if (definedActionCallManager.readyToShow())
-			row.addCell(new CellOnParse(new TablesOnParse(definedActionCallManager.getShowsTable())));
+			row.addCell(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
 		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();

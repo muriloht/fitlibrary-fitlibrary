@@ -14,7 +14,7 @@ import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.flow.DoFlow;
 import fitlibrary.table.Row;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
@@ -89,7 +89,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 		throw new ClassNotFoundException(className);
 	}
 	private void handleArgs(Fixture fixture, Row row) {
-		fixture.getArgsForTable(new TableOnParse(row).parse());
+		fixture.getArgsForTable(TableFactory.table(row).parse());
 	}
 	@Override
 	public boolean isValid() {

@@ -34,6 +34,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.CollectionUtility;
 import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 @RunWith(JMock.class)
@@ -42,7 +43,7 @@ public class TestDoFlow {
 	final States stackStates = context.states("stack").startsAs("empty");
 	final FlowEvaluator flowEvaluator = context.mock(FlowEvaluator.class);
 	final IScopeStack scopeStack = context.mock(IScopeStack.class);
-	final TestResults testResults = new TestResults();
+	final TestResults testResults = TestResultsFactory.testResults();
 	final ITableListener tableListener = context.mock(ITableListener.class);
 	final RuntimeContextContainer runtime = new RuntimeContextContainer();
 	DoFlow doFlow;
@@ -194,6 +195,7 @@ public class TestDoFlow {
 			allowing(row2).size(); will(returnValue(2));
 			allowing(cell1).hasEmbeddedTable(); will(returnValue(false));
 			allowing(row2).cell(0); will(returnValue(cell1));
+			allowing(cell1).hadError(); will(returnValue(false));
 		}});
 	}
 	protected ArrayList<TypedObject> scopeList(Object... objects) {

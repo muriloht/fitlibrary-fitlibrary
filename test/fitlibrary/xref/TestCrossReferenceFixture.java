@@ -6,12 +6,10 @@ package fitlibrary.xref;
 
 import org.junit.Test;
 
-import fit.Parse;
 import fit.exception.FitParseException;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.SimpleWikiTranslator;
-import fitlibrary.utility.TestResults;
-import fitlibrary.xref.CrossReferenceFixture;
+import fitlibrary.utility.TestResultsFactory;
 
 public class TestCrossReferenceFixture
 {
@@ -24,7 +22,7 @@ public class TestCrossReferenceFixture
 			}
 		};
 		String wiki =  "||";
-		TablesOnParse tables = new TablesOnParse(new Parse(SimpleWikiTranslator.translate(wiki))); 
-		xref.interpretAfterFirstRow(tables.table(0), new TestResults());
+		Tables tables = SimpleWikiTranslator.translateToTables(wiki); 
+		xref.interpretAfterFirstRow(tables.table(0), TestResultsFactory.testResults());
 	}
 }

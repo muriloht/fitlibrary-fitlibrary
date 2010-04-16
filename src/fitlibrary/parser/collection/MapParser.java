@@ -14,8 +14,8 @@ import fitlibrary.exception.parse.InvalidMapString;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.NonGenericTyped;
@@ -81,8 +81,8 @@ public class MapParser implements Parser {
 			String[] split = mapString.split("->");
 			if (split.length != 2)
 				throw new InvalidMapString(mapString);
-			map.put(parser.parseTyped(new CellOnParse(split[0]),testResults).getSubject(),
-					parser.parseTyped(new CellOnParse(split[1]),testResults).getSubject());
+			map.put(parser.parseTyped(TableFactory.cell(split[0]),testResults).getSubject(),
+					parser.parseTyped(TableFactory.cell(split[1]),testResults).getSubject());
 		}
 		return map;
 	}

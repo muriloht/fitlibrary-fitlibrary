@@ -30,11 +30,11 @@
 <td class="ignore">paradise</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td class="ignore">abandon storytest</td></tr>
 </table>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td class="ignore">should ignore this</td></tr>
 </table></td></tr>
 <tr><td class="ignore">eve</td>

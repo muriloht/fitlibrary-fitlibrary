@@ -9,10 +9,8 @@ import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.table.RowOnParse;
-import fitlibrary.table.TableOnParse;
-import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.utility.TestResults;
@@ -75,9 +73,9 @@ public class DefineAction extends Traverse {
 		parametersRow.passKeywords(testResults);
 		Tables body = tables.followingTables();
 		if (body.parse() == null) {
-			RowOnParse row = new RowOnParse();
+			Row row = TableFactory.row();
 			row.addCell("comment");
-			body = new TablesOnParse(new TableOnParse(row));
+			body = TableFactory.tables(TableFactory.table(row));
 		}
 		
 		List<String> formalParameters = getDefinedActionParameters(parametersRow);

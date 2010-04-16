@@ -16,12 +16,13 @@ import org.junit.Test;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.suite.SuiteFixture;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.CollectionUtility;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class TestScopeStack {
@@ -125,8 +126,8 @@ public class TestScopeStack {
 	}
 	@Test
 	public void addNamedObjectAndSelect() {
-		final TestResults testResults = new TestResults();
-		scopeStack.addNamedObject("x",someTypedObject,new RowOnParse(),testResults);
+		final TestResults testResults = TestResultsFactory.testResults();
+		scopeStack.addNamedObject("x",someTypedObject,TableFactory.row(),testResults);
 		assertThat(scopeStack.objectsForLookup(),hasSubjects(something,global,flowEvaluator));
 		assertThat(scopeStack.possibleClasses(),is(classList(something.getClass())));
 
@@ -136,9 +137,9 @@ public class TestScopeStack {
 	}
 	@Test
 	public void addTwoNamedObjectAndSelectBetweenThem() {
-		final TestResults testResults = new TestResults();
-		scopeStack.addNamedObject("x",someTypedObject,new RowOnParse(),testResults);
-		scopeStack.addNamedObject("y",otherTypedObject,new RowOnParse(),testResults);
+		final TestResults testResults = TestResultsFactory.testResults();
+		scopeStack.addNamedObject("x",someTypedObject,TableFactory.row(),testResults);
+		scopeStack.addNamedObject("y",otherTypedObject,TableFactory.row(),testResults);
 		assertThat(scopeStack.objectsForLookup(),hasSubjects(something,other,global,flowEvaluator));
 		assertThat(scopeStack.possibleClasses(),is(classList(something.getClass(),other.getClass())));
 

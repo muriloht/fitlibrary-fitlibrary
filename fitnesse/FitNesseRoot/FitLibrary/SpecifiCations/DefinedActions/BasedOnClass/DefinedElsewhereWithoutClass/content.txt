@@ -45,8 +45,11 @@ If the dynamic variable ''this'' is set, it's treated as the default object. Thi
 <td>Isis</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
-<table>
-<tr><td>get</td><td>Anna</td><td>is not</td><td class="pass">Isis</td></tr>
-</table>
+<table border="1" cellspacing="0">
+<tr>
+<td>get</td>
+<td>Anna</td>
+<td>is not</td>
+<td class="pass">Isis</td></tr></table>
 <br/></html></td></tr>
 </table>-!|

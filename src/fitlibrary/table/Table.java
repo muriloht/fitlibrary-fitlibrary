@@ -28,5 +28,9 @@ public interface Table {
 	void addFoldingText(String foldingText);
 	boolean isPlainTextTable();
 	void replaceAt(int r, Row newRow);
-	Cell cell(int i, int j);
+	Table copy();
+	void setLeader(String leader);
+	void setTrailer(String trailer);
+	String getLeader();
+	String getTrailer();
 }

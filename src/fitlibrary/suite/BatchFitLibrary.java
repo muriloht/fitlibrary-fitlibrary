@@ -6,7 +6,6 @@ package fitlibrary.suite;
 
 import java.io.IOException;
 
-import fit.Counts;
 import fit.FitServerBridge;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
@@ -15,19 +14,20 @@ import fitlibrary.flow.ScopeStack;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.ParseNode;
-import fitlibrary.table.RowOnParse;
-import fitlibrary.table.TableOnParse;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class BatchFitLibrary {
-	private TableListener tableListener = new TableListener(new TestResults(new Counts()));
+	private TableListener tableListener = new TableListener(TestResultsFactory.testResults());
 	private DoFlow doFlow = wiredUpDoFlow();
 
 	public BatchFitLibrary() {
@@ -36,7 +36,7 @@ public class BatchFitLibrary {
 	public BatchFitLibrary(TableListener tableListener) {
 		this.tableListener = tableListener;
 	}
-	public TestResults doStorytest(TablesOnParse theTables) {
+	public TestResults doStorytest(Tables theTables) {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		return doTables(theTables);
 	}
@@ -53,7 +53,7 @@ public class BatchFitLibrary {
 		runtime.SetTableEvaluator(doFlow2);
 		return doFlow2;
 	}
-	public TestResults doTables(TablesOnParse theTables) {
+	public TestResults doTables(Tables theTables) {
 		tableListener.clearTestResults();
 		doFlow.runStorytest(theTables,tableListener);
 		DynamicVariablesRecording recorder = doFlow.getRuntimeContext().getDynamicVariableRecorder();
@@ -61,14 +61,14 @@ public class BatchFitLibrary {
 			try {
 				recorder.write();
 			} catch (IOException e) {
-				TableOnParse errorTable = new TableOnParse(new RowOnParse("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
+				Table errorTable = TableFactory.table(TableFactory.row("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
 				errorTable.row(0).cell(1).error(tableListener.getTestResults());
 				theTables.add(errorTable );
 			}
 		}
 		return tableListener.getTestResults();
 	}
-	public void doTables(TablesOnParse theTables, TableListener listener) {
+	public void doTables(Tables theTables, TableListener listener) {
 		this.tableListener = listener;
 		doStorytest(theTables);
 	}

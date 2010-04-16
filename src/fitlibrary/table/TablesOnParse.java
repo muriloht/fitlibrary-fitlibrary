@@ -12,19 +12,19 @@ import fitlibrary.utility.SimpleWikiTranslator;
 public class TablesOnParse implements Tables {
     public Parse parse;
 
+    public TablesOnParse(Parse parse) {
+    	this.parse = parse;
+    }
     public TablesOnParse() {
     	// start with an empty parse
-    }
-    public TablesOnParse(Parse parse) {
-        this.parse = parse;
     }
     public TablesOnParse(Table theTable) {
 		this(theTable.parse());
 	}
-	public TablesOnParse(String html) throws FitParseException {
-		this(new Parse(html));
+	public TablesOnParse(Tables tables) {
+		this(ParseUtility.copyParse(tables.parse()));
 	}
-	public TableOnParse table(int i) {
+	public Table table(int i) {
         return new TableOnParse(parse.at(i));
     }
     public void add(Table table) {
@@ -53,7 +53,10 @@ public class TablesOnParse implements Tables {
 		return new TableOnParse(parse.last());
 	}
 	public Tables deepCopy() {
-		return new TablesOnParse(ParseUtility.copyParse(parse));
+		Tables copy = TableFactory.tables();
+		for (int i = 0; i < size(); i++)
+			copy.add(table(i).copy());
+		return copy;
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -74,8 +77,8 @@ public class TablesOnParse implements Tables {
 	public Tables followingTables() {
 		return new TablesOnParse(parse.more);
 	}
-	public static TablesOnParse fromWiki(String wiki) throws FitParseException {
-		return new TablesOnParse(new Parse(SimpleWikiTranslator.translate(wiki)));
+	public static Tables fromWiki(String wiki) throws FitParseException {
+		return SimpleWikiTranslator.translateToTables(wiki);
 	}
 	@Override
 	public Cell cell(int table, int row, int cell) {

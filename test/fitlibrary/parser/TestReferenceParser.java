@@ -10,14 +10,15 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import fitlibrary.DoFixture;
-import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.ref.EntityReference;
 import fitlibrary.runtime.RuntimeContextContainer;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.table.Cell;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public class TestReferenceParser extends TestCase {
     List<MyClass> list;
@@ -44,8 +45,8 @@ public class TestReferenceParser extends TestCase {
         assertEquals("the third MyClass",parser.show(list.get(2)));
 	}
     private void checkReference(Parser adapter, String text, Object element) throws Exception {
-        CellOnParse cell = new CellOnParse(text);
-        TestResults testResults = new TestResults();
+        Cell cell = TableFactory.cell(text);
+        TestResults testResults = TestResultsFactory.testResults();
 		assertEquals(element,adapter.parseTyped(cell,testResults).getSubject());
         assertTrue(adapter.matches(cell, element,testResults));
         assertEquals("the first MyClass",adapter.show(element));
@@ -60,8 +61,8 @@ public class TestReferenceParser extends TestCase {
     }
     private void checkReferenceFails(Parser adapter, String text) {
         try {
-            CellOnParse cell = new CellOnParse(text);
-            adapter.parseTyped(cell,new TestResults());
+            Cell cell = TableFactory.cell(text);
+            adapter.parseTyped(cell,TestResultsFactory.testResults());
             fail("Should throw and exception with '"+text+"'");
         } catch (Exception e) {
         	//

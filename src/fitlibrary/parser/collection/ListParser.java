@@ -18,8 +18,8 @@ import fitlibrary.collection.list.ListTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.FitLibrarySelector;
 import fitlibrary.traverse.Traverse;
@@ -98,7 +98,7 @@ public class ListParser implements Parser {
         List<Object> list = new ArrayList<Object>();
 		while (tokeniser.hasMoreTokens())
 			list.add(valueParser.parseTyped(
-					new CellOnParse(tokeniser.nextToken()),testResults).getSubject());
+					TableFactory.cell(tokeniser.nextToken()),testResults).getSubject());
 		return list;
 	}
 	@SuppressWarnings("unchecked")

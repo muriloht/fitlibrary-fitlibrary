@@ -14,13 +14,13 @@ public class TableListener implements ITableListener {
 	private TestResults testResults;
 
 	public TableListener() {
-		this(new EmptyFixtureListener(),new TestResults(new Counts()));
+		this(new EmptyFixtureListener(),TestResultsFactory.testResults());
 	}
 	public TableListener(TestResults testResults) {
 		this(new EmptyFixtureListener(),testResults);
 	}
 	public TableListener(FixtureListener listener) {
-		this(listener,new TestResults(new Counts()));
+		this(listener,TestResultsFactory.testResults());
 	}
 	public TableListener(FixtureListener listener, TestResults testResults) {
 		this.listener = listener;

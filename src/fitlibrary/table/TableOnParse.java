@@ -13,23 +13,27 @@ import fitlibrary.utility.TestResults;
 public class TableOnParse extends ParseNode implements Table {
     private int firstErrorRow = 0;
     
+    public TableOnParse(Parse parse) {
+    	super(parse);
+    }
 	public TableOnParse() {
         super(new Parse("table","",null,null));
-    }
-	public TableOnParse(Parse parse) {
-        super(parse);
+        parse().addToTag(" border=\"1\" cellspacing=\"0\"");
     }
     public TableOnParse(Row... rows) {
     	this();
     	for (Row row: rows)
     		addRow(row);
 	}
+	public Parse parse() {
+		return parse;
+	}
 	public int size() {
 		if (parse == null || parse.parts == null)
 			return 0;
         return parse.parts.size();
     }
-    public RowOnParse row(int i) {
+    public Row row(int i) {
         if (!rowExists(i))
             throw new MissingRowException("");
         return new RowOnParse(parse.parts.at(i));
@@ -48,9 +52,6 @@ public class TableOnParse extends ParseNode implements Table {
     public void wrong(TestResults testResults, String msg) {
         row(firstErrorRow).cell(0).fail(testResults,msg);
     }
-    public void missing(TestResults testResults) {
-        row(firstErrorRow).missing(testResults);
-    }
     public void ignore(TestResults testResults) {
         row(firstErrorRow).ignore(testResults);
     }
@@ -61,7 +62,7 @@ public class TableOnParse extends ParseNode implements Table {
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
-    public RowOnParse lastRow() {
+    public Row lastRow() {
         return row(size()-1);
     }
     public void addRow(Row row) {
@@ -70,8 +71,8 @@ public class TableOnParse extends ParseNode implements Table {
         else
             parse.parts.last().more = row.parse();
     }
-    public RowOnParse newRow() {
-        RowOnParse row = new RowOnParse();
+    public Row newRow() {
+        Row row = TableFactory.row();
         addRow(row);
         return row;
     }
@@ -85,10 +86,6 @@ public class TableOnParse extends ParseNode implements Table {
 	private void setFirstRowIsHidden() {
 		this.firstErrorRow  = 1;
 		row(0).setIsHidden();
-	}
-	@Override
-	public Parse parse() {
-		return parse;
 	}
 	public int phaseBoundaryCount() {
 		int count = (parse.leader).split("<hr>").length-1;
@@ -157,11 +154,12 @@ public class TableOnParse extends ParseNode implements Table {
 	private int getMaxRowColumnSpan() {
 		int maxLength = 0;
 		for (int rowNo = 0; rowNo < size(); rowNo++) {
-			RowOnParse row = row(rowNo);
+			Row row = row(rowNo);
 			maxLength = Math.max(maxLength, row.getColumnSpan());
 		}
 		return maxLength;
 	}
+	// Following is only needed for TestDefinedActionBodyCollector -- remove it when that is gone.
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof TableOnParse))
@@ -179,15 +177,33 @@ public class TableOnParse extends ParseNode implements Table {
 		return parse().tag.contains("plain_text_table");
 	}
 	@Override
-	public Cell cell(int rowNo, int cellNo) {
-		return row(rowNo).cell(cellNo);
-	}
-	@Override
 	public void replaceAt(int t, Row row) {
 		row.parse().more = parse().parts.at(t).more;
 		if (t == 0)
 			parse().parts = row.parse();
 		else
 			parse().parts.at(t-1).more = row.parse();
+	}
+	public Table copy() {
+		Table copy = TableFactory.table();
+		for (int i = 0; i < size(); i++)
+			copy.addRow(row(i).copy());
+		copy.setLeader(getLeader());
+		copy.setTrailer(getTrailer());
+		return copy;
+	}
+	public String getLeader() {
+		return parse().leader;
+	}
+	public String getTrailer() {
+		return parse().trailer;
+	}
+	@Override
+	public void setLeader(String leader) {
+		parse().leader = leader;
+	}
+	@Override
+	public void setTrailer(String trailer) {
+		parse().trailer = trailer;
 	}
 }

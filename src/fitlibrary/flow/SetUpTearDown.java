@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import fitlibrary.flow.SetUpTearDownReferenceCounter.MethodCaller;
 import fitlibrary.table.Row;
 import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
 
@@ -29,7 +30,7 @@ public class SetUpTearDown {
 		callMethod(suiteFixture, "suiteSetUp", row,testResults);
 	}
 	public void callSuiteTearDown(Object suiteFixture, TestResults testResults) {
-		callMethod(suiteFixture,"suiteTearDown",new RowOnParse("a"),testResults);
+		callMethod(suiteFixture,"suiteTearDown",TableFactory.row("a"),testResults);
 	}
 	private MethodCaller methodCaller(final  Row row, final TestResults testResults) {
 		return new MethodCaller(){

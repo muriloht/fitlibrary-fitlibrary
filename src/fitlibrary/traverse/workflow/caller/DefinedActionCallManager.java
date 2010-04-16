@@ -10,11 +10,12 @@ import java.util.Set;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Row;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 
 public class DefinedActionCallManager {
 	protected final Set<Object> callsInProgress = new HashSet<Object>();
-	protected TableOnParse shows = new TableOnParse();
+	protected Table shows = TableFactory.table();
 
 	public void startCall(Object call) {
 		clearShowsIfNoCallsInProgress();
@@ -24,7 +25,7 @@ public class DefinedActionCallManager {
 	public void endCall(Object call) {
 		callsInProgress.remove(call);
 	}
-	public TableOnParse getShowsTable() {
+	public Table getShowsTable() {
 		return shows;
 	}
 	public void addShow(Row row) {
@@ -44,7 +45,7 @@ public class DefinedActionCallManager {
 	}
 	private void clearShowsIfNoCallsInProgress() {
 		if (callsInProgress.isEmpty())
-			shows = new TableOnParse();
+			shows = TableFactory.table();
 	}
 	private boolean hasShows() {
 		return shows.size() > 0;

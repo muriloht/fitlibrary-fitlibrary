@@ -27,6 +27,9 @@ public class RowOnParse extends ParseNode implements Row {
     	for (String s : ss)
     		addCell(s);
     }
+    public Parse parse() {
+    	return parse;
+    }
     public int size() {
     	if (parse.parts == null)
     		return 0;
@@ -76,7 +79,7 @@ public class RowOnParse extends ParseNode implements Row {
         cell(0).expectedElementMissing(testResults);
     }
     public Cell addCell() {
-    	Cell cell = new CellOnParse("");
+    	Cell cell = TableFactory.cell("");
 		addCell(cell);
 		return cell;
     }
@@ -90,12 +93,13 @@ public class RowOnParse extends ParseNode implements Row {
         return this;
     }
 	public Cell addCell(String text) {
-        CellOnParse cell = new CellOnParse(text);
+        Cell cell = TableFactory.cell(text);
         addCell(cell);
         return cell;
 	}
-    public CellOnParse addCell(String text, int cols) {
-        CellOnParse cell = new CellOnParse(text,cols);
+    public Cell addCell(String text, int cols) {
+        Cell cell = new CellOnParse(text);
+        cell.setColumnSpan(cols);
         addCell(cell);
         return cell;
     }
@@ -141,20 +145,20 @@ public class RowOnParse extends ParseNode implements Row {
 		parse.more = commentRow.parse;
 		commentRow.parse.more = next;
 	}
-	public RowOnParse rowTo(int from, int upto) {
-		RowOnParse row = new RowOnParse();
+	public Row rowTo(int from, int upto) {
+		Row row = TableFactory.row();
 		for (int i = from; i < upto; i++)
-			row.addCell(new CellOnParse(cell(i)));
+			row.addCell(TableFactory.cell(cell(i)));
 		return row;
 	}
 	public void passKeywords(TestResults testResults) {
 		for (int i = 0; i < size(); i += 2)
 			cell(i).pass(testResults);
 	}
-	public RowOnParse copy() {
-		RowOnParse rowCopy = new RowOnParse();
+	public Row copy() {
+		Row rowCopy = TableFactory.row();
 		for (int i = 0; i < size(); i++)
-			rowCopy.addCell(new CellOnParse(cell(i).fullText()));
+			rowCopy.addCell(TableFactory.cell(cell(i).fullText()));
 		return rowCopy;
 	}
 	public void removeFirstCell() {
@@ -198,5 +202,10 @@ public class RowOnParse extends ParseNode implements Row {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+	@Override
+	public void removeCell(int i) {
+		cell(i-1).parse().more = null;
+		cell(i-1).parse().trailer = "";
 	}
 }

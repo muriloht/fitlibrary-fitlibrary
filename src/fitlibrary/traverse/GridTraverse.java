@@ -5,10 +5,10 @@
 package fitlibrary.traverse;
 
 import fitlibrary.parser.Parser;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.utility.TestResults;
 
 public class GridTraverse extends Traverse {
@@ -89,8 +89,8 @@ public class GridTraverse extends Traverse {
 		for (int i = 0; i < actuals.length; i++)
 			row.addCell(cellWithValue(actuals[i]));
 	}
-	private CellOnParse cellWithValue(Object object) {
-		CellOnParse cell = new CellOnParse();
+	private Cell cellWithValue(Object object) {
+		Cell cell = TableFactory.cell("");
 		try {
 			cell.setUnvisitedText(parser.show(object));
 		} catch (Exception e) {

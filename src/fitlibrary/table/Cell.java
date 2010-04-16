@@ -59,4 +59,5 @@ public interface Cell {
 	void setColumnSpan(int span);
 	void setIsHidden();
 	Parse parse();
+	void setUnvisitedText(String s);
 }

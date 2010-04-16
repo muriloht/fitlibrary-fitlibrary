@@ -12,6 +12,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
@@ -64,7 +65,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 			} else {
 				try {
 			    	CalledMethodTarget target =PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
-			    	target.invokeAndCheck(new RowOnParse(),cell2,testResults,false);
+			    	target.invokeAndCheck(TableFactory.row(),cell2,testResults,false);
 				} catch (MissingMethodException ex) {
 					cell.error(testResults,ex);
 				}

@@ -29,19 +29,26 @@
 <tr><td class="ignore"><i>act</i></td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
-<table>
-<tr><td>show</td><td>get</td><td>1</td>
-<td bgcolor=#C0C0FF>1</td></tr>
-</table>
+<table border="1" cellspacing="0">
+<tr>
+<td>show</td>
+<td>get</td>
+<td>1</td>
+<td bgcolor=#C0C0FF>1</td></tr></table>
 <br/><br/>
-<table>
-<tr><td class="ignore">abandon storytest</td></tr>
-<tr><td class="ignore">show</td><td class="ignore">get</td><td class="ignore">2</td></tr>
-</table>
+<table border="1" cellspacing="0">
+<tr>
+<td class="ignore">abandon storytest</td></tr>
+<tr>
+<td class="ignore">show</td>
+<td class="ignore">get</td>
+<td class="ignore">2</td></tr></table>
 <br/><br/>
-<table>
-<tr><td class="ignore">show</td><td class="ignore">get</td><td class="ignore">3</td></tr>
-</table></td></tr>
+<table border="1" cellspacing="0">
+<tr>
+<td class="ignore">show</td>
+<td class="ignore">get</td>
+<td class="ignore">3</td></tr></table></td></tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td class="ignore"><i>act</i></td>

@@ -38,4 +38,10 @@ public interface Row {
 	String methodNameForPlain(VariableResolver resolver);
 	
 	Parse parse();
+	int getColumnSpan();
+	void setColumnSpan(int span);
+	void setIsHidden();
+	boolean didPass();
+	boolean didFail();
+	void removeCell(int i);
 }

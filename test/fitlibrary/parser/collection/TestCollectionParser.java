@@ -17,10 +17,12 @@ import org.junit.Test;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.table.Cell;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 @SuppressWarnings("unchecked")
 public class TestCollectionParser {
@@ -43,8 +45,8 @@ public class TestCollectionParser {
 	public void parserAlone() throws Exception {
 		Parser parser = Traverse.asTyped(list).parser(evaluator);
 		String cellText = "1, 2, 3";
-		CellOnParse cell = new CellOnParse(cellText);
-		TestResults testResults = new TestResults();
+		Cell cell = TableFactory.cell(cellText);
+		TestResults testResults = TestResultsFactory.testResults();
 		assertThat(parser.parseTyped(cell,testResults).getSubject(), is((Object)list));
 		assertThat(parser.matches(cell, list,testResults),is(true));
 		assertThat(parser.show(list),is(cellText));

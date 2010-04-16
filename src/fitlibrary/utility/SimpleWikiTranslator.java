@@ -10,7 +10,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import fit.Parse;
+import fit.exception.FitParseException;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 
 public class SimpleWikiTranslator {
 	private final FileAccess fileAccess;
@@ -24,6 +28,9 @@ public class SimpleWikiTranslator {
 			File file = files.next();
 			translateLines(file,fileAccess.linesOf(file), receiver);
 		}
+	}
+	public static Tables translateToTables(String wiki) throws FitParseException {
+		return new TablesOnParse(new Parse(translate(wiki)));
 	}
 	public static String translate(String wiki) {
 		final StringBuilder result = new StringBuilder();

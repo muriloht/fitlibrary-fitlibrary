@@ -7,19 +7,18 @@ package fitlibrary.definedAction;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
-import fit.Parse;
 import fitlibrary.DefineAction;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.RowOnParse;
-import fitlibrary.table.TableOnParse;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public class DefineActionsOnPageSlowly extends Traverse {
 	protected String topPageName;
@@ -49,7 +48,7 @@ public class DefineActionsOnPageSlowly extends Traverse {
 				break;
 			String html = ParseUtility.tabulize(test.getContent());
 			if (html.contains("<table")) {
-				parseDefinitions(new TablesOnParse(new Parse(html)),determineClassName(pageName,test.getName()),test.getName());
+				parseDefinitions(TableFactory.tables(html),determineClassName(pageName,test.getName()),test.getName());
 			}
 		}
 	}
@@ -65,26 +64,26 @@ public class DefineActionsOnPageSlowly extends Traverse {
 		}
 		return "";
 	}
-	protected void parseDefinitions(TablesOnParse tables, final String className, final String pageName) {
+	protected void parseDefinitions(Tables tables, final String className, final String pageName) {
 		new DefinedActionBodyCollector().parseDefinitions(tables, new DefineActionBodyConsumer() {
 			@Override
-			public void addAction(TablesOnParse innerTables) {
+			public void addAction(Tables innerTables) {
 				defineAction(innerTables,className,pageName);
 			}
 		});
 	}
-	protected void defineAction(TablesOnParse innerTables, String className, String pageName) {
+	protected void defineAction(Tables innerTables, String className, String pageName) {
 		DefineAction defineAction = new DefineAction(className,pageName);
 		defineAction.setRuntimeContext(getRuntimeContext());
-		defineAction.interpret(createDefineActionTable(innerTables), new TestResults());
+		defineAction.interpret(createDefineActionTable(innerTables), TestResultsFactory.testResults());
 	}
-	private TableOnParse createDefineActionTable(TablesOnParse innerTables) {
-		TableOnParse defineActionTable = new TableOnParse();
-		RowOnParse row = new RowOnParse();
+	private Table createDefineActionTable(Tables innerTables) {
+		Table defineActionTable = TableFactory.table();
+		Row row = TableFactory.row();
 		row.addCell("DefineAction");
 		defineActionTable.addRow(row);
-		row = new RowOnParse();
-		row.addCell(new CellOnParse(innerTables));
+		row = TableFactory.row();
+		row.addCell(TableFactory.cell(innerTables));
 		defineActionTable.addRow(row);
 		return defineActionTable;
 	}

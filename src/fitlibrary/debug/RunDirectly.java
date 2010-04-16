@@ -10,17 +10,18 @@ import fit.FixtureListener;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
 
 public class RunDirectly {
 	protected FixtureListener fixtureListener = new FixtureListener() {
-		public void tableFinished(@SuppressWarnings("unused") Parse table) {
+		public void tableFinished(Parse table) {
 			//
 		}
-		public void tablesFinished(@SuppressWarnings("unused") Counts count) {
+		public void tablesFinished(Counts count) {
 			//
 		}
 	};
@@ -28,12 +29,11 @@ public class RunDirectly {
 
 	private void run(String wiki) throws FitParseException {
 		String html = html(wiki);
-		Parse parse = new Parse(html);
 		System.out.println("\n----------\nHTML\n----------\n"+html);
-		TablesOnParse tables = new TablesOnParse(parse);
+		Tables tables = TableFactory.tables(html);
 		FitServerBridge.setFitNesseUrl(""); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);
-		System.out.println("\n----------\nHTML Report\n----------\n"+ParseUtility.toString(parse));
+		System.out.println("\n----------\nHTML Report\n----------\n"+ParseUtility.toString(tables.parse()));
 		System.out.println(testResults);
 	}
 	@SuppressWarnings("unused")

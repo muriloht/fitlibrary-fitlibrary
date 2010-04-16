@@ -10,10 +10,9 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.SimpleWikiTranslator;
 
 @RunWith(JMock.class)
@@ -90,9 +89,9 @@ public class TestDefinedActionBodyCollector {
 	private void check(String wiki) {
 		collector.parseDefinitions(makeTables(wiki), consumer);
 	}
-	protected TablesOnParse makeTables(String wiki) {
+	protected Tables makeTables(String wiki) {
 		try {
-			return new TablesOnParse(new Parse(SimpleWikiTranslator.translate(wiki)));
+			return SimpleWikiTranslator.translateToTables(wiki);
 		} catch (FitParseException e) {
 			throw new RuntimeException(e.toString());
 		}

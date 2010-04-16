@@ -10,14 +10,14 @@ import java.io.PrintStream;
 
 import fit.Counts;
 import fit.Fixture;
-import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.batch.trinidad.SingleTestResult;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.batch.trinidad.TestEngine;
 import fitlibrary.batch.trinidad.TestResult;
 import fitlibrary.suite.BatchFitLibrary;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TableListener;
 
@@ -52,11 +52,10 @@ public class FitLibraryTestEngine implements TestEngine {
 		if (!content.contains("<table"))
 			return new SingleTestResult(new Counts(),test.getName()," contains no tables");
         try {
-			Parse parse = new Parse(ParseUtility.tabulize(content));
-			TablesOnParse tables = new TablesOnParse(parse);
+			Tables tables = TableFactory.tables(content);
 			TableListener listener = new TableListener();
 			batching.doTables(tables,listener);
-			String report = ParseUtility.toString(parse);
+			String report = ParseUtility.toString(tables.parse());
 			report = add("out",out,report);
 			report = add("err",err,report);
 			return new SingleTestResult(listener.getTestResults().getCounts(),test.getName(),report);
@@ -81,7 +80,7 @@ public class FitLibraryTestEngine implements TestEngine {
 	static class FitLibraryBatchingImp implements FitLibraryBatching {
 		BatchFitLibrary batching = new BatchFitLibrary();
 
-		public void doTables(TablesOnParse tables, TableListener listener) {
+		public void doTables(Tables tables, TableListener listener) {
 			batching.doTables(tables,listener);
 		}
 	}

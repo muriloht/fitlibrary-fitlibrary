@@ -32,12 +32,12 @@ public class HtmlRunner {
     }
     public Counts runInSuite(File inFile, File theReport, String encoding, Parse setUp,
             Parse tearDown, BatchFitLibrary batchFitLibrary) throws IOException {
-        if (!theReport.canWrite() && false) {//////////////////////
-            System.err.println("HtmlRunner: Unable to write "+theReport.getAbsolutePath());/////
-            Counts counts = new Counts();
-            counts.ignores++;
-            return counts;
-        }
+//        if (!theReport.canWrite() && false) {//////////////////////
+//            System.err.println("HtmlRunner: Unable to write "+theReport.getAbsolutePath());/////
+//            Counts counts = new Counts();
+//            counts.ignores++;
+//            return counts;
+//        }
         PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(theReport),encoding));
         String fileContents = read(inFile,encoding);
         if (fileContents.indexOf("<i>[Not a TEST]</i>") >= 0) {

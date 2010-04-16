@@ -8,7 +8,7 @@ import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.UnknownClassException;
 import fitlibrary.table.Cell;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.table.TableOnParse;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
@@ -54,7 +54,7 @@ public class FixtureBridge extends Fixture {
 		}
 	}
 
-    String[] getArgsForTable(RowOnParse row) {
+    String[] getArgsForTable(Row row) {
         String[] arguments = new String[row.size()-1];
         for (int i = 1; i < row.size(); i++)
         	arguments[i-1] = row.text(i,null);

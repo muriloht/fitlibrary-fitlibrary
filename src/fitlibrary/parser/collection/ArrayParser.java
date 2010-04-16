@@ -17,8 +17,8 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
@@ -98,7 +98,7 @@ public class ArrayParser implements Parser {
 		Object array = Array.newInstance(componentType.asClass(), t.countTokens());
 		for (int i = 0; t.hasMoreTokens(); i++)
 			Array.set(array, i, componentParser.parseTyped(
-					new CellOnParse(t.nextToken()),testResults).getSubject());
+					TableFactory.cell(t.nextToken()),testResults).getSubject());
 		return array;
 	}
 	public String show(Object o) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
@@ -120,7 +120,7 @@ public class ArrayParser implements Parser {
 			return false;
 		for (int i = 0; i < length; i++) {
 			try {
-				if (!componentParser.matches(new CellOnParse(Array.get(a, i).toString()), Array.get(b, i),testResults))
+				if (!componentParser.matches(TableFactory.cell(Array.get(a, i).toString()), Array.get(b, i),testResults))
 					return false;
 			} catch (Exception e) {
 				return false;

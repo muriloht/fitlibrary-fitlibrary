@@ -22,10 +22,12 @@ import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.table.TableParser;
 import fitlibrary.parser.tagged.TaggedStringParser;
 import fitlibrary.parser.tree.TreeParser;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.table.Cell;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.list.ListParser2;
 import fitlibraryGeneric.map.MapParser2;
 import fitlibraryGeneric.set.SetParser2;
@@ -106,8 +108,8 @@ public class ParserSelectorForType {
     }
 	public static Object evaluate(Evaluator evaluator, Type type, String text) throws Exception {
 		Parser parserFor = new ParserSelectorForType().parserFor(evaluator,new GenericTyped(type),false);
-		TestResults testResults = new TestResults();
-		CellOnParse cell = new CellOnParse(text);
+		TestResults testResults = TestResultsFactory.testResults();
+		Cell cell = TableFactory.cell(text);
 		Object subject = parserFor.parseTyped(cell,testResults).getSubject();
 		if (testResults.problems())
 			throw new RuntimeException("Unable to parse '"+text+"' as a "+type+": "+cell.fullText());

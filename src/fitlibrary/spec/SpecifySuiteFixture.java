@@ -9,11 +9,12 @@ import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.table.TableOnParse;
 import fitlibrary.table.TablesOnParse;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 /**
  * Like SpecifyFixture, except that:
@@ -27,10 +28,10 @@ public class SpecifySuiteFixture extends SpecifyFixture {
 		doTable(new TableOnParse(table));
 	}
     private void doTable(TableOnParse theTable) {
-        TestResults testResults = new TestResults(counts);
+        TestResults testResults = TestResultsFactory.testResults(counts);
         BatchFitLibrary batch = new BatchFitLibrary();
     	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
-            RowOnParse row = theTable.row(rowNo);
+            Row row = theTable.row(rowNo);
             if (row.size() < 2)
 				row.error(testResults, new RowWrongWidthException(2));
             Cell test = row.cell(0);

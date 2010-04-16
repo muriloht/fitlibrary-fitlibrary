@@ -25,15 +25,15 @@ public class CellOnParse extends ParseNode implements Cell {
 	public CellOnParse(Parse parse) {
         super(parse);
     }
-    public CellOnParse() {
-        this("");
-    }
     public CellOnParse(String cellText) {
         this(new Parse("td",cellText,null,null));
     }
-    public CellOnParse(String cellText, int cols) {
-		 this(new Parse("td",cellText,null,null));
-		 setColumnSpan(cols);
+	public CellOnParse(Cell cell) {
+		this("");
+		if (cell.hasEmbeddedTable())
+			setInnerTables(cell.getEmbeddedTables());
+		else
+			setText(cell.fullText());
 	}
 	public CellOnParse(Tables innerTables) {
 		this(new Parse("td","",innerTables.parse(),null));
@@ -43,16 +43,9 @@ public class CellOnParse extends ParseNode implements Cell {
 		parse.parts.leader = Fixture.label(preamble)+parse.parts.leader;
 		calls();
 	}
-	public CellOnParse(TableOnParse innerTable) {
-		this(new TablesOnParse(innerTable));
-	}
-	public CellOnParse(Cell cell) {
-		this();
-		if (cell.hasEmbeddedTable())
-			setInnerTables(cell.getEmbeddedTables());
-		else
-			setText(cell.fullText());
-	}
+    public Parse parse() {
+    	return parse;
+    }
 	public String text(VariableResolver resolver) {
 		if (parse.body == null)
 			return "";
@@ -214,7 +207,7 @@ public class CellOnParse extends ParseNode implements Cell {
     	else
     		error(testResults,e);
     }
-    public TableOnParse getEmbeddedTable() {
+    public Table getEmbeddedTable() {
         TablesOnParse tables = getEmbeddedTables();
         if (tables.size() != 1)
         	throw new SingleNestedTableExpected();

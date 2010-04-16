@@ -25,7 +25,7 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.CreateFromClassNameCaller;
@@ -72,15 +72,15 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 						if (subject instanceof DoEvaluator) {
 							DoEvaluator doEvaluator = (DoEvaluator)subject;
 							doEvaluator.setRuntimeContext(runtimeContext);
-							doEvaluator.interpretInFlow(new TableOnParse(row),testResults);
+							doEvaluator.interpretInFlow(TableFactory.table(row),testResults);
 							break;
 						} else if (subject instanceof Evaluator) {
 							Evaluator evaluator = (Evaluator)subject;
 							evaluator.setRuntimeContext(runtimeContext);
-							interpretEvaluator(evaluator,new TableOnParse(row),testResults);
+							interpretEvaluator(evaluator,TableFactory.table(row),testResults);
 							break;
 						} else if (subject instanceof Fixture) {
-							getFitHandler().doTable(subject, new TableOnParse(row),testResults,this);
+							getFitHandler().doTable(subject, TableFactory.table(row),testResults,this);
 							break;
 						}
 					}

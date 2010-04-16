@@ -471,7 +471,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		RowOnParse actionPartOfRow = row.rowTo(1,row.size()-2);
+		Row actionPartOfRow = row.rowTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {

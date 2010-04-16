@@ -92,7 +92,7 @@
 <td class="pass"><i>name is override</i></td>
 <td>Ella</td>
 <td>
-<table>
+<table border="1" cellspacing="0">
 <tr>
 <td><b>show</b></td>
 <td><i>get</i></td>

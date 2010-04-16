@@ -18,7 +18,7 @@ import fitlibrary.batch.testRun.FitLibraryTestEngine;
 import fitlibrary.batch.trinidad.InMemoryTestImpl;
 import fitlibrary.batch.trinidad.SingleTestResult;
 import fitlibrary.batch.trinidad.TestResult;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.TableListener;
 
 @RunWith(JMock.class)
@@ -37,8 +37,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Two";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
-			@SuppressWarnings("unused")
-			public void doTables(TablesOnParse tables, TableListener listener) {
+			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().pass();
 			}};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
@@ -49,8 +48,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
-			@SuppressWarnings("unused")
-			public void doTables(TablesOnParse tables, TableListener listener) {
+			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().fail();
 				System.out.print("Mess");
 				System.out.println("age");
@@ -65,8 +63,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
-			@SuppressWarnings("unused")
-			public void doTables(TablesOnParse tables, TableListener listener) {
+			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().exception();
 				System.err.println("Message");
 			}};
@@ -79,8 +76,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
-			@SuppressWarnings("unused")
-			public void doTables(TablesOnParse tables, TableListener listener) {
+			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().ignore();
 				// The following are a part of the test, as System.out/err should be redirected at this point
 				System.out.println("Out Message");
@@ -96,8 +92,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<body><table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
-			@SuppressWarnings("unused")
-			public void doTables(TablesOnParse tables, TableListener listener) {
+			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().ignore();
 				// The following are a part of the test, as System.out/err should be redirected at this point
 				System.out.println("Out Message");

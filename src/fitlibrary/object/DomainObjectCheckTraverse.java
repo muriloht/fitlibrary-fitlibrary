@@ -11,6 +11,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
@@ -48,7 +49,7 @@ public class DomainObjectCheckTraverse extends Traverse {
 			} else {
 				try {
 					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
-					target.invokeAndCheck(new RowOnParse(),row.cell(i+1),testResults,false);
+					target.invokeAndCheck(TableFactory.row(),row.cell(i+1),testResults,false);
 				} catch (Exception e) {
 					cell.error(testResults,e);
 				}

@@ -5,8 +5,7 @@
 
 |show|get|USER+PASSWORD|
 )
-!define test (
-!|fitlibrary.specify.definedAction.DefinedActionUnderTest|
+!define test (!|fitlibrary.specify.definedAction.DefinedActionUnderTest|
 
 |define action|
 |${body}|
@@ -21,7 +20,7 @@
 !3 Any show within the body of a defined action is shown at the point of call, unless the defined action calls are already being expanded.
 
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<br/><table border="1" cellspacing="0">
+|${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.definedAction.DefinedActionUnderTest</td>
 </tr>
 </table>
@@ -56,7 +55,7 @@
 <td class="pass">with</td>
 <td>Pass</td>
 <td>
-<table>
+<table border="1" cellspacing="0">
 <tr>
 <td>show</td>
 <td>get</td>
@@ -80,16 +79,16 @@
 <td>Pass</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><table border="1" cellspacing="0">
-<tr><td>show</td>
+<tr>
+<td>show</td>
 <td>get</td>
 <td>Rick</td>
-<td bgcolor=#C0C0FF>Rick</td></tr>
-</table>
+<td bgcolor=#C0C0FF>Rick</td></tr></table>
 <br/><table border="1" cellspacing="0">
-<tr><td>show</td>
+<tr>
+<td>show</td>
 <td>get</td>
 <td>Rick+Pass</td>
-<td bgcolor=#C0C0FF>Rick+Pass</td></tr>
-</table>
+<td bgcolor=#C0C0FF>Rick+Pass</td></tr></table>
 </td></tr>
 </table>-!|

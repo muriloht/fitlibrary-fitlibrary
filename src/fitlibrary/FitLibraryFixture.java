@@ -15,6 +15,7 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 /**
  * An abstract superclass of all the flow-style fixtures.
@@ -80,7 +81,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 		return traverse().doesInnerTablePass(table,evaluator,testResults);
 	}
 	public TestResults createTestResults() {
-		return new TestResults(counts);
+		return TestResultsFactory.testResults(counts);
 	}
     public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	return traverse().interpretAfterFirstRow(table,testResults);

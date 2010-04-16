@@ -15,8 +15,8 @@ import fitlibrary.collection.set.SetTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.table.Cell;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.FitLibrarySelector;
 import fitlibrary.traverse.Traverse;
@@ -67,7 +67,7 @@ public class SetParser implements Parser {
 		StringTokenizer t = new StringTokenizer(s, ",");
         Set<Object> set = new HashSet<Object>();
 		while (t.hasMoreTokens())
-			set.add(parser.parseTyped(new CellOnParse(t.nextToken()),testResults).getSubject());
+			set.add(parser.parseTyped(TableFactory.cell(t.nextToken()),testResults).getSubject());
 		return set;
 	}
 	public String show(Object object) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {

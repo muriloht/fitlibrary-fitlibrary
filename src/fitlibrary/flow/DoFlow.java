@@ -24,7 +24,7 @@ import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -37,6 +37,7 @@ import fitlibrary.traverse.workflow.PlainTextAnalyser;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
@@ -151,7 +152,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    			handleOtherEvaluator(typedResult,(Evaluator)subject, row, testResults);
 			    			return; // have finished table
 			    		} else if (subject instanceof Fixture) {
-			    			flowEvaluator.fitHandler().doTable(subject,new TableOnParse(row),testResults,flowEvaluator);
+			    			flowEvaluator.fitHandler().doTable(subject,TableFactory.table(row),testResults,flowEvaluator);
 			    			return; // have finished table
 			    		}
 			    	}
@@ -168,8 +169,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			row.cell(0).setText("add named");
 			row.cell(1).setText(row.text(3,evaluator));
 			row.cell(2).setText(className);
-			row.cell(2).parse().more = null; // Hack to remove the cell
-			row.cell(2).parse().trailer = "";
+			row.removeCell(3);
 		}
 		return row;
 	}
@@ -192,7 +192,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		callSetUpSutChain(evaluator,row,testResults);
 		if (!(evaluator instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
 			pushOnScope(typedResult,row,testResults);
-		evaluator.interpretAfterFirstRow(new TableOnParse(row), testResults); // It could be any row
+		evaluator.interpretAfterFirstRow(TableFactory.table(row), testResults); // It could be any row
 		setUpTearDown.callTearDownSutChain(evaluator, row, testResults);
 	}
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
@@ -242,7 +242,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	public void exit() {
 		if (suiteFixtureOption.isSome())
-			setUpTearDown.callSuiteTearDown(suiteFixtureOption.get(),new TestResults());
+			setUpTearDown.callSuiteTearDown(suiteFixtureOption.get(),TestResultsFactory.testResults());
 	}
 	public RuntimeContextInternal getRuntimeContext() {
 		return runtime;

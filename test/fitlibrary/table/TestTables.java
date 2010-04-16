@@ -10,13 +10,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 import fit.exception.FitParseException;
-import fitlibrary.table.RowOnParse;
-import fitlibrary.table.TableOnParse;
-import fitlibrary.table.TablesOnParse;
 
 public class TestTables {
 	@Test
 	public void fromWiki() throws FitParseException {
-		assertThat(TablesOnParse.fromWiki("|a|b|"), is(new TablesOnParse(new TableOnParse(new RowOnParse("a","b")))));
+		assertThat(TablesOnParse.fromWiki("|a|b|"), is(TableFactory.tables(TableFactory.table(TableFactory.row("a","b")))));
 	}
 }

@@ -8,14 +8,14 @@ import org.junit.Test;
 public class TestTable {
 	@Test
 	public void sizeWithEmptyTable() {
-		assertThat(new TableOnParse().size(),is(0));
+		assertThat(TableFactory.table().size(),is(0));
 	}
 	@Test
 	public void evenUpRowsChangesLastCellColumnSpanToMatchOtherRowsColumnSpan() throws Exception {
-		TableOnParse table = new TableOnParse();
-		RowOnParse row1 = table.newRow();
+		Table table = TableFactory.table();
+		Row row1 = table.newRow();
 		row1.addCell("1_1", 4);
-		RowOnParse row2 = table.newRow();
+		Row row2 = table.newRow();
 		row2.addCell("2_1", 1);
 		row2.addCell("2_2", 1);
 		table.evenUpRows();

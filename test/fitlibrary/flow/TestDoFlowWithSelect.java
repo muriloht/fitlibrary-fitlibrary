@@ -17,6 +17,7 @@ import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 @RunWith(JMock.class)
 public class TestDoFlowWithSelect {
@@ -38,7 +39,7 @@ public class TestDoFlowWithSelect {
 	}
 	@Test
 	public void addNamedObjectAndSelect() {
-		final TestResults testResults = new TestResults();
+		final TestResults testResults = TestResultsFactory.testResults();
 		context.checking(new Expectations() {{
 			oneOf(someTypedObject).getSubject(); will(returnValue(something));
 			oneOf(scopeStack).addNamedObject("x",someTypedObject,row, testResults);

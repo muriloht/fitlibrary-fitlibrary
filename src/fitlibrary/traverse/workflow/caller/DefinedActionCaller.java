@@ -11,13 +11,12 @@ import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.table.CellOnParse;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
 import fitlibrary.table.RowOnParse;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
@@ -25,6 +24,7 @@ import fitlibrary.typed.NonGenericTypedObject;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.TableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public class DefinedActionCaller extends DoCaller {
 	private ParameterSubstitution parameterSubstitution;
@@ -77,7 +77,7 @@ public class DefinedActionCaller extends DoCaller {
 			definedActionCallManager.endCall(parameterSubstitution);
 		}
 		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
-			row.addCell(new CellOnParse(new TablesOnParse(definedActionCallManager.getShowsTable())));
+			row.addCell(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 		return new NonGenericTypedObject(null);
 	}
 	@Override
@@ -98,7 +98,7 @@ public class DefinedActionCaller extends DoCaller {
 		return result;
 	}
 	private void processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
-		TestResults subTestResults = new TestResults();
+		TestResults subTestResults = TestResultsFactory.testResults();
 		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
 		for (int i = 0; i < definedActionBody.size(); i++) {
 			Table table = definedActionBody.table(i);
@@ -123,7 +123,7 @@ public class DefinedActionCaller extends DoCaller {
 				for (int i = 0; i < row.size(); i += 2)
 					row.cell(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
-			row.addCell(new CellOnParse(link(pageName),body));
+			row.addCell(TableFactory.cell(link(pageName),body));
 		} else if (!runtime.isAbandoned(testResults))
 			row.passKeywords(testResults);
 	}

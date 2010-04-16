@@ -15,7 +15,7 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Cell;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableOnParse;
 import fitlibrary.traverse.Traverse;
@@ -55,7 +55,7 @@ public class ReferenceTraverse extends Traverse {
     public Object interpretReference(TableOnParse table, TestResults testResults) throws Exception {
         return getObject(table.row(0),1,getSystemUnderTest(),testResults);
     }
-    private Object getObject(RowOnParse row, int cellNo, Object initialObject, TestResults testResults) {
+    private Object getObject(Row row, int cellNo, Object initialObject, TestResults testResults) {
     	Object object = initialObject;
         boolean last = false;
         if (row.cellExists(cellNo+1)) {

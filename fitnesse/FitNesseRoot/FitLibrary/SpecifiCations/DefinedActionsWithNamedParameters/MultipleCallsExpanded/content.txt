@@ -43,12 +43,12 @@
 <td class="pass">paradise</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td>show</td><td>get</td><td>adam</td>
 <td bgcolor=#C0C0FF>adam</td></tr>
 </table>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td>show</td><td>get</td><td>paradise</td>
 <td bgcolor=#C0C0FF>paradise</td></tr>
 </table></td></tr>
@@ -56,15 +56,14 @@
 <td class="pass">paradise</td>
 <td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td>show</td><td>get</td><td>eve</td>
 <td bgcolor=#C0C0FF>eve</td></tr>
 </table>
 <br/><br/>
-<table>
+<table border="1" cellspacing="0">
 <tr><td>show</td><td>get</td><td>paradise</td>
 <td bgcolor=#C0C0FF>paradise</td></tr>
 </table></td></tr>
-</table>
--!|
+</table>-!|
 

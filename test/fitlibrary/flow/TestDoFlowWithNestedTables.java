@@ -24,6 +24,7 @@ import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.utility.CollectionUtility;
 import fitlibrary.utility.ITableListener;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 @RunWith(JMock.class)
@@ -31,7 +32,7 @@ public class TestDoFlowWithNestedTables {
 	final Mockery context = new Mockery();
 	final FlowEvaluator flowEvaluator = context.mock(FlowEvaluator.class);
 	final IScopeStack scopeStack = context.mock(IScopeStack.class);
-	final TestResults testResults = new TestResults();
+	final TestResults testResults = TestResultsFactory.testResults();
 	final ITableListener tableListener = context.mock(ITableListener.class);
 	final IScopeState scopeState = context.mock(IScopeState.class);
 	final RuntimeContextContainer runtime = new RuntimeContextContainer();
@@ -68,6 +69,7 @@ public class TestDoFlowWithNestedTables {
 			allowing(table1).row(0); will(returnValue(row1));
 			allowing(row1).cell(0); will(returnValue(cell1));
 			allowing(cell1).hasEmbeddedTable(); will(returnValue(false));
+			allowing(cell1).hadError(); will(returnValue(false));
 			allowing(row1).size(); will(returnValue(2));
 			allowing(row2).size(); will(returnValue(2));
 			
@@ -76,12 +78,14 @@ public class TestDoFlowWithNestedTables {
 			allowing(row2).cell(0); will(returnValue(cell2));
 			allowing(cell2).hasEmbeddedTable(); will(returnValue(true));
 			allowing(cell2).getEmbeddedTables(); will(returnValue(innerTables));
+			allowing(cell2).hadError(); will(returnValue(false));
 			allowing(innerTables).size(); will(returnValue(1));
 			allowing(innerTables).table(0); will(returnValue(innerTable1));
 			allowing(innerTable1).size(); will(returnValue(1));
 			allowing(innerTable1).row(0); will(returnValue(innerRow1));
 			allowing(innerRow1).cell(0); will(returnValue(innerCell));
 			allowing(innerCell).hasEmbeddedTable(); will(returnValue(false));
+			allowing(innerCell).hadError(); will(returnValue(false));
 			allowing(innerRow1).size(); will(returnValue(2));
 		}});
 	}

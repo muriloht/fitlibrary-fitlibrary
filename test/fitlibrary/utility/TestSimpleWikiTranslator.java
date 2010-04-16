@@ -21,18 +21,12 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.utility.CollectionUtility;
-import fitlibrary.utility.FileAccess;
-import fitlibrary.utility.HtmlReceiver;
-import fitlibrary.utility.NullIterator;
-import fitlibrary.utility.SimpleWikiTranslator;
-
 @RunWith(JMock.class)
 public class TestSimpleWikiTranslator {
 	protected List<File> files = new ArrayList<File>();
 	protected Map<File,List<String>> fileContents = new HashMap<File, List<String>>();
 	protected SimpleWikiTranslator simpleWikiTranslator = new SimpleWikiTranslator(new FileAccess( ) {
-		public Iterator<File> filesWithSuffix(@SuppressWarnings("unused") String suffix) {
+		public Iterator<File> filesWithSuffix(String suffix) {
 			return files.iterator();
 		}
 		public NullIterator<String> linesOf(File file) {

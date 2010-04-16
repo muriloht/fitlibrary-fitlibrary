@@ -19,6 +19,7 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 @RunWith(JMock.class)
 public class TestSpecialCaller {
@@ -28,7 +29,7 @@ public class TestSpecialCaller {
 	Row row = context.mock(Row.class);
 	TwoStageSpecial lazySpecial = context.mock(TwoStageSpecial.class);
 	ICalledMethodTarget specialMethod = context.mock(ICalledMethodTarget.class);
-	TestResults testResults = new TestResults();
+	TestResults testResults = TestResultsFactory.testResults();
 	
 	@Test
 	public void invalidAsMethodUnknown() {

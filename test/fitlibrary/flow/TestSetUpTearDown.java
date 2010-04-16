@@ -15,9 +15,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 @RunWith(JMock.class)
 public class TestSetUpTearDown {
@@ -25,15 +26,15 @@ public class TestSetUpTearDown {
 	SetUpTearDown setUpTearDown = new SetUpTearDown();
 	TestInterface object = context.mock(TestInterface.class,"object");
 	TestInterface sut = context.mock(TestInterface.class,"sut");
-	TestResults testResults = new TestResults();
-	Row table = new RowOnParse("1");
+	TestResults testResults = TestResultsFactory.testResults();
+	Row row = TableFactory.row("1");
 	
 	@Test
 	public void suiteSetUp() {
 		context.checking(new Expectations() {{
 			oneOf(object).suiteSetUp();
 		}});
-		setUpTearDown.callSuiteSetUp(object, table, testResults);
+		setUpTearDown.callSuiteSetUp(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -41,7 +42,7 @@ public class TestSetUpTearDown {
 		context.checking(new Expectations() {{
 			oneOf(object).suiteSetUp(); will(throwException(new RuntimeException("error")));
 		}});
-		setUpTearDown.callSuiteSetUp(object, table, testResults);
+		setUpTearDown.callSuiteSetUp(object, row, testResults);
 		assertThat(testResults.problems(),is(true));
 	}
 	@Test
@@ -66,7 +67,7 @@ public class TestSetUpTearDown {
 			allowing(object).getSystemUnderTest(); will(returnValue(null));
 			oneOf(object).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -77,7 +78,7 @@ public class TestSetUpTearDown {
 			allowing(sut).getSystemUnderTest(); will(returnValue(null));
 			oneOf(sut).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -88,7 +89,7 @@ public class TestSetUpTearDown {
 			allowing(sut).getSystemUnderTest(); will(returnValue(null));
 			oneOf(sut).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(true));
 	}
 	@Test
@@ -98,8 +99,8 @@ public class TestSetUpTearDown {
 			oneOf(object).setUp();
 			oneOf(object).tearDown();
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
-		setUpTearDown.callTearDownSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
+		setUpTearDown.callTearDownSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -112,8 +113,8 @@ public class TestSetUpTearDown {
 			oneOf(object).tearDown();
 			oneOf(sut).tearDown();
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
-		setUpTearDown.callTearDownSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
+		setUpTearDown.callTearDownSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -123,8 +124,8 @@ public class TestSetUpTearDown {
 			oneOf(object).setUp();
 			oneOf(object).tearDown(); will(throwException(new RuntimeException("error")));
 		}});
-		setUpTearDown.callSetUpSutChain(object, table, testResults);
-		setUpTearDown.callTearDownSutChain(object, table, testResults);
+		setUpTearDown.callSetUpSutChain(object, row, testResults);
+		setUpTearDown.callTearDownSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(true));
 	}
 

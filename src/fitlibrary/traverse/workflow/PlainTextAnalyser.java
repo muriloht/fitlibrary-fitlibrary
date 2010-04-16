@@ -13,6 +13,7 @@ import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.TestResults;
 
@@ -46,7 +47,7 @@ public class PlainTextAnalyser {
 				call.possibility(runtime.getGlobal());
 			return row;
 		}
-		Row newRow = new RowOnParse();
+		Row newRow = TableFactory.row();
 		for (String word : results.get(0).getList())
 			newRow.addCell(word);
 		return newRow;

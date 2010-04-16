@@ -29,7 +29,7 @@
 <tr class="pass"><td>adam</td>
 <td>paradise</td>
 <td>
-<table>
+<table border="1" cellspacing="0">
 <tr>
 <td>show</td>
 <td>get</td>
@@ -43,7 +43,7 @@
 <tr class="pass"><td>eve</td>
 <td>paradise</td>
 <td>
-<table>
+<table border="1" cellspacing="0">
 <tr>
 <td>show</td>
 <td>get</td>

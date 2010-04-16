@@ -11,6 +11,7 @@ import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.utility.TestResults;
+import fitlibrary.utility.TestResultsFactory;
 
 public abstract class TestSpecialAction {
 	Mockery context = new Mockery();
@@ -19,7 +20,7 @@ public abstract class TestSpecialAction {
 	Row subRow = context.mock(Row.class,"subRow");
 	Cell expectedCell = context.mock(Cell.class,"expected cell");
 	Cell firstCell = context.mock(Cell.class,"first cell");
-	TestResults testResults = new TestResults();
+	TestResults testResults = TestResultsFactory.testResults();
 	PrefixSpecialAction special = new PrefixSpecialAction(actionContext);
 	ICalledMethodTarget target = context.mock(ICalledMethodTarget.class);
 	
