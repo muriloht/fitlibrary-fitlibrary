@@ -169,7 +169,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			row.elementAt(0).setText("add named");
 			row.elementAt(1).setText(row.text(3,evaluator));
 			row.elementAt(2).setText(className);
-			row.removeCell(3);
+			row.removeElementAt(3);
 		}
 		return row;
 	}

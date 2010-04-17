@@ -21,7 +21,7 @@ public class TestCheck extends TestSpecialAction {
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,1);will(returnValue(target));
 			allowing(initialRow).last();will(returnValue(expectedCell));
-			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
+			allowing(initialRow).elementsFrom(2);will(returnValue(subRow));
 			allowing(initialRow).elementAt(0);will(returnValue(firstCell));
 			one(target).invokeAndCheckForSpecial(subRow,expectedCell,testResults,initialRow,firstCell);
 		}});

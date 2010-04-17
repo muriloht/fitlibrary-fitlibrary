@@ -26,7 +26,6 @@ import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.graphic.ObjectDotGraphic;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.FitHandler;
 import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
@@ -216,7 +215,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	public void is(TestResults testResults, final RowOnParse row) throws Exception {
+	public void is(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -224,13 +223,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		target.invokeAndCheckForSpecial(row.rowTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
-	public void equals(TestResults testResults, final RowOnParse row) throws Exception {
+	public void equals(TestResults testResults, Row row) throws Exception {
 		is(testResults,row);
 	}
 	/** Check that the result of the action in the first part of the row is not the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	public void isNot(TestResults testResults, final RowOnParse row) throws Exception {
+	public void isNot(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -256,7 +255,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is less than
 	 *  the expected value in the last cell of the row.
 	 */
-	public void lessThan(TestResults testResults, final RowOnParse row) throws Exception {
+	public void lessThan(TestResults testResults, Row row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -268,7 +267,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is less than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	public void lessThanEquals(TestResults testResults, final RowOnParse row) throws Exception {
+	public void lessThanEquals(TestResults testResults, Row row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -280,7 +279,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  the expected value in the last cell of the row.
 	 */
-	public void greaterThan(TestResults testResults, final RowOnParse row) throws Exception {
+	public void greaterThan(TestResults testResults, Row row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -292,7 +291,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	public void greaterThanEquals(TestResults testResults, final RowOnParse row) throws Exception {
+	public void greaterThanEquals(TestResults testResults, Row row) throws Exception {
 		Comparison compare = new Comparison() {
 			@SuppressWarnings("unchecked")
 			public boolean compares(Comparable actual, Comparable expected) {
@@ -302,8 +301,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		comparison(testResults, row, compare);
 	}
 	@SuppressWarnings("unchecked")
-	private void comparison(TestResults testResults, final RowOnParse row,
-			Comparison compare) {
+	private void comparison(TestResults testResults, Row row, Comparison compare) {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -333,13 +331,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		@SuppressWarnings("unchecked")
 		boolean compares(Comparable actual, Comparable expected);
 	}
-	private Cell operatorCell(final RowOnParse row) {
+	private Cell operatorCell(Row row) {
 		return row.elementAt(row.size()-2);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void matches(TestResults testResults, final RowOnParse row) throws Exception {
+	public void matches(TestResults testResults, Row row) throws Exception {
 		try
 		{
 			int less = 3;
@@ -360,7 +358,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, eventually matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void eventuallyMatches(TestResults testResults, final RowOnParse row) throws Exception {
+	public void eventuallyMatches(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("eventuallyMatches");
@@ -389,7 +387,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, does not match
 	 *  the regular expression in the last cell of the row.
 	 */
-	public void doesNotMatch(TestResults testResults, final RowOnParse row) throws Exception {
+	public void doesNotMatch(TestResults testResults, Row row) throws Exception {
 		try
 		{
 			int less = 3;
@@ -411,7 +409,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void contains(TestResults testResults, final RowOnParse row) throws Exception {
+	public void contains(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
@@ -427,7 +425,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void eventuallyContains(TestResults testResults, final RowOnParse row) throws Exception {
+	public void eventuallyContains(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("contains");
@@ -444,12 +442,12 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				return;
 			}
 		}
-		expectedCell.failWithStringEquals(testResults, result,this);
+		expectedCell.failWithStringEquals(testResults,result,this);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	public void doesNotContain(TestResults testResults, final RowOnParse row) throws Exception {
+	public void doesNotContain(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("doesNoContain");
@@ -465,7 +463,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the first part of the row, as a string becomes equals
 	 *  to the given value within the timeout period.
 	 */
-	public void becomes(TestResults testResults, final RowOnParse row) throws Exception {
+	public void becomes(TestResults testResults, Row row) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseMatches");
@@ -491,63 +489,63 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/** Check that the result of the action in the rest of the row matches
 	 *  the expected value in the last cell of the row.
 	 */
-	public TwoStageSpecial check(final Row row) throws Exception {
+	public TwoStageSpecial check(Row row) throws Exception {
 		return prefixSpecialAction.check(row);
 	}
-	public TwoStageSpecial reject(final Row row) throws Exception {
+	public TwoStageSpecial reject(Row row) throws Exception {
 		return not(row);
 	}
     /** Same as reject()
      * @param testResults 
      */
-	public TwoStageSpecial not(final Row row) throws Exception {
+	public TwoStageSpecial not(Row row) throws Exception {
 		return prefixSpecialAction.not(row,NotSyle.PASSES_ON_EXCEPION);
 	}
-	public TwoStageSpecial notTrue(final Row row) throws Exception {
+	public TwoStageSpecial notTrue(Row row) throws Exception {
 		return prefixSpecialAction.not(row,NotSyle.ERROR_ON_EXCEPION);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is not altered, so it can be viewed directly.
      */
-	public TwoStageSpecial show(final Row row) throws Exception {
+	public TwoStageSpecial show(Row row) throws Exception {
 		return prefixSpecialAction.show(row);
 	}
 	/** Adds the result of the action in the rest of the row to a folding area after the table.
      */
-	public TwoStageSpecial showAfter(final Row row) throws Exception {
+	public TwoStageSpecial showAfter(Row row) throws Exception {
 		return prefixSpecialAction.showAfter(row);
 	}
 	/** Adds the result of the action in the rest of the row to a folding area after the table.
      */
-	public TwoStageSpecial showAfterAs(final Row row) throws Exception {
+	public TwoStageSpecial showAfterAs(Row row) throws Exception {
 		return prefixSpecialAction.showAfterAs(row);
 	}
 	/** Add a cell containing the result of the action in the rest of the row.
      *  HTML is escaped so that the underlying layout text can be viewed.
      */
-	public TwoStageSpecial showEscaped(final Row row) throws Exception {
+	public TwoStageSpecial showEscaped(Row row) throws Exception {
 		return prefixSpecialAction.showEscaped(row);
 	}
 	/** Log result to a file
 	 */
-	public TwoStageSpecial log(final Row row) throws Exception {
+	public TwoStageSpecial log(Row row) throws Exception {
 		return prefixSpecialAction.log(row);
 	}
 	/** Set the dynamic variable name to the result of the action, or to the string if there's no action.
 	 */
-	public TwoStageSpecial set(final Row row) throws Exception {
+	public TwoStageSpecial set(Row row) throws Exception {
 		return prefixSpecialAction.set(row);
 	}
 	/** Set the named FIT symbol to the result of the action, or to the string if there's no action.
 	 */
-	public TwoStageSpecial setSymbolNamed(final Row row) throws Exception {
+	public TwoStageSpecial setSymbolNamed(Row row) throws Exception {
 		return prefixSpecialAction.setSymbolNamed(row);
 	}
 	/** Add a cell containing the result of the rest of the row,
      *  shown as a Dot graphic.
 	 * @param testResults 
      */
-	public void showDot(RowOnParse row, TestResults testResults) throws Exception {
+	public void showDot(Row row, TestResults testResults) throws Exception {
 		Parser adapter = new GraphicParser(new NonGenericTyped(ObjectDotGraphic.class));
 		try {
 		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
@@ -561,18 +559,18 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
 	 * @param testResults 
      */
-	public TwoStageSpecial ensure(final Row row) throws Exception {
+	public TwoStageSpecial ensure(Row row) throws Exception {
 		return prefixSpecialAction.ensure(row);
 	}
 
 	/** The rest of the row is ignored. 
      */
 	@SuppressWarnings("unused")
-	public void note(RowOnParse row, TestResults testResults) throws Exception {
+	public void note(Row row, TestResults testResults) throws Exception {
 		//		Nothing to do
 	}
 	/** To allow for example storytests in user guide to pass overall, even if they have failures within them. */
-	public void expectedTestResults(RowOnParse row, TestResults testResults) throws Exception {
+	public void expectedTestResults(Row row, TestResults testResults) throws Exception {
 		if (testResults.matches(row.text(1,this),row.text(3,this),row.text(5,this),row.text(7,this))) {
 			testResults.clear();
 			row.elementAt(0).pass(testResults);
@@ -582,20 +580,20 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			row.elementAt(0).fail(testResults,results,this);
 		}
 	}
-	public Object oo(final RowOnParse row, TestResults testResults) throws Exception {
+	public Object oo(Row row, TestResults testResults) throws Exception {
 		if (row.size() < 3)
 			throw new MissingCellsException("DoTraverseOO");
 		String object = row.text(1,this);
 		Object className = getDynamicVariable(object+".class");
 		if (className == null || "".equals(className))
 			className = object; // then use the object name as a class name
-		RowOnParse macroRow = row.rowFrom(2);
+		Row macroRow = row.elementsFrom(2);
 		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,this).run(row, testResults);
 		return typedObject.getSubject();
 	}
 	/** Don't mind that the action succeeds or not, just as long as it's not a FitLibraryException (such as action unknown) 
      */
-	public void optionally(RowOnParse row, TestResults testResults) throws Exception {
+	public void optionally(Row row, TestResults testResults) throws Exception {
 		try {
 		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
 		    if (result instanceof Boolean && !((Boolean)result).booleanValue()) {
@@ -613,11 +611,11 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	/*
 	 * |''add named''|name|...action or fixture|
 	 */
-	public void addNamed(RowOnParse row, TestResults testResults) throws Exception {
+	public void addNamed(Row row, TestResults testResults) throws Exception {
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("addNamed");
-		TypedObject typedObject = interpretRow(row.rowFrom(2), testResults);
+		TypedObject typedObject = interpretRow(row.elementsFrom(2), testResults);
 		getRuntimeContext().getTableEvaluator().addNamedObject(row.text(1,this),typedObject,row,testResults);
 	}
 	@Override

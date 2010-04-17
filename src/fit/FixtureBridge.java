@@ -9,7 +9,8 @@ import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.UnknownClassException;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.TestResults;
 
@@ -18,11 +19,11 @@ import fitlibrary.utility.TestResults;
 public class FixtureBridge extends Fixture {
 	public Object firstObject(Parse tables, TestResults results) {
 		if (tables != null) {
-			return getFixture(new TableOnParse(tables.at(0)),results);
+			return getFixture(TableFactory.table(tables.at(0)),results);
 		}
 		return null;
 	}
-	public Object getFixture(TableOnParse table, TestResults results) {
+	public Object getFixture(Table table, TestResults results) {
 		Cell headingCell = table.elementAt(0).elementAt(0);
 		try {
 			String className = headingCell.text().replaceAll(" ","");

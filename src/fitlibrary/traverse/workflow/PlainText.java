@@ -10,7 +10,7 @@ import java.util.List;
 import fit.Fixture;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.TestResults;
@@ -18,14 +18,14 @@ import fitlibrary.utility.TestResults;
 // This us not being used now.
 // But keep it in case we reintroduce plain text for fixture methods too.
 public class PlainText {
-	private final RowOnParse row;
+	private final Row row;
 	private final TestResults testResults;
 	private final DoTraverse doTraverse;
 	private String prefixAction = "";
 	private String infixAction = "";
 	private String infixPart = "";
 
-	public PlainText(RowOnParse row, TestResults testResults, DoTraverse doTraverse) {
+	public PlainText(Row row, TestResults testResults, DoTraverse doTraverse) {
 		this.row = row;
 		this.testResults = testResults;
 		this.doTraverse = doTraverse;
@@ -41,7 +41,7 @@ public class PlainText {
 		findProperty("is", textCall, results);
 		findMethodsFromPlainText(textCall, results);
 		
-		row.removeFirstCell();
+		row.removeElementAt(0);
 		if (results.isEmpty()) {
 			error("Unknown action");
 			return;
@@ -53,7 +53,7 @@ public class PlainText {
 				call.possibility(doTraverse.getRuntimeContext().getGlobal());
 			return;
 		}
-		row.removeAllCells();
+		row.clear();
 		if (!"".equals(prefixAction)) {
 			row.addCell("<b>"+prefixAction+"</b>");
 		}

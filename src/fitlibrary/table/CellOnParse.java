@@ -19,7 +19,7 @@ import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
-public class CellOnParse extends ParseNode implements Cell {
+public class CellOnParse extends ParseNode<Table> implements Cell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
     private boolean cellIsInHiddenRow = false;
     
@@ -44,9 +44,6 @@ public class CellOnParse extends ParseNode implements Cell {
 		parse.parts.leader = Fixture.label(preamble)+parse.parts.leader;
 		calls();
 	}
-    public Parse parse() {
-    	return parse;
-    }
 	public String text(VariableResolver resolver) {
 		if (parse.body == null)
 			return "";

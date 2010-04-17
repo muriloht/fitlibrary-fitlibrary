@@ -5,16 +5,11 @@
 
 package fitlibrary.table;
 
-import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.utility.TestResults;
 
 public interface Row extends TableElement<Row,Cell> {
-	int size();
-	boolean isEmpty();
-	Cell last();
 	boolean hasFurtherRows();
-	boolean cellExists(int i);
 	Cell addCell();
 	Cell addCell(String s);
 	Cell addCell(String text, int cols);
@@ -28,17 +23,18 @@ public interface Row extends TableElement<Row,Cell> {
 	void ignore(TestResults testResults);
 	void missing(TestResults testResults);
 	void shown();
-	Row rowFrom(int i);
+	Row elementsFrom(int i);
 	
 	int argumentCount();
 	String methodNameForCamel(VariableResolver resolver);
 	String methodNameForPlain(VariableResolver resolver);
 	
-	Parse parse();
 	int getColumnSpan();
 	void setColumnSpan(int span);
 	void setIsHidden();
 	boolean didPass();
 	boolean didFail();
-	void removeCell(int i);
+	void removeElementAt(int i);
+	Row rowTo(int from, int upto);
+	void clear();
 }

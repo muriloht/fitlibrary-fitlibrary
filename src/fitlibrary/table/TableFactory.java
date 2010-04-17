@@ -21,12 +21,20 @@ public class TableFactory {
 	public static Tables tables(String html) throws FitParseException {
 		return new TablesOnParse(new Parse(html));
 	}
+	public static Tables tables(Parse parse) {
+		return new TablesOnParse(parse);
+	}
+
 	public static Table table() {
 		return new TableOnParse();
 	}
 	public static Table table(Row... rows) {
 		return new TableOnParse(rows);
 	}
+	public static Table table(Parse parse) {
+		return new TableOnParse(parse);
+	}
+
 	public static Row row() {
 		return new RowOnParse();
 	}

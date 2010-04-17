@@ -17,7 +17,7 @@ import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.table.RowOnParse;
+import fitlibrary.table.Row;
 import fitlibrary.traverse.CompareFilesTraverse;
 import fitlibrary.traverse.Evaluator;
 
@@ -54,7 +54,7 @@ public class ClassUtility {
 		);
 	}
 	private static boolean isSpecial(Class<?>[] parameterTypes, int p0, int p1) {
-		return parameterTypes[p0] == RowOnParse.class
+		return parameterTypes[p0] == Row.class
 			&& parameterTypes[p1] == TestResults.class;
 	}
 	public static String allElementClassNames(Collection<Object> actuals) {

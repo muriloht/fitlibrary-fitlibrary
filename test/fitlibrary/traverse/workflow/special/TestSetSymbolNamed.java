@@ -22,7 +22,7 @@ public class TestSetSymbolNamed extends TestSpecialAction {
 			allowing(initialRow).text(2,actionContext); will(returnValue(eq));
 			allowing(initialRow).elementAt(0); will(returnValue(firstCell));
 			allowing(initialRow).text(1,actionContext); will(returnValue("2nd"));
-			allowing(initialRow).rowFrom(3);will(returnValue(subRow));
+			allowing(initialRow).elementsFrom(3);will(returnValue(subRow));
 		}
 	}
 	@Test

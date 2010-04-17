@@ -237,7 +237,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		return result+") {}";
 	}
 	public ICalledMethodTarget findMethodFromRow(Row row, int from, int extrasCellsOnEnd) throws Exception {
-		return findMethodByActionName(row.rowFrom(from), row.size() - from - extrasCellsOnEnd - 1);
+		return findMethodByActionName(row.elementsFrom(from), row.size() - from - extrasCellsOnEnd - 1);
 	}
 	public ICalledMethodTarget findMethodFromRow222(Row row, int from, int less) throws Exception {
 		return findMethodFromRow(row,from,less-from-1);
@@ -304,6 +304,6 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 		return this;
 	}
 	protected Object callMethodInRow(Row row, TestResults testResults, boolean catchError, Cell operatorCell) throws Exception {
-		return findMethodFromRow222(row,1, 2).invokeForSpecial(row.rowFrom(2),testResults,catchError,operatorCell);
+		return findMethodFromRow222(row,1, 2).invokeForSpecial(row.elementsFrom(2),testResults,catchError,operatorCell);
 	}
 }

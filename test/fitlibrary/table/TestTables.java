@@ -12,6 +12,7 @@ import java.util.Iterator;
 import org.junit.Test;
 
 import fit.exception.FitParseException;
+import fitlibrary.utility.SimpleWikiTranslator;
 
 public class TestTables {
 	final Table table1 = TableFactory.table(TableFactory.row("first"));
@@ -20,7 +21,7 @@ public class TestTables {
 	
 	@Test
 	public void fromWiki() throws FitParseException {
-		assertThat(TablesOnParse.fromWiki("|a|b|"), is(TableFactory.tables(TableFactory.table(TableFactory.row("a","b")))));
+		assertThat(SimpleWikiTranslator.translateToTables("|a|b|"), is(TableFactory.tables(TableFactory.table(TableFactory.row("a","b")))));
 	}
 	@Test
 	public void iteratorIsEmptyWhenNoElements() {
@@ -47,19 +48,19 @@ public class TestTables {
 	}
 	@Test
 	public void iterableAfterFirstIsEmptyWhenNoElements() {
-		Iterator<Table> iterator = tables.afterFirst().iterator();
+		Iterator<Table> iterator = tables.listFrom(1).iterator();
 		assertThat(iterator.hasNext(), is(false));
 	}
 	@Test
 	public void iterableAfterFirstIsEmptyWhenOneElement() {
-		Iterator<Table> iterator = TableFactory.tables(table1).afterFirst().iterator();
+		Iterator<Table> iterator = TableFactory.tables(table1).listFrom(1).iterator();
 		assertThat(iterator.hasNext(), is(false));
 	}
 	@Test
 	public void iterableAfterFirstHasOneWhenTwoElements() {
 		tables.add(table1);
 		tables.add(table2);
-		Iterator<Table> iterator = tables.afterFirst().iterator();
+		Iterator<Table> iterator = tables.listFrom(1).iterator();
 		assertThat(iterator.hasNext(), is(true));
 		assertThat(iterator.next(), is(table2));
 		assertThat(iterator.hasNext(), is(false));

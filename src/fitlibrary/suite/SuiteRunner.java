@@ -6,11 +6,11 @@
 
 package fitlibrary.suite;
 
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.TableListener;
 
 public interface SuiteRunner {
-	void runStorytest(TablesOnParse tables, TableListener tableListener);
-	void runFirstStorytest(TablesOnParse tables, TableListener tableListener);
+	void runStorytest(Tables tables, TableListener tableListener);
+	void runFirstStorytest(Tables tables, TableListener tableListener);
 	void exit();
 }

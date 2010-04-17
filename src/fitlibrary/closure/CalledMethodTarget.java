@@ -294,7 +294,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 	}
 	public void color(Row row, boolean right, TestResults testResults) throws Exception {
-		if (!everySecond && row.cellExists(0))
+		if (!everySecond && row.elementExists(0))
 			row.elementAt(0).passOrFail(testResults,right);
 		else
 			for (int i = 0; i < row.size(); i += 2)

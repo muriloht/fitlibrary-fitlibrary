@@ -7,7 +7,6 @@ package fitlibrary.object;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.typed.TypedObject;
@@ -38,7 +37,7 @@ public class DomainTraverse extends DoTraverse implements DomainTraverser, Table
         	domainInject.setSystemUnderTest(sut);
     }
 	@SuppressWarnings("unused")
-    public void checks(RowOnParse row, TestResults testResults) {
+    public void checks(Row row, TestResults testResults) {
     	setCurrentCheck();
     }
 	@Override

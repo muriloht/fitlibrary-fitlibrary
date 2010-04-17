@@ -5,10 +5,20 @@
 
 package fitlibrary.table;
 
+import fit.Parse;
+
 public interface TableElement<From, To> extends Iterable<To> {
+	void add(To t);
 	int size();
 	boolean isEmpty();
 	To elementAt(int i);
-	void add(To t);
+	boolean elementExists(int i);
+	To last();
+	Iterable<To> listFrom(int start);
 	From deepCopy();
+	void setLeader(String leader);
+	void setTrailer(String trailer);
+	String getLeader();
+	String getTrailer();
+	Parse parse();
 }

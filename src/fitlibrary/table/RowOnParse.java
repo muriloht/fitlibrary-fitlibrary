@@ -14,10 +14,9 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
-public class RowOnParse extends ParseNode implements Row {
+public class RowOnParse extends ParseNode<Cell> implements Row {
     private boolean rowIsHidden = false;
     
 	public RowOnParse(Parse parse) {
@@ -26,25 +25,21 @@ public class RowOnParse extends ParseNode implements Row {
     public RowOnParse() {
         this(new Parse("tr","",null,null));
     }
-    public Parse parse() {
-    	return parse;
-    }
-    public int size() {
+    @Override
+	public int size() {
     	if (parse.parts == null)
     		return 0;
         return parse.parts.size();
     }
-    public Cell elementAt(int i) {
-        if (!cellExists(i))
+    @Override
+	public Cell elementAt(int i) {
+        if (!elementExists(i))
             throw new MissingCellsException("");
         return new CellOnParse(parse.parts.at(i));
     }
-    public boolean cellExists(int i) {
-        return i >= 0 && i < size();
-    }
     @Override
 	public String toString() {
-        return "Row["+ParseUtility.toString(parse.parts)+"]";
+        return toString("Row",parse.parts);
     }
     @Override
 	public void pass(TestResults testResults) {
@@ -113,12 +108,9 @@ public class RowOnParse extends ParseNode implements Row {
                 return false;
         return true;
     }
-	public RowOnParse rowFrom(int i) {
+	public RowOnParse elementsFrom(int i) {
 		// Can be an empty row
 		return new RowOnParse(new Parse("tr","",parse.parts.at(i),null));
-	}
-	public Cell last() {
-		return elementAt(size()-1);
 	}
 	public void ignore(TestResults testResults) {
 		for (int i = 0; i < size(); i++)
@@ -159,10 +151,7 @@ public class RowOnParse extends ParseNode implements Row {
 			rowCopy.add(TableFactory.cell(elementAt(i).fullText()));
 		return rowCopy;
 	}
-	public void removeFirstCell() {
-		parse.parts = parse.parts.more;
-	}
-	public void removeAllCells() {
+	public void clear() {
 		parse.parts = null;
 	}
 	public String methodNameForPlain(VariableResolver resolver) {
@@ -202,9 +191,13 @@ public class RowOnParse extends ParseNode implements Row {
 		return super.hashCode();
 	}
 	@Override
-	public void removeCell(int i) {
-		elementAt(i-1).parse().more = null;
-		elementAt(i-1).parse().trailer = "";
+	public void removeElementAt(int i) {
+		if (i == 0)
+			parse.parts = parse.parts.more;
+		else {
+			elementAt(i-1).parse().more = null;
+			elementAt(i-1).parse().trailer = "";
+		}
 	}
 	@Override
 	public Iterator<Cell> iterator() {
@@ -213,8 +206,4 @@ public class RowOnParse extends ParseNode implements Row {
 			list.add(elementAt(i));
 		return list.iterator();
 	}
-//	@Override
-//	public Cell elementAt(int i) {
-//		return cell(i);
-//	}
 }

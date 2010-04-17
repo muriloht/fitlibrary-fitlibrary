@@ -10,7 +10,7 @@ import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableOnParse;
+import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
@@ -69,7 +69,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     }
     @Override
     public void doTable(Parse parseTable) {
-    	TableOnParse table = new TableOnParse(parseTable);
+    	Table table = TableFactory.table(parseTable);
     	TestResults testResults = createTestResults();
     	try {
     		interpretAfterFirstRow(table, testResults);
@@ -77,7 +77,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     		table.error(testResults,e);
     	}
     }
-	public boolean doEmbeddedTablePasses(TableOnParse table, Evaluator evaluator, TestResults testResults) {
+	public boolean doEmbeddedTablePasses(Table table, Evaluator evaluator, TestResults testResults) {
 		return traverse().doesInnerTablePass(table,evaluator,testResults);
 	}
 	public TestResults createTestResults() {

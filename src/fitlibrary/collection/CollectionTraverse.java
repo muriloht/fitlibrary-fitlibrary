@@ -98,7 +98,7 @@ public abstract class CollectionTraverse extends Traverse {
             List<MethodTarget[]> getters = new ArrayList<MethodTarget[]>();
             if (!actuals.isEmpty())
                 getters = bindGettersForAllActuals(firstRow,testResults);
-            else if (!table.rowExists(2))
+            else if (!table.elementExists(2))
                 table.elementAt(1).pass(testResults);
             for (int rowNo = 2; rowNo < table.size(); rowNo++) {
                 firstRow = table.elementAt(rowNo);

@@ -5,11 +5,6 @@
 
 package fitlibrary.table;
 
-import fit.Parse;
-
 public interface Tables extends TableElement<Tables,Table>{
-	Table last();
 	Tables followingTables();
-	Parse parse();
-	Iterable<Table> afterFirst();
 }

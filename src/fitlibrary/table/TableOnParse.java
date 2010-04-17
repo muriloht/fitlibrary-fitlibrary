@@ -4,17 +4,12 @@
 */
 package fitlibrary.table;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import fit.Parse;
 import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 
-public class TableOnParse extends ParseNode implements Table {
+public class TableOnParse extends ParseNode<Row> implements Table {
     private int firstErrorRow = 0;
     
     public TableOnParse(Parse parse) {
@@ -29,25 +24,21 @@ public class TableOnParse extends ParseNode implements Table {
     	for (Row row: rows)
     		add(row);
 	}
-	public Parse parse() {
-		return parse;
-	}
+	@Override
 	public int size() {
 		if (parse == null || parse.parts == null)
 			return 0;
         return parse.parts.size();
     }
-    public Row elementAt(int i) {
-        if (!rowExists(i))
+    @Override
+	public Row elementAt(int i) {
+        if (!elementExists(i))
             throw new MissingRowException("");
         return new RowOnParse(parse.parts.at(i));
     }
-    public boolean rowExists(int i) {
-        return i >= 0 && i < size();
-    }
     @Override
 	public String toString() {
-        return "Table["+ParseUtility.toString(parse.parts)+"]";
+    	return toString("Table", parse.parts);
     }
     @Override
 	public void pass(TestResults testResults) {
@@ -66,9 +57,6 @@ public class TableOnParse extends ParseNode implements Table {
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
-    public Row lastRow() {
-        return elementAt(size()-1);
-    }
     public void add(Row row) {
         if (parse.parts == null)
             parse.parts = row.parse();
@@ -96,26 +84,6 @@ public class TableOnParse extends ParseNode implements Table {
 		if (count == 0)
 			count = (parse.leader).split("<hr/>").length-1;
 		return count;
-	}
-	public void addToLeader(String s) {
-		parse.leader += s;
-	}
-	public void addToStartOfLeader(String s) {
-		parse.leader = s + parse.leader;
-	}
-	public void addToTrailer(String s) {
-		if (parse.trailer == null)
-			parse.trailer = "";
-		parse.trailer += s;
-	}
-	public void removeNext() {
-		parse.more = parse.more.more;
-	}
-	public String getLeading() {
-		return parse.leader;
-	}
-	public String getTrailing() {
-		return parse.trailer;
 	}
 	public void addFoldingText(String fold) {
 		if (parse.more != null)
@@ -154,7 +122,6 @@ public class TableOnParse extends ParseNode implements Table {
 			row.setColumnSpan(maxRowLength);
 		}
 	}
-
 	private int getMaxRowColumnSpan() {
 		int maxLength = 0;
 		for (Row row : this)
@@ -194,33 +161,12 @@ public class TableOnParse extends ParseNode implements Table {
 		copy.setTrailer(getTrailer());
 		return copy;
 	}
-	public String getLeader() {
-		return parse().leader;
-	}
-	public String getTrailer() {
-		return parse().trailer;
-	}
-	@Override
-	public void setLeader(String leader) {
-		parse().leader = leader;
-	}
-	@Override
-	public void setTrailer(String trailer) {
-		parse().trailer = trailer;
-	}
-	@Override
-	public Iterator<Row> iterator() {
-		List<Row> list = new ArrayList<Row>();
-		for (int i = 0; i < size(); i++)
-			list.add(elementAt(i));
-		return list.iterator();
-	}
-//	@Override
-//	public Row elementAt(int i) {
-//		return row(i);
-//	}
 	@Override
 	public boolean isEmpty() {
 		return parse.more == null;
+	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

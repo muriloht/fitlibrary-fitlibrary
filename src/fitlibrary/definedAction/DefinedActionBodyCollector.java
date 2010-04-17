@@ -1,17 +1,12 @@
 package fitlibrary.definedAction;
 
-import java.security.InvalidParameterException;
-
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
 
 public class DefinedActionBodyCollector {
 	// Warning: 'orrible code due to Parse!
 	public void parseDefinitions(Tables tables, DefineActionBodyConsumer consumer) {
-		if (!(tables instanceof TablesOnParse))
-			throw new InvalidParameterException("New code needed for other Tables implementation");
 		Tables innerTables = tables;
 		// Process the first and last tables differently
 		// (Ignore the first & (also) handle last outside loop)

@@ -88,8 +88,8 @@ public class DefinedActionTraverse extends Traverse {
 					for (String key : reverseSortOrder) {
 						if (text.contains(key)) {
 							Object value = mapToRef.get(key);
-							if (value instanceof TableOnParse) {
-								cell.setInnerTables(TableFactory.tables((TableOnParse) value));
+							if (value instanceof Table) {
+								cell.setInnerTables(TableFactory.tables((Table) value));
 							}
 							else  {
 								text = text.replaceAll(key,(String) value);

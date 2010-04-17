@@ -4,23 +4,17 @@
 */
 package fitlibrary.table;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import fit.Parse;
-import fit.exception.FitParseException;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.SimpleWikiTranslator;
+import fitlibrary.utility.TestResults;
 
-public class TablesOnParse implements Tables {
-    public Parse parse;
+public class TablesOnParse extends ParseNode<Table> implements Tables {
 
     public TablesOnParse(Parse parse) {
-    	this.parse = parse;
+    	super(parse);
     }
     public TablesOnParse() {
-    	// start with an empty parse
+    	super(null);
     }
     public TablesOnParse(Table theTable) {
 		this(theTable.parse());
@@ -28,6 +22,7 @@ public class TablesOnParse implements Tables {
 	public TablesOnParse(Tables tables) {
 		this(ParseUtility.copyParse(tables.parse()));
 	}
+	@Override
 	public Table elementAt(int i) {
         return new TableOnParse(parse.at(i));
     }
@@ -37,25 +32,16 @@ public class TablesOnParse implements Tables {
     	else
             parse.last().more = table.parse();
     }
-    public int size() {
+    @Override
+	public int size() {
     	if (parse == null)
     		return 0;
         return parse.size();
     }
     @Override
 	public String toString() {
-        return "Tables["+ParseUtility.toString(parse)+"]";
+        return toString("Tables",parse);
     }
-	public Parse parse() {
-		return parse;
-	}
-	public TablesOnParse withExtraTableInFront() {
-		Parse tablesWithTableInFront = new Parse("table","",new Parse("tr","",null,null),parse);
-		return new TablesOnParse(tablesWithTableInFront);
-	}
-	public Table last() {
-		return new TableOnParse(parse.last());
-	}
 	public Tables deepCopy() {
 		Tables copy = TableFactory.tables();
 		for (Table table: this)
@@ -81,29 +67,12 @@ public class TablesOnParse implements Tables {
 	public Tables followingTables() {
 		return new TablesOnParse(parse.more);
 	}
-	public static Tables fromWiki(String wiki) throws FitParseException {
-		return SimpleWikiTranslator.translateToTables(wiki);
-	}
-	@Override
-	public Iterator<Table> iterator() {
-		return elementsFrom(0).iterator();
-	}
-	private List<Table> elementsFrom(int start) {
-		List<Table> list = new ArrayList<Table>();
-		for (int i = start; i < size(); i++)
-			list.add(elementAt(i));
-		return list;
-	}
-//	@Override
-//	public Table elementAt(int i) {
-//		return table(i);
-//	}
 	@Override
 	public boolean isEmpty() {
 		return size() == 0;
 	}
 	@Override
-	public Iterable<Table> afterFirst() {
-		return elementsFrom(1);
+	protected void error(TestResults testResults, Throwable e) {
+		elementAt(0).error(testResults, e);
 	}
 }

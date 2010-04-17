@@ -13,7 +13,6 @@ import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
@@ -49,7 +48,7 @@ public class DefinedActionCaller extends DoCaller {
 			}
 		}
 	}
-	public DefinedActionCaller(String object, String className, RowOnParse row, DoTraverseInterpreter doTraverse) {
+	public DefinedActionCaller(String object, String className, Row row, DoTraverseInterpreter doTraverse) {
 		this.doTraverse = doTraverse;
 		this.runtime = doTraverse.getRuntimeContext();
 		methodName = row.methodNameForCamel(doTraverse);

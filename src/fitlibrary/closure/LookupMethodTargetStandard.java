@@ -13,7 +13,6 @@ import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.flow.IScope;
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
@@ -31,7 +30,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ RowOnParse.class, TestResults.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class, TestResults.class });
 		if (findEntityMethod == null)
 			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class });
 		if (findEntityMethod == null)
@@ -41,7 +40,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findPostfixSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ TestResults.class, RowOnParse.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ TestResults.class, Row.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);

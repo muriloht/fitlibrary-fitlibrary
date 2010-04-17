@@ -12,9 +12,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
-import fitlibrary.table.TableOnParse;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.TestResults;
 import fitlibrary.utility.TestResultsFactory;
@@ -27,8 +25,7 @@ public class UseTemplateTraverse extends Traverse {
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		TablesOnParse tables = table.getTables();
-		for (Table defTable: tables) {
+		for (Table defTable: table.getTables()) {
 			Row firstRow = defTable.elementAt(0);
 			if (firstRow.size() == 2 && firstRow.text(0,this).equals("template") && firstRow.text(1,this).equals(templateName)) {
 				interpret(defTable, table, testResults);
@@ -78,7 +75,7 @@ public class UseTemplateTraverse extends Traverse {
 			paramsRow.add(TableFactory.cell(actualParameterNames.text(c,this)));
 		Row argsRow = paramsTable.newRow();
 		for (Object paramValue: parameters) {
-			if (paramValue instanceof TableOnParse) {
+			if (paramValue instanceof Table) {
 				Cell newCell = argsRow.addCell();
 				newCell.setInnerTables(TableFactory.tables((Table) paramValue));
 			} else

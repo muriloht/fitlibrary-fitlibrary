@@ -10,8 +10,8 @@ import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.TableOnParse;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 import fitlibrary.utility.ParseUtility;
 import fitlibrary.utility.TestResults;
 import fitlibrary.utility.TestResultsFactory;
@@ -24,10 +24,10 @@ import fitlibrary.utility.TestResultsFactory;
  */
 public class SpecifySuiteFixture extends SpecifyFixture {
 	@Override
-	public void doTable(Parse table) {
-		doTable(new TableOnParse(table));
+	public void doTable(Parse parseTable) {
+		doTable(TableFactory.table(parseTable));
 	}
-    private void doTable(TableOnParse theTable) {
+    private void doTable(Table theTable) {
         TestResults testResults = TestResultsFactory.testResults(counts);
         BatchFitLibrary batch = new BatchFitLibrary();
     	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
@@ -43,13 +43,13 @@ public class SpecifySuiteFixture extends SpecifyFixture {
             Parse actual = test.getEmbeddedTables().parse();
             Parse expected = report.getEmbeddedTables().parse();
             
-            batch.doStorytest(new TablesOnParse(actual));
+            batch.doStorytest(TableFactory.tables(actual));
 			if (reportsEqual(actual, expected))
                 report.pass(testResults);
             else {
                 report.fail(testResults);
                 ParseUtility.printParse(actual,"actual");
-                addTableToBetterShowDifferences(theTable.parse,
+                addTableToBetterShowDifferences(theTable.parse(),
                         actual,expected);
             }
         }

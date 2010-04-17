@@ -20,7 +20,7 @@ public class TestShowAfter extends TestSpecialAction {
 		context.checking(new Expectations() {{
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
-			allowing(initialRow).rowFrom(2);will(returnValue(subRow));
+			allowing(initialRow).elementsFrom(2);will(returnValue(subRow));
 			allowing(initialRow).elementAt(0);will(returnValue(firstCell));
 			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
 			one(target).getResultString("result");will(returnValue("Result"));

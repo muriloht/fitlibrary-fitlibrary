@@ -13,8 +13,8 @@ import java.util.List;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
 
 public class SimpleWikiTranslator {
 	private final FileAccess fileAccess;
@@ -30,7 +30,7 @@ public class SimpleWikiTranslator {
 		}
 	}
 	public static Tables translateToTables(String wiki) throws FitParseException {
-		return new TablesOnParse(new Parse(translate(wiki)));
+		return TableFactory.tables(new Parse(translate(wiki)));
 	}
 	public static String translate(String wiki) {
 		final StringBuilder result = new StringBuilder();

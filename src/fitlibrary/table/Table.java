@@ -15,18 +15,13 @@ public interface Table extends TableElement<Table,Row> {
 	Parse parse();
 	int phaseBoundaryCount();
 	Row newRow();
-	boolean rowExists(int i);
 	void ignore(TestResults testResults);
 	void pass(TestResults testResults);
 	TablesOnParse getTables();
 	void insertTable(int offset, Table table);
+	void replaceAt(int r, Row newRow);
 	Table withDummyFirstRow();
 	void evenUpRows();
 	void addFoldingText(String foldingText);
 	boolean isPlainTextTable();
-	void replaceAt(int r, Row newRow);
-	void setLeader(String leader);
-	void setTrailer(String trailer);
-	String getLeader();
-	String getTrailer();
 }

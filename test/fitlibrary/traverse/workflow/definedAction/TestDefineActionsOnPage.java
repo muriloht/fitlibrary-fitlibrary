@@ -20,7 +20,7 @@ import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.utility.SimpleWikiTranslator;
 import fitlibrary.utility.TestResultsFactory;
 
 public class TestDefineActionsOnPage {
@@ -38,7 +38,7 @@ public class TestDefineActionsOnPage {
 	@Test public void actionsAreDefinedThroughFileSystem() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.PlainTextInsteadOfTables.DefinedActions";
 		String wiki = "|''define actions at''|"+pageName+"|";
-		Tables tables = TablesOnParse.fromWiki(wiki);
+		Tables tables = SimpleWikiTranslator.translateToTables(wiki);
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
@@ -54,7 +54,7 @@ public class TestDefineActionsOnPage {
 	@Test public void actionsAreDefinedThroughFileSystemExample2() throws FitParseException {
 		String pageName = ".FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.DefinedActions";
 		String wiki = "|''define actions at''|"+pageName+"|";
-		Tables tables = TablesOnParse.fromWiki(wiki);
+		Tables tables = SimpleWikiTranslator.translateToTables(wiki);
 		DefineActionsOnPage defineActionsOnPage = new DefineActionsOnPage(pageName) {
 			@Override
 			protected File fitNesseDiry() {
