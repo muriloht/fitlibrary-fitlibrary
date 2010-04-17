@@ -74,9 +74,6 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
     public boolean isBlank(VariableResolver resolver) {
         return text(resolver).equals("");
     }
-    public boolean hasEmbeddedTable() {
-        return parse.parts != null;
-    }
     public CellOnParse deepCopy() {
         return new CellOnParse(ParseUtility.copyParse(parse));
     }
@@ -211,11 +208,6 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
         	throw new SingleNestedTableExpected();
 		return tables.elementAt(0);
     }
-    public TablesOnParse getEmbeddedTables() {
-        if (!hasEmbeddedTable())
-            throw new NestedTableExpectedException();
-		return new TablesOnParse(parse.parts);
-    }
     @Override
 	public String toString() {
         if (hasEmbeddedTable())
@@ -314,7 +306,16 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
 	@Override
 	public void add(Table table) {
 		if (!hasEmbeddedTable())
-			parse().parts = TableFactory.tables().parse();
-		getEmbeddedTables().add(table);
+			parse.parts = TableFactory.tables(table).parse();
+		else
+			getEmbeddedTables().add(table);
 	}
+    public TablesOnParse getEmbeddedTables() {
+        if (!hasEmbeddedTable())
+            throw new NestedTableExpectedException();
+		return new TablesOnParse(parse.parts);
+    }
+    public boolean hasEmbeddedTable() {
+        return parse.parts != null;
+    }
 }

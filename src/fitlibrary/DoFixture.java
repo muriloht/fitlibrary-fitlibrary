@@ -9,7 +9,6 @@ import java.util.List;
 import fit.Fixture;
 import fit.Parse;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.ITableListener;
@@ -38,8 +37,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     // Dispatched to from Fixture when a DoFixture is the first fixture in a storytest
     @Override
 	final public void interpretTables(Parse parseTables) {
-    	TableFactory.tables(parseTables).elementAt(0).error(createTestResults(),
-    			new RuntimeException("Please use FitLibraryServer instead of FitServer."));
+    	throw new RuntimeException("Please use FitLibraryServer instead of FitServer.");
     }
     // Dispatched to from Fixture when Fixture is doTabling the tables one by one (not in flow)
 	@Override
