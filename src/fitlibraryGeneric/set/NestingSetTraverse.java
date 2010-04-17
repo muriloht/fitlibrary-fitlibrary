@@ -10,12 +10,11 @@ import java.util.Set;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
-import fitlibrary.table.CellOnParse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTyped;
 
 public class NestingSetTraverse extends Traverse {
@@ -59,7 +58,7 @@ public class NestingSetTraverse extends Traverse {
         }
         for (int i = 0; i < listOfActuals.size(); i++) {
             Object element = listOfActuals.get(i);
-            if (adapter.matches(cell.deepCopy(),element,testResults)) {
+            if (adapter.matches((Cell)cell.deepCopy(),element,testResults)) {
                 adapter.matches(cell,element,testResults);
                 listOfActuals.remove(i);
                 return;

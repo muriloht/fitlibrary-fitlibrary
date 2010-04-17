@@ -5,10 +5,10 @@
 package fitlibrary.traverse.workflow;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public class SetVariableTraverse extends Traverse {
 	@Override

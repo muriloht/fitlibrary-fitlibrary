@@ -7,12 +7,12 @@ package fitlibrary.object;
 import fitlibrary.closure.Closure;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class DomainObjectParser implements Parser {
     protected Evaluator evaluator;
@@ -28,7 +28,7 @@ public class DomainObjectParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
     private Object parse(Cell cell, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTable())
+    	if (cell.hasEmbeddedTables())
     		return parseTable(cell.getEmbeddedTable(),testResults);
 //    	if (cell.text().equals("")) // Someone may want to use a pseudo key value of ""
 //    		return null;
@@ -58,8 +58,8 @@ public class DomainObjectParser implements Parser {
 	}
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
-			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
-    	if (cell.hasEmbeddedTable())
+			return !cell.hasEmbeddedTables() && cell.isBlank(evaluator);
+    	if (cell.hasEmbeddedTables())
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return matches(parse(cell,testResults),result);
     }

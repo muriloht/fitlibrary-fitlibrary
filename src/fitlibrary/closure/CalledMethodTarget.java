@@ -18,12 +18,12 @@ import fitlibrary.exception.parse.NoValueProvidedException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoTraverse.Comparison;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 /**
  * Manages calling a method on row cells, and possibly checking the result against a cell.
@@ -147,7 +147,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         } catch (IgnoredException ex) {
             //
         } catch (Exception e) {
-        	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
+        	expectedCell.exceptionExpected(exceptionExpected, e, testResults);
         }
     }
     public void invokeAndCheckForSpecial(Row row, Cell expectedCell, TestResults testResults, Row fullRow, Cell specialCell) {
@@ -178,9 +178,9 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         		specialCell.error(testResults);
         		fullRow.error(testResults, e);
         	} else
-        		expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
+        		expectedCell.exceptionExpected(exceptionExpected, e, testResults);
         } catch (Exception e) {
-        	expectedCell.exceptionMayBeExpected(exceptionExpected, e, testResults);
+        	expectedCell.exceptionExpected(exceptionExpected, e, testResults);
         }
     }
 	private boolean exceptionIsExpected(Cell expectedCell) {
@@ -226,7 +226,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				expectedCell.passIfNotEmbedded(testResults);
 				return true;
 			}
-			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTable())) {
+			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables())) {
 				if (result instanceof String)
 					expectedCell.failWithStringEquals(testResults,valueParser.show(result),evaluator);
 				else
@@ -262,7 +262,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				throw new NoValueProvidedException();
 			else if (!resultParser.matches(expectedCell,result,testResults))
 				expectedCell.passIfNotEmbedded(testResults);
-			else if (!expectedCell.hasEmbeddedTable()) {
+			else if (!expectedCell.hasEmbeddedTables()) {
 				expectedCell.fail(testResults);
 			}
 		} catch (Exception e) {
@@ -278,8 +278,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			if (expected instanceof Comparable) {
 				if (compare.compares(actual,(Comparable)expected))
 					expectedCell.passIfNotEmbedded(testResults);
-				else if (!expectedCell.hasEmbeddedTable())
-					expectedCell.fail(testResults,""+actual);
+				else if (!expectedCell.hasEmbeddedTables())
+					expectedCell.fail(testResults,""+actual,evaluator);
 			} else
 				throw new FitLibraryException("Unable to compare, as expected value is not Comparable");
 		} catch (Exception e) {

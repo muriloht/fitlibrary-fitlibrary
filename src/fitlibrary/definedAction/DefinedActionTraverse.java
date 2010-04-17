@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Set;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -25,8 +27,6 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.TableOnParse;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
 
 public class DefinedActionTraverse extends Traverse {
 	private Tables body;

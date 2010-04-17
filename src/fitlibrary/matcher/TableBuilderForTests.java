@@ -11,130 +11,148 @@ import java.util.List;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 
+import fitlibrary.dynamicVariable.VariableResolver;
+import fitlibrary.exception.FitLibraryException;
+import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.table.TableElement;
 import fitlibrary.table.Tables;
+import fitlibrary.utility.option.None;
+import fitlibrary.utility.option.Option;
+import fitlibrary.utility.option.Some;
 
 public class TableBuilderForTests {
-	static class TablesBuilder {
-		final List<TableBuilder> elements;
+	static class TableElementBuilder<From extends TableElement, Builder extends TableElementBuilder, To extends TableElement> {
+		protected final Class<From> type;
+		protected final List<Builder> elements;
 
-		public TablesBuilder() {
-			this(new ArrayList<TableBuilder>());
+		public TableElementBuilder(Class<From> type) {
+			this(type,new ArrayList<Builder>());
 		}
-		public TablesBuilder(List<TableBuilder> copy) {
+		protected TableElementBuilder(Class<From> type, List<Builder> copy) {
+			this.type = type;
 			elements = copy;
+		}
+		public From expect(final Mockery context) {
+			return expect(context,"",0);
+		}
+		public From expect(final Mockery context,String path, int index) {
+			String localPath = localPath(path, index);
+			final From from = context.mock(type,localPath);
+			final List<To> listOfMockElements = new ArrayList<To>();
+			int count = 0;
+			for (Builder builder : elements)
+				listOfMockElements.add((To) builder.expect(context,localPath,(count++)));
+			context.checking(new Expectations() {{
+				allowing(from).isEmpty(); will(returnValue(listOfMockElements.isEmpty()));
+				allowing(from).size(); will(returnValue(listOfMockElements.size()));
+				allowing(from).iterator(); will(returnValue(listOfMockElements.iterator()));
+				allowing(from).getType(); will(returnValue(type.getSimpleName()));
+				for (int i = 0; i < elements.size(); i++) {
+					final int ii = i;
+					allowing(from).elementAt(i); will(returnValue(listOfMockElements.get(ii)));
+				}
+			}});
+			if (listOfMockElements.isEmpty())
+				context.checking(new Expectations() {{
+					allowing(from).last(); will(throwException(new FitLibraryException("It's empty.")));
+				}});
+			else 
+				context.checking(new Expectations() {{
+					allowing(from).last(); will(returnValue(listOfMockElements.get(elements.size()-1)));
+				}});
+			return from;
+		}
+		protected String localPath(String path, int index) {
+			if (path.isEmpty())
+				return type.getSimpleName()+"["+index+"]";
+			return path+"."+type.getSimpleName()+"["+index+"]";
+		}
+		protected List<Builder> withCopy(Builder... els) {
+			List<Builder> copy = new ArrayList<Builder>(elements);
+			for (Builder builder : els)
+				copy.add(builder);
+			return copy;
+		}
+	}
+	public static class TablesBuilder extends TableElementBuilder<Tables,TableBuilder,Row> {
+		public TablesBuilder() {
+			super(Tables.class);
 		}
 		public TablesBuilder with(TableBuilder... els) {
-			List<TableBuilder> copy = new ArrayList<TableBuilder>(elements);
-			for (TableBuilder element : els)
-				copy.add(element);
-			return new TablesBuilder(copy);
+			return new TablesBuilder(withCopy(els));
 		}
-		public Tables expect(final Mockery context) {
-			final List<Table> listOfTable = new ArrayList<Table>();
-			for (TableBuilder builder : elements)
-				listOfTable.add(builder.expect(context));
-			final Tables tables = context.mock(Tables.class);
-			context.checking(new Expectations() {{
-				allowing(tables).size(); will(returnValue(listOfTable.size()));
-				for (int i = 0; i < elements.size(); i++) {
-					final int ii = i;
-					allowing(tables).elementAt(i); will(returnValue(listOfTable.get(ii)));
-				}
-				allowing(tables).last(); will(returnValue(listOfTable.get(elements.size()-1)));
-				allowing(tables).iterator(); will(returnValue(listOfTable.iterator()));
-			}});
-			return tables;
+		public TablesBuilder(List<TableBuilder> copy) {
+			super(Tables.class,copy);
 		}
 	}
-	static class TableBuilder {
-		final List<RowBuilder> elements;
-
+	public static class TableBuilder extends TableElementBuilder<Table,RowBuilder,Cell> {
 		public TableBuilder() {
-			this(new ArrayList<RowBuilder>());
-		}
-		public TableBuilder(List<RowBuilder> copy) {
-			elements = copy;
+			super(Table.class);
 		}
 		public TableBuilder with(RowBuilder... els) {
-			List<RowBuilder> copy = new ArrayList<RowBuilder>(elements);
-			for (RowBuilder element : els)
-				copy.add(element);
-			return new TableBuilder(copy);
+			return new TableBuilder(withCopy(els));
 		}
-		public Table expect(final Mockery context) {
-			final List<Row> listOfTable = new ArrayList<Row>();
-			for (RowBuilder builder : elements)
-				listOfTable.add(builder.expect(context));
-			final Table table = context.mock(Table.class);
-			context.checking(new Expectations() {{
-				allowing(table).size(); will(returnValue(listOfTable.size()));
-				for (int i = 0; i < elements.size(); i++) {
-					final int ii = i;
-					allowing(table).elementAt(i); will(returnValue(listOfTable.get(ii)));
-				}
-//				allowing(table).last(); will(returnValue(listOfTable.get(elements.size()-1)));
-				allowing(table).iterator(); will(returnValue(listOfTable.iterator()));
-			}});
-			return table;
+		public TableBuilder(List<RowBuilder> copy) {
+			super(Table.class,copy);
 		}
 	}
-	static class RowBuilder {
-
-		public Row expect(Mockery context) {
-			// TODO Auto-generated method stub
-			return null;
+	public static class RowBuilder extends TableElementBuilder<Row,CellBuilder,Cell> {
+		public RowBuilder() {
+			super(Row.class);
 		}
+		public RowBuilder with(CellBuilder... els) {
+			return new RowBuilder(withCopy(els));
+		}
+		public RowBuilder(List<CellBuilder> copy) {
+			super(Row.class,copy);
+		}
+	}
+	public static class CellBuilder extends TableElementBuilder<Cell,TableBuilder,Row> {
+		protected Option<String> optionalText = None.none();
 		
+		public CellBuilder() {
+			super(Cell.class);
+		}
+		public CellBuilder with(TableBuilder... els) {
+			return new CellBuilder(optionalText,withCopy(els));
+		}
+		public CellBuilder(Option<String> optionalText, List<TableBuilder> copy) {
+			super(Cell.class,copy);
+			this.optionalText = optionalText;
+		}
+		public CellBuilder(String text) {
+			this();
+			optionalText = new Some<String>(text);
+		}
+		@Override
+		public Cell expect(final Mockery context,final String path, final int index) {
+			final Cell cell = super.expect(context, path, index);
+			final String name = optionalText.isSome() ? optionalText.get() : localPath(path, index);
+			context.checking(new Expectations() {{
+				allowing(cell).text(); 
+				will(returnValue(name));
+				allowing(cell).text(with(any(VariableResolver.class))); will(returnValue(name));
+				allowing(cell).hasEmbeddedTables(); will(returnValue(!cell.isEmpty()));
+				allowing(cell).getEmbeddedTables(); will(returnValue(cell));
+			}});
+			return cell;
+		}
 	}
-
-	//	static class Build <T, ElementBuilder> {
-//		final T tables;
-//		final List<ElementBuilder> elements = new ArrayList<ElementBuilder>();
-//
-//		public Build(T tables) {
-//			this(tables, new ArrayList<ElementBuilder>());
-//		}
-//		public Build(T tables, List<ElementBuilder> els) {
-//			this.tables = tables;
-//			for (ElementBuilder element : els)
-//				this.elements.add(element);
-//		}
-//		public Build<T,ElementBuilder> with(ElementBuilder... els) {
-//			List<ElementBuilder> copy = new ArrayList<ElementBuilder>(elements);
-//			for (ElementBuilder element : els)
-//				copy.add(element);
-//			return new Build<T,ElementBuilder>(tables, copy);
-//		}
-//		public void expect(Mockery context) {
-//			context.checking(new Expectations() {{
-//				allowing(tables).size(); will(returnValue(elements.size()));
-//				for (int i = 0; i < elements.size(); i++) {
-//					final int ii = i;
-//					allowing(tables).table(i); will(returnValue(elements.get(ii).table));
-//				}
-//				allowing(tables).last(); will(returnValue(elements.get(elements.size()-1).table));
-//			}});
-//		}
-//	}
-//	private void trial() {
-//		tables().with(
-//				table().with(
-//						row().with(
-//								cell(),
-//								cell().with(
-//										tables().with(
-//												table().with(
-//														row().with(
-//																cell()
-//														)
-//												)
-//										)
-//								)
-//						),
-//						row()
-//				)
-//		);
-//	}
+	public static TablesBuilder tables() {
+		return new TablesBuilder();
+	}
+	public static TableBuilder table() {
+		return new TableBuilder();
+	}
+	public static RowBuilder row() {
+		return new RowBuilder();
+	}
+	public static CellBuilder cell() {
+		return new CellBuilder();
+	}
+	public static CellBuilder cell(String text) {
+		return new CellBuilder(text);
+	}
 }

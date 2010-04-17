@@ -9,12 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import fitlibrary.definedAction.DefinedActionsRepository;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.caller.ValidCall;
-import fitlibrary.utility.TestResults;
 
 public class PlainTextAnalyser {
 	private final RuntimeContextInternal runtime;

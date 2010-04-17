@@ -9,12 +9,12 @@ import fit.FitServerBridge;
 import fit.FixtureListener;
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
 
 public class RunDirectly {
 	protected FixtureListener fixtureListener = new FixtureListener() {

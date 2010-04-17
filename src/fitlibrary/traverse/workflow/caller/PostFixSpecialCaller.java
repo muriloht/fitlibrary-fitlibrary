@@ -6,12 +6,12 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PostFixSpecialCaller extends DoCaller {

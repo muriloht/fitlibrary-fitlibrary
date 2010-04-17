@@ -14,11 +14,11 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public class ReferenceTraverse extends Traverse {
     private static String[] WORD_COUNTS = {

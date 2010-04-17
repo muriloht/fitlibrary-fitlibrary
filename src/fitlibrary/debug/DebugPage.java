@@ -14,12 +14,12 @@ import fit.FixtureListener;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
 
 public class DebugPage {
 	protected int tablesFinished = 0;

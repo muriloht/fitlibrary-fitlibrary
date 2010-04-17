@@ -8,11 +8,11 @@ import java.util.List;
 
 import fit.Fixture;
 import fit.Parse;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 /** An alternative to fit.ActionFixture
 	@author rick mugridge, july 2003

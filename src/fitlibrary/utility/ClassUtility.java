@@ -17,6 +17,7 @@ import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.CompareFilesTraverse;
 import fitlibrary.traverse.Evaluator;

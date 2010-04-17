@@ -7,10 +7,10 @@ package fitlibrary.runtime;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.IScope;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
-import fitlibrary.utility.TestResults;
 
 public interface RuntimeContextInternal extends RuntimeContext {
 	RuntimeContextInternal freshCopy();

@@ -4,9 +4,9 @@
 */
 package fitlibrary.traverse.workflow;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public abstract class DoCaller {
 	private Exception problem = null;

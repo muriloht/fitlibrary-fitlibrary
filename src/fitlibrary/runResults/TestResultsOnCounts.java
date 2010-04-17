@@ -2,7 +2,7 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.utility;
+package fitlibrary.runResults;
 
 import fit.Counts;
 
@@ -89,5 +89,9 @@ public class TestResultsOnCounts implements TestResults {
 	}
 	private static String backgroundColour(String colour) {
 		return "bgcolor=\""+colour+"\"";
+	}
+	@Override
+	public void addRights(int extraRight) {
+		counts.right += extraRight;
 	}
 }

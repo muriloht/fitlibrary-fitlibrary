@@ -4,8 +4,8 @@
 */
 package fitlibrary.batch.testRun;
 
+import fitlibrary.runResults.TableListener;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.TableListener;
 
 public interface FitLibraryBatching {
 	void doTables(Tables tables, TableListener listener);

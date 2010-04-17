@@ -8,10 +8,10 @@ import java.util.Date;
 
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
 
 public class FitLibraryServer extends FitServerBridge implements Reportage {
 	private BatchFitLibrary batching = new BatchFitLibrary();

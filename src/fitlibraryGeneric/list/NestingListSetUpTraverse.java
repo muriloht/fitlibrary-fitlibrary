@@ -10,11 +10,11 @@ import java.util.List;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.workflow.DoTraverse;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTyped;
 
 public class NestingListSetUpTraverse extends DoTraverse {

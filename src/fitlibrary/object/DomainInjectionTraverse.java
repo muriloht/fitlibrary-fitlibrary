@@ -7,14 +7,14 @@ package fitlibrary.object;
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 public class DomainInjectionTraverse extends Traverse implements TableEvaluator {
 	private DomainTraverser domainTraverser = null;

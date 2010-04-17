@@ -4,11 +4,11 @@
 */
 package fitlibrary.traverse;
 
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 public interface TableEvaluator {
     void runTable(Table table, ITableListener tableListener);

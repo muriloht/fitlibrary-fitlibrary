@@ -3,7 +3,7 @@
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 
-package fitlibrary.utility;
+package fitlibrary.runResults;
 
 import fit.Counts;
 
@@ -20,4 +20,5 @@ public interface TestResults {
 	void fail();
 	void pass();
 	boolean matches(String text, String text2, String text3, String text4);
+	void addRights(int i);
 }

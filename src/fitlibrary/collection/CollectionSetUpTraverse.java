@@ -12,12 +12,12 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 
 /**
  * Used to be called SetUpTraverse

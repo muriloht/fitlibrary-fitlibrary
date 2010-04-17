@@ -5,8 +5,8 @@
 
 package fitlibrary.suite;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.TestResults;
 
 public interface StorytestRunner {
 	TestResults doStorytest(Tables actualTables);

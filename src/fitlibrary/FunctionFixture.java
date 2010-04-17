@@ -4,9 +4,9 @@
 */
 package fitlibrary;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.function.FunctionTraverse;
-import fitlibrary.utility.TestResults;
 
 public abstract class FunctionFixture extends FitLibraryFixture {
 	private FunctionTraverse functionTraverse;

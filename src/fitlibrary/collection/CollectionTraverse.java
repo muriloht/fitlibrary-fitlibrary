@@ -21,6 +21,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.NoSuchPropertyException;
 import fitlibrary.object.DomainObjectSetUpTraverse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -28,7 +29,6 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.MapElement;
-import fitlibrary.utility.TestResults;
 
 public abstract class CollectionTraverse extends Traverse {
 	protected boolean[] usedFields;

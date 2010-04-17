@@ -17,12 +17,12 @@ import org.junit.Test;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoEvaluator;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 @SuppressWarnings("unchecked")
 public class TestCollectionParser {

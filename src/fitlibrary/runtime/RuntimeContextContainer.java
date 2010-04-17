@@ -19,10 +19,10 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.log.FileLogger;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
-import fitlibrary.utility.TestResults;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";

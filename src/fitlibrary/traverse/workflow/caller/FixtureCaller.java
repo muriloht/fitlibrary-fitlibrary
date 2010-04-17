@@ -5,10 +5,10 @@
 package fitlibrary.traverse.workflow.caller;
 
 import fit.Fixture;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class FixtureCaller extends DoCaller {

@@ -21,4 +21,5 @@ public interface TableElement<From, To> extends Iterable<To> {
 	String getLeader();
 	String getTrailer();
 	Parse parse();
+	String getType();
 }

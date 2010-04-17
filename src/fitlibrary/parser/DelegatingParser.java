@@ -10,12 +10,12 @@ import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.object.DomainObjectCheckTraverse;
 import fitlibrary.object.DomainObjectSetUpTraverse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class DelegatingParser implements Parser {
 	protected final DelegateParser delegateParser;
@@ -31,7 +31,7 @@ public class DelegatingParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTable())
+		if (cell.hasEmbeddedTables())
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		try {
 			return delegateParser.parse(cell.text(evaluator),typed);
@@ -57,7 +57,7 @@ public class DelegatingParser implements Parser {
 		return newInstance;
 	}
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTable())
+    	if (cell.hasEmbeddedTables())
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return delegateParser.matches(parse(cell,testResults),result);
     }

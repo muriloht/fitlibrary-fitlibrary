@@ -9,11 +9,11 @@ import java.lang.reflect.Method;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ResultParser;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.NonGenericTyped;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class TestArrayParser extends ParserTestCase {

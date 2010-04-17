@@ -9,11 +9,11 @@ import fitlibrary.exception.table.MissingTableException;
 import fitlibrary.parser.HtmlStructureParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class TableParser extends HtmlStructureParser {
 	public TableParser(Typed typed) {
@@ -24,7 +24,7 @@ public class TableParser extends HtmlStructureParser {
 	}
 	@Override
 	protected Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (!cell.hasEmbeddedTable())
+		if (!cell.hasEmbeddedTables())
 			throw new MissingTableException();
         Parse parse = cell.getEmbeddedTable().parse();
 		Object[] args = new Object[]{parse};

@@ -9,9 +9,9 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.BooleanMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.utility.TestResults;
 
 public class ConstraintTraverse extends FunctionTraverse {
 	private CalledMethodTarget target;

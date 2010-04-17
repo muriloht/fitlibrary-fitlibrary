@@ -6,8 +6,8 @@
 package fitlibrary.table;
 
 import fit.Parse;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 
 public interface Table extends TableElement<Table,Row> {
 	void error(TestResults testResults, Throwable e);

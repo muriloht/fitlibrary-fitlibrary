@@ -12,12 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 @RunWith(JMock.class)
 public class TestDoFlowWithSelect {

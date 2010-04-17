@@ -7,9 +7,9 @@ package fitlibrary.table;
 
 import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
-import fitlibrary.utility.TestResults;
+import fitlibrary.runResults.TestResults;
 
-public interface Cell extends TableElement<Cell,Table> {
+public interface Cell extends Tables {
 	String text();
 	String text(VariableResolver resolver);
 	String textLower(VariableResolver resolver);
@@ -20,7 +20,7 @@ public interface Cell extends TableElement<Cell,Table> {
 	boolean matchesText(String text, VariableResolver resolver);
 	String camelledText(VariableResolver resolver);
 	
-	boolean hasEmbeddedTable();
+	boolean hasEmbeddedTables();
 	Tables getEmbeddedTables();
 	Table getEmbeddedTable();
 	void setInnerTables(Tables tables);
@@ -32,11 +32,9 @@ public interface Cell extends TableElement<Cell,Table> {
 	void passIfBlank(TestResults testResults, VariableResolver resolver);
 	void fail(TestResults testResults);
 	void fail(TestResults testResults, String message, VariableResolver resolver);
-	void fail(TestResults testResults, String message);
 	void failWithStringEquals(TestResults testResults, String message, VariableResolver resolver);
 	void failHtml(TestResults testResults, String html);
-	void exceptionMayBeExpected(boolean exceptionExpected, Exception e,
-			TestResults testResults);
+	void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults);
 	void error(TestResults testResults);
 	void error(TestResults testResults, Throwable e);
 	void error(TestResults testResults, String s);

@@ -14,13 +14,13 @@ import fitlibrary.exception.classes.NotSubclassFromClassFactoryMethod;
 import fitlibrary.exception.classes.NullFromClassFactoryMethod;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.object.DomainObjectSetUpTraverse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.TestResults;
 
 public class ListSetUpTraverse2 extends DoTraverse {
     private final Class<?> componentType;

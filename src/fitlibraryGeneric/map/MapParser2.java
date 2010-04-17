@@ -10,10 +10,10 @@ import fitlibrary.collection.map.MapTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.collection.MapParser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTyped;
 
 public class MapParser2 extends MapParser {

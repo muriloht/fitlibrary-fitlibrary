@@ -5,8 +5,10 @@
 
 package fitlibrary.flow;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.hamcrest.number.IsGreaterThan;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -112,7 +114,7 @@ public class TestGlobalScope {
 			oneOf(dynamicVariables).get(GlobalScope.STOP_WATCH); will(returnValue(new StopWatch()));
 		}});
 		globalScope.startStopWatch();
-		assertThat(globalScope.stopWatch(),is(0L));
+		assertThat(globalScope.stopWatch(),not(new IsGreaterThan<Long>(5L)));
 	}
 	//--- FIXTURE SELECTION
 	//--- DEFINED ACTIONS

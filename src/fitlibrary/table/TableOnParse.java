@@ -6,8 +6,8 @@ package fitlibrary.table;
 
 import fit.Parse;
 import fitlibrary.exception.table.MissingRowException;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 
 public class TableOnParse extends ParseNode<Row> implements Table {
     private int firstErrorRow = 0;
@@ -43,9 +43,6 @@ public class TableOnParse extends ParseNode<Row> implements Table {
     @Override
 	public void pass(TestResults testResults) {
         elementAt(firstErrorRow).pass(testResults);
-    }
-    public void wrong(TestResults testResults, String msg) {
-        elementAt(firstErrorRow).elementAt(0).fail(testResults,msg);
     }
     public void ignore(TestResults testResults) {
         elementAt(firstErrorRow).ignore(testResults);
@@ -168,5 +165,9 @@ public class TableOnParse extends ParseNode<Row> implements Table {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+	@Override
+	public String getType() {
+		return "Table";
 	}
 }

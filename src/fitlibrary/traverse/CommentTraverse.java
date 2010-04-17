@@ -4,8 +4,8 @@
 */
 package fitlibrary.traverse;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
-import fitlibrary.utility.TestResults;
 
 public class CommentTraverse extends Traverse {
 	private boolean markAsIgnored;

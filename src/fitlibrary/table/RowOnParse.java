@@ -13,8 +13,8 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 
 public class RowOnParse extends ParseNode<Cell> implements Row {
     private boolean rowIsHidden = false;
@@ -205,5 +205,9 @@ public class RowOnParse extends ParseNode<Cell> implements Row {
 		for (int i = 0; i < size(); i++)
 			list.add(elementAt(i));
 		return list.iterator();
+	}
+	@Override
+	public String getType() {
+		return "Row";
 	}
 }

@@ -8,10 +8,10 @@ import java.lang.reflect.Field;
 
 import fitlibrary.parser.HtmlParser;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class FieldParser implements ResultParser {
 	private Parser parser;

@@ -5,10 +5,10 @@
 
 package fitlibrary;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.CreateFromClassNameCaller;
-import fitlibrary.utility.TestResults;
 
 public class DefaultPackages extends Traverse {
 	@Override

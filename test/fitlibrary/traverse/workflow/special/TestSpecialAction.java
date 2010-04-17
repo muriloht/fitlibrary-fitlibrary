@@ -8,10 +8,10 @@ package fitlibrary.traverse.workflow.special;
 import org.jmock.Mockery;
 
 import fitlibrary.closure.ICalledMethodTarget;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public abstract class TestSpecialAction {
 	Mockery context = new Mockery();

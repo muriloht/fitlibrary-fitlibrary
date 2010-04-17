@@ -4,10 +4,10 @@
 */
 package fitlibrary.parser;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 /**
  * There are several ways that Parsers are used:

@@ -10,11 +10,11 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class DoActionCaller extends DoCaller {

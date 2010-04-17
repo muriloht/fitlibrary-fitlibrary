@@ -14,11 +14,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.DomainAdapter;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 @RunWith(JMock.class)
 public class TestSetUpTearDown {

@@ -14,6 +14,7 @@ import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.collection.set.SetTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
@@ -22,7 +23,6 @@ import fitlibrary.traverse.FitLibrarySelector;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class SetParser implements Parser {
 	protected final Parser parser, showParser;
@@ -42,7 +42,7 @@ public class SetParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTable()) 
+		if (cell.hasEmbeddedTables()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
 	}
@@ -54,8 +54,8 @@ public class SetParser implements Parser {
 	}
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
-			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
-		if (cell.hasEmbeddedTable())
+			return !cell.hasEmbeddedTables() && cell.isBlank(evaluator);
+		if (cell.hasEmbeddedTables())
 			return tableMatches(cell.getEmbeddedTable(),result,testResults);
 		return parse(cell,testResults).equals(result);
     }

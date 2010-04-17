@@ -7,11 +7,11 @@ package fitlibrary.parser;
 import java.lang.reflect.Method;
 
 import fitlibrary.parser.lookup.ResultParser;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class TestSimpleValueAdapter extends ParserTestCase {
 	public int aProp = 567;

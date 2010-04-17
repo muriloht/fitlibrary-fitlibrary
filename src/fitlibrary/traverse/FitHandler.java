@@ -5,10 +5,10 @@
 package fitlibrary.traverse;
 
 import fit.Fixture;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.utility.TestResults;
 
 public class FitHandler {
 	public void doTable(Object result, Table table, TestResults testResults, Evaluator evaluator) {

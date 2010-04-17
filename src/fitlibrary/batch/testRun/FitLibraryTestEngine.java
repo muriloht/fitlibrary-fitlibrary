@@ -15,11 +15,11 @@ import fitlibrary.batch.trinidad.SingleTestResult;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.batch.trinidad.TestEngine;
 import fitlibrary.batch.trinidad.TestResult;
+import fitlibrary.runResults.TableListener;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TableListener;
 
 public class FitLibraryTestEngine implements TestEngine {
 	public static final String NOT_A_TEST = "NOT-A-TEST";

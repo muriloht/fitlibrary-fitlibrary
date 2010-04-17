@@ -12,6 +12,7 @@ import java.util.List;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.flow.IScope;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -19,7 +20,6 @@ import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 import fitlibrary.utility.option.Option;
 import fitlibraryGeneric.typed.GenericTypedObject;
 

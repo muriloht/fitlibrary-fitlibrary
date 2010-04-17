@@ -11,14 +11,14 @@ import fitlibrary.DefineAction;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class DefineActionsOnPageSlowly extends Traverse {
 	protected String topPageName;

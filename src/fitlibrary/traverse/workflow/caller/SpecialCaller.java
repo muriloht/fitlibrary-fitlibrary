@@ -9,11 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.exception.method.MissingMethodException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class SpecialCaller extends DoCaller {

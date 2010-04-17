@@ -6,12 +6,12 @@ package fitlibrary.parser;
 
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 /**
  * This Parser is used when there is nothing specific available. As it's just for

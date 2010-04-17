@@ -9,12 +9,12 @@ import java.util.Map;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
-import fitlibrary.utility.TestResults;
 
 public class MapSetUpTraverse extends Traverse {
     private Map<Object,Object> theMap = new HashMap<Object,Object>();

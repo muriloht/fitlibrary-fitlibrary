@@ -12,13 +12,13 @@ import junit.framework.TestCase;
 import fitlibrary.DoFixture;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.ref.EntityReference;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.NonGenericTyped;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class TestReferenceParser extends TestCase {
     List<MyClass> list;

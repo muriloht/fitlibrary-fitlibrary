@@ -11,9 +11,9 @@ import fitlibrary.closure.MethodTarget;
 import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.utility.TestResults;
 
 /**
  * A more flexible alternative to RowFixture:

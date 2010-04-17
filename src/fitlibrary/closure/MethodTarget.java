@@ -4,9 +4,9 @@
 */
 package fitlibrary.closure;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public interface MethodTarget {
 	boolean matches(Cell cell, TestResults testResults);

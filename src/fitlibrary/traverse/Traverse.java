@@ -18,14 +18,14 @@ import fitlibrary.exception.CycleException;
 import fitlibrary.flow.IScope;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.lookup.ParseDelegation;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 

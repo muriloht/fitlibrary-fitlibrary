@@ -9,12 +9,12 @@ package fitlibrary.parser;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTyped;
 
 public class EnumParser implements Parser {
@@ -42,7 +42,7 @@ public class EnumParser implements Parser {
 		}
 	}
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTable()) {
+		if (cell.hasEmbeddedTables()) {
 			cell.unexpected(testResults,"collection");
 			return false;
 		}

@@ -6,11 +6,11 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class MultiDefinedActionCaller extends DoCaller {

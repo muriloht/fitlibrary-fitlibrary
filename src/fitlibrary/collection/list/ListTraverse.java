@@ -10,8 +10,8 @@ import fitlibrary.closure.MethodTarget;
 import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
-import fitlibrary.utility.TestResults;
 
 /**
  * Like fit.RowFixture, except that the order of rows is important

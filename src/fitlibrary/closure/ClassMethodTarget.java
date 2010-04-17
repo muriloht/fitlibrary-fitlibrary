@@ -5,10 +5,10 @@
 package fitlibrary.closure;
 
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class ClassMethodTarget implements MethodTarget {
 	private Class<?> componentType;

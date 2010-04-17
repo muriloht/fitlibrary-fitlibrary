@@ -12,6 +12,7 @@ import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.NotSubclassFromClassFactoryMethod;
 import fitlibrary.exception.classes.NullFromClassFactoryMethod;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -19,7 +20,6 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.TestResults;
 
 public class DomainObjectSetUpTraverse extends Traverse {
 	private Class<?> type;
@@ -96,7 +96,7 @@ public class DomainObjectSetUpTraverse extends Traverse {
 		}
 	}
     public static boolean givesClass(Cell cell, VariableResolver resolver) {
-        return cell.isBlank(resolver) && !cell.hasEmbeddedTable();
+        return cell.isBlank(resolver) && !cell.hasEmbeddedTables();
     }
 	private static void callSetter(CalledMethodTarget target, Cell nextCell, TestResults testResults) {
 		try {

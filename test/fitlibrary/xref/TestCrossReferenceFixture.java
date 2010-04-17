@@ -7,9 +7,9 @@ package fitlibrary.xref;
 import org.junit.Test;
 
 import fit.exception.FitParseException;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.SimpleWikiTranslator;
-import fitlibrary.utility.TestResultsFactory;
 
 public class TestCrossReferenceFixture
 {

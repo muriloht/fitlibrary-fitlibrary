@@ -12,6 +12,9 @@ import fitlibrary.flow.DoFlow;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.ScopeStack;
 import fitlibrary.parser.lookup.ParseDelegation;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.ParseNode;
 import fitlibrary.table.Table;
@@ -21,9 +24,6 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class BatchFitLibrary implements StorytestRunner {

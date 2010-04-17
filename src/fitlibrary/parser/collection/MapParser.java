@@ -13,6 +13,7 @@ import fitlibrary.collection.map.MapTraverse;
 import fitlibrary.exception.parse.InvalidMapString;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
@@ -21,7 +22,6 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 /** We have to assume that the Map is a Map<String,String>
  */
@@ -51,7 +51,7 @@ public class MapParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTable()) 
+		if (cell.hasEmbeddedTables()) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
 	}
@@ -63,9 +63,9 @@ public class MapParser implements Parser {
 	@SuppressWarnings("unchecked")
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
-			return !cell.hasEmbeddedTable() && cell.isBlank(evaluator);
+			return !cell.hasEmbeddedTables() && cell.isBlank(evaluator);
 		Map<Object,Object> map = (Map<Object,Object>) result;
-		if (cell.hasEmbeddedTable())
+		if (cell.hasEmbeddedTables())
 			return tableMatches(cell.getEmbeddedTable(),map,testResults);
 		return parse(cell,testResults).equals(result);
     }

@@ -15,14 +15,14 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.suite.SuiteFixture;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.CollectionUtility;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class TestScopeStack {

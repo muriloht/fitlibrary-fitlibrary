@@ -65,7 +65,7 @@ public class ParameterSubstitution {
 	}
 	private static void macroReplaceCell(Cell cell, String key, Object value) {
 		// Do NOT do dynamic variable substitution at this stage; it has to be done dynamically.
-		if (cell.hasEmbeddedTable())
+		if (cell.hasEmbeddedTables())
 			macroReplaceTables(cell.getEmbeddedTables(),key,value);
 		String text = cell.fullText();
 		if (value instanceof String) {
@@ -78,7 +78,7 @@ public class ParameterSubstitution {
 			if (at < 0)
 				return;
 			Tables addedTables = valueTables.deepCopy();
-			if (cell.hasEmbeddedTable())
+			if (cell.hasEmbeddedTables())
 				cell.getEmbeddedTables().parse().last().more = addedTables.parse();
 			else
 				cell.setInnerTables(addedTables);

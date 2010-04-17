@@ -14,12 +14,12 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.SingleNestedTableExpected;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TestResults;
 
-public class CellOnParse extends ParseNode<Table> implements Cell {
+public class CellOnParse extends TablesOnParse implements Cell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
     private boolean cellIsInHiddenRow = false;
     
@@ -31,7 +31,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
     }
 	public CellOnParse(Cell cell) {
 		this("");
-		if (cell.hasEmbeddedTable())
+		if (cell.hasEmbeddedTables())
 			setInnerTables(cell.getEmbeddedTables());
 		else
 			setText(cell.fullText());
@@ -74,7 +74,8 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
     public boolean isBlank(VariableResolver resolver) {
         return text(resolver).equals("");
     }
-    public CellOnParse deepCopy() {
+    @Override
+	public CellOnParse deepCopy() {
         return new CellOnParse(ParseUtility.copyParse(parse));
     }
     @Override
@@ -124,7 +125,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
     	super.fail(testResults);
     }
     public void fail(TestResults testResults, String msg, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTable()) {
+    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
     		failHtml(testResults,msg);
     		return;
     	}
@@ -136,7 +137,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
                 + label("actual"));
     }
     public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTable()) {
+    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
     		failHtml(testResults,actual);
     		return;
     	}
@@ -150,15 +151,6 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
 	public static String differences(String actual, String expected) {
 		return PlugBoard.stringDifferencing.differences(actual, expected);
 	}
-	public void fail(TestResults testResults, String msg) {
-    	if ("".equals(parse.body) && !hasEmbeddedTable()) {
-    		failHtml(testResults,msg);
-    		return;
-    	}
-        fail(testResults);
-        addToBody(label("expected") + "<hr>" + Fixture.escape(msg)
-                + label("actual"));
-    }
     public void failHtml(TestResults testResults, String msg) {
         fail(testResults);
         addToBody(msg);
@@ -196,7 +188,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
         parse.addToTag(IGNORE);
         testResults.ignore();
     }
-    public void exceptionMayBeExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
+    public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
     	if (exceptionExpected)
     		pass(testResults);
     	else
@@ -210,7 +202,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
     }
     @Override
 	public String toString() {
-        if (hasEmbeddedTable())
+        if (hasEmbeddedTables())
             return "Cell["+ParseUtility.toString(parse.parts)+"]";
         return "Cell["+text()+"]";
     }
@@ -220,7 +212,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
                 + label("actual"));
     }
     private void addToBody(String msg) {
-        if (hasEmbeddedTable()) {
+        if (hasEmbeddedTables()) {
             if (parse.parts.more == null)
                 parse.parts.trailer = msg;
             else
@@ -259,7 +251,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
 			fail(counts,"",resolver);
 	}
 	public void passIfNotEmbedded(TestResults counts) {
-		if (!hasEmbeddedTable()) // already coloured
+		if (!hasEmbeddedTables()) // already coloured
 			pass(counts);
 	}
 	public void setIsHidden() {
@@ -293,7 +285,7 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
 	}
 	@Override
 	public boolean isEmpty() {
-		return !hasEmbeddedTable() || getEmbeddedTables().isEmpty() ;
+		return !hasEmbeddedTables() || getEmbeddedTables().isEmpty() ;
 	}
 	@Override
 	public int size() {
@@ -305,17 +297,21 @@ public class CellOnParse extends ParseNode<Table> implements Cell {
 	}
 	@Override
 	public void add(Table table) {
-		if (!hasEmbeddedTable())
+		if (!hasEmbeddedTables())
 			parse.parts = TableFactory.tables(table).parse();
 		else
 			getEmbeddedTables().add(table);
 	}
     public TablesOnParse getEmbeddedTables() {
-        if (!hasEmbeddedTable())
+        if (!hasEmbeddedTables())
             throw new NestedTableExpectedException();
 		return new TablesOnParse(parse.parts);
     }
-    public boolean hasEmbeddedTable() {
+    public boolean hasEmbeddedTables() {
         return parse.parts != null;
     }
+	@Override
+	public String getType() {
+		return "Cell";
+	}
 }

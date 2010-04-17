@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import fit.Parse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TestResults;
 
 public abstract class ParseNode<To> {
     public final static String PASS = " class=\"pass\"";

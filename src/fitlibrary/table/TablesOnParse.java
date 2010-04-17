@@ -5,8 +5,8 @@
 package fitlibrary.table;
 
 import fit.Parse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TestResults;
 
 public class TablesOnParse extends ParseNode<Table> implements Tables {
 
@@ -74,5 +74,9 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 	@Override
 	protected void error(TestResults testResults, Throwable e) {
 		elementAt(0).error(testResults, e);
+	}
+	@Override
+	public String getType() {
+		return "Tables";
 	}
 }

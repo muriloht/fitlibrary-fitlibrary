@@ -5,7 +5,7 @@
 
 package fitlibrary.traverse.workflow.caller;
 
-import fitlibrary.utility.TestResults;
+import fitlibrary.runResults.TestResults;
 
 public interface TwoStageSpecial {
 	void run(TestResults testResults);

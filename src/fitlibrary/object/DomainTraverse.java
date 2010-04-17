@@ -5,13 +5,13 @@
 package fitlibrary.object;
 
 import fitlibrary.exception.NoSystemUnderTestException;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 public class DomainTraverse extends DoTraverse implements DomainTraverser, TableEvaluator {
 	private DomainInjectionTraverse domainInject = new DomainInjectionTraverse();

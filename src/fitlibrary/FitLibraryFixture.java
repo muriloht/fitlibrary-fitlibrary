@@ -8,13 +8,13 @@ import fit.Fixture;
 import fit.Parse;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.parser.lookup.ParseDelegation;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 /**
  * An abstract superclass of all the flow-style fixtures.

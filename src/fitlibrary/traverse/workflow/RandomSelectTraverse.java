@@ -6,9 +6,9 @@ package fitlibrary.traverse.workflow;
 
 import java.util.Random;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public class RandomSelectTraverse extends Traverse {
 	private static Random random = new Random();

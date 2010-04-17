@@ -19,6 +19,9 @@ import fitlibrary.object.DomainCheckTraverse;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.object.DomainInjectionTraverse;
 import fitlibrary.object.DomainTraverser;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Cell;
@@ -35,9 +38,6 @@ import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.traverse.workflow.PlainTextAnalyser;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
@@ -121,7 +121,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 				try {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.elementAt(0);
-			    	if (cell.hasEmbeddedTable()) { // Doesn't allow for other cells in row...
+			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
 			    		handleInnerTables(cell, tableListener);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);

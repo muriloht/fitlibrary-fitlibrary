@@ -9,12 +9,12 @@ import java.util.Map;
 
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
-import fitlibrary.utility.TestResults;
 
 public class MapTraverse extends Traverse {
 	private Map<Object,Object> map;

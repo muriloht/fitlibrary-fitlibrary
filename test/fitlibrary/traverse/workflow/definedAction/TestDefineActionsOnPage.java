@@ -18,10 +18,10 @@ import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.SimpleWikiTranslator;
-import fitlibrary.utility.TestResultsFactory;
 
 public class TestDefineActionsOnPage {
 	RuntimeContextContainer runtime = new RuntimeContextContainer();

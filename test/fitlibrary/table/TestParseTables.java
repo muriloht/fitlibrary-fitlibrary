@@ -9,9 +9,9 @@ import fit.Counts;
 import fit.exception.FitParseException;
 import fitlibrary.DoFixture;
 import fitlibrary.parser.ParserTestCase;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.traverse.workflow.DoEvaluator;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class TestParseTables extends TestCase {
     private Tables tables;

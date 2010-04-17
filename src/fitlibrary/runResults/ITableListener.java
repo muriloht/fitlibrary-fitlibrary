@@ -3,7 +3,7 @@
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 
-package fitlibrary.utility;
+package fitlibrary.runResults;
 
 import fitlibrary.table.Table;
 

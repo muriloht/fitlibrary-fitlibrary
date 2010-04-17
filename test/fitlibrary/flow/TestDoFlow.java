@@ -20,6 +20,9 @@ import org.junit.runner.RunWith;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
@@ -32,9 +35,6 @@ import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.CollectionUtility;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 @RunWith(JMock.class)
@@ -193,7 +193,7 @@ public class TestDoFlow {
 			allowing(row1).elementAt(0); will(returnValue(cell1));
 			allowing(row1).size(); will(returnValue(2));
 			allowing(row2).size(); will(returnValue(2));
-			allowing(cell1).hasEmbeddedTable(); will(returnValue(false));
+			allowing(cell1).hasEmbeddedTables(); will(returnValue(false));
 			allowing(row2).elementAt(0); will(returnValue(cell1));
 			allowing(cell1).hadError(); will(returnValue(false));
 		}});

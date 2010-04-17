@@ -7,13 +7,13 @@ import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
-import fitlibrary.utility.TestResults;
 
 public class DefineAction extends Traverse {
 	private String wikiClassName = "";
@@ -51,7 +51,7 @@ public class DefineAction extends Traverse {
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain one cell.");
     	if (hasClass && table.elementAt(2).size() != 1)
     		throw new FitLibraryException("Third row of table for DefineAction needs to contain one cell.");
-    	if (!table.elementAt(bodyRow).elementAt(0).hasEmbeddedTable())
+    	if (!table.elementAt(bodyRow).elementAt(0).hasEmbeddedTables())
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain nested tables.");
     	if (hasClass)
     		wikiClassName = table.elementAt(1).text(0,this);

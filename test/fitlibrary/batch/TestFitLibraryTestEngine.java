@@ -18,8 +18,8 @@ import fitlibrary.batch.testRun.FitLibraryTestEngine;
 import fitlibrary.batch.trinidad.InMemoryTestImpl;
 import fitlibrary.batch.trinidad.SingleTestResult;
 import fitlibrary.batch.trinidad.TestResult;
+import fitlibrary.runResults.TableListener;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.TableListener;
 
 @RunWith(JMock.class)
 public class TestFitLibraryTestEngine {

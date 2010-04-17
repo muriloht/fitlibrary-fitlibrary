@@ -7,12 +7,12 @@ package fitlibrary.parser.tagged;
 import fitlibrary.parser.HtmlParser;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class TaggedStringParser implements HtmlParser {
 	public static boolean applicableType(Class<?> type) {

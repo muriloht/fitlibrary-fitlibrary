@@ -6,7 +6,7 @@
 package fitlibrary.table;
 
 import fitlibrary.dynamicVariable.VariableResolver;
-import fitlibrary.utility.TestResults;
+import fitlibrary.runResults.TestResults;
 
 public interface Row extends TableElement<Row,Cell> {
 	boolean hasFurtherRows();

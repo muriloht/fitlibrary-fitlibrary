@@ -8,11 +8,11 @@ import java.lang.reflect.Array;
 
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public class ArraySetUpTraverse extends Traverse {
     private Parser valueAdapter;

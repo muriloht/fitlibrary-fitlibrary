@@ -8,6 +8,8 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.RowOnParse;
@@ -16,8 +18,6 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	private DomainTraverse domainTraverse;

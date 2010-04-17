@@ -7,9 +7,9 @@ package fitlibrary.flow;
 
 import java.util.List;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public interface IScopeStack extends IScope {
 	void clearAllButSuite();

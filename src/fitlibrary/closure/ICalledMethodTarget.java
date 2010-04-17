@@ -6,10 +6,10 @@
 package fitlibrary.closure;
 
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoTraverse.Comparison;
-import fitlibrary.utility.TestResults;
 
 public interface ICalledMethodTarget extends MethodTarget {
 	Object invoke(Object[] arguments) throws Exception;

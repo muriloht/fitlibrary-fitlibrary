@@ -6,10 +6,10 @@ package fitlibrary.traverse.workflow;
 
 import java.util.List;
 
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
 
 public interface DoEvaluator extends Evaluator {
 	Object interpretInFlow(Table table, TestResults testResults);

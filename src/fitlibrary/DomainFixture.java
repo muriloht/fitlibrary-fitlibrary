@@ -5,8 +5,8 @@
 package fitlibrary;
 
 import fitlibrary.object.DomainTraverse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
-import fitlibrary.utility.TestResults;
 
 public class DomainFixture extends DoFixture {
     private DomainTraverse domainTraverse = new DomainTraverse(this);

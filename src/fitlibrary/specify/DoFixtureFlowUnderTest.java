@@ -11,10 +11,10 @@ import java.util.List;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.specify.eg.MyPoint;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.utility.TestResults;
 
 public class DoFixtureFlowUnderTest extends DoFixture {
 	private static SimpleDateFormat DATE_FORMAT = 

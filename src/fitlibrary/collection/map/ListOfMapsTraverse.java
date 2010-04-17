@@ -9,11 +9,11 @@ import java.util.Map;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public class ListOfMapsTraverse extends Traverse {
 	private final List<Map<String, Object>> maps;
@@ -55,12 +55,12 @@ public class ListOfMapsTraverse extends Traverse {
 					if (parser.matches(cell, value, testResults))
 						cell.pass(testResults);
 					else
-						cell.fail(testResults, parser.show(actual));
+						cell.fail(testResults,parser.show(actual),this);
 				} else {
 					if ("".equals(cell.text(this)))
 						cell.pass(testResults);
 					else
-						cell.fail(testResults, "");
+						cell.fail(testResults,"",this);
 				}
 			} catch (Exception e) {
 				cell.error(testResults, e);

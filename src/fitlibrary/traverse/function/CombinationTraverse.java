@@ -12,10 +12,10 @@ import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.utility.TestResults;
 
 public class CombinationTraverse extends FunctionTraverse {
 	private List<Object> topValues = new ArrayList<Object>();

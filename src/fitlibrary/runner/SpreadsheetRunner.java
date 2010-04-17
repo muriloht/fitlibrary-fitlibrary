@@ -24,9 +24,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import fit.Counts;
 import fit.Parse;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
-import fitlibrary.utility.TestResults;
 
 /**
  * Run Fit tests from a spreadsheet.

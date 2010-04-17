@@ -10,10 +10,10 @@ import java.util.List;
 import fit.Fixture;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 
 // This us not being used now.
 // But keep it in case we reintroduce plain text for fixture methods too.

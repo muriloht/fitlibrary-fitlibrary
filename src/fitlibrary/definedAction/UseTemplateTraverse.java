@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class UseTemplateTraverse extends Traverse {
 	private String templateName;
@@ -43,7 +43,7 @@ public class UseTemplateTraverse extends Traverse {
 			Row row = callingTable.elementAt(r);
 			List<Object> parameters = new ArrayList<Object>();
 			for (int c = 0; c < row.size(); c++) {
-				if (row.elementAt(c).hasEmbeddedTable())
+				if (row.elementAt(c).hasEmbeddedTables())
 					parameters.add(row.elementAt(c).getEmbeddedTable());
 				else
 					parameters.add(row.text(c,this));

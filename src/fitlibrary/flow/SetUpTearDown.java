@@ -8,11 +8,11 @@ package fitlibrary.flow;
 import java.lang.reflect.Method;
 
 import fitlibrary.flow.SetUpTearDownReferenceCounter.MethodCaller;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.RowOnParse;
 import fitlibrary.table.TableFactory;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class SetUpTearDown {
 	private final SetUpTearDownReferenceCounter referenceCounter = new SetUpTearDownReferenceCounter();

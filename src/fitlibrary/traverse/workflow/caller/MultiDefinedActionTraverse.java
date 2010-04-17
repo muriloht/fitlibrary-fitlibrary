@@ -6,6 +6,9 @@ package fitlibrary.traverse.workflow.caller;
 
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -14,9 +17,6 @@ import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class MultiDefinedActionTraverse extends Traverse {
 	private MultiParameterSubstitution multiParameterSubstitution;

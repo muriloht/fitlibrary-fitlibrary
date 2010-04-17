@@ -7,6 +7,7 @@ package fitlibrary.object;
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -15,7 +16,6 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class DomainObjectCheckTraverse extends Traverse {
 	private Class<?> type;

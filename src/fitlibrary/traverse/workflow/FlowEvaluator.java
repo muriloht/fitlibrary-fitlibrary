@@ -6,11 +6,11 @@
 package fitlibrary.traverse.workflow;
 
 import fit.Fixture;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.FitHandler;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public interface FlowEvaluator extends DoEvaluator {
 	TypedObject interpretRow(Row row, TestResults testResults);

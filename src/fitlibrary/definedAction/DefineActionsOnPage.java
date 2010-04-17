@@ -8,11 +8,11 @@ import java.io.File;
 import java.util.List;
 
 import fitlibrary.exception.FitLibraryExceptionInHtml;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.utility.FileIO;
 import fitlibrary.utility.SimpleWikiTranslator;
-import fitlibrary.utility.TestResults;
 
 public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 	private final String rootLocation;

@@ -9,10 +9,10 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 /**
  * Subclasses don't interpret the contents of a cell as text, but in some other way.

@@ -6,8 +6,8 @@
 
 package fitlibrary.suite;
 
+import fitlibrary.runResults.TableListener;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.TableListener;
 
 public interface SuiteRunner {
 	void runStorytest(Tables tables, TableListener tableListener);

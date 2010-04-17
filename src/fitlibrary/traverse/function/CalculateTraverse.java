@@ -11,12 +11,12 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
-import fitlibrary.utility.TestResults;
 
 /**
  * A traverse similar in function to ColumnFixture, except that:

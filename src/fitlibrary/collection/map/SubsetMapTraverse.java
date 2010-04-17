@@ -6,8 +6,8 @@ package fitlibrary.collection.map;
 
 import java.util.Map;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
-import fitlibrary.utility.TestResults;
 
 public class SubsetMapTraverse extends MapTraverse {
 

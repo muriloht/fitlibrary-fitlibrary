@@ -7,14 +7,14 @@ package fitlibrary.spec;
 import fit.Parse;
 import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.RowWrongWidthException;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.utility.ParseUtility;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 /**
  * Like SpecifyFixture, except that:
@@ -36,7 +36,7 @@ public class SpecifySuiteFixture extends SpecifyFixture {
 				row.error(testResults, new RowWrongWidthException(2));
             Cell test = row.elementAt(0);
             Cell report = row.elementAt(1);
-            if (!test.hasEmbeddedTable()) {
+            if (!test.hasEmbeddedTables()) {
             	row.error(testResults, new NestedTableExpectedException());
                 return;
             }

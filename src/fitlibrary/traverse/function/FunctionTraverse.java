@@ -4,9 +4,9 @@
 */
 package fitlibrary.traverse.function;
 
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.TestResults;
 
 public abstract class FunctionTraverse extends Traverse {
 	protected String repeatString = null;

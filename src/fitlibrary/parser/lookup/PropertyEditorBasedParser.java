@@ -10,12 +10,12 @@ import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.object.DomainObjectCheckTraverse;
 import fitlibrary.object.DomainObjectSetUpTraverse;
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 
 public class PropertyEditorBasedParser implements Parser {
 	private PropertyEditor editor;
@@ -33,7 +33,7 @@ public class PropertyEditorBasedParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTable())
+		if (cell.hasEmbeddedTables())
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		if (nullOK && cell.isBlank(evaluator)) {
 			return null;
@@ -57,7 +57,7 @@ public class PropertyEditorBasedParser implements Parser {
 		return newInstance;
 	}
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTable())
+    	if (cell.hasEmbeddedTables())
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return matches(parse(cell,testResults),result);
     }

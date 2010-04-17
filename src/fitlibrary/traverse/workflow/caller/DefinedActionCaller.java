@@ -10,6 +10,9 @@ import java.util.List;
 import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.runResults.TableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -21,9 +24,6 @@ import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.NonGenericTypedObject;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 
 public class DefinedActionCaller extends DoCaller {
 	private ParameterSubstitution parameterSubstitution;
@@ -89,7 +89,7 @@ public class DefinedActionCaller extends DoCaller {
 	private List<Object> actualArgs(Row row, List<Object> result) {
 		for (int i = 1; i < row.size(); i += 2) {
 			Cell cell = row.elementAt(i);
-			if (cell.hasEmbeddedTable())
+			if (cell.hasEmbeddedTables())
 				result.add(cell.getEmbeddedTables());
 			else
 				result.add(cell.text(runtime.getResolver()));

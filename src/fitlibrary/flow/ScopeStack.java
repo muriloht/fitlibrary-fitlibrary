@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.Stack;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.TestResults;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;

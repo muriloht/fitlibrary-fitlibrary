@@ -24,6 +24,7 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.graphic.ObjectDotGraphic;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.FitHandler;
@@ -37,7 +38,6 @@ import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.TestResults;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext, FlowEvaluator{
@@ -247,9 +247,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
         		specialCell.error(testResults);
         		row.error(testResults, e);
         	} else
-        		expectedCell.exceptionMayBeExpected(false, e, testResults);
+        		expectedCell.exceptionExpected(false, e, testResults);
         } catch (Exception e) {
-        	expectedCell.exceptionMayBeExpected(false, e, testResults);
+        	expectedCell.exceptionExpected(false, e, testResults);
         }
 	}
 	/** Check that the result of the action in the first part of the row is less than
@@ -322,9 +322,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
         		specialCell.error(testResults);
         		row.error(testResults, e);
         	} else
-        		expectedCell.exceptionMayBeExpected(false, e, testResults);
+        		expectedCell.exceptionExpected(false, e, testResults);
         } catch (Exception e) {
-        	expectedCell.exceptionMayBeExpected(false, e, testResults);
+        	expectedCell.exceptionExpected(false, e, testResults);
         }
 	}
 	public interface Comparison {

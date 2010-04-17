@@ -5,11 +5,11 @@
 package fitlibrary.traverse;
 
 import fitlibrary.parser.Parser;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
-import fitlibrary.utility.TestResults;
 
 public class GridTraverse extends Traverse {
 	private Object[][] grid;

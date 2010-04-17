@@ -15,6 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -23,9 +26,6 @@ import fitlibrary.table.Tables;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.utility.CollectionUtility;
-import fitlibrary.utility.ITableListener;
-import fitlibrary.utility.TestResults;
-import fitlibrary.utility.TestResultsFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 @RunWith(JMock.class)
@@ -69,7 +69,7 @@ public class TestDoFlowWithNestedTables {
 			allowing(table1).size(); will(returnValue(2));
 			allowing(table1).elementAt(0); will(returnValue(row1));
 			allowing(row1).elementAt(0); will(returnValue(cell1));
-			allowing(cell1).hasEmbeddedTable(); will(returnValue(false));
+			allowing(cell1).hasEmbeddedTables(); will(returnValue(false));
 			allowing(cell1).hadError(); will(returnValue(false));
 			allowing(row1).size(); will(returnValue(2));
 			allowing(row2).size(); will(returnValue(2));
@@ -77,7 +77,7 @@ public class TestDoFlowWithNestedTables {
 			allowing(table1).isPlainTextTable(); will(returnValue(false));
 			allowing(table1).elementAt(1); will(returnValue(row2));
 			allowing(row2).elementAt(0); will(returnValue(cell2));
-			allowing(cell2).hasEmbeddedTable(); will(returnValue(true));
+			allowing(cell2).hasEmbeddedTables(); will(returnValue(true));
 			allowing(cell2).getEmbeddedTables(); will(returnValue(innerTables));
 			allowing(cell2).hadError(); will(returnValue(false));
 			allowing(innerTables).size(); will(returnValue(1));
@@ -87,7 +87,7 @@ public class TestDoFlowWithNestedTables {
 			allowing(innerTable1).size(); will(returnValue(1));
 			allowing(innerTable1).elementAt(0); will(returnValue(innerRow1));
 			allowing(innerRow1).elementAt(0); will(returnValue(innerCell));
-			allowing(innerCell).hasEmbeddedTable(); will(returnValue(false));
+			allowing(innerCell).hasEmbeddedTables(); will(returnValue(false));
 			allowing(innerCell).hadError(); will(returnValue(false));
 			allowing(innerRow1).size(); will(returnValue(2));
 		}});
