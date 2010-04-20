@@ -19,9 +19,9 @@ public class FitHandler {
 	}
 	private void substituteDynamicVariables(Table table, Evaluator evaluator) {
 		for (int r = 0; r < table.size(); r++) {
-			Row row = table.elementAt(r);
+			Row row = table.at(r);
 			for (int c = 0; c < row.size(); c++) {
-				Cell cell = row.elementAt(c);
+				Cell cell = row.at(c);
 				String text = cell.text(evaluator);
 				if (!text.equals(cell.text()))
 					cell.setText(text);

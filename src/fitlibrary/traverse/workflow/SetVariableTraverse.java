@@ -15,7 +15,7 @@ public class SetVariableTraverse extends Traverse {
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		try {
 			for (int rowNo = 1; rowNo < table.size(); rowNo++)
-				processRow(table.elementAt(rowNo), testResults);
+				processRow(table.at(rowNo), testResults);
 		} catch (Exception e) {
 			table.error(testResults, e);
 		}
@@ -25,6 +25,6 @@ public class SetVariableTraverse extends Traverse {
 		if (row.size() == 2)
 			getDynamicVariables().put(row.text(0,this), row.text(1,this));
 		else
-			row.elementAt(0).error(testResults, new FitLibraryException("Must be two cells"));
+			row.at(0).error(testResults, new FitLibraryException("Must be two cells"));
 	}
 }

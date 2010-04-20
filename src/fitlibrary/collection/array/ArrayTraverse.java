@@ -42,26 +42,26 @@ public class ArrayTraverse extends Traverse {
         int arrayLength = Array.getLength(typedArray.getSubject());
         int tableSize = table.size();
         if (tableSize == offset && arrayLength == 0 && offset == 1)
-        	table.elementAt(0).elementAt(0).pass(testResults);
+        	table.at(0).at(0).pass(testResults);
         int rowNo;
         int arrayIndex = 0;
 		for (rowNo = offset; rowNo < tableSize && arrayIndex < arrayLength; rowNo++) {
-            Row row = table.elementAt(rowNo);
+            Row row = table.at(rowNo);
             try {
                 if (row.size() != 1)
                     throw new RowWrongWidthException(1);
-                if (parser.matches(row.elementAt(0),get(arrayIndex),testResults)) {
+                if (parser.matches(row.at(0),get(arrayIndex),testResults)) {
                     row.pass(testResults);
                     arrayIndex++;
                 }
                 else
-                    row.elementAt(0).expectedElementMissing(testResults);
+                    row.at(0).expectedElementMissing(testResults);
             } catch (Exception e) {
                 row.error(testResults,e);
             }
         }
         for (; rowNo < tableSize; rowNo++) {
-            table.elementAt(rowNo).missing(testResults);
+            table.at(rowNo).missing(testResults);
         }
         for (; arrayIndex < arrayLength; arrayIndex++) {
             Row row = table.newRow();

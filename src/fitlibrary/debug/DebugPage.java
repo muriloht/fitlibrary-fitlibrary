@@ -39,7 +39,7 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.DefinedActions.AbandonInDefinedAction"
+				"FitLibrary.SpecifiCations.SpecialisedTables.EmbeddedTables"
 		};
 		run(pageNames);
 	}

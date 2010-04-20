@@ -8,6 +8,7 @@ import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
@@ -33,4 +34,7 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	boolean isAbandoned(TestResults testResults);
 	void setStopOnError(boolean stop);
 	DefinedActionCallManager getDefinedActionCallManager();
+	void setCurrentTable(Table table);
+	void setCurrentRow(Row row);
+	boolean hasRowsAfter(Row row);
 }

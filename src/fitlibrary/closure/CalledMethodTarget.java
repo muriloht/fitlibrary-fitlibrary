@@ -120,7 +120,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
     private void collectCells(Row row, int step, TestResults testResults, boolean catchParseError) throws Exception {
 		for (int argNo = 0; argNo < args.length; argNo++) {
-			Cell cell = row.elementAt(argNo*step);
+			Cell cell = row.at(argNo*step);
 			collectCell(cell, argNo,cell.text(evaluator),testResults,catchParseError);
 		}
 	}
@@ -295,10 +295,10 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
 	public void color(Row row, boolean right, TestResults testResults) throws Exception {
 		if (!everySecond && row.elementExists(0))
-			row.elementAt(0).passOrFail(testResults,right);
+			row.at(0).passOrFail(testResults,right);
 		else
 			for (int i = 0; i < row.size(); i += 2)
-				row.elementAt(i).passOrFail(testResults,right);
+				row.at(i).passOrFail(testResults,right);
 	}
 	/** Defines the Strings that signifies that the value in the row above is
 	 *  to be used again. Eg, it could be set to "" or to '"".

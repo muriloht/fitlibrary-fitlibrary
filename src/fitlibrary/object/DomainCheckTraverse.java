@@ -43,7 +43,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
         }
         try {
             for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-                Row row = table.elementAt(rowNo);
+                Row row = table.at(rowNo);
                 if (row.text(0,this).equals("comment"))
                 	return;
 				processRow(row,tableListener.getTestResults());
@@ -54,8 +54,8 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
     }
 	private void processRow(Row row, TestResults testResults) {
 		for (int i = 0; i < row.size(); i += 2) {
-			Cell cell = row.elementAt(i);
-			Cell cell2 = row.elementAt(i+1);
+			Cell cell = row.at(i);
+			Cell cell2 = row.at(i+1);
 			if (DomainObjectSetUpTraverse.givesClass(cell,this)) {
 				if (getSystemUnderTest() == null)
 					throw new NoSystemUnderTestException();
@@ -86,8 +86,8 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	}
     private boolean switchOnExpected(Table table) {
         return domainTraverse != null && table.size() == 1 && 
-                table.elementAt(0).size() == 1 && 
-                table.elementAt(0).elementAt(0).matchesText("expected",this);
+                table.at(0).size() == 1 && 
+                table.at(0).at(0).matchesTextInLowerCase("expected",this);
     }
 	@Override
 	public void addNamedObject(String text, TypedObject typedObject, Row row, TestResults testResults) {

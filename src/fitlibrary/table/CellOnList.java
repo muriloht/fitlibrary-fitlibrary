@@ -4,7 +4,6 @@
 */
 package fitlibrary.table;
 
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,52 +15,43 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
-import fitlibrary.utility.ParseUtility;
 
-public class CellOnParse extends TablesOnParse implements Cell {
+public class CellOnList extends TablesOnList implements Cell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
     private boolean cellIsInHiddenRow = false;
     private String fullText = "";
     
-	public CellOnParse(Parse parse) {
-        super(parse);
+	public CellOnList() {
+        super("td");
     }
-    public CellOnParse(String cellText) {
-        this(new Parse("td",cellText,null,null));
+    public CellOnList(String cellText) {
+        this();
         this.fullText = cellText;
     }
-	public CellOnParse(Cell cell) {
-		this("");
-		if (cell.hasEmbeddedTables())
-			setInnerTables(cell.getEmbeddedTables());
-		else
-			setText(cell.fullText());
+	public CellOnList(Cell cell) {
+		this(cell.fullText());
+		setInnerTables(cell.getEmbeddedTables());
 	}
-	public CellOnParse(Tables innerTables) {
-		this(new Parse("td","",innerTables.parse(),null));
+	public CellOnList(Tables tables) {
+		this();
+		addTables(tables);
 	}
-	public CellOnParse(String preamble, Tables innerTables) {
-		this(innerTables);
-		parse.parts.leader = Fixture.label(preamble)+parse.parts.leader;
-		calls();
+	public CellOnList(String preamble, Tables tables) {
+		this(tables);
+		addToStartOfLeader(Fixture.label(preamble));
 	}
 	public void setText(String text) {
-		parse.body = text;
 		this.fullText = text;
 	}
 	public String text(VariableResolver resolver) {
-		if (parse.body == null)
-			return "";
-		String s = parse.text();
+		String s = text();
 		String resolve = resolver.resolve(s);
 		if (!s.equals(resolve))
-			parse.body = resolve;
+			fullText = resolve;
 		return resolve;
 	}
 	public String text() {
-        if (parse.body == null)
-            return "";
-        return parse.text();
+        return Parse.unescape(Parse.unformat(fullText)).trim();
     }
 	public boolean unresolved(VariableResolver resolver) {
 		return text().startsWith("@{") && text().indexOf("}") == text().length()-1 &&
@@ -79,20 +69,14 @@ public class CellOnParse extends TablesOnParse implements Cell {
     public boolean isBlank(VariableResolver resolver) {
         return text(resolver).equals("");
     }
-    @Override
-	public CellOnParse deepCopy() {
-        return new CellOnParse(ParseUtility.copyParse(parse));
-    }
-    @Override
-	public boolean equals(Object object) {
-        if (!(object instanceof CellOnParse))
-            return false;
-        CellOnParse other = (CellOnParse)object;
-        return parse.body.equals(other.parse.body);
-    }
 	@Override
-	public int hashCode() {
-		return parse.body.hashCode();
+	public Cell deepCopy() {
+		Cell copy = TableFactory.cell(fullText);
+		for (Table table: this)
+			copy.add(table.deepCopy());
+		copy.setLeader(getLeader());
+		copy.setTrailer(getTrailer());
+		return copy;
 	}
     public void expectedElementMissing(TestResults testResults) {
         fail(testResults);
@@ -108,7 +92,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	}
     public void actualElementMissing(TestResults testResults, String value) {
         fail(testResults);
-        parse.body = Fixture.gray(Fixture.escape(value.toString()));
+        fullText = Fixture.gray(Fixture.escape(value.toString()));
         addToBody(label("surplus"));
     }
     @Override
@@ -130,7 +114,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
     	super.fail(testResults);
     }
     public void fail(TestResults testResults, String msg, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
+    	if (fullText.isEmpty() && !hasEmbeddedTables()) {
     		failHtml(testResults,msg);
     		return;
     	}
@@ -142,7 +126,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
                 + label("actual"));
     }
     public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
+    	if (fullText.isEmpty() && !hasEmbeddedTables()) {
     		failHtml(testResults,actual);
     		return;
     	}
@@ -165,32 +149,31 @@ public class CellOnParse extends TablesOnParse implements Cell {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
         addToBody(PlugBoard.exceptionHandling.exceptionMessage(e));
-        parse.addToTag(ERROR);
+        addToTag(ERROR);
         testResults.exception();
     }
    public void error(TestResults testResults, String msg) {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
         addToBody("<hr/>" + Fixture.label(msg));
-        parse.addToTag(ERROR);
+        addToTag(ERROR);
         testResults.exception();
     }
    public void error(TestResults testResults) {
 	   if (cellIsInHiddenRow)
 		   System.out.println("Bug: colouring a cell in a hidden table");
-	   parse.addToTag(ERROR);
+	   addToTag(ERROR);
 	   testResults.exception();
    }
 	public void ignore(TestResults testResults) {
-    	if (parse.tag.contains(CALLS))
+    	if (tagAnnotation.contains(CALLS))
     		return;
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
-        ensureBodyNotNull();
-        if (parse.tag.indexOf("class") >= 0)
+        if (tagAnnotation.indexOf("class") >= 0)
         	throw new RuntimeException("Duplicate cell class in tag. Tag is already: "+
-        			parse.tag.substring(1,parse.tag.length()-2));
-        parse.addToTag(IGNORE);
+        			tagAnnotation);
+        addToTag(IGNORE);
         testResults.ignore();
     }
     public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
@@ -200,15 +183,13 @@ public class CellOnParse extends TablesOnParse implements Cell {
     		error(testResults,e);
     }
     public Table getEmbeddedTable() {
-        TablesOnParse tables = getEmbeddedTables();
+        Tables tables = getEmbeddedTables();
         if (tables.size() != 1)
         	throw new SingleNestedTableExpected();
 		return tables.at(0);
     }
     @Override
 	public String toString() {
-        if (hasEmbeddedTables())
-            return "Cell["+ParseUtility.toString(parse.parts)+"]";
         return "Cell["+text()+"]";
     }
     public void wrongHtml(TestResults counts, String actual) {
@@ -217,16 +198,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
                 + label("actual"));
     }
     private void addToBody(String msg) {
-        if (hasEmbeddedTables()) {
-            if (parse.parts.more == null)
-                parse.parts.trailer = msg;
-            else
-                parse.parts.more.leader += msg;
-        }
-        else {
-            ensureBodyNotNull();
-            parse.addToBody(msg);
-        }
+        fullText += msg;
     }
 	public void setEscapedText(String text) {
 		setText(Fixture.escape(text));
@@ -235,7 +207,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		setText(HtmlUtils.escape(text));
 	}
 	public String fullText() {
-		return parse.body;
+		return fullText;
 	}
 	public void setUnvisitedEscapedText(String s) {
 		setUnvisitedText(Fixture.escape(s));
@@ -260,10 +232,10 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		this.cellIsInHiddenRow = true;
 	}
 	public void setInnerTables(Tables tables) {
-		parse.parts = tables.parse();
+		addTables(tables);
 	}
 	public int getColumnSpan() {
-		Matcher matcher = COLSPAN_PATTERN.matcher(parse.tag);
+		Matcher matcher = COLSPAN_PATTERN.matcher(tagAnnotation);
 		int colspan = 1;
 		if (matcher.matches())
 			colspan = Integer.parseInt(matcher.group(2));
@@ -272,48 +244,27 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public void setColumnSpan(int colspan) {
 		if (colspan < 1)
 			return;
-		Matcher matcher = COLSPAN_PATTERN.matcher(parse.tag);
+		Matcher matcher = COLSPAN_PATTERN.matcher(tagAnnotation);
 		if (matcher.matches())
-			parse.tag = parse.tag.replace(matcher.group(1), getColspanHtml(colspan));
+			tagAnnotation = tagAnnotation.replace(matcher.group(1), getColspanHtml(colspan));
 		else
-			parse.addToTag(getColspanHtml(colspan));
+			addToTag(getColspanHtml(colspan));
 	}
 	private static String getColspanHtml(int colspan) {
 		return " colspan=\""+colspan+"\"";
 	}
-	@Override
-	public Table at(int i) {
-		return getEmbeddedTables().at(i);
-	}
-	@Override
-	public boolean isEmpty() {
-		return !hasEmbeddedTables() || getEmbeddedTables().isEmpty() ;
-	}
-	@Override
-	public int size() {
-		return getEmbeddedTables().size();
-	}
-	@Override
-	public Iterator<Table> iterator() {
-		return getEmbeddedTables().iterator();
-	}
-	@Override
-	public void add(Table table) {
-		if (!hasEmbeddedTables())
-			parse.parts = TableFactory.tables(table).parse();
-		else
-			getEmbeddedTables().add(table);
-	}
-    public TablesOnParse getEmbeddedTables() {
-//        if (!hasEmbeddedTables())
-//            throw new NestedTableExpectedException();
-		return new TablesOnParse(parse.parts);
+    public Tables getEmbeddedTables() {
+		return this;
     }
     public boolean hasEmbeddedTables() {
-        return parse.parts != null;
+        return !isEmpty();
     }
 	@Override
 	public String getType() {
 		return "Cell";
+	}
+	@Override
+	protected void appendBody(StringBuilder builder) {
+		builder.append(fullText);
 	}
 }

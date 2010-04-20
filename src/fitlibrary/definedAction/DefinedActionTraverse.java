@@ -37,10 +37,10 @@ public class DefinedActionTraverse extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		// Just check the parameter names here. Things happen in the call...
-		Row header = table.elementAt(1);
+		Row header = table.at(1);
 		Set<String> parameterNames = new HashSet<String>();
 		for (int c = 0; c < header.size(); c++) {
-			Cell parameterCell = header.elementAt(c);
+			Cell parameterCell = header.at(c);
 			String parameterName = parameterCell.text(this);
 			if (parameterNames.contains(parameterName))
 				parameterCell.error(testResults, new FitLibraryException("Duplicate parameter names"));
@@ -49,13 +49,13 @@ public class DefinedActionTraverse extends Traverse {
 		return null;
 	}
 	protected DefinedActionTraverse(Table defTable, int parameterCount) {
-		Row header = defTable.elementAt(1);
+		Row header = defTable.at(1);
 		if (header.size() != parameterCount)
 			throw new FitLibraryException("Mismatch in number of parameters to template");
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
 		for (int c = 0; c < header.size(); c++)
 			mapToRef.put(header.text(c,this),paramRef(c));
-		body = TableFactory.tables(defTable.elementAt(2).elementAt(0).getEmbeddedTables());
+		body = TableFactory.tables(defTable.at(2).at(0).getEmbeddedTables());
 		macroReplace(body,mapToRef);
 	}
 	public Tables call(List<Object> parameters, TestResults results) {

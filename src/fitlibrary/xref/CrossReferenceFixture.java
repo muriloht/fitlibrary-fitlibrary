@@ -48,9 +48,9 @@ public class CrossReferenceFixture extends Traverse {
 			if (!definedActions.isEmpty())
 				table.add(TableFactory.row("<h1>Defined Actions</h1>",""));
 			addMapDataToTable(definedActions,table);
-			table.elementAt(0).elementAt(0).pass(testResults);
+			table.at(0).at(0).pass(testResults);
 		} catch (Exception e) {
-			table.elementAt(0).elementAt(0).error(testResults, e);
+			table.at(0).at(0).error(testResults, e);
 		}
 		return null;
 	}
@@ -60,7 +60,7 @@ public class CrossReferenceFixture extends Traverse {
 	private void xref(String pageName, Tables tables) throws FitParseException, InterruptedException, IOException {
 		for (Table table: tables) {
 			for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-				String action = actionOf(table.elementAt(rowNo));
+				String action = actionOf(table.at(rowNo));
 				if (action != null)
 					add(xref, action, pageName, rowNo == 0);
 			}
@@ -166,11 +166,11 @@ public class CrossReferenceFixture extends Traverse {
 					if (pageName.endsWith("."))
 						pageName = definitionsName;
 					if (header) {
-						add(definedActions,actionOf(table.elementAt(0)),pageName,true);
+						add(definedActions,actionOf(table.at(0)),pageName,true);
 						header = false;
 					} else {
 						for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-							String action = actionOf(table.elementAt(rowNo));
+							String action = actionOf(table.at(rowNo));
 							if (action != null)
 								add(xref, action,pageName,rowNo==0);
 						}

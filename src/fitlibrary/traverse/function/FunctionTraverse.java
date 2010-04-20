@@ -35,7 +35,7 @@ public abstract class FunctionTraverse extends Traverse {
 		try {
             result = interpretAfterFirstRow(table,testResults);
 		} catch (Exception e) {
-			table.elementAt(0).error(testResults,e);
+			table.at(0).error(testResults,e);
 		}
 		return result;
 	}

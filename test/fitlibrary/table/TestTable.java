@@ -19,8 +19,8 @@ public class TestTable {
 		row2.addCell("2_1", 1);
 		row2.addCell("2_2", 1);
 		table.evenUpRows();
-		assertThat(row1.elementAt(0).getColumnSpan(),is(4));
-		assertThat(row2.elementAt(0).getColumnSpan(),is(1));
-		assertThat(row2.elementAt(1).getColumnSpan(),is(3));
+		assertThat(row1.at(0).getColumnSpan(),is(4));
+		assertThat(row2.at(0).getColumnSpan(),is(1));
+		assertThat(row2.at(1).getColumnSpan(),is(3));
 	}
 }

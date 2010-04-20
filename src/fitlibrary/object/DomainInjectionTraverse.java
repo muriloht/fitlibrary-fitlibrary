@@ -39,7 +39,7 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
         }
         try {
         	for (int rowNo = 0; rowNo < table.size(); rowNo++)
-        		processRow(table.elementAt(rowNo),tableListener.getTestResults());
+        		processRow(table.at(rowNo),tableListener.getTestResults());
         } catch (IgnoredException e) {
         	//
         } catch (Exception e) {
@@ -48,20 +48,20 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
     }
     private boolean switchOnActions(Table table) {
         return domainTraverser != null && table.size() == 1 && 
-                table.elementAt(0).size() == 1 && 
-                table.elementAt(0).elementAt(0).matchesText("actions",this);
+                table.at(0).size() == 1 && 
+                table.at(0).at(0).matchesTextInLowerCase("actions",this);
     }
     private boolean switchOnChecks(Table table) {
         return domainTraverser != null && table.size() == 1 && 
-                table.elementAt(0).size() == 1 && 
-                table.elementAt(0).elementAt(0).matchesText("checks",this);
+                table.at(0).size() == 1 && 
+                table.at(0).at(0).matchesTextInLowerCase("checks",this);
     }
     public void processRow(Row row, TestResults testResults) {
     	for (int i = 0; i < row.size(); i += 2) {
-    		Cell cell = row.elementAt(i);
+    		Cell cell = row.at(i);
     		try {
     			CalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
-    			Cell nextCell = row.elementAt(i+1);
+    			Cell nextCell = row.at(i+1);
     			try {
     				target.invoke(nextCell,testResults);
     			} catch (IgnoredException e) {

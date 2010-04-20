@@ -20,6 +20,7 @@ import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.log.FileLogger;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
@@ -39,6 +40,8 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	private DynamicVariablesRecording dynamicVariablesRecording = new DynamicVariablesRecordingThatFails();
 	private DefinedActionCallManager definedActionCallManager = new DefinedActionCallManager();
 	private FoldingTexts foldingTexts = new FoldingTexts();
+	private Row currentRow;
+	private Table currentTable;
 
 	public RuntimeContextContainer() {
 		//
@@ -165,5 +168,19 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	@Override
 	public VariableResolver getResolver() {
 		return getDynamicVariables();
+	}
+	@Override
+	public void setCurrentRow(Row row) {
+		currentRow = row;
+	}
+	@Override
+	public void setCurrentTable(Table table) {
+		currentTable = table;
+	}
+	@Override
+	public boolean hasRowsAfter(Row row) {
+		if (currentTable == null || currentRow == null)
+			return false;
+		return currentTable.hasRowsAfter(currentRow);
 	}
 }

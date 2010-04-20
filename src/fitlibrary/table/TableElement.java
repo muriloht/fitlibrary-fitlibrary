@@ -6,20 +6,26 @@
 package fitlibrary.table;
 
 import fit.Parse;
+import fitlibrary.runResults.TestResults;
 
 public interface TableElement<From, To> extends Iterable<To> {
 	void add(To t);
 	int size();
 	boolean isEmpty();
-	To elementAt(int i);
+	To at(int i);
 	boolean elementExists(int i);
 	To last();
-	Iterable<To> listFrom(int start);
+	Iterable<To> iterableFrom(int start);
 	From deepCopy();
 	void setLeader(String leader);
 	void setTrailer(String trailer);
 	String getLeader();
 	String getTrailer();
+	String getTagLine();
+	void setTagLine(String tagLine);
 	Parse parse();
 	String getType();
+	void addToTag(String report);
+	void error(TestResults testResults, Throwable e);
+	void toHtml(StringBuilder builder);
 }

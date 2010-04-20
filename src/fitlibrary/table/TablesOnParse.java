@@ -23,7 +23,7 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 		this(ParseUtility.copyParse(tables.parse()));
 	}
 	@Override
-	public Table elementAt(int i) {
+	public Table at(int i) {
         return new TableOnParse(parse.at(i));
     }
     public void add(Table table) {
@@ -56,7 +56,7 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 		if (size() != other.size())
 			return false;
 		for (int i = 0; i < size(); i++)
-			if (!elementAt(i).equals(other.elementAt(i)))
+			if (!at(i).equals(other.at(i)))
 				return false;
 		return true;
 	}
@@ -72,8 +72,8 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 		return size() == 0;
 	}
 	@Override
-	protected void error(TestResults testResults, Throwable e) {
-		elementAt(0).error(testResults, e);
+	public void error(TestResults testResults, Throwable e) {
+		at(0).error(testResults, e);
 	}
 	@Override
 	public String getType() {

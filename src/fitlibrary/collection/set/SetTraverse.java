@@ -69,7 +69,7 @@ public class SetTraverse extends CollectionTraverse {
 	}
     /* Returns the subset of actuals that match on the given column of the row */
 	private List<MethodTarget[]> matchOnColumn(final Row row, List<MethodTarget[]> theActuals, final int column, TestResults testResults) {
-        final Cell cell = row.elementAt(column);
+        final Cell cell = row.at(column);
 		List<MethodTarget[]> results = new ArrayList<MethodTarget[]>();
 		for (MethodTarget[] columnBindings : theActuals) {
 			MethodTarget getter = columnBindings[column];

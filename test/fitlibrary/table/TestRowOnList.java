@@ -12,9 +12,9 @@ import org.junit.Test;
 import fitlibrary.DoFixture;
 import fitlibrary.parser.ParserTestCase;
 
-public class TestRowOnParse {
-	Row row = TableFactory.row();
+public class TestRowOnList {
 	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
+	Row row = row();
 	
 	@Test
 	public void sizeOfEmptyRow() {
@@ -70,40 +70,40 @@ public class TestRowOnParse {
 	}
 	@Test
 	public void plainMethodNameNoArg() {
-		Row row2 = TableFactory.row("aa");
+		Row row2 = row("aa");
 		assertThat(row2.methodNameForPlain(evaluator),is("aa"));
 		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArg() {
-		Row row2 = TableFactory.row("aa","1");
+		Row row2 = row("aa","1");
 		assertThat(row2.methodNameForPlain(evaluator),is("aa|"));
 		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArgTwoKeywords() {
-		Row row2 = TableFactory.row("aa","1","bb");
+		Row row2 = row("aa","1","bb");
 		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb"));
 		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgs() {
-		Row row2 = TableFactory.row("aa","1","bb","2");
+		Row row2 = row("aa","1","bb","2");
 		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|"));
 		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgsThreeKeywords() {
-		Row row2 = TableFactory.row("aa","1","bb","2",".");
+		Row row2 = row("aa","1","bb","2",".");
 		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|."));
 		assertThat(row2.methodNameForCamel(evaluator),is("aaBbDot"));
 	}
 	@Test
 	public void canReplaceRowAtStart() {
-		Row row0 = TableFactory.row("a","b");
-		Row row1 = TableFactory.row("x","y");
-		Row row2 = TableFactory.row("m","n");
-		Table table = TableFactory.table();
+		Row row0 = row("a","b");
+		Row row1 = row("x","y");
+		Row row2 = row("m","n");
+		Table table = table();
 		table.add(row0);
 		table.add(row1);
 		assertThat(table.at(0),is(row0));
@@ -114,14 +114,56 @@ public class TestRowOnParse {
 	}
 	@Test
 	public void canReplaceRowAtEnd() {
-		Row row0 = TableFactory.row("a","b");
-		Row row1 = TableFactory.row("x","y");
-		Row row2 = TableFactory.row("m","n");
-		Table table = TableFactory.table();
+		Row row0 = row("a","b");
+		Row row1 = row("x","y");
+		Row row2 = row("m","n");
+		Table table = table();
 		table.add(row0);
 		table.add(row1);
 		table.replaceAt(1, row2);
 		assertThat(table.at(0),is(row0));
 		assertThat(table.at(1),is(row2));
+	}
+	@Test
+	public void elementsFrom0() {
+		Row row0 = row("a","b","c");
+		Row copy = row0.elementsFrom(0);
+		assertThat(copy.size(),is(3));
+		assertThat(copy.at(0),is(row0.at(0)));
+		assertThat(copy.at(1),is(row0.at(1)));
+		assertThat(copy.at(2),is(row0.at(2)));
+	}
+	@Test
+	public void elementsFrom2() {
+		Row row0 = row("a","b","c");
+		Row copy = row0.elementsFrom(2);
+		assertThat(copy.size(),is(1));
+		assertThat(copy.at(0),is(row0.at(2)));
+	}
+	@Test
+	public void elementsFromTo() {
+		Row row0 = row("a","b","c");
+		Row copy = row0.rowFromTo(1,2);
+		assertThat(copy.size(),is(1));
+		assertThat(copy.at(0),is(row0.at(1)));
+	}
+	@Test
+	public void last() {
+		Row row0 = row("a","b","c");
+		assertThat(row0.last(),is(row0.at(2)));
+	}
+
+	
+	protected static Row row() {
+		return new RowOnList();
+	}
+	protected static Row row(String... text) {
+		Row row = row();
+		for (String cellText: text)
+			row.add(new CellOnList(cellText));
+		return row;
+	}
+	protected static Table table() {
+		return new TableOnList();
 	}
 }

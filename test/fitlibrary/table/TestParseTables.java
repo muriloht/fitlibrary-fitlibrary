@@ -29,36 +29,36 @@ public class TestParseTables extends TestCase {
         assertEquals(3,tables.size());
     }
     public void testTable0() {
-        Table table = tables.elementAt(0);
+        Table table = tables.at(0);
         assertEquals(2,table.size());
         assertTrue(!table.elementExists(-1));
         assertTrue(table.elementExists(0));
         assertTrue(table.elementExists(1));
         assertTrue(!table.elementExists(2));
         try {
-            table.elementAt(2);
+            table.at(2);
             fail("Exception expected");
         } catch (Exception e) {
         	//
         }
     }
     public void testTable0Right() {
-        Table table0 = tables.elementAt(0);
+        Table table0 = tables.at(0);
         table0.pass(testResults);
-        assertTrue(table0.elementAt(0).didPass());
+        assertTrue(table0.at(0).didPass());
         assertEquals("1 right, 0 wrong, 0 ignored, 0 exceptions",counts.toString());
     }
     public void testTable0Ignored() {
-        Table table0 = tables.elementAt(0);
+        Table table0 = tables.at(0);
         table0.ignore(testResults);
-        assertTrue(table0.elementAt(0).elementAt(0).wasIgnored());
+        assertTrue(table0.at(0).at(0).wasIgnored());
         assertEquals("0 right, 0 wrong, 1 ignored, 0 exceptions",counts.toString());
     }
     public void testTable0Exception() {
-        Table table0 = tables.elementAt(0);
+        Table table0 = tables.at(0);
         table0.error(testResults,new RuntimeException("Forced"));
-        assertTrue(table0.elementAt(0).elementAt(0).hadError());
-        assertTrue(table0.elementAt(0).text(0,doFixture).startsWith("1java.lang.RuntimeException: Forced"));
+        assertTrue(table0.at(0).at(0).hadError());
+        assertTrue(table0.at(0).text(0,doFixture).startsWith("1java.lang.RuntimeException: Forced"));
         assertEquals("0 right, 0 wrong, 0 ignored, 1 exceptions",counts.toString());
     }
 
@@ -69,7 +69,7 @@ public class TestParseTables extends TestCase {
         assertTrue(row.elementExists(0));
         assertTrue(!row.elementExists(1));
         try {
-            row.elementAt(1);
+            row.at(1);
             fail("Exception expected");
         } catch (Exception e) {
         	//
@@ -91,14 +91,14 @@ public class TestParseTables extends TestCase {
     public void testRow0Missing() {
         Row row0 = getRow(0,0);
         row0.missing(testResults);
-        assertTrue(row0.elementAt(0).didFail());
+        assertTrue(row0.at(0).didFail());
         assertEquals("1 missing",row0.text(0,doFixture));
         assertEquals("0 right, 1 wrong, 0 ignored, 0 exceptions",counts.toString());
     }
     public void testRow0Ignored() {
         Row row0 = getRow(0,0);
         row0.ignore(testResults);
-        assertTrue(row0.elementAt(0).wasIgnored());
+        assertTrue(row0.at(0).wasIgnored());
         assertEquals("0 right, 0 wrong, 1 ignored, 0 exceptions",counts.toString());
     }
     public void testRow0Exception() {
@@ -106,7 +106,7 @@ public class TestParseTables extends TestCase {
         DoFixture doFixture2 = ParserTestCase.evaluatorWithRuntime();
         doFixture2.counts = counts;
         row0.error(testResults,new RuntimeException("Forced"));
-        assertTrue(row0.elementAt(0).hadError());
+        assertTrue(row0.at(0).hadError());
         assertTrue(row0.text(0,doFixture2).startsWith("1java.lang.RuntimeException: Forced"));
         assertEquals("0 right, 0 wrong, 0 ignored, 1 exceptions",counts.toString());
     }
@@ -151,9 +151,9 @@ public class TestParseTables extends TestCase {
     }
 
     private Cell getCell(int tableNo, int rowNo, int cellNo) {
-        return getRow(tableNo, rowNo).elementAt(cellNo);
+        return getRow(tableNo, rowNo).at(cellNo);
     }
     private Row getRow(int tableNo, int rowNo) {
-        return tables.elementAt(tableNo).elementAt(rowNo);
+        return tables.at(tableNo).at(rowNo);
     }
 }

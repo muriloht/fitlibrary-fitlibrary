@@ -68,7 +68,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		TestResults testResults = tableListener.getTestResults();
 		reset();
 		for (int t = 0; t < tables.size(); t++) {
-			Table table = tables.elementAt(t);
+			Table table = tables.at(t);
 			if (current == this && table.isPlainTextTable()) {
 				PlainTextAnalyser plainTextAnalyser = new PlainTextAnalyser(runtime,TemporaryPlugBoardForRuntime.definedActionsRepository());
 				plainTextAnalyser.analyseAndReplaceRowsIn(table, testResults);
@@ -77,9 +77,9 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 				handleDomainPhases(table);
 			current.runTable(table,tableListener);
 			if (t < tables.size() - 1)
-				tearDown(scopeStack.poppedAtEndOfTable(), table.elementAt(0), testResults);
+				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
 			else
-				tearDown(scopeStack.poppedAtEndOfStorytest(), table.elementAt(0), testResults);
+				tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
 			runtime.addAccumulatedFoldingText(table);
 			tableListener.tableFinished(table);
 		}
@@ -107,10 +107,11 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
         }
 	}
 	public void runTable(Table table, ITableListener tableListener) {
+		runtime.setCurrentTable(table);
 		TestResults testResults = tableListener.getTestResults();
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-			Row row = table.elementAt(rowNo);
-			if (row.elementAt(0).hadError()) {
+			Row row = table.at(rowNo);
+			if (row.at(0).hadError()) {
 				// Already failed due to plain text problems
 			} else if (runtime.isAbandoned(testResults)) {
 //				if (!testResults.problems())
@@ -120,11 +121,12 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			} else {
 				try {
 //					System.out.println("DoFlow row "+row);
-					final Cell cell = row.elementAt(0);
+					final Cell cell = row.at(0);
 			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
 			    		handleInnerTables(cell, tableListener);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
+			    		runtime.setCurrentRow(row);
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
 //			    		System.out.println("DoFlow got "+subject);
@@ -166,9 +168,9 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		// |add|class|as|name| => |add named|name|class|
 		if (row.size() == 4 && "add".equals(row.text(0,evaluator)) && "as".equals(row.text(2,evaluator))) {
 			String className = row.text(1,evaluator);
-			row.elementAt(0).setText("add named");
-			row.elementAt(1).setText(row.text(3,evaluator));
-			row.elementAt(2).setText(className);
+			row.at(0).setText("add named");
+			row.at(1).setText(row.text(3,evaluator));
+			row.at(2).setText(className);
 			row.removeElementAt(3);
 		}
 		return row;

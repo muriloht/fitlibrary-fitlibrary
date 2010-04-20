@@ -31,7 +31,7 @@ public class PlainText {
 		this.doTraverse = doTraverse;
 	}
 	public void analyse() {
-		String textCall = row.elementAt(1).fullText();
+		String textCall = row.at(1).fullText();
 		List<ValidCall> results = new ArrayList<ValidCall>();
 
 		findDefinedActionCallsFromPlainText(textCall, results);
@@ -73,7 +73,7 @@ public class PlainText {
 		PlugBoard.lookupTarget.findMethodsFromPlainText(textCall,results,doTraverse.getRuntimeContext().getScope());
 	}
 	private void error(String message) {
-		row.elementAt(0).error(testResults, message);
+		row.at(0).error(testResults, message);
 	}
 	private void findProperty(String prefix, String textCall, List<ValidCall> results) {
 		int count = results.size();

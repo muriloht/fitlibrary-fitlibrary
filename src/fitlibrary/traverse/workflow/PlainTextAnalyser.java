@@ -26,21 +26,21 @@ public class PlainTextAnalyser {
 	}
 	public void analyseAndReplaceRowsIn(Table table, TestResults testResults) {
 		for (int r = 0; r < table.size(); r++) {
-			Row newRow = analyse(table.elementAt(r), testResults);
+			Row newRow = analyse(table.at(r), testResults);
 			table.replaceAt(r,newRow);
 		}
 	}
 	private Row analyse(Row row, TestResults testResults) {
-		String textCall = row.elementAt(0).fullText();
+		String textCall = row.at(0).fullText();
 		List<ValidCall> results = new ArrayList<ValidCall>();
 		definedActionsRepository.findPlainTextCall(textCall, results);
 		if (results.isEmpty()) {
-			row.elementAt(0).error(testResults, "Unknown action");
+			row.at(0).error(testResults, "Unknown action");
 			return row;
 		}
 		removeShorterMatches(results);
 		if (results.size() > 1) {
-			row.elementAt(0).error(testResults, "Ambiguous action (see details in logs after table)");
+			row.at(0).error(testResults, "Ambiguous action (see details in logs after table)");
 			runtime.showAsAfterTable("plain text","Possible action tables:<br/>");
 			for (ValidCall call: results)
 				call.possibility(runtime.getGlobal());

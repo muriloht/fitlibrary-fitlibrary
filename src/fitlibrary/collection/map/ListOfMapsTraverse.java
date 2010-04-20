@@ -23,9 +23,9 @@ public class ListOfMapsTraverse extends Traverse {
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		Row labelRow = table.elementAt(1);
+		Row labelRow = table.at(1);
 		for (int r = 2; r < table.size(); r++) {
-			Row row = table.elementAt(r);
+			Row row = table.at(r);
 			try {
 				if (row.size() != labelRow.size()) {
 					row.error(testResults, new FitLibraryException("Row is wrong length"));
@@ -45,7 +45,7 @@ public class ListOfMapsTraverse extends Traverse {
 	private void processRow(Row labelRow, Row row, Map<String, Object> map,
 			TestResults testResults) {
 		for (int c = 0; c < labelRow.size(); c++) {
-			Cell cell = row.elementAt(c);
+			Cell cell = row.at(c);
 			try {
 				String key = labelRow.text(c, this);
 				Object value = map.get(key);

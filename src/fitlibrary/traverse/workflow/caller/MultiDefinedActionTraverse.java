@@ -34,11 +34,11 @@ public class MultiDefinedActionTraverse extends Traverse {
 			if (table.size() < 3)
 				throw new FitLibraryException("Missing data rows in table");
 			getRuntimeContext().pushLocalDynamicVariables();
-			Row parameterRow = table.elementAt(1);
+			Row parameterRow = table.at(1);
 			multiParameterSubstitution.verifyParameters(parameterRow,this);
 			parameterRow.pass(testResults);
 			for (int r = 2; r < table.size(); r++) {
-				Row row = table.elementAt(r);
+				Row row = table.at(r);
 				if (runtime.isAbandoned(testResults))
 					row.ignore(testResults);
 				else
@@ -84,13 +84,13 @@ public class MultiDefinedActionTraverse extends Traverse {
 				row.passKeywords(testResults);
 			else if (subTestResults.errors())
 				for (int i = 0; i < row.size(); i++)
-					row.elementAt(i).error(testResults, new FitLibraryException(""));
+					row.at(i).error(testResults, new FitLibraryException(""));
 			else if (subTestResults.failed())
 				for (int i = 0; i < row.size(); i++)
-					row.elementAt(i).fail(testResults);
+					row.at(i).fail(testResults);
 			else
 				for (int i = 0; i < row.size(); i++)
-					row.elementAt(i).pass(testResults);
+					row.at(i).pass(testResults);
 		} else
 			row.pass(testResults);
 	}

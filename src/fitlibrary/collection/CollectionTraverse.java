@@ -93,15 +93,15 @@ public abstract class CollectionTraverse extends Traverse {
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
         if (actuals == null)
         	throw new FitLibraryException("Actual list missing");
-        Row firstRow = table.elementAt(1);
+        Row firstRow = table.at(1);
         try {
             List<MethodTarget[]> getters = new ArrayList<MethodTarget[]>();
             if (!actuals.isEmpty())
                 getters = bindGettersForAllActuals(firstRow,testResults);
             else if (!table.elementExists(2))
-                table.elementAt(1).pass(testResults);
+                table.at(1).pass(testResults);
             for (int rowNo = 2; rowNo < table.size(); rowNo++) {
-                firstRow = table.elementAt(rowNo);
+                firstRow = table.at(rowNo);
                 interpretRow(firstRow,getters,testResults);
             }
             if (showSurplus)
@@ -131,9 +131,9 @@ public abstract class CollectionTraverse extends Traverse {
 		}
         for (int i = 0; i < usedFields.length; i++)
             if (!usedFields[i]) {
-                String propertyName = camelCase(row.elementAt(i).text(this));
+                String propertyName = camelCase(row.at(i).text(this));
                 String classNames = ClassUtility.allElementClassNames(actuals);
-				row.elementAt(i).error(testResults,new NoSuchPropertyException(
+				row.at(i).error(testResults,new NoSuchPropertyException(
                 		propertyName,classNames));
                 throw new IgnoredException();
             }
@@ -143,7 +143,7 @@ public abstract class CollectionTraverse extends Traverse {
     private MethodTarget[] bindGettersForOneElement(Row row, TestResults testResults, TypedObject typedObject) {
 		MethodTarget[] columnBindings = new MethodTarget[row.size()];
         for (int i = 0; i < columnBindings.length; i++) {
-            Cell cell = row.elementAt(i);
+            Cell cell = row.at(i);
             if (componentType != null && DomainObjectSetUpTraverse.givesClass(cell,this)) {
                 columnBindings[i] = new ClassMethodTarget(componentType,this,typedObject);
                 usedFields[i] = true;
@@ -174,10 +174,10 @@ public abstract class CollectionTraverse extends Traverse {
     protected final boolean matchRow(Row row, MethodTarget[] columnBindings, TestResults testResults) throws Exception {
         boolean matchedAlready = false;
         for (int i = 0; i < columnBindings.length; i++) {
-            Cell expectedCell = row.elementAt(i);
+            Cell expectedCell = row.at(i);
             MethodTarget getter = columnBindings[i];
             if (getter == null)
-            	expectedCell.passIfBlank(testResults,this);
+            	expectedCell.passOrFailIfBlank(testResults,this);
             else {
             	boolean matched = getter.invokeAndCheckCell(expectedCell,matchedAlready,testResults);
             	if (!matchedAlready && !matched)
@@ -196,7 +196,7 @@ public abstract class CollectionTraverse extends Traverse {
         for (MethodTarget[] getter : surplusBindings) {
 			Row row = table.newRow();
 			buildSurplusRow(row,getValues(getter),testResults);
-            row.elementAt(0).actualElementMissing(testResults);
+            row.at(0).actualElementMissing(testResults);
         }
     }
     private static void buildSurplusRow(Row row, Object[] values, TestResults testResults) {

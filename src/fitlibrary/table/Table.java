@@ -18,10 +18,10 @@ public interface Table extends TableElement<Table,Row> {
 	void ignore(TestResults testResults);
 	void pass(TestResults testResults);
 	TablesOnParse getTables();
-	void insertTable(int offset, Table table);
 	void replaceAt(int r, Row newRow);
 	Table withDummyFirstRow();
 	void evenUpRows();
 	void addFoldingText(String foldingText);
 	boolean isPlainTextTable();
+	boolean hasRowsAfter(Row currentRow);
 }

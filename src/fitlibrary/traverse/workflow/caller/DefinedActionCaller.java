@@ -88,7 +88,7 @@ public class DefinedActionCaller extends DoCaller {
 	}
 	private List<Object> actualArgs(Row row, List<Object> result) {
 		for (int i = 1; i < row.size(); i += 2) {
-			Cell cell = row.elementAt(i);
+			Cell cell = row.at(i);
 			if (cell.hasEmbeddedTables())
 				result.add(cell.getEmbeddedTables());
 			else
@@ -112,13 +112,13 @@ public class DefinedActionCaller extends DoCaller {
 				row.passKeywords(testResults);
 			else if (subTestResults.errors())
 				for (int i = 0; i < row.size(); i += 2)
-					row.elementAt(i).error(testResults, new FitLibraryException(""));
+					row.at(i).error(testResults, new FitLibraryException(""));
 			else if (subTestResults.failed())
 				for (int i = 0; i < row.size(); i += 2)
-					row.elementAt(i).fail(testResults);
+					row.at(i).fail(testResults);
 			else
 				for (int i = 0; i < row.size(); i += 2)
-					row.elementAt(i).ignore(testResults);
+					row.at(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
 			row.add(TableFactory.cell(link(pageName),body));
 		} else if (!runtime.isAbandoned(testResults))

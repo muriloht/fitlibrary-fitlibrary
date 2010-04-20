@@ -14,7 +14,7 @@ public class DefaultPackages extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		for (int r = 1; r < table.size(); r ++) {
-			CreateFromClassNameCaller.addDefaultPackage(table.elementAt(r).text(0, this));
+			CreateFromClassNameCaller.addDefaultPackage(table.at(r).text(0, this));
 		}
 		return null;
 	}

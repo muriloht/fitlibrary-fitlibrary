@@ -22,7 +22,7 @@ import fitlibrary.utility.ParseUtility;
  * o The first row will usually hold the SuiteSetUp tables, which will register a new FixtureSupplier
  * o It uses BatchFitLibrary to doTables()
  */
-public class SpecifySuiteFixture extends SpecifyFixture {
+public class SpecifySuiteFixture extends SpecifyFixture3 {
 	@Override
 	public void doTable(Parse parseTable) {
 		doTable(TableFactory.table(parseTable));
@@ -31,11 +31,11 @@ public class SpecifySuiteFixture extends SpecifyFixture {
         TestResults testResults = TestResultsFactory.testResults(counts);
         BatchFitLibrary batch = new BatchFitLibrary();
     	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
-            Row row = theTable.elementAt(rowNo);
+            Row row = theTable.at(rowNo);
             if (row.size() < 2)
 				row.error(testResults, new RowWrongWidthException(2));
-            Cell test = row.elementAt(0);
-            Cell report = row.elementAt(1);
+            Cell test = row.at(0);
+            Cell report = row.at(1);
             if (!test.hasEmbeddedTables()) {
             	row.error(testResults, new NestedTableExpectedException());
                 return;

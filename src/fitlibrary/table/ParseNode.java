@@ -19,7 +19,7 @@ public abstract class ParseNode<To> {
     public final static String ERROR = " class=\"error\"";
     public final static String SHOWN = " bgcolor=#C0C0FF";
     public final static String CALLS = " bgcolor=#DADAFF";
-    public Parse parse;
+    protected Parse parse;
 
     public ParseNode(Parse parse) {
         this.parse = parse;
@@ -76,12 +76,16 @@ public abstract class ParseNode<To> {
 		return parse.tag.indexOf(label) >= 0;
 	}
 	public String getLeader() {
+		if (parse == null)
+			return "";
 		String leader = parse.leader;
 		if (leader == null)
 			return "";
 		return leader;
 	}
 	public String getTrailer() {
+		if (parse == null)
+			return "";
 		String trailer = parse.trailer;
 		if (trailer == null)
 			return "";
@@ -105,22 +109,44 @@ public abstract class ParseNode<To> {
         return i >= 0 && i < size();
     }
     public To last() {
-        return elementAt(size()-1);
+        return at(size()-1);
     }
-    public List<To> listFrom(int start) {
+    public List<To> iterableFrom(int start) {
 		List<To> list = new ArrayList<To>();
 		for (int i = start; i < size(); i++)
-			list.add(elementAt(i));
+			list.add(at(i));
 		return list;
 	}
 	public Iterator<To> iterator() {
-		return listFrom(0).iterator();
+		return iterableFrom(0).iterator();
 	}
 	protected String toString(String type, Parse theParse) {
 		return type+"["+ParseUtility.toString(theParse)+"]";
 	}
+	public String getTagLine() {
+		if (parse == null)
+			return "";
+		String tagLine = parse.tag;
+		int index = tagLine.indexOf(" ");
+		if (index < 0)
+			return "";
+		return tagLine.substring(index+1,tagLine.length()-1);
+	}
+	public void setTagLine(String tagLine) {
+		int index = parse.tag.indexOf(" ");
+		if (index < 0)
+			parse.tag += " "+tagLine+">";
+		else
+			parse.tag = parse.tag.substring(0,index+1)+tagLine+">";
+	}
+    public void addToTag(String annotation) {
+    	parse.addToTag(annotation);
+    }
+	public void toHtml(StringBuilder builder) {
+		//
+	}
 
-    protected abstract To elementAt(int i);
+    protected abstract To at(int i);
     protected abstract int size();
     protected abstract void error(TestResults testResults, Throwable e);
 }

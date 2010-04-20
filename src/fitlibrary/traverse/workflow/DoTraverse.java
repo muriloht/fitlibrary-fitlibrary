@@ -19,7 +19,6 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.flow.GlobalScope;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.graphic.GraphicParser;
@@ -204,12 +203,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void show(Row row, String text) {
 		global().show(row, text);
 	}
-	public void showAfterTable(String s) {
-		showAsAfterTable("Logs",s);
-	}
-	public void showAsAfterTable(String title,String s) {
-		global().showAsAfterTable(title,s);
-	}
 
 	//------------------- Postfix Special Actions:
 	/** Check that the result of the action in the first part of the row is the same as
@@ -221,7 +214,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseIs");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		target.invokeAndCheckForSpecial(row.rowTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
+		target.invokeAndCheckForSpecial(row.rowFromTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
 	public void equals(TestResults testResults, Row row) throws Exception {
 		is(testResults,row);
@@ -237,7 +230,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Object result = target.invoke(row.rowTo(1,row.size()-2),testResults,true);
+			Object result = target.invoke(row.rowFromTo(1,row.size()-2),testResults,true);
 			target.notResult(expectedCell, result, testResults);
         } catch (IgnoredException e) {
             //
@@ -309,7 +302,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Object result = target.invoke(row.rowTo(1,row.size()-2),testResults,true);
+			Object result = target.invoke(row.rowFromTo(1,row.size()-2),testResults,true);
 			if (result instanceof Comparable) {
 				target.compare(expectedCell, (Comparable)result, testResults, compare);
 			} else
@@ -332,7 +325,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		boolean compares(Comparable actual, Comparable expected);
 	}
 	private Cell operatorCell(Row row) {
-		return row.elementAt(row.size()-2);
+		return row.at(row.size()-2);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
@@ -345,7 +338,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches();
 			if (matches)
 				expectedCell.pass(testResults);
@@ -370,7 +363,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = compile.matcher(result).matches();
 			if (matches) {
 				expectedCell.pass(testResults);
@@ -395,7 +388,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			if (!Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches())
 				expectedCell.pass(testResults);
 			else if (expectedCell.text(this).equals(result))
@@ -415,7 +408,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("contains");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+		String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (matches)
 			expectedCell.pass(testResults);
@@ -435,7 +428,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = result.contains(expectedCell.text(this));
 			if (matches) {
 				expectedCell.pass(testResults);
@@ -453,7 +446,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("doesNoContain");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.rowTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+		String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (!matches)
 			expectedCell.pass(testResults);
@@ -469,7 +462,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		Row actionPartOfRow = row.rowTo(1,row.size()-2);
+		Row actionPartOfRow = row.rowFromTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
@@ -548,7 +541,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void showDot(Row row, TestResults testResults) throws Exception {
 		Parser adapter = new GraphicParser(new NonGenericTyped(ObjectDotGraphic.class));
 		try {
-		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
+		    Object result = callMethodInRow(row,testResults, true,row.at(0));
 		    row.addCell(adapter.show(new ObjectDotGraphic(result)));
 		} catch (IgnoredException e) { // No result, so ignore
 		}
@@ -573,11 +566,11 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public void expectedTestResults(Row row, TestResults testResults) throws Exception {
 		if (testResults.matches(row.text(1,this),row.text(3,this),row.text(5,this),row.text(7,this))) {
 			testResults.clear();
-			row.elementAt(0).pass(testResults);
+			row.at(0).pass(testResults);
 		} else {
 			String results = testResults.toString();
 			testResults.clear();
-			row.elementAt(0).fail(testResults,results,this);
+			row.at(0).fail(testResults,results,this);
 		}
 	}
 	public Object oo(Row row, TestResults testResults) throws Exception {
@@ -595,18 +588,18 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      */
 	public void optionally(Row row, TestResults testResults) throws Exception {
 		try {
-		    Object result = callMethodInRow(row,testResults, true,row.elementAt(0));
+		    Object result = callMethodInRow(row,testResults, true,row.at(0));
 		    if (result instanceof Boolean && !((Boolean)result).booleanValue()) {
 		    	row.addCell("false").shown();
 		    	getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		    }
 		} catch (FitLibraryException e) {
-			row.elementAt(0).error(testResults,e);
+			row.at(0).error(testResults,e);
 		} catch (Exception e) {
 			row.addCell(PlugBoard.exceptionHandling.exceptionMessage(e)).shown();
 			getRuntimeContext().getDefinedActionCallManager().addShow(row);
 		}
-		row.elementAt(0).pass(testResults);
+		row.at(0).pass(testResults);
 	}
 	/*
 	 * |''add named''|name|...action or fixture|
@@ -621,8 +614,5 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	@Override
 	public FitHandler fitHandler() {
 		return getFitHandler();
-	}
-	private GlobalScope global() {
-		return getRuntimeContext().getGlobal();
 	}
 }

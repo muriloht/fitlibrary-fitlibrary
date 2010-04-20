@@ -11,8 +11,8 @@ public class DefinedActionBodyCollector {
 		// Process the first and last tables differently
 		// (Ignore the first & (also) handle last outside loop)
 		for (int i = 1; i < tables.size(); i++) {
-			Table table = tables.elementAt(i);
-			Table previousTable = tables.elementAt(i-1);
+			Table table = tables.at(i);
+			Table previousTable = tables.at(i-1);
 			if (isHR(table.getLeader()) || isHR(previousTable.getTrailer())) {
 				table.parse().leader = "";
 				previousTable.parse().more = null;

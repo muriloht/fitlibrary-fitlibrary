@@ -47,27 +47,27 @@ public class DefineAction extends Traverse {
     		hasClass = true;
     		bodyRow = 2;
     	}
-    	if (table.elementAt(1).size() != 1)
+    	if (table.at(1).size() != 1)
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain one cell.");
-    	if (hasClass && table.elementAt(2).size() != 1)
+    	if (hasClass && table.at(2).size() != 1)
     		throw new FitLibraryException("Third row of table for DefineAction needs to contain one cell.");
-    	if (!table.elementAt(bodyRow).elementAt(0).hasEmbeddedTables())
+    	if (!table.at(bodyRow).at(0).hasEmbeddedTables())
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain nested tables.");
     	if (hasClass)
-    		wikiClassName = table.elementAt(1).text(0,this);
-    	processDefinition(table.elementAt(1).elementAt(0).getEmbeddedTables(), testResults);
+    		wikiClassName = table.at(1).text(0,this);
+    	processDefinition(table.at(1).at(0).getEmbeddedTables(), testResults);
     	return null;
 	}
     public String getPageName() {
 		return pageName;
 	}
 	private void processDefinition(Tables tables, TestResults testResults) {
-		Table headerTable = tables.elementAt(0);
+		Table headerTable = tables.at(0);
 		if (headerTable.size() == 2) {
 			processMultiDefinedAction(headerTable,tables.followingTables());
 			return;
 		}
-		Row parametersRow = headerTable.elementAt(0);
+		Row parametersRow = headerTable.at(0);
 		if (headerTable.size() > 1)
 			error("Unexpected rows in first table of defined action",parametersRow);
 		parametersRow.passKeywords(testResults);
@@ -83,11 +83,11 @@ public class DefineAction extends Traverse {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, pageName);
 	}
 	private void processMultiDefinedAction(Table headerTable, Tables body) {
-		String definedActionName = headerTable.elementAt(0).elementAt(0).text();
+		String definedActionName = headerTable.at(0).at(0).text();
 		ArrayList<String> formalParameters = new ArrayList<String>();
-		Row parametersRow = headerTable.elementAt(1);
+		Row parametersRow = headerTable.at(1);
 		for (int c = 0; c < parametersRow.size(); c++) {
-			String parameter = parametersRow.elementAt(c).text();
+			String parameter = parametersRow.at(c).text();
 			if ("".equals(parameter))
 				error("Parameter name is blank",parametersRow);
 			if (formalParameters.contains(parameter))

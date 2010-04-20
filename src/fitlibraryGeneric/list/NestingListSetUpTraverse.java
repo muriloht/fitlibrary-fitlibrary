@@ -31,11 +31,11 @@ public class NestingListSetUpTraverse extends DoTraverse {
 	public Object interpretAfterFirstRow(Table table,TestResults testResults) {
         Parser parser = subComponentTyped.parser(this);
         for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-            Row row = table.elementAt(rowNo);
+            Row row = table.at(rowNo);
             try {
                 if (row.size() != 1)
                     throw new RowWrongWidthException(1);
-                Cell cell = row.elementAt(0);
+                Cell cell = row.at(0);
                 list.add(parser.parseTyped(cell,testResults).getSubject());
             } catch (Exception e) {
 				row.error(testResults,e);

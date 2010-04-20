@@ -41,7 +41,7 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				target.invokeAndCheckForSpecial(row.elementsFrom(2),expectedCell,testResults,row,row.elementAt(0));
+				target.invokeAndCheckForSpecial(row.elementsFrom(2),expectedCell,testResults,row,row.at(0));
 			}
 		};
 	}
@@ -62,7 +62,7 @@ public class PrefixSpecialAction {
 			@Override
 			public void run(TestResults testResults) {
 				try {
-					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,true,row.elementAt(0));
+					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,true,row.at(0));
 					String text = target.getResultString(result);
 					report(text);
 				} catch (Exception e) {
@@ -92,7 +92,7 @@ public class PrefixSpecialAction {
 			@Override
 			public void run(TestResults testResults) {
 				try {
-					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,true,row.elementAt(0));
+					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,true,row.at(0));
 					actionContext.showAfterTable(target.getResultString(result));
 				} catch (Exception e) {
 					// No result, so ignore it
@@ -109,7 +109,7 @@ public class PrefixSpecialAction {
 			@Override
 			public void run(TestResults testResults) {
 				try {
-					Object result = target.invokeForSpecial(row.elementsFrom(3),testResults,true,row.elementAt(0));
+					Object result = target.invokeForSpecial(row.elementsFrom(3),testResults,true,row.at(0));
 					actionContext.showAsAfterTable(row.text(1,actionContext),target.getResultString(result));
 				} catch (Exception e) {
 					// No result, so ignore it
@@ -124,7 +124,7 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				Cell firstCell = row.elementAt(0);
+				Cell firstCell = row.at(0);
 				try {
 					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,true,firstCell);
 				    Boolean resultBoolean = result == null ? Boolean.TRUE : (Boolean) result;
@@ -147,9 +147,9 @@ public class PrefixSpecialAction {
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				Cell notCell = row.elementAt(0);
+				Cell notCell = row.at(0);
 				try {
-					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,false,row.elementAt(0));
+					Object result = target.invokeForSpecial(row.elementsFrom(2),testResults,false,row.at(0));
 				    if (!(result instanceof Boolean))
 				        notCell.error(testResults,new NotRejectedException());
 				    else if (((Boolean)result).booleanValue())
@@ -204,7 +204,7 @@ public class PrefixSpecialAction {
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {
-						Object result = optionalTarget.get().invokeForSpecial(row.elementsFrom(3),testResults,true,row.elementAt(0));
+						Object result = optionalTarget.get().invokeForSpecial(row.elementsFrom(3),testResults,true,row.at(0));
 						actionContext.setDynamicVariable(variableName,result);
 					} else
 						actionContext.setDynamicVariable(variableName,Ognl.getValue(row.text(3,actionContext), null));
@@ -226,7 +226,7 @@ public class PrefixSpecialAction {
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {
-						Object result = optionalTarget.get().invokeForSpecial(row.elementsFrom(3),testResults,true,row.elementAt(0));
+						Object result = optionalTarget.get().invokeForSpecial(row.elementsFrom(3),testResults,true,row.at(0));
 						actionContext.setFitVariable(variableName,result);
 					} else
 						actionContext.setFitVariable(variableName,Ognl.getValue(row.text(3,actionContext), null));

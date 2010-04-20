@@ -49,9 +49,9 @@ public class CollectionSetUpTraverse extends DoTraverse {
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		bindFirstRowToTarget(table.elementAt(1),testResults,this);
+		bindFirstRowToTarget(table.at(1),testResults,this);
 		for (int i = 2; i < table.size(); i++)
-			processRow(table.elementAt(i),testResults);
+			processRow(table.at(i),testResults);
 		return collection;
 	}
 	@Override
@@ -62,7 +62,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
 			int rowNo = 0;
 			if (embedded)
 				rowNo = 1;
-			table.elementAt(rowNo).error(testResults,e);
+			table.at(rowNo).error(testResults,e);
 		}
 		return collection;
 	}
@@ -121,7 +121,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
 	}
 	public static boolean hasObjectFactoryMethodFor(Table table, Evaluator evaluator) {
 		try {
-			findMethodTarget(table.elementAt(0),evaluator,false);
+			findMethodTarget(table.at(0),evaluator,false);
 			return true;
 		} catch (Exception e) {
 			return false;

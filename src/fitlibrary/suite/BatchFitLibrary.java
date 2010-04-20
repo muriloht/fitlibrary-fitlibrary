@@ -62,7 +62,7 @@ public class BatchFitLibrary implements StorytestRunner {
 				recorder.write();
 			} catch (IOException e) {
 				Table errorTable = TableFactory.table(TableFactory.row("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
-				errorTable.elementAt(0).elementAt(1).error(tableListener.getTestResults());
+				errorTable.at(0).at(1).error(tableListener.getTestResults());
 				theTables.add(errorTable );
 			}
 		}

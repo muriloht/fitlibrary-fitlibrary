@@ -36,7 +36,7 @@ public class DomainObjectSetUpTraverse extends Traverse {
 		if (type != null)
 			createObjectOfSpecifiedType(table,testResults);
 		for (int rowNo = 1; rowNo < table.size(); rowNo++)
-			processRow(table.elementAt(rowNo),testResults);
+			processRow(table.at(rowNo),testResults);
 		try {
 			callEndCreatingObjectMethod(getTypedSystemUnderTest());
 		} catch (Exception e) {
@@ -46,10 +46,10 @@ public class DomainObjectSetUpTraverse extends Traverse {
 	}
 	private void createObjectOfSpecifiedType(Table table, TestResults testResults) {
 		for (int rowNo = 1; rowNo < table.size(); rowNo++) {
-			Row row = table.elementAt(rowNo);
+			Row row = table.at(rowNo);
 			for (int i = 0; i < row.size(); i += 2) {
-				if (givesClass(row.elementAt(i),this)) {
-					createSystemUnderTest(row.elementAt(i+1), testResults);
+				if (givesClass(row.at(i),this)) {
+					createSystemUnderTest(row.at(i+1), testResults);
 					return;
 				}
 			}
@@ -80,14 +80,14 @@ public class DomainObjectSetUpTraverse extends Traverse {
 	}
 	public void processRow(Row row, TestResults testResults) {
 		for (int i = 0; i < row.size(); i += 2) {
-			Cell cell = row.elementAt(i);
+			Cell cell = row.at(i);
 			if (!DomainObjectSetUpTraverse.givesClass(cell,this)) {
 				if (getSystemUnderTest() == null) {
 					cell.ignore(testResults);
 				} else {
 					try {
 						CalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
-						callSetter(target, row.elementAt(i+1), testResults);
+						callSetter(target, row.at(i+1), testResults);
 					} catch (Exception e) {
 						cell.error(testResults,e);
 					}

@@ -21,7 +21,7 @@ public class MultiDefinedActionCaller extends DoCaller {
 
 	public MultiDefinedActionCaller(Row row, DoTraverseInterpreter doTraverse) {
 		this.doTraverse = doTraverse;
-		furtherRows = row.hasFurtherRows();
+		this.furtherRows = doTraverse.getRuntimeContext().hasRowsAfter(row);
 		methodName = row.text(0,doTraverse);
 		multiParameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupMulti(methodName);
 	}

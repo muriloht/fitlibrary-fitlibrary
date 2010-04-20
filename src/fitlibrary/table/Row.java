@@ -9,7 +9,6 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runResults.TestResults;
 
 public interface Row extends TableElement<Row,Cell> {
-	boolean hasFurtherRows();
 	Cell addCell();
 	Cell addCell(String s);
 	Cell addCell(String text, int cols);
@@ -35,6 +34,6 @@ public interface Row extends TableElement<Row,Cell> {
 	boolean didPass();
 	boolean didFail();
 	void removeElementAt(int i);
-	Row rowTo(int from, int upto);
+	Row rowFromTo(int from, int upto);
 	void clear();
 }

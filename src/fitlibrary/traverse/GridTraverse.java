@@ -35,13 +35,13 @@ public class GridTraverse extends Traverse {
         for (int rowNo = 0; rowNo < actual.length; rowNo++) {
             if (!table.elementExists(rowNo+1))
                 return false;
-            Row row = table.elementAt(rowNo+1);
+            Row row = table.at(rowNo+1);
             if (!cellsMatch(actual[rowNo],row,testResults))
                 matched = false;
         }
         for (int rowNo = actual.length+1; rowNo < table.size(); rowNo++) {
             matched = false;
-            table.elementAt(rowNo).fail(testResults);
+            table.at(rowNo).fail(testResults);
         }
         return matched;
     }
@@ -50,12 +50,12 @@ public class GridTraverse extends Traverse {
         for (int i = 0; i < actual.length; i++) {
             if (!row.elementExists(i))
                 return false;
-        	if (!cellMatches(actual[i], row.elementAt(i),testResults))
+        	if (!cellMatches(actual[i], row.at(i),testResults))
         		matched = false;
         }
         for (int cellNo = actual.length; cellNo < row.size(); cellNo++) {
         	matched = false;
-        	row.elementAt(cellNo).fail(testResults);
+        	row.at(cellNo).fail(testResults);
         }
         return matched;
     }

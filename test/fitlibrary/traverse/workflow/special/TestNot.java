@@ -30,7 +30,7 @@ public class TestNot extends TestSpecialAction {
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
 
 			allowing(initialRow).elementsFrom(2);will(returnValue(subRow));
-			allowing(initialRow).elementAt(0);will(returnValue(firstCell));
+			allowing(initialRow).at(0);will(returnValue(firstCell));
 		}
 	}
 	@Test
