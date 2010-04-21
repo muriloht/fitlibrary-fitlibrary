@@ -4,8 +4,10 @@
 */
 package fitlibrary.table;
 
+import fit.Parse;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.utility.ParseUtility;
 
 public class TableOnList extends TableElementOnList<Row> implements Table {
     private int firstErrorRow = 0;
@@ -121,5 +123,13 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 			if (at(i) == currentRow)
 				return true;
 		return false;
+	}
+	public Parse asParse() {
+		TableFactory.useOnLists(false);
+		try {
+			return ParseUtility.convert(this).parse();
+		} finally {
+			TableFactory.pop();
+		}
 	}
 }

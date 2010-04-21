@@ -4,17 +4,13 @@
 */
 package fitlibrary.spec;
 
-import fit.Parse;
 import fitlibrary.exception.table.NestedTableExpectedException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableFactory;
-import fitlibrary.utility.ParseUtility;
+import fitlibrary.table.Tables;
 
 /**
  * Like SpecifyFixture, except that:
@@ -22,37 +18,31 @@ import fitlibrary.utility.ParseUtility;
  * o The first row will usually hold the SuiteSetUp tables, which will register a new FixtureSupplier
  * o It uses BatchFitLibrary to doTables()
  */
-public class SpecifySuiteFixture extends SpecifyFixture3 {
+public class SpecifySuiteFixture extends SpecifyFixture {
 	@Override
-	public void doTable(Parse parseTable) {
-		doTable(TableFactory.table(parseTable));
-	}
-    private void doTable(Table theTable) {
-        TestResults testResults = TestResultsFactory.testResults(counts);
-        BatchFitLibrary batch = new BatchFitLibrary();
-    	for (int rowNo = 1; rowNo < theTable.size(); rowNo++) {
-            Row row = theTable.at(rowNo);
+	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+    	for (int rowNo = 1; rowNo < table.size(); rowNo++) {
+            Row row = table.at(rowNo);
             if (row.size() < 2)
 				row.error(testResults, new RowWrongWidthException(2));
-            Cell test = row.at(0);
-            Cell report = row.at(1);
-            if (!test.hasEmbeddedTables()) {
+            Cell testCell = row.at(0);
+            Cell reportCell = row.at(1);
+            if (!testCell.hasEmbeddedTables()) {
             	row.error(testResults, new NestedTableExpectedException());
-                return;
+                return null;
             }
-            Parse actual = test.getEmbeddedTables().parse();
-            Parse expected = report.getEmbeddedTables().parse();
+            Tables actualTables = testCell.getEmbeddedTables();
+            Tables expectedTables = reportCell.getEmbeddedTables();
             
-            batch.doStorytest(TableFactory.tables(actual));
-			if (reportsEqual(actual, expected))
-                report.pass(testResults);
-            else {
-                report.fail(testResults);
-                ParseUtility.printParse(actual,"actual");
-                addTableToBetterShowDifferences(theTable.parse(),
-                        actual,expected);
+            runner.doStorytest(actualTables);
+			if (tablesCompare.tablesEqual("",actualTables, expectedTables)) {
+                reportCell.pass(testResults);
+				testResults.addRights(cellCount(actualTables) - 1);
+			} else {
+                reportCell.fail(testResults);
+                errorReport.actualResult(actualTables);
             }
         }
-    	batch.exit();
+    	return null;
     }
 }

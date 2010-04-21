@@ -581,7 +581,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		if (className == null || "".equals(className))
 			className = object; // then use the object name as a class name
 		Row macroRow = row.elementsFrom(2);
-		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,this).run(row, testResults);
+		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,getRuntimeContext()).run(row, testResults);
 		return typedObject.getSubject();
 	}
 	/** Don't mind that the action succeeds or not, just as long as it's not a FitLibraryException (such as action unknown) 

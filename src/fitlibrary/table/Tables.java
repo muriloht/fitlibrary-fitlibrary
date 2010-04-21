@@ -5,8 +5,12 @@
 
 package fitlibrary.table;
 
+import fit.Parse;
+
 public interface Tables extends TableElement<Tables,Table>{
 	Tables followingTables();
 	String report();
 	void addTables(Tables tables);
+	void print(String heading);
+	Parse asParse();
 }

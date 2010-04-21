@@ -4,6 +4,9 @@
 */
 package fitlibrary.table;
 
+import fit.Parse;
+import fitlibrary.utility.ParseUtility;
+
 public class TablesOnList extends TableElementOnList<Table> implements Tables {
     public TablesOnList() {
     	super("");
@@ -43,5 +46,19 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 		StringBuilder builder = new StringBuilder();
 		toHtml(builder );
 		return builder.toString();
+	}
+	@Override
+	public void print(String heading) {
+		System.out.println("---------Tables for "+heading+":----------");
+		System.out.println(toString());
+        System.out.println("-------------------");
+	}
+	public Parse asParse() {
+		TableFactory.useOnLists(false);
+		try {
+			return ParseUtility.convert(this).parse();
+		} finally {
+			TableFactory.pop();
+		}
 	}
 }

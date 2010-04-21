@@ -80,7 +80,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 							interpretEvaluator(evaluator,TableFactory.table(row),testResults);
 							break;
 						} else if (subject instanceof Fixture) {
-							getFitHandler().doTable(subject, TableFactory.table(row),testResults,this);
+							getFitHandler().doTable((Fixture) subject, TableFactory.table(row),testResults,this);
 							break;
 						}
 					}
@@ -117,7 +117,7 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 				return result;
 			}
 			if (result instanceof Fixture)
-				getFitHandler().doTable(result,table,testResults,this);
+				getFitHandler().doTable((Fixture) result,table,testResults,this);
 			else // do the rest of the table with this traverse
 				return interpretInFlow(table,testResults);
 		} catch (Throwable e) {
@@ -216,8 +216,8 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     }
 	public DoCaller[] createDoCallers(Row row, Fixture fixtureByName) {
 		DoCaller[] actions = { 
-				new DefinedActionCaller(row, this),
-				new MultiDefinedActionCaller(row, this),
+				new DefinedActionCaller(row, getRuntimeContext()),
+				new MultiDefinedActionCaller(row, getRuntimeContext()),
 				new SpecialCaller(row,this,PlugBoard.lookupTarget),
 				new PostFixSpecialCaller(row,this),
 				new FixtureCaller(fixtureByName),

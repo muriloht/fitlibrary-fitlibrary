@@ -16,9 +16,9 @@ import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
 
 public class SpecifyFixture extends Traverse {
-	private final StorytestRunner runner;
-	private final SpecifyErrorReport errorReport;
-	private final TablesCompare tablesCompare;
+	protected final StorytestRunner runner;
+	protected final SpecifyErrorReport errorReport;
+	protected final TablesCompare tablesCompare;
 	
 	public SpecifyFixture() {
 		this.runner = new BatchFitLibrary();
@@ -59,7 +59,7 @@ public class SpecifyFixture extends Traverse {
 			return table.at(2).at(0);
 		throw new FitLibraryException("Table must have one row with two cells or two rows with one cell");
 	}
-	private int cellCount(Tables tables) {
+	protected int cellCount(Tables tables) {
 		int count = 0;
 		for (Table table: tables)
 			for (Row row: table)

@@ -154,7 +154,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    			handleOtherEvaluator(typedResult,(Evaluator)subject, row, testResults);
 			    			return; // have finished table
 			    		} else if (subject instanceof Fixture) {
-			    			flowEvaluator.fitHandler().doTable(subject,TableFactory.table(row),testResults,flowEvaluator);
+			    			flowEvaluator.fitHandler().doTable((Fixture) subject,TableFactory.table(row),testResults,flowEvaluator);
 			    			return; // have finished table
 			    		}
 			    	}

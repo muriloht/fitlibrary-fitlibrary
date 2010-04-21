@@ -26,7 +26,7 @@ public class TableParser extends HtmlStructureParser {
 	protected Object parse(Cell cell, TestResults testResults) throws Exception {
 		if (!cell.hasEmbeddedTables())
 			throw new MissingTableException();
-        Parse parse = cell.getEmbeddedTable().parse();
+        Parse parse = cell.getEmbeddedTable().asParse();
 		Object[] args = new Object[]{parse};
 		Class<?>[] argTypes = new Class[]{ Parse.class };
 		return callReflectively("parseTable",args,argTypes,null);

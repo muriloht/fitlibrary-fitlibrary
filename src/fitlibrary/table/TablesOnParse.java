@@ -88,4 +88,8 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 		for (Table table: tables)
 			add(table);
 	}
+	@Override
+	public void print(String heading) {
+		ParseUtility.printParse(parse(),"actual");
+	}
 }

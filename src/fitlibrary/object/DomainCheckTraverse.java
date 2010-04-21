@@ -12,7 +12,6 @@ import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.RowOnParse;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.TableEvaluator;
@@ -20,7 +19,7 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
 
 public class DomainCheckTraverse extends Traverse implements TableEvaluator {
-	private DomainTraverse domainTraverse;
+	private DomainTraverser domainTraverser;
 	
 	public DomainCheckTraverse() {
 		//
@@ -33,12 +32,12 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
         table.error(testResults,new RuntimeException("Don't expect to have this called!"));
         return null;
     }
-	public void setDomainTraverse(DomainTraverse domainTraverse) {
-		this.domainTraverse = domainTraverse;
+	public void setDomainTraverse(DomainTraverser domainTraverser) {
+		this.domainTraverser = domainTraverser;
 	}
 	public void runTable(Table table, ITableListener tableListener) {
         if (switchOnExpected(table)) {
-            domainTraverse.setCurrentAction();
+            domainTraverser.setCurrentAction();
             return;
         }
         try {
@@ -85,7 +84,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 		}
 	}
     private boolean switchOnExpected(Table table) {
-        return domainTraverse != null && table.size() == 1 && 
+        return domainTraverser != null && table.size() == 1 && 
                 table.at(0).size() == 1 && 
                 table.at(0).at(0).matchesTextInLowerCase("expected",this);
     }

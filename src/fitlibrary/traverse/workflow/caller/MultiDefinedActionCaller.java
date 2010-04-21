@@ -7,22 +7,22 @@ package fitlibrary.traverse.workflow.caller;
 import fitlibrary.definedAction.MultiParameterSubstitution;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoCaller;
-import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class MultiDefinedActionCaller extends DoCaller {
-	private final DoTraverseInterpreter doTraverse;
+	private final RuntimeContextInternal runtime;
 	private final String methodName;
 	private final MultiParameterSubstitution multiParameterSubstitution;
 	private final boolean furtherRows;
 
-	public MultiDefinedActionCaller(Row row, DoTraverseInterpreter doTraverse) {
-		this.doTraverse = doTraverse;
-		this.furtherRows = doTraverse.getRuntimeContext().hasRowsAfter(row);
-		methodName = row.text(0,doTraverse);
+	public MultiDefinedActionCaller(Row row, RuntimeContextInternal runtime) {
+		this.runtime = runtime;
+		this.furtherRows = runtime.hasRowsAfter(row);
+		methodName = row.text(0,runtime.getResolver());
 		multiParameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupMulti(methodName);
 	}
 	@Override
@@ -36,6 +36,6 @@ public class MultiDefinedActionCaller extends DoCaller {
 	@Override
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		return new GenericTypedObject(
-				new MultiDefinedActionTraverse(multiParameterSubstitution,doTraverse));
+				new MultiDefinedActionTraverse(multiParameterSubstitution,runtime));
 	}
 }

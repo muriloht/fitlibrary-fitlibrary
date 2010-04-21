@@ -10,6 +10,7 @@ import java.util.List;
 
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.utility.ParseUtility;
 
 public abstract class TableElementOnList<To extends TableElement> {
     public final static String PASS = " class=\"pass\"";
@@ -142,7 +143,7 @@ public abstract class TableElementOnList<To extends TableElement> {
     	tagAnnotation += report;
 	}
 	public Parse parse() {
-		return null;
+		throw new RuntimeException("Unable to provide a Parse.");
 	}
 	public String getType() {
 		return tag;

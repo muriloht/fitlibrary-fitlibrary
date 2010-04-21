@@ -27,6 +27,9 @@ public abstract class ParseNode<To> {
     public Parse parse() {
     	return parse;
     }
+    public Parse asParse() {
+    	return parse;
+    }
     public void pass(TestResults testResults) {
         ensureBodyNotNull();
         parse.addToTag(PASS);

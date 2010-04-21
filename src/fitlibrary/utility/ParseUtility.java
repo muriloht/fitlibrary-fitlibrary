@@ -34,7 +34,7 @@ public class ParseUtility {
         return stringWriter.toString();
     }
     public static void printParse(Parse tables, String title) {
-        System.out.println("---------Parse tables for "+title+":----------");
+        System.out.println("---------Tables for "+title+":----------");
         if (tables != null) {
             PrintWriter printWriter = new PrintWriter(System.out);
             tables.print(printWriter);

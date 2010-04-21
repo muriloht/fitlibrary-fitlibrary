@@ -89,7 +89,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 		throw new ClassNotFoundException(className);
 	}
 	private void handleArgs(Fixture fixture, Row row) {
-		fixture.getArgsForTable(TableFactory.table(row).parse());
+		fixture.getArgsForTable(TableFactory.table(row).asParse());
 	}
 	@Override
 	public boolean isValid() {

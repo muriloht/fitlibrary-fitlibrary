@@ -16,17 +16,14 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 
 public class MultiDefinedActionTraverse extends Traverse {
 	private MultiParameterSubstitution multiParameterSubstitution;
-	private DoTraverseInterpreter doTraverse;
 	private RuntimeContextInternal runtime;
 
-	public MultiDefinedActionTraverse(MultiParameterSubstitution multiParameterSubstitution, DoTraverseInterpreter doTraverse) {
+	public MultiDefinedActionTraverse(MultiParameterSubstitution multiParameterSubstitution, RuntimeContextInternal runtime) {
 		this.multiParameterSubstitution = multiParameterSubstitution;
-		this.doTraverse = doTraverse;
-		this.runtime = doTraverse.getRuntimeContext();
+		this.runtime = runtime;
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
@@ -57,7 +54,7 @@ public class MultiDefinedActionTraverse extends Traverse {
 	private void runRow(Row row, Row parameterRow, TestResults testResults) {
 		Tables body = multiParameterSubstitution.getCopyOfBody();
 		TestResults subTestResults = TestResultsFactory.testResults();
-		DefinedActionCallManager definedActionCallManager = doTraverse.getRuntimeContext().getDefinedActionCallManager();
+		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
 		try {
 			definedActionCallManager.startCall(multiParameterSubstitution);
 			multiParameterSubstitution.bind(parameterRow,row,getDynamicVariables(),this);
@@ -72,7 +69,7 @@ public class MultiDefinedActionTraverse extends Traverse {
 			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
-		TableEvaluator tableEvaluator = doTraverse.getRuntimeContext().getTableEvaluator();
+		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
 		for (Table table: body)
 			tableEvaluator.runTable(table, new TableListener(subTestResults));
 	}

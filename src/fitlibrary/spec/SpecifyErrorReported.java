@@ -9,7 +9,6 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.ShowAfter;
 import fitlibrary.utility.HtmlUtils;
-import fitlibrary.utility.ParseUtility;
 
 public class SpecifyErrorReported implements SpecifyErrorReport {
 	private final ShowAfter showAfter;
@@ -19,7 +18,7 @@ public class SpecifyErrorReported implements SpecifyErrorReport {
 	}
 	@Override
 	public void actualResult(Tables actualTables) {
-		ParseUtility.printParse(actualTables.parse(),"actual");
+		actualTables.print("actual");
 	}
 	@Override
 	public void sizeWrong(String path, int actualSize, int expectedSize) {

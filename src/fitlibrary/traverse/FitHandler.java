@@ -11,11 +11,10 @@ import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 
 public class FitHandler {
-	public void doTable(Object result, Table table, TestResults testResults, Evaluator evaluator) {
-		Fixture fixture = (Fixture) result;
+	public void doTable(Fixture fixture, Table table, TestResults testResults, Evaluator evaluator) {
 		fixture.counts = testResults.getCounts();
 		substituteDynamicVariables(table, evaluator);
-		fixture.doTable(table.parse());
+		fixture.doTable(table.asParse());
 	}
 	private void substituteDynamicVariables(Table table, Evaluator evaluator) {
 		for (int r = 0; r < table.size(); r++) {

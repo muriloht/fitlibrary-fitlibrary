@@ -18,8 +18,4 @@ public class DomainFixture extends DoFixture {
     	this();
     	setSystemUnderTest(sut);
     }
-    @SuppressWarnings("unused")
-    public void checks(Row row, TestResults testResults) {
-    	domainTraverse.setCurrentCheck();
-    }
 }
