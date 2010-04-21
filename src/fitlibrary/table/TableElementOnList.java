@@ -24,7 +24,7 @@ public abstract class TableElementOnList<To extends TableElement> {
     private String trailer = "";
     private List<To> elements = new ArrayList<To>();
 
-    public boolean elementExists(int i) {
+    public boolean atExists(int i) {
         return i >= 0 && i < size();
     }
     public int size() {
@@ -149,7 +149,9 @@ public abstract class TableElementOnList<To extends TableElement> {
 	}
 	@Override
     public String toString() {
-    	return "<"+getTagLine()+">";
+    	StringBuilder builder = new StringBuilder();
+    	toHtml(builder);
+		return builder.toString();
     }
 	public void toHtml(StringBuilder builder) {
 		builder.append(getLeader());
@@ -163,7 +165,7 @@ public abstract class TableElementOnList<To extends TableElement> {
 		builder.append(getTrailer());
 	}
     protected void appendBody(StringBuilder builder) {
-		//
+		// Overridden in Cell
 	}
 	protected abstract TableElementOnList<To> newObject();
 }

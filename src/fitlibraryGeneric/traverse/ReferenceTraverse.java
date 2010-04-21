@@ -57,13 +57,13 @@ public class ReferenceTraverse extends Traverse {
     private Object getObject(Row row, int cellNo, Object initialObject, TestResults testResults) {
     	Object object = initialObject;
         boolean last = false;
-        if (row.elementExists(cellNo+1)) {
+        if (row.atExists(cellNo+1)) {
             Cell nextCell = row.at(cellNo+1);
             if (!nextCell.matchesTextInLowerCase("of",this) && !nextCell.matchesTextInLowerCase("in",this)) {
                 nextCell.fail(testResults,"'of' or 'in' expected",this);
                 throw new IgnoredException();
             }
-            if (!row.elementExists(cellNo+2)) {
+            if (!row.atExists(cellNo+2)) {
                 nextCell.error(testResults,new MissingCellsException(""));
                 throw new IgnoredException();
             }

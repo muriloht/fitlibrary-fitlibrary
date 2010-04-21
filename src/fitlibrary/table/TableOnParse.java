@@ -32,7 +32,7 @@ public class TableOnParse extends ParseNode<Row> implements Table {
     }
     @Override
 	public Row at(int i) {
-        if (!elementExists(i))
+        if (!atExists(i))
             throw new MissingRowException("");
         return new RowOnParse(parse.parts.at(i));
     }

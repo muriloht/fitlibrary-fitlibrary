@@ -7,4 +7,6 @@ package fitlibrary.table;
 
 public interface Tables extends TableElement<Tables,Table>{
 	Tables followingTables();
+	String report();
+	void addTables(Tables tables);
 }

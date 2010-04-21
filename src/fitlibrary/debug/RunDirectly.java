@@ -14,7 +14,6 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.ParseUtility;
 
 public class RunDirectly {
 	protected FixtureListener fixtureListener = new FixtureListener() {
@@ -33,7 +32,7 @@ public class RunDirectly {
 		Tables tables = TableFactory.tables(html);
 		FitServerBridge.setFitNesseUrl(""); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);
-		System.out.println("\n----------\nHTML Report\n----------\n"+ParseUtility.toString(tables.parse()));
+		System.out.println("\n----------\nHTML Report\n----------\n"+tables.report());
 		System.out.println(testResults);
 	}
 	@SuppressWarnings("unused")

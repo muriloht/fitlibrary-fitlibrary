@@ -79,4 +79,13 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
 	public String getType() {
 		return "Tables";
 	}
+	@Override
+	public String report() {
+		return ParseUtility.toString(parse());
+	}
+	@Override
+	public void addTables(Tables tables) {
+		for (Table table: tables)
+			add(table);
+	}
 }

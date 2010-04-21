@@ -30,7 +30,7 @@ import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public abstract class Traverse implements Evaluator {
+public abstract class Traverse implements Evaluator, ShowAfter {
 	protected static DifferenceInterface FITNESSE_DIFFERENCES = new FitNesseDifference();
 	protected static FitHandler FIT_HANDLER = new FitHandler();
 	public static final String FITNESSE_URL_KEY = "fitNesse.url";

@@ -13,7 +13,7 @@ public interface TableElement<From, To> extends Iterable<To> {
 	int size();
 	boolean isEmpty();
 	To at(int i);
-	boolean elementExists(int i);
+	boolean atExists(int i);
 	To last();
 	Iterable<To> iterableFrom(int start);
 	From deepCopy();
@@ -23,9 +23,9 @@ public interface TableElement<From, To> extends Iterable<To> {
 	String getTrailer();
 	String getTagLine();
 	void setTagLine(String tagLine);
-	Parse parse();
 	String getType();
 	void addToTag(String report);
 	void error(TestResults testResults, Throwable e);
 	void toHtml(StringBuilder builder);
+	Parse parse();
 }

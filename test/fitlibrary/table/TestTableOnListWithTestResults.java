@@ -38,7 +38,7 @@ public class TestTableOnListWithTestResults {
 	}
 	@After
 	public void stopUsingListsFactory() {
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 	}
 	@Test
 	public void pass() {

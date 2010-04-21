@@ -5,7 +5,6 @@
 
 package fitlibrary.table;
 
-import fit.Parse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runResults.TestResults;
 
@@ -54,6 +53,5 @@ public interface Cell extends Tables {
 	int getColumnSpan();
 	void setColumnSpan(int span);
 	void setIsHidden();
-	Parse parse();
 	void setUnvisitedText(String s);
 }

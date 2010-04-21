@@ -77,13 +77,9 @@ public class ParameterSubstitution {
 			int at = text.indexOf(key);
 			if (at < 0)
 				return;
-			Tables addedTables = valueTables.deepCopy();
-			if (cell.hasEmbeddedTables())
-				cell.getEmbeddedTables().parse().last().more = addedTables.parse();
-			else
-				cell.setInnerTables(addedTables);
-			cell.getEmbeddedTables().parse().leader = text.substring(0,at);
-			cell.getEmbeddedTables().parse().last().trailer = text.substring(at+key.length());
+			cell.addTables(valueTables.deepCopy());
+			cell.setLeader(text.substring(0,at));
+			cell.last().setTrailer(text.substring(at+key.length()));
 		}
 	}
 	private static String paramRef(int c) {

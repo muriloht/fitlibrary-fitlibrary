@@ -40,7 +40,7 @@ public class TestRowOnListWithTestResults {
 	}
 	@After
 	public void stopUsingListsFactory() {
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 	}
 	@Test
 	public void text() {

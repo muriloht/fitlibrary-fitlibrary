@@ -105,7 +105,7 @@ public abstract class ParseNode<To> {
 	public void setTrailer(String trailer) {
 		parse.trailer = trailer;
 	}
-    public boolean elementExists(int i) {
+    public boolean atExists(int i) {
         return i >= 0 && i < size();
     }
     public To last() {

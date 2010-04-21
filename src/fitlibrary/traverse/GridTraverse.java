@@ -33,7 +33,7 @@ public class GridTraverse extends Traverse {
     private boolean rowsMatch(Object[][] actual, Table table, TestResults testResults) {
         boolean matched = true;
         for (int rowNo = 0; rowNo < actual.length; rowNo++) {
-            if (!table.elementExists(rowNo+1))
+            if (!table.atExists(rowNo+1))
                 return false;
             Row row = table.at(rowNo+1);
             if (!cellsMatch(actual[rowNo],row,testResults))
@@ -48,7 +48,7 @@ public class GridTraverse extends Traverse {
     private boolean cellsMatch(Object[] actual, Row row, TestResults testResults) {
         boolean matched = true;
         for (int i = 0; i < actual.length; i++) {
-            if (!row.elementExists(i))
+            if (!row.atExists(i))
                 return false;
         	if (!cellMatches(actual[i], row.at(i),testResults))
         		matched = false;

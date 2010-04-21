@@ -5,24 +5,27 @@
 
 package fitlibrary.table;
 
+import java.util.Stack;
+
 import fit.Parse;
 import fit.exception.FitParseException;
 
 public class TableFactory {
-	private static boolean useOnLists = false;
+	private static Stack<Boolean> stack = new Stack<Boolean>();
+	private static boolean CREATE_LIST_BASED = false;
 	
 	public static Tables tables() {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new TablesOnList();
 		return new TablesOnParse();
 	}
 	public static Tables tables(Table table) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new TablesOnList(table);
 		return new TablesOnParse(table);
 	}
 	public static Tables tables(Tables tables) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new TablesOnList(tables);
 		return new TablesOnParse(tables);
 	}
@@ -30,29 +33,29 @@ public class TableFactory {
 		return tables(new Parse(html));
 	}
 	public static Tables tables(Parse parse) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			throw new RuntimeException("Unable to");
 		return new TablesOnParse(parse);
 	}
 
 	public static Table table() {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new TableOnList();
 		return new TableOnParse();
 	}
 	public static Table table(Row... rows) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new TableOnList(rows);
 		return new TableOnParse(rows);
 	}
 	public static Table table(Parse parse) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			throw new RuntimeException("Unable to");
 		return new TableOnParse(parse);
 	}
 
 	public static Row row() {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new RowOnList();
 		return new RowOnParse();
 	}
@@ -70,26 +73,30 @@ public class TableFactory {
 	}
 	
 	public static Cell cell(String cellText) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new CellOnList(cellText);
 		return new CellOnParse(cellText);
 	}
 	public static Cell cell(Cell cell) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new CellOnList(cell);
 		return new CellOnParse(cell);
 	}
 	public static Cell cell(Tables innerTables) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new CellOnList(innerTables);
 		return new CellOnParse(innerTables);
 	}
 	public static Cell cell(String preamble, Tables innerTables) {
-		if (useOnLists)
+		if (CREATE_LIST_BASED)
 			return new CellOnList(preamble,innerTables);
 		return new CellOnParse(preamble,innerTables);
 	}
 	public static void useOnLists(boolean useLists) {
-		useOnLists  = useLists;
+		stack.push(CREATE_LIST_BASED);
+		CREATE_LIST_BASED  = useLists;
+	}
+	public static void pop() {
+		CREATE_LIST_BASED = stack.pop();
 	}
 }

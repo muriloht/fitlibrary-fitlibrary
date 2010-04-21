@@ -77,9 +77,9 @@ public class SetParser2 extends SetParser {
     	}
     }
     private boolean keyed(Table table) {
-    	return (table.at(0).elementExists(0) &&
+    	return (table.at(0).atExists(0) &&
     			table.at(0).text(0,evaluator).toLowerCase().equals("key")) ||
-    			( table.at(0).elementExists(1) &&
+    			( table.at(0).atExists(1) &&
     					table.at(0).text(1,evaluator).toLowerCase().equals("key"));
     }
     public static ParserFactory parserFactory() {

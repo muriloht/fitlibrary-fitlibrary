@@ -36,7 +36,7 @@ public class TestTables {
 	}
 	@After
 	public void stopUsingListsFactory() {
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 	}
 //	@Test
 //	public void fromWiki() throws FitParseException {
@@ -132,6 +132,12 @@ public class TestTables {
 		tables12.setTrailer("TT");
 		tables12.toHtml(stringBuilder);
 		assertThat(stringBuilder.toString(),is("LLTT"));
+	}
+	@Test public void addTables() {
+		tables12.addTables(tables(table2,table2));
+		assertThat(tables12.size(), is(4));
+		assertThat(tables12.at(2), is(table2));
+		assertThat(tables12.at(3), is(table2));
 	}
 
 	protected static Tables tables(Table... ts) {

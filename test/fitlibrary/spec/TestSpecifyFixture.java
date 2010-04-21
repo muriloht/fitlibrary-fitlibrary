@@ -19,7 +19,6 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.matcher.TableBuilderForTests.CellBuilder;
 import fitlibrary.matcher.TableBuilderForTests.TableBuilder;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.spec.SpecifyFixture.SpecifyErrorReport;
 import fitlibrary.suite.StorytestRunner;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;

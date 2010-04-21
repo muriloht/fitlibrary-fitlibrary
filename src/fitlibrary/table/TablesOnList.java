@@ -30,12 +30,18 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 	public Tables followingTables() {
 		return (TablesOnList) from(1);
 	}
-	protected void addTables(Tables tables) {
+	public void addTables(Tables tables) {
 		for (Table table: tables)
 			add(table);
 	}
 	@Override
 	protected TableElementOnList<Table> newObject() {
 		return new TablesOnList();
+	}
+	@Override
+	public String report() {
+		StringBuilder builder = new StringBuilder();
+		toHtml(builder );
+		return builder.toString();
 	}
 }

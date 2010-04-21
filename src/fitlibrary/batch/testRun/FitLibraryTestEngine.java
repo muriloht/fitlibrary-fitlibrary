@@ -19,7 +19,6 @@ import fitlibrary.runResults.TableListener;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.ParseUtility;
 
 public class FitLibraryTestEngine implements TestEngine {
 	public static final String NOT_A_TEST = "NOT-A-TEST";
@@ -55,7 +54,7 @@ public class FitLibraryTestEngine implements TestEngine {
 			Tables tables = TableFactory.tables(content);
 			TableListener listener = new TableListener();
 			batching.doTables(tables,listener);
-			String report = ParseUtility.toString(tables.parse());
+			String report = tables.report();
 			report = add("out",out,report);
 			report = add("err",err,report);
 			return new SingleTestResult(listener.getTestResults().getCounts(),test.getName(),report);

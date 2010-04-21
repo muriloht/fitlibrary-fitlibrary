@@ -33,7 +33,7 @@ public class RowOnParse extends ParseNode<Cell> implements Row {
     }
     @Override
 	public Cell at(int i) {
-        if (!elementExists(i))
+        if (!atExists(i))
             throw new MissingCellsException("");
         return new CellOnParse(parse.parts.at(i));
     }

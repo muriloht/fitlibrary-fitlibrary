@@ -31,10 +31,10 @@ public class TestParseTables extends TestCase {
     public void testTable0() {
         Table table = tables.at(0);
         assertEquals(2,table.size());
-        assertTrue(!table.elementExists(-1));
-        assertTrue(table.elementExists(0));
-        assertTrue(table.elementExists(1));
-        assertTrue(!table.elementExists(2));
+        assertTrue(!table.atExists(-1));
+        assertTrue(table.atExists(0));
+        assertTrue(table.atExists(1));
+        assertTrue(!table.atExists(2));
         try {
             table.at(2);
             fail("Exception expected");
@@ -65,9 +65,9 @@ public class TestParseTables extends TestCase {
     public void testRow0() {
         Row row = getRow(0,0);
         assertEquals(1,row.size());
-        assertTrue(!row.elementExists(-1));
-        assertTrue(row.elementExists(0));
-        assertTrue(!row.elementExists(1));
+        assertTrue(!row.atExists(-1));
+        assertTrue(row.atExists(0));
+        assertTrue(!row.atExists(1));
         try {
             row.at(1);
             fail("Exception expected");

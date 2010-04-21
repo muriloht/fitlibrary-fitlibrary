@@ -64,25 +64,27 @@ public class DefineAction extends Traverse {
 	private void processDefinition(Tables tables, TestResults testResults) {
 		Table headerTable = tables.at(0);
 		if (headerTable.size() == 2) {
-			processMultiDefinedAction(headerTable,tables.followingTables());
+			processMultiDefinedAction(headerTable,copyBody(tables));
 			return;
 		}
 		Row parametersRow = headerTable.at(0);
 		if (headerTable.size() > 1)
 			error("Unexpected rows in first table of defined action",parametersRow);
 		parametersRow.passKeywords(testResults);
-		Tables body = tables.followingTables();
-		if (body.parse() == null) {
-			Row row = TableFactory.row();
-			row.addCell("comment");
-			body = TableFactory.tables(TableFactory.table(row));
-		}
 		
+		Tables bodyCopy = copyBody(tables);
 		List<String> formalParameters = getDefinedActionParameters(parametersRow);
-		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,body.deepCopy(),pageName);
+		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,bodyCopy,pageName);
 		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, pageName);
 	}
-	private void processMultiDefinedAction(Table headerTable, Tables body) {
+	private Tables copyBody(Tables tables) {
+		if (tables.atExists(1))
+			return tables.followingTables().deepCopy(); 
+		Row row = TableFactory.row();
+		row.addCell("comment");
+		return TableFactory.tables(TableFactory.table(row));
+	}
+	private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
 		String definedActionName = headerTable.at(0).at(0).text();
 		ArrayList<String> formalParameters = new ArrayList<String>();
 		Row parametersRow = headerTable.at(1);
@@ -94,7 +96,7 @@ public class DefineAction extends Traverse {
 				error("Parameter name '<b>"+parameter+"</b>' is duplicated",parametersRow);
 			formalParameters.add(parameter);
 		}
-		TemporaryPlugBoardForRuntime.definedActionsRepository().defineMultiDefinedAction(definedActionName, formalParameters, body.deepCopy(), "");
+		TemporaryPlugBoardForRuntime.definedActionsRepository().defineMultiDefinedAction(definedActionName, formalParameters, bodyCopy, "");
 	}
 	private void error(String msg, Row parametersRow) {
 		throw new FitLibraryExceptionInHtml(msg +" in <b>"+parametersRow.methodNameForCamel(this)+

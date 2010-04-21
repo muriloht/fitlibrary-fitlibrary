@@ -32,6 +32,13 @@ public class SimpleWikiTranslator {
 	public static Tables translateToTables(String wiki) throws FitParseException {
 		return TableFactory.tables(new Parse(translate(wiki)));
 	}
+	public static Tables translateToTablesOnList(String wiki) throws FitParseException {
+		Tables tablesOnParse = TableFactory.tables(new Parse(translate(wiki)));
+		TableFactory.useOnLists(true);
+		Tables tables = ParseUtility.convert(tablesOnParse);
+		TableFactory.pop();
+		return tables;
+	}
 	public static String translate(String wiki) {
 		final StringBuilder result = new StringBuilder();
 		HtmlReceiver accumulatingReceiver = new HtmlReceiver() {

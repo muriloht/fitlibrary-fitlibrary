@@ -19,7 +19,6 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.ParseUtility;
 
 public class DebugPage {
 	protected int tablesFinished = 0;
@@ -67,7 +66,7 @@ public class DebugPage {
 		expectedTablesFinished += tables.size();
 		FitServerBridge.setFitNesseUrl(FITNESSE_URL); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);
-		System.out.println("\n----------\nHTML Report for "+pageName+"\n----------\n"+ParseUtility.toString(tables.parse()));
+		System.out.println("\n----------\nHTML Report for "+pageName+"\n----------\n"+tables.report());
 		System.out.println(testResults);
 	}
 }

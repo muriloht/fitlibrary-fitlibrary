@@ -38,7 +38,7 @@ public class TestCell {
 	}
 	@After
 	public void stopUsingListsFactory() {
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 	}
 	@Test public void text() {
 		assertThat(cellA.text(),is("AbC"));

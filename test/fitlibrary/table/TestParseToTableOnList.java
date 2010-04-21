@@ -13,7 +13,9 @@ import fitlibrary.utility.ParseUtility;
 
 public class TestParseToTableOnList {
 	@Test public void convertToListForm() {
+		TableFactory.useOnLists(false);
 		Tables tables = TableFactory.tables(TableFactory.table(TableFactory.row("a","b")));
+		TableFactory.pop();
 		assertThat(tables,is(TablesOnParse.class));
 		tables.at(0).setLeader("LL");
 		tables.at(0).setTrailer("TT");
@@ -24,7 +26,7 @@ public class TestParseToTableOnList {
 
 		TableFactory.useOnLists(true);
 		Tables resultingTables = ParseUtility.convert(tables);
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 		
 		assertThat(resultingTables,is(TablesOnList.class));
 		Table resultingTable = resultingTables.at(0);
@@ -39,17 +41,17 @@ public class TestParseToTableOnList {
 		assertThat(resultingRow.getLeader(),is("00LL"));
 		assertThat(resultingRow.getTrailer(),is("00TT"));
 		assertThat(resultingRow.size(),is(2));
-		Cell firstCell = resultingRow.at(0);
-		assertThat(firstCell,is(CellOnList.class));
-		assertThat(firstCell.getTagLine(),is("00RR"));
-		assertThat(firstCell.text(),is("a"));
+		Cell resultingFirstCell = resultingRow.at(0);
+		assertThat(resultingFirstCell,is(CellOnList.class));
+		assertThat(resultingFirstCell.getTagLine(),is("00RR"));
+		assertThat(resultingFirstCell.text(),is("a"));
 		assertThat(resultingRow.at(1).text(),is("b"));
 	}
 	@Test public void convertToParseForm() {
 		TableFactory.useOnLists(true);
 		Tables tables = TableFactory.tables(TableFactory.table(TableFactory.row("a","b")));
 		assertThat(tables,is(TablesOnList.class));
-		TableFactory.useOnLists(false);
+		TableFactory.pop();
 		tables.at(0).setLeader("LL");
 		tables.at(0).setTrailer("TT");
 		tables.at(0).addToTag("RR");
@@ -57,8 +59,10 @@ public class TestParseToTableOnList {
 		tables.at(0).at(0).setTrailer("00TT");
 		tables.at(0).at(0).at(0).addToTag(" 00RR");
 
+		TableFactory.useOnLists(false);
 		Tables resultingTables = ParseUtility.convert(tables);
-		
+		TableFactory.pop();
+	
 		assertThat(resultingTables,is(TablesOnParse.class));
 		Table resultingTable = resultingTables.at(0);
 		assertThat(resultingTable,is(TableOnParse.class));
