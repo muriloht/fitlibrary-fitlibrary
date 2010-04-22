@@ -31,7 +31,7 @@ public class TestFitLibraryTestEngine {
 		String html = "contents";
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(mockBatching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,result(new SingleTestResult(new Counts(),testName," contains no tables")));
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(),testName," contains no tables")));
 	}
 	@Test public void passWithNoOutput() {
 		String testName = "Test Two";
@@ -42,7 +42,7 @@ public class TestFitLibraryTestEngine {
 			}};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,result(new SingleTestResult(new Counts(1,0,0,0),testName,html)));
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(1,0,0,0),testName,html)));
 	}
 	@Test public void failWithOutOnly() {
 		String testName = "Test Three";
@@ -56,7 +56,7 @@ public class TestFitLibraryTestEngine {
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result.getContent(),equalTo(html+"\n<hr/><h1>out</h1>\n<pre>\nMessage\r\n\n</pre>\n"));
-		assertThat(result,result(new SingleTestResult(new Counts(0,1,0,0),testName,
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,1,0,0),testName,
 				html+"\n<hr/><h1>out</h1>\n<pre>\nMessage\r\n\n</pre>\n")));
 	}
 	@Test public void exceptionWithErrOnly() {
@@ -69,7 +69,7 @@ public class TestFitLibraryTestEngine {
 			}};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,result(new SingleTestResult(new Counts(0,0,0,1),testName,
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,0,1),testName,
 				html+"\n<hr/><h1>err</h1>\n<pre>\nMessage\r\n\n</pre>\n")));
 	}
 	@Test public void ignoreWithOutAndErr() {
@@ -84,7 +84,7 @@ public class TestFitLibraryTestEngine {
 			}};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,result(new SingleTestResult(new Counts(0,0,1,0),testName,
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
 				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message\r\n\n</pre>\n"+
 				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message\r\n\n</pre>\n")));
 	}
@@ -100,14 +100,14 @@ public class TestFitLibraryTestEngine {
 			}};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html+"</body>"));
-		assertThat(result,result(new SingleTestResult(new Counts(0,0,1,0),testName,
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
 				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message\r\n\n</pre>\n"+
 				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message\r\n\n</pre>\n</body>")));
 	}
 
 	
 	
-	private Matcher<TestResult> result(TestResult testResult) {
+	private Matcher<TestResult> matchesTestResult(TestResult testResult) {
 		return new TestResultMatcher(testResult);
 	}
 	static class TestResultMatcher extends TypeSafeMatcher<TestResult> {
@@ -123,7 +123,7 @@ public class TestFitLibraryTestEngine {
 				System.out.println("Names don't match: '"+other.getName()+"' not as expected: '"+expected.getName());
 			boolean contentsMatch = expected.getContent().equals(other.getContent());
 			if (!contentsMatch)
-				System.out.println("Contents don't match: '\n"+other.getContent()+"\n' not as expected: '\n"+expected.getContent());
+				System.out.println("Contents don't match: '\n"+other.getContent()+"\n' not as expected: '\n"+expected.getContent()+"\n'");
 			boolean countsMatch = expected.getCounts().equals(other.getCounts());
 			if (!countsMatch)
 				System.out.println("Counts don't match: '"+other.getCounts()+"' not as expected: '"+expected.getCounts());

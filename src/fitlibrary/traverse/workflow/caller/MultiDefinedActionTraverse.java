@@ -10,6 +10,7 @@ import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
@@ -63,9 +64,11 @@ public class MultiDefinedActionTraverse extends Traverse {
 		} finally {
 			definedActionCallManager.endCall(multiParameterSubstitution);
 		}
-		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults))
-			row.add(TableFactory.cell("Defined action call:",body));
-		else if (definedActionCallManager.readyToShow())
+		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults)) {
+			Cell cell = TableFactory.cell(body);
+			cell.addPrefixToFirstInnerTable("Defined action call:");
+			row.add(cell);
+		} else if (definedActionCallManager.readyToShow())
 			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 	}
 	private void runBody(Tables body, TestResults subTestResults) {

@@ -5,16 +5,13 @@
 
 package fitlibrary.traverse.workflow;
 
-import fit.Fixture;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
-import fitlibrary.table.Table;
 import fitlibrary.traverse.FitHandler;
 import fitlibrary.typed.TypedObject;
 
 public interface FlowEvaluator extends DoEvaluator {
 	TypedObject interpretRow(Row row, TestResults testResults);
-	Fixture fixtureOrDoTraverseByName(Table table, TestResults testResults);
 	FitHandler fitHandler();
 	void setTypedSystemUnderTest(TypedObject typedResult);
 }

@@ -42,16 +42,18 @@ public interface Cell extends Tables {
 	void error(TestResults testResults);
 	void error(TestResults testResults, String s);
 	void ignore(TestResults testResults);
+	void shown();
 	
 	boolean didPass();
 	boolean didFail();
 	boolean wasIgnored();
 	boolean hadError();
-	void shown();
 	
 	boolean unresolved(VariableResolver resolver);
 	int getColumnSpan();
 	void setColumnSpan(int span);
 	void setIsHidden();
 	void setUnvisitedText(String s);
+	void calls();
+	void addPrefixToFirstInnerTable(String s);
 }

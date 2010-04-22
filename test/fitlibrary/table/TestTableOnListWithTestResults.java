@@ -76,13 +76,6 @@ public class TestTableOnListWithTestResults {
 		assertThat(table12.size(),is(3));
 	}
 	@Test
-	public void withDummyFirstRow() {
-		Table withDummyFirstRow = table12.withDummyFirstRow();
-		assertThat(withDummyFirstRow.size(),is(3));
-		assertThat(withDummyFirstRow.at(1),is(table12.at(0)));
-		assertThat(withDummyFirstRow.at(2),is(table12.at(1)));
-	}
-	@Test
 	public void phaseBoundaryCount() {
 		table12.setLeader("12<hr/>34<hr/>456<hr/>");
 		assertThat(table12.phaseBoundaryCount(),is(2));

@@ -27,7 +27,6 @@ import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -145,18 +144,31 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    			handleDomainFixture(typedResult, subject, row, testResults);
 			    		} else if (subject instanceof SuiteEvaluator) {
 			    			handleSuiteFixture((SuiteEvaluator)subject, typedResult, row, testResults);
-			    		} else if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
-			    			handleOtherEvaluator(typedResult,(Evaluator)subject, row, testResults);
-			    			return;// have finished table
-			    		} else if (subject instanceof DoEvaluator) {
-			    			pushOnScope(typedResult,row,testResults);
-			    		} else if (subject instanceof Evaluator) { // Calculate, etc
-			    			handleOtherEvaluator(typedResult,(Evaluator)subject, row, testResults);
-			    			return; // have finished table
-			    		} else if (subject instanceof Fixture) {
-			    			flowEvaluator.fitHandler().doTable((Fixture) subject,TableFactory.table(row),testResults,flowEvaluator);
-			    			return; // have finished table
-			    		}
+			    		} else {
+							Table restOfTable = rowNo == 0 ? table : table.fromAt(rowNo);
+							if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
+								handleOtherEvaluator(typedResult,(Evaluator)subject, row, restOfTable,testResults);
+								if (restOfTable != table)
+									for (int i = 0; i < restOfTable.size(); i++)
+										table.replaceAt(rowNo+i, restOfTable.at(i));
+								return;// have finished table
+							} else if (subject instanceof DoEvaluator) {
+								pushOnScope(typedResult,row,testResults);
+							} else if (subject instanceof Evaluator) { // Calculate, etc
+								handleOtherEvaluator(typedResult,(Evaluator)subject, row, restOfTable, testResults);
+								if (restOfTable != table)
+									for (int i = 0; i < restOfTable.size(); i++)
+										table.replaceAt(rowNo+i, restOfTable.at(i));
+								return; // have finished table
+							} else if (subject instanceof Fixture) {
+								Table remainingTable = restOfTable.asTableOnParse();
+								flowEvaluator.fitHandler().doTable((Fixture) subject,remainingTable,testResults,flowEvaluator);
+								if (restOfTable != table)
+									for (int i = 0; i < remainingTable.size(); i++)
+										table.replaceAt(rowNo+i, remainingTable.at(i));
+								return; // have finished table
+							}
+						}
 			    	}
 				} catch (Exception ex) {
 					row.error(testResults, ex);
@@ -188,12 +200,12 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		if (doEvaluator.getSystemUnderTest() != null)
 			pushOnScope(doEvaluator.getTypedSystemUnderTest(),row,testResults);
 	}
-	private void handleOtherEvaluator(TypedObject typedResult, Evaluator evaluator, Row row, TestResults testResults) {
+	private void handleOtherEvaluator(TypedObject typedResult, Evaluator evaluator, Row row, Table remainingTable, TestResults testResults) {
 		setRuntimeContextOf(evaluator);
 		callSetUpSutChain(evaluator,row,testResults);
 		if (!(evaluator instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
 			pushOnScope(typedResult,row,testResults);
-		evaluator.interpretAfterFirstRow(TableFactory.table(row), testResults); // It could be any row
+		evaluator.interpretAfterFirstRow(remainingTable, testResults);
 		setUpTearDown.callTearDownSutChain(evaluator, row, testResults);
 	}
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {

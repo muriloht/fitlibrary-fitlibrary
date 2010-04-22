@@ -10,15 +10,14 @@ import java.util.List;
 
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.utility.ParseUtility;
 
 public abstract class TableElementOnList<To extends TableElement> {
-    public final static String PASS = " class=\"pass\"";
-    public final static String FAIL = " class=\"fail\"";
-    public final static String IGNORE = " class=\"ignore\"";
-    public final static String ERROR = " class=\"error\"";
-    public final static String SHOWN = " bgcolor=#C0C0FF";
-    public final static String CALLS = " bgcolor=#DADAFF";
+    public final static String PASS = "class=\"pass\"";
+    public final static String FAIL = "class=\"fail\"";
+    public final static String IGNORE = "class=\"ignore\"";
+    public final static String ERROR = "class=\"error\"";
+    public final static String SHOWN = "bgcolor=#C0C0FF";
+    public final static String CALLS = "bgcolor=#DADAFF";
     private final String tag;
     protected String tagAnnotation = "";
     private String leader = "";
@@ -139,8 +138,11 @@ public abstract class TableElementOnList<To extends TableElement> {
 	}
     public void addToTag(String report) {
     	if (tag.isEmpty())
-    		at(0).addToTag(report);
-    	tagAnnotation += report;
+    		at(0).addToTag(report.trim());
+    	if (tagAnnotation.isEmpty())
+    		tagAnnotation += report.trim();
+    	else
+    		tagAnnotation += " "+report.trim();
 	}
 	public Parse parse() {
 		throw new RuntimeException("Unable to provide a Parse.");
@@ -155,15 +157,22 @@ public abstract class TableElementOnList<To extends TableElement> {
 		return builder.toString();
     }
 	public void toHtml(StringBuilder builder) {
-		builder.append(getLeader());
-		if (!tag.isEmpty())
-			builder.append("<").append(tag).append(getTagLine()).append(">");
-		appendBody(builder);
+		boolean everything = this.getClass() != TablesOnList.class;
+		if (everything) {
+			builder.append(getLeader());
+			builder.append("<").append(tag);
+			if (!getTagLine().isEmpty())
+				builder.append(" ").append(getTagLine());
+			builder.append(">");
+		}
 		for (To to : elements)
 			to.toHtml(builder);
-		if (!tag.isEmpty())
-			builder.append("</").append(tag).append(">");
-		builder.append(getTrailer());
+		if (everything) {
+			appendBody(builder);
+			if (!tag.isEmpty())
+				builder.append("</").append(tag).append(">");
+			builder.append(getTrailer());
+		}
 	}
     protected void appendBody(StringBuilder builder) {
 		// Overridden in Cell

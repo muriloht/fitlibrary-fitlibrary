@@ -17,25 +17,27 @@
 <tr><td>fitlibrary.specify.domain.NotConcrete</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>abstract user</i></td>
 <td class="error"><table border="1" cellspacing="0">
 <tr><td><i>name</i></td>
 <td>Brad Prayer</td>
 </tr>
-</table><hr/> <span class="fit_label">Class is abstract</span></td>
+</table>
+<hr/> <span class="fit_label">Class is abstract</span></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>checks</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>abstract user</i></td>
 <td class="fail"><table border="1" cellspacing="0">
 <tr><td><i>name</i></td>
 <td>Brad Prayer</td>
 </tr>
-</table> <span class="fit_label">expected</span><hr> <span class="fit_label">actual</span></td>
+</table>
+ <span class="fit_label">expected</span><hr> <span class="fit_label">actual</span></td>
 </tr>
 </table>-!|

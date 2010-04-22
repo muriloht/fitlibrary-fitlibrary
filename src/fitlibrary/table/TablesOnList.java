@@ -5,7 +5,6 @@
 package fitlibrary.table;
 
 import fit.Parse;
-import fitlibrary.utility.ParseUtility;
 
 public class TablesOnList extends TableElementOnList<Table> implements Tables {
     public TablesOnList() {
@@ -28,6 +27,7 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 			copy.add(table.deepCopy());
 		copy.setLeader(getLeader());
 		copy.setTrailer(getTrailer());
+		copy.setTagLine(getTagLine());
 		return copy;
 	}
 	public Tables followingTables() {
@@ -56,7 +56,7 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 	public Parse asParse() {
 		TableFactory.useOnLists(false);
 		try {
-			return ParseUtility.convert(this).parse();
+			return TableConversion.convert(this).parse();
 		} finally {
 			TableFactory.pop();
 		}

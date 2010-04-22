@@ -10,29 +10,24 @@ import fit.FitServerBridge;
 import fit.exception.FitParseException;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsOnCounts;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
-public class FitLibraryServer extends FitServerBridge implements Reportage {
+public class FitLibraryServer extends FitServerBridge {
 	private BatchFitLibrary batching = new BatchFitLibrary();
 
-    public FitLibraryServer(String host, int port, boolean verbose) {
-        super(host,port,verbose);
-    }
-    public FitLibraryServer() {
-    	//
-    }
 	@Override
-	public void doTables(String html) {
+	public TestResults doTables(String html) {
 		try {
-//			String translated = ParseUtility.tabulize(html); //ParseUtility.translate(html);
-			fixture.counts = doTables(TableFactory.tables(html)).getCounts();
+			return doTables(TableFactory.tables(html));
 		} catch (FitParseException e) {
 			e.printStackTrace();
 		}
+		return new TestResultsOnCounts();
 	}
 	public TestResults doTables(Tables theTables) {
-		TableListener tableListener = new TableListener(fixtureListener);
+		TableListener tableListener = new TableListener(reportListener);
 		batching.doTables(theTables,tableListener);
 		return tableListener.getTestResults();
 	}

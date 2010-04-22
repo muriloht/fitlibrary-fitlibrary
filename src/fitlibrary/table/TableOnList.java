@@ -5,9 +5,9 @@
 package fitlibrary.table;
 
 import fit.Parse;
+import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.utility.ParseUtility;
 
 public class TableOnList extends TableElementOnList<Row> implements Table {
     private int firstErrorRow = 0;
@@ -20,6 +20,12 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
     	this();
     	for (Row row: rows)
     		add(row);
+	}
+    @Override
+	public Row at(int i) {
+    	if (!atExists(i))
+    		throw new MissingRowException("");
+		return super.at(i);
 	}
     @Override
 	public void pass(TestResults testResults) {
@@ -40,16 +46,6 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
         add(row);
         return row;
     }
-	public Table withDummyFirstRow() {
-		TableOnList table = (TableOnList) from(0);
-		table.add(0,new RowOnList());
-		table.setFirstRowIsHidden();
-		return table;
-	}
-	private void setFirstRowIsHidden() {
-		this.firstErrorRow  = 1;
-		at(0).setIsHidden();
-	}
 	public int phaseBoundaryCount() {
 		int count = (getLeader()).split("<hr>").length-1;
 		if (count == 0)
@@ -94,11 +90,12 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 	}
 	@Override
 	public boolean isPlainTextTable() {
-		return parse().tag.contains("plain_text_table");
+		return getTagLine().contains("plain_text_table");
 	}
 	@Override
 	public void replaceAt(int t, Row row) {
-		removeElementAt(t);
+		if (t < size())
+			removeElementAt(t);
 		add(t,row);
 	}
 	public Table deepCopy() {
@@ -107,6 +104,7 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 			copy.add(row.deepCopy());
 		copy.setLeader(getLeader());
 		copy.setTrailer(getTrailer());
+		copy.setTagLine(getTagLine());
 		return copy;
 	}
 	@Override
@@ -125,9 +123,19 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 		return false;
 	}
 	public Parse asParse() {
+		return asTableOnParse().asParse();
+	}
+	@Override
+	public Table fromAt(int rowNo) {
+		if (rowNo == 0)
+			return this;
+		return (Table) from(rowNo);
+	}
+	@Override
+	public Table asTableOnParse() {
 		TableFactory.useOnLists(false);
 		try {
-			return ParseUtility.convert(this).parse();
+			return TableConversion.convert(this);
 		} finally {
 			TableFactory.pop();
 		}

@@ -42,10 +42,11 @@ public class SpecifyErrorReported implements SpecifyErrorReport {
 		showAfterTable("Trailer differs at "+ path + wasExpected(actual, expected));
 	}
 	private String wasExpected(String actualText, String expectedText) {
-		return ". <table>"+
+		return ". <table border=\"1\" cellspacing=\"0\">"+
 		plainRow("Actual","Expected")+
 		row(actualText,expectedText)+
 		optionalEscapedRow(actualText, expectedText)+
+		row(""+actualText.length(),""+expectedText.length())+
 		"</table>";
 	}
 	private String optionalEscapedRow(String actualText, String expectedText) {
@@ -57,15 +58,16 @@ public class SpecifyErrorReported implements SpecifyErrorReport {
 	}
 	private String row(String actual, String expected) {
 		return "<tr><td>"+actual+PlugBoard.stringDifferencing.differences(actual, expected)+
-			   "</td><td>"+expected+"</td></tr>";
+			   "</td><td>"+expected+"</td></tr>\n";
 	}
 	private String plainRow(String actual, String expected) {
-		return "<tr><td>"+actual+"</td><td>"+expected+"</td></tr>";
+		return "<tr><td>"+actual+"</td><td>"+expected+"</td></tr>\n";
 	}
 	private String escape(String text) {
 		return HtmlUtils.escape(text);
 	}
 	private void showAfterTable(String s) {
 		showAfter.showAsAfterTable("Logs",s);
+		System.out.println(s);
 	}
 }

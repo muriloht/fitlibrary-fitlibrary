@@ -8,15 +8,14 @@ package fitlibrary.debug;
 
 import java.io.IOException;
 
-import fit.Counts;
 import fit.FitServerBridge;
-import fit.FixtureListener;
-import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
+import fitlibrary.suite.ReportListener;
+import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
@@ -26,19 +25,19 @@ public class DebugPage {
 	protected int expectedTablesFinished = 0;
 	private static String FITNESSE_URL = "http://localhost:8080/";
 	
-	protected FixtureListener fixtureListener = new FixtureListener() {
-		public void tableFinished(Parse table) {
+	protected ReportListener reportListener = new ReportListener() {
+		public void tableFinished(Table table) {
 			tablesFinished++;
 		}
-		public void tablesFinished(Counts count) {
+		public void tablesFinished(TestResults testResults) {
 			storytestsFinished++;
 		}
 	};
-	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(fixtureListener));
+	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(reportListener));
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.SpecialisedTables.EmbeddedTables"
+				"FitLibrary.SpecifiCations.DoWorkflow.TestReturnedFixtureDoesNotWreckFlow"
 		};
 		run(pageNames);
 	}

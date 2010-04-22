@@ -38,10 +38,6 @@ public class TablesOnParse extends ParseNode<Table> implements Tables {
     		return 0;
         return parse.size();
     }
-    @Override
-	public String toString() {
-        return toString("Tables",parse);
-    }
 	public Tables deepCopy() {
 		Tables copy = TableFactory.tables();
 		for (Table table: this)

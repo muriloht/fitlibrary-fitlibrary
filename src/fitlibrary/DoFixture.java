@@ -8,7 +8,6 @@ import java.util.List;
 
 import fit.Fixture;
 import fit.Parse;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.workflow.DoEvaluator;
@@ -68,9 +67,6 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	}
 	public Object interpretInFlow(Table firstTable, TestResults testResults) {
 		return doTraverse.interpretInFlow(firstTable,testResults);
-	}
-	final public Object interpretWholeTable(Table table, ITableListener tableListener) {
-		return doTraverse.interpretWholeTable(table,tableListener);
 	}
 	// --------- Interpretation ---------------------------------------
 	public List<String> methodsThatAreVisible() {

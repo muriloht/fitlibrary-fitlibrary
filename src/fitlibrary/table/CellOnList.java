@@ -76,6 +76,7 @@ public class CellOnList extends TablesOnList implements Cell {
 			copy.add(table.deepCopy());
 		copy.setLeader(getLeader());
 		copy.setTrailer(getTrailer());
+		copy.setTagLine(getTagLine());
 		return copy;
 	}
     public void expectedElementMissing(TestResults testResults) {
@@ -188,10 +189,6 @@ public class CellOnList extends TablesOnList implements Cell {
         	throw new SingleNestedTableExpected();
 		return tables.at(0);
     }
-    @Override
-	public String toString() {
-        return "Cell["+text()+"]";
-    }
     public void wrongHtml(TestResults counts, String actual) {
         fail(counts);
         addToBody(label("expected") + "<hr>" + actual
@@ -254,7 +251,7 @@ public class CellOnList extends TablesOnList implements Cell {
 		return " colspan=\""+colspan+"\"";
 	}
     public Tables getEmbeddedTables() {
-		return this;
+		return (Tables) from(0);
     }
     public boolean hasEmbeddedTables() {
         return !isEmpty();
@@ -266,5 +263,9 @@ public class CellOnList extends TablesOnList implements Cell {
 	@Override
 	protected void appendBody(StringBuilder builder) {
 		builder.append(fullText);
+	}
+	@Override
+	public void addPrefixToFirstInnerTable(String s) {
+		at(0).setLeader(Fixture.label(s)+getLeader());
 	}
 }

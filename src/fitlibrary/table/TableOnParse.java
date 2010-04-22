@@ -37,10 +37,6 @@ public class TableOnParse extends ParseNode<Row> implements Table {
         return new RowOnParse(parse.parts.at(i));
     }
     @Override
-	public String toString() {
-    	return toString("Table", parse.parts);
-    }
-    @Override
 	public void pass(TestResults testResults) {
         at(firstErrorRow).pass(testResults);
     }
@@ -60,22 +56,19 @@ public class TableOnParse extends ParseNode<Row> implements Table {
         else
             parse.parts.last().more = row.parse();
     }
+	@Override
+	public void add(int i, Row row) {
+		throw new RuntimeException("Not implemented");
+	}
+	@Override
+	public void removeElementAt(int i) {
+		throw new RuntimeException("Not implemented");
+	}
     public Row newRow() {
         Row row = TableFactory.row();
         add(row);
         return row;
     }
-	public TableOnParse withDummyFirstRow() {
-		Parse firstRow = new Parse("tr", "", new Parse("td","empty",null,null), parse.parts);
-		Parse pseudoTable = new Parse("table", "", firstRow, null);
-		TableOnParse table = new TableOnParse(pseudoTable);
-		table.setFirstRowIsHidden();
-		return table;
-	}
-	private void setFirstRowIsHidden() {
-		this.firstErrorRow  = 1;
-		at(0).setIsHidden();
-	}
 	public int phaseBoundaryCount() {
 		int count = (parse.leader).split("<hr>").length-1;
 		if (count == 0)
@@ -170,5 +163,13 @@ public class TableOnParse extends ParseNode<Row> implements Table {
 			if (at(i).parse() == currentRow.parse())
 				return true;
 		return false;
+	}
+	@Override
+	public Table fromAt(int rowNo) {
+		return TableFactory.table(at(rowNo));
+	}
+	@Override
+	public Table asTableOnParse() {
+		return this;
 	}
 }

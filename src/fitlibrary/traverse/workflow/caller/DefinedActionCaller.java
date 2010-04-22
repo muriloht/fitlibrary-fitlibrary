@@ -7,6 +7,7 @@ package fitlibrary.traverse.workflow.caller;
 import java.util.ArrayList;
 import java.util.List;
 
+import fit.Fixture;
 import fitlibrary.definedAction.ParameterSubstitution;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
@@ -118,7 +119,10 @@ public class DefinedActionCaller extends DoCaller {
 				for (int i = 0; i < row.size(); i += 2)
 					row.at(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
-			row.add(TableFactory.cell(link(pageName),body));
+			Cell cell = TableFactory.cell(body);
+			cell.at(0).setLeader(Fixture.label(link(pageName))+cell.getLeader());
+			cell.calls();
+			row.add(cell);
 		} else if (!runtime.isAbandoned(testResults))
 			row.passKeywords(testResults);
 	}

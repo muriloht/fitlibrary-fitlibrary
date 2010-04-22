@@ -17,7 +17,7 @@ public class DoTable extends DoFixture {
 		return table.tableAt(0,0,0);
 	}
 	public Table aTable() throws FitParseException {
-		return new Table(new Parse("<html><table><tr><td>one</td><td>two</td><td>three</td></tr></table></html>"));
+		return new Table(new Parse("<html><table border=\"1\" cellspacing=\"0\"><tr><td>one</td><td>two</td><td>three</td></tr></table></html>"));
 	}
 	public Table nullTable() {
 		return null;

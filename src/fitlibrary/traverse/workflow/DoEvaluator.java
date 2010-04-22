@@ -6,13 +6,11 @@ package fitlibrary.traverse.workflow;
 
 import java.util.List;
 
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 
 public interface DoEvaluator extends Evaluator {
 	Object interpretInFlow(Table table, TestResults testResults);
-	Object interpretWholeTable(Table table, ITableListener tableListener);
 	List<String> methodsThatAreVisible();
 }

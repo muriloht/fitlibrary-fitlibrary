@@ -6,6 +6,7 @@ package fitlibrary.table;
 
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryShowException;
+import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ExtendedCamelCase;
@@ -16,6 +17,12 @@ public class RowOnList extends TableElementOnList<Cell> implements Row {
     public RowOnList() {
         super("tr");
     }
+    @Override
+	public Cell at(int i) {
+    	if (i < 0 || i >= size())
+    		throw new MissingCellsException("");
+		return super.at(i);
+	}
     public String text(int i, VariableResolver resolver) {
         return at(i).text(resolver);
     }
@@ -89,6 +96,7 @@ public class RowOnList extends TableElementOnList<Cell> implements Row {
 			copy.add((Cell) at(i).deepCopy());
 		copy.setLeader(getLeader());
 		copy.setTrailer(getTrailer());
+		copy.setTagLine(getTagLine());
 		return copy;
 	}
 	public String methodNameForPlain(VariableResolver resolver) {

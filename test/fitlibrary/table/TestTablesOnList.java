@@ -22,7 +22,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
 
 @RunWith(JMock.class)
-public class TestTables {
+public class TestTablesOnList {
 	Mockery context = new Mockery();
 	TestResults testResults = context.mock(TestResults.class);
 
@@ -38,10 +38,10 @@ public class TestTables {
 	public void stopUsingListsFactory() {
 		TableFactory.pop();
 	}
-//	@Test
-//	public void fromWiki() throws FitParseException {
-//		assertThat(SimpleWikiTranslator.translateToTables("|a|b|"), is(TableFactory.tables(TableFactory.table(TableFactory.row("a","b")))));
-//	}
+	@Test
+	public void emptyTables() {
+		assertThat(TableFactory.tables().toString(), is(""));
+	}
 	@Test
 	public void iteratorIsEmptyWhenNoElements() {
 		assertThat(TableFactory.tables().iterator().hasNext(), is(false));
@@ -131,7 +131,7 @@ public class TestTables {
 		tables12.setLeader("LL");
 		tables12.setTrailer("TT");
 		tables12.toHtml(stringBuilder);
-		assertThat(stringBuilder.toString(),is("LLTT"));
+		assertThat(stringBuilder.toString(),is(""));
 	}
 	@Test public void addTables() {
 		tables12.addTables(tables(table2,table2));

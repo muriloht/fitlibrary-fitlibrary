@@ -489,7 +489,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		return not(row);
 	}
     /** Same as reject()
-     * @param testResults 
+     * @param suiteTestResults 
      */
 	public TwoStageSpecial not(Row row) throws Exception {
 		return prefixSpecialAction.not(row,NotSyle.PASSES_ON_EXCEPION);
@@ -550,7 +550,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
      *  o If a boolean is returned, it must be true.
      *  o For other result types, no exception should be thrown.
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
-	 * @param testResults 
+	 * @param suiteTestResults 
      */
 	public TwoStageSpecial ensure(Row row) throws Exception {
 		return prefixSpecialAction.ensure(row);

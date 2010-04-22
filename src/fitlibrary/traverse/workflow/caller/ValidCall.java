@@ -117,7 +117,7 @@ public class ValidCall {
 		return methodName.substring(wordLength,wordLength+1).toLowerCase()+methodName.substring(wordLength+1);
 	}
 	public void possibility(GlobalScope globalScope) {
-		String result = "<table><tr>";
+		String result = "<table border=\"1\" cellspacing=\"0\"><tr>";
 		for (String s : getList())
 			result += "<td>"+s+"</td>";
 		globalScope.showAsAfterTable("plain text",result+"</tr></table>");

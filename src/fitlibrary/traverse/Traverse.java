@@ -22,6 +22,7 @@ import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.table.RowOnList;
 import fitlibrary.table.Table;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.Typed;
@@ -123,8 +124,15 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 			scope.removeTemporary(this);
 		}
 	}
-    public void interpretInnerTableWithInScope(Table table, Evaluator evaluator, TestResults testResults) {
-    	interpretWithinScope(table.withDummyFirstRow(),evaluator,testResults);
+	public void interpretInnerTableWithInScope(Table table, Evaluator evaluator, TestResults testResults) {
+		RowOnList row = new RowOnList();
+		table.add(0,row);
+		row.setIsHidden();
+		try {
+			interpretWithinScope(table,evaluator,testResults);
+		} finally {
+			table.removeElementAt(0);
+		}
 	}
 	private IScope scopeOf(Evaluator evaluator) {
 		return evaluator.getRuntimeContext().getScope();

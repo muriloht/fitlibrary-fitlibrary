@@ -97,6 +97,7 @@ public class Fixture {
       getArgsForTable(tables); // get them again for the new fixture object
       doTable(tables);
     } catch (Exception ex) {
+    	System.out.println("Fixture.interpretTables() "+ex);
       exception(tables.at(0, 0, 0), ex);
       listener.tableFinished(tables);
       return;

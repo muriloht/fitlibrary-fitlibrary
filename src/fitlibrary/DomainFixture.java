@@ -4,9 +4,7 @@
 */
 package fitlibrary;
 
-import fitlibrary.object.DomainTraverse;
-import fitlibrary.runResults.TestResults;
-import fitlibrary.table.Row;
+import fitlibrary.traverse.workflow.DoTraverse;
 
 public class DomainFixture extends DoFixture {
     private DomainTraverse domainTraverse = new DomainTraverse(this);
@@ -17,5 +15,11 @@ public class DomainFixture extends DoFixture {
     public DomainFixture(Object sut) {
     	this();
     	setSystemUnderTest(sut);
+    }
+    
+    class DomainTraverse extends DoTraverse {
+    	public DomainTraverse(Object sut) {
+    		super(sut);
+    	}
     }
 }

@@ -13,8 +13,10 @@ import java.util.List;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.table.TableConversion;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnParse;
 
 public class SimpleWikiTranslator {
 	private final FileAccess fileAccess;
@@ -30,12 +32,12 @@ public class SimpleWikiTranslator {
 		}
 	}
 	public static Tables translateToTables(String wiki) throws FitParseException {
-		return TableFactory.tables(new Parse(translate(wiki)));
+		return new TablesOnParse(new Parse(translate(wiki)));
 	}
 	public static Tables translateToTablesOnList(String wiki) throws FitParseException {
-		Tables tablesOnParse = TableFactory.tables(new Parse(translate(wiki)));
+		Tables tablesOnParse = translateToTables(wiki);
 		TableFactory.useOnLists(true);
-		Tables tables = ParseUtility.convert(tablesOnParse);
+		Tables tables = TableConversion.convert(tablesOnParse);
 		TableFactory.pop();
 		return tables;
 	}
@@ -89,7 +91,7 @@ public class SimpleWikiTranslator {
 	}
 	private static String processTable(String lineOriginal, NullIterator<String> lines, StringBuilder result) {
 		String line = lineOriginal;
-		result.append("<table>\n");
+		result.append("<table border=\"1\" cellspacing=\"0\">\n");
 		while (true) {
 			if (lines.end(line))
 				break;

@@ -18,15 +18,18 @@ import java.net.Socket;
 
 import util.StreamReader;
 import fit.exception.FitParseException;
+import fitlibrary.runResults.TestResults;
+import fitlibrary.runResults.TestResultsOnCounts;
+import fitlibrary.suite.ReportListener;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.TableOnList;
 
-/* This is a variation of FitServer that changes the doTables() call in 
- * the middle of the process() method.
+/* This is a variation of FitServer that's needed to run FitLibrary
  */
 public abstract class FitServerBridge {
-	public String input;
-	public Fixture fixture = new Fixture();
-	public FixtureListener fixtureListener = new TablePrintingFixtureListener();
-	private Counts counts = new Counts();
+	protected ReportListener reportListener = new TableReportListener();
+	protected TestResults suiteTestResults = new TestResultsOnCounts();
 	protected OutputStream socketOutput;
 	private StreamReader socketReader;
 	private boolean verbose = false;
@@ -34,19 +37,9 @@ public abstract class FitServerBridge {
 	private int port;
 	private int socketToken;
 	private Socket socket;
-	protected int numberOfPages = 0;
-	protected boolean showAllReports = false;
-	private boolean exit = true;
-	private boolean sentinel;
+	protected boolean exit = true;
 	public static String FITNESSE_URL = "";
 
-	public FitServerBridge(String host, int port, boolean verbose) {
-		setFitNesseUrl(host, port);
-		this.verbose = verbose;
-	}
-	public FitServerBridge() {
-		//
-	}
 	public boolean isExit() {
 		return exit;
 	}
@@ -55,22 +48,15 @@ public abstract class FitServerBridge {
 		this.port = port;
 		FITNESSE_URL = "http://" + host + ":" + port + "/";
 	}
-	protected String fitNesseUrl() {
-		return host + ":" + port;
-	}
 	public void run(String argv[]) throws Exception {
 		args(argv);
 		establishConnection();
 		validateConnection();
 		process();
-		closeConnection();
+		socket.close();
 		exit();
 	}
-	public void closeConnection() throws IOException {
-		socket.close();
-	}
 	public void process() {
-		fixture.listener = fixtureListener;
 		try {
 			while (true) {
 				print("FitServerBridge: Reading size...");
@@ -79,14 +65,11 @@ public abstract class FitServerBridge {
 				if (size == 0)
 					break;
 				try {
-					print("FitServerBridge: Processing document of size: "
-							+ size);
-					String document = FitProtocol.readDocument(socketReader,
-							size);
-					doTables(document);
-					print("\tresults: " + fixture.counts() + "\n");
-					counts.tally(fixture.counts);
-					numberOfPages++;
+					print("FitServerBridge: Processing document of size: "+ size);
+					String document = FitProtocol.readDocument(socketReader,size);
+					TestResults storyTestResults = doTables(document);
+					print("\tresults: " + storyTestResults + "\n");
+					suiteTestResults.add(storyTestResults);
 				} catch (FitParseException e) {
 					exception(e);
 				}
@@ -96,7 +79,7 @@ public abstract class FitServerBridge {
 			exception(e);
 		}
 	}
-	public abstract void doTables(String html);
+	public abstract TestResults doTables(String html);
 
 	public String readDocument() throws Exception {
 		int size = FitProtocol.readSize(socketReader);
@@ -118,8 +101,6 @@ public abstract class FitServerBridge {
 				verbose = true;
 			else if ("-x".equals(arg))
 				exit = false;
-			else if ("-s".equals(arg))
-				sentinel = true;
 			else
 				usage();
 			i++;
@@ -139,11 +120,10 @@ public abstract class FitServerBridge {
 	}
 	protected void exception(Exception e) {
 		printExceptionDetails(e);
-		Parse tables = new Parse("span", "Exception occurred: ", null, null);
-		fixture.exception(tables, e);
-		counts.exceptions += 1;
-		fixture.listener.tableFinished(tables);
-		fixture.listener.tablesFinished(counts); // TODO shouldn't this be fixture.counts
+		Table table = TableFactory.table(TableFactory.row("Exception occurred: "));
+		table.at(0).at(0).error(suiteTestResults, e);
+		reportListener.tableFinished(table);
+		reportListener.tablesFinished(suiteTestResults);
 	}
 	public void printExceptionDetails(Exception e) {
 		print("FitServerBridge: Exception: " + e.getMessage());
@@ -153,10 +133,10 @@ public abstract class FitServerBridge {
 	}
 	public void exit() throws Exception {
 		print("FitServerBridge: exiting");
-		print("FitServerBridge: end results: " + counts.toString());
+		print("FitServerBridge: end results: " + suiteTestResults.getCounts().toString());
 	}
 	public int exitCode() {
-		return counts.wrong + counts.exceptions;
+		return suiteTestResults.getCounts().wrong + suiteTestResults.getCounts().exceptions;
 	}
 	public void establishConnection() throws Exception {
 		establishConnection(makeHttpRequest());
@@ -190,9 +170,6 @@ public abstract class FitServerBridge {
 			System.exit(-1);
 		}
 	}
-	public Counts getCounts() {
-		return counts;
-	}
 	public void print(String message) {
 		if (verbose) {
 			System.out.println(message);
@@ -219,29 +196,28 @@ public abstract class FitServerBridge {
 		writer.close();
 		return byteBuffer.toByteArray();
 	}
-	@SuppressWarnings("unused")
-	public void writeCounts(Counts count) throws IOException {
-		// TODO This can't be right.... which counts should be used?
-		FitProtocol.writeCounts(counts, socketOutput);
+	public static byte[] readTable(Table table) throws Exception { // FAILS
+		StringBuilder builder = new StringBuilder();
+		table.toHtml(builder );
+		return builder.toString().getBytes();
 	}
 
-	public void showAllReports() {
-		showAllReports = true;
-	}
-
-	class TablePrintingFixtureListener implements FixtureListener {
-		public void tableFinished(Parse table) {
+	class TableReportListener implements ReportListener {
+		@Override
+		public void tableFinished(Table table) {
+			print("FitServerBridge table is of type "+table.getClass());
 			try {
-				byte[] bytes = readTable(table);
+				byte[] bytes = readTable(table); // (table); // FAILS
 				if (bytes.length > 0)
 					FitProtocol.writeData(bytes, socketOutput);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		public void tablesFinished(Counts count) {
+		@Override
+		public void tablesFinished(TestResults testResults) {
 			try {
-				FitProtocol.writeCounts(count, socketOutput);
+				FitProtocol.writeCounts(testResults.getCounts(), socketOutput);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

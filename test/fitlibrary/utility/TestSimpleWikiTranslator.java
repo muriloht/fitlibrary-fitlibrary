@@ -56,7 +56,7 @@ public class TestSimpleWikiTranslator {
 	public void oneRowInOneTable() {
 		createFile("/a/b", "|a|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -64,7 +64,7 @@ public class TestSimpleWikiTranslator {
 	public void oneRowInOneTableWithText() {
 		createFile("/a/b", "b", "|a|", "c");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/>b<br/>\n<table>\n<tr><td>a</td></tr>\n</table>\n<br/>c<br/>\n</html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/>b<br/>\n<table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/>c<br/>\n</html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -72,7 +72,7 @@ public class TestSimpleWikiTranslator {
 	public void twoRowsInOneTable() {
 		createFile("/a/b", "|a|", "|b|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n<tr><td>b</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n<tr><td>b</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -80,7 +80,7 @@ public class TestSimpleWikiTranslator {
 	public void twoRowsSecondBlankInOneTable() {
 		createFile("/a/b", "|a|", "| |");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n<tr><td></td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n<tr><td></td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -96,7 +96,7 @@ public class TestSimpleWikiTranslator {
 	public void twoOneRowTables() {
 		createFile("/a/b", "|a|", "b", "|c|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/>b<br/>\n<table>\n<tr><td>c</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/>b<br/>\n<table border=\"1\" cellspacing=\"0\">\n<tr><td>c</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -104,7 +104,7 @@ public class TestSimpleWikiTranslator {
 	public void definedAction() {
 		createFile("/a/b", "|a|", "", "|b|", "----");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/><br/>\n<table>\n<tr><td>b</td></tr>\n</table>\n<br/><hr/>\n</html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/><br/>\n<table border=\"1\" cellspacing=\"0\">\n<tr><td>b</td></tr>\n</table>\n<br/><hr/>\n</html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -112,7 +112,7 @@ public class TestSimpleWikiTranslator {
 	public void italicQuotesAreRemoved() {
 		createFile("/a/b", "|''a''|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -120,7 +120,7 @@ public class TestSimpleWikiTranslator {
 	public void boldQuotesAreRemoved() {
 		createFile("/a/b", "|'''a'''|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -128,7 +128,7 @@ public class TestSimpleWikiTranslator {
 	public void singleQuotesAreNotRemoved() {
 		createFile("/a/b", "|'a'|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>'a'</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>'a'</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -136,7 +136,7 @@ public class TestSimpleWikiTranslator {
 	public void wikiEscapesAreRemoved() {
 		createFile("/a/b", "|!-a-!|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -144,7 +144,7 @@ public class TestSimpleWikiTranslator {
 	public void wikiEscapesAreRemovedButBarRemains() {
 		createFile("/a/b", "|!-a|b-!|");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table>\n<tr><td>a|b</td></tr>\n</table>\n<br/></html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a|b</td></tr>\n</table>\n<br/></html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -152,7 +152,7 @@ public class TestSimpleWikiTranslator {
 	public void contentsTableIsRemoved() {
 		createFile("/a/b", "|!contents|", "", "|b|", "----");
 		context.checking(new Expectations() {{
-			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><br/>\n<br/>\n<table>\n<tr><td>b</td></tr>\n</table>\n<br/><hr/>\n</html>");
+			oneOf(receiver).take(new File("/a/b"),"<html>\n<br/><br/>\n<br/>\n<table border=\"1\" cellspacing=\"0\">\n<tr><td>b</td></tr>\n</table>\n<br/><hr/>\n</html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -161,7 +161,7 @@ public class TestSimpleWikiTranslator {
 		createFile("/a/b", "- some action call");
 		context.checking(new Expectations() {{
 			oneOf(receiver).take(new File("/a/b"),
-					"<html>\n<br/>\n<table><tr><td><i>run plain</i></td><td>some action call</td></tr>\n</table>\n<br/>\n</html>");
+					"<html>\n<br/>\n<table border=\"1\" cellspacing=\"0\"><tr><td><i>run plain</i></td><td>some action call</td></tr>\n</table>\n<br/>\n</html>");
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
@@ -169,15 +169,15 @@ public class TestSimpleWikiTranslator {
 	@Test
 	public void stringToString() {
 		assertThat(SimpleWikiTranslator.translate("|a|"),
-				is("<html>\n<br/><table>\n<tr><td>a</td></tr>\n</table>\n<br/></html>"));
+				is("<html>\n<br/><table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/></html>"));
 	}
 	@Test
 	public void secondDefinedActionBodyIsEmpty() {
 		assertThat(SimpleWikiTranslator.translate("|a|\n\n|comment|\n----\n|b|\n"),
 				is("<html>\n<br/>"+
-				   "<table>\n<tr><td>a</td></tr>\n</table>\n<br/><br/>\n"+
-				   "<table>\n<tr><td>comment</td></tr>\n</table>\n<br/><hr/>\n"+
-				   "<table>\n<tr><td>b</td></tr>\n</table>\n<br/></html>"));
+				   "<table border=\"1\" cellspacing=\"0\">\n<tr><td>a</td></tr>\n</table>\n<br/><br/>\n"+
+				   "<table border=\"1\" cellspacing=\"0\">\n<tr><td>comment</td></tr>\n</table>\n<br/><hr/>\n"+
+				   "<table border=\"1\" cellspacing=\"0\">\n<tr><td>b</td></tr>\n</table>\n<br/></html>"));
 	}
 
 	private void createFile(String fileName, String... wiki) {

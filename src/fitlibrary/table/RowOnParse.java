@@ -38,10 +38,6 @@ public class RowOnParse extends ParseNode<Cell> implements Row {
         return new CellOnParse(parse.parts.at(i));
     }
     @Override
-	public String toString() {
-        return toString("Row",parse.parts);
-    }
-    @Override
 	public void pass(TestResults testResults) {
     	if (rowIsHidden)
     		System.out.println("Bug: colouring a cell in a hidden table");

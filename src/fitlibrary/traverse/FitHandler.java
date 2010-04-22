@@ -14,7 +14,9 @@ public class FitHandler {
 	public void doTable(Fixture fixture, Table table, TestResults testResults, Evaluator evaluator) {
 		fixture.counts = testResults.getCounts();
 		substituteDynamicVariables(table, evaluator);
+//		System.out.println("FitHandler before: "+table.getClass()+" "+table);
 		fixture.doTable(table.asParse());
+//		System.out.println("FitHandler after: "+table.getClass()+" "+table);
 	}
 	private void substituteDynamicVariables(Table table, Evaluator evaluator) {
 		for (int r = 0; r < table.size(); r++) {

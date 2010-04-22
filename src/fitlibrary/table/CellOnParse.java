@@ -21,14 +21,12 @@ import fitlibrary.utility.ParseUtility;
 public class CellOnParse extends TablesOnParse implements Cell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
     private boolean cellIsInHiddenRow = false;
-    private String fullText = "";
     
 	public CellOnParse(Parse parse) {
         super(parse);
     }
     public CellOnParse(String cellText) {
         this(new Parse("td",cellText,null,null));
-        this.fullText = cellText;
     }
 	public CellOnParse(Cell cell) {
 		this("");
@@ -40,14 +38,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public CellOnParse(Tables innerTables) {
 		this(new Parse("td","",innerTables.parse(),null));
 	}
-	public CellOnParse(String preamble, Tables innerTables) {
-		this(innerTables);
-		parse.parts.leader = Fixture.label(preamble)+parse.parts.leader;
-		calls();
-	}
 	public void setText(String text) {
 		parse.body = text;
-		this.fullText = text;
 	}
 	public String text(VariableResolver resolver) {
 		if (parse.body == null)
@@ -205,12 +197,6 @@ public class CellOnParse extends TablesOnParse implements Cell {
         	throw new SingleNestedTableExpected();
 		return tables.at(0);
     }
-    @Override
-	public String toString() {
-        if (hasEmbeddedTables())
-            return "Cell["+ParseUtility.toString(parse.parts)+"]";
-        return "Cell["+text()+"]";
-    }
     public void wrongHtml(TestResults counts, String actual) {
         fail(counts);
         addToBody(label("expected") + "<hr>" + actual
@@ -315,5 +301,9 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	@Override
 	public String getType() {
 		return "Cell";
+	}
+	@Override
+	public void addPrefixToFirstInnerTable(String s) {
+		at(0).setLeader(Fixture.label(s)+getLeader());
 	}
 }

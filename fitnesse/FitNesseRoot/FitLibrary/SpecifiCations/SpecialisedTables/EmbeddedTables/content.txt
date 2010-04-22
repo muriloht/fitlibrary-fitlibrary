@@ -75,7 +75,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td>show</td>
 <td><i>a table</i></td>
-<td bgcolor=#C0C0FF><html><table><tr><td>one</td><td>two</td><td>three</td></tr></table></html></td></tr>
+<td bgcolor=#C0C0FF><html><table border="1" cellspacing="0"><tr><td>one</td><td>two</td><td>three</td></tr></table></html></td></tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td>check</td>

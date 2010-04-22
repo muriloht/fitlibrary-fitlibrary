@@ -10,7 +10,6 @@ import java.util.List;
 
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.utility.ParseUtility;
 
 public abstract class ParseNode<To> {
     public final static String PASS = " class=\"pass\"";
@@ -123,9 +122,6 @@ public abstract class ParseNode<To> {
 	public Iterator<To> iterator() {
 		return iterableFrom(0).iterator();
 	}
-	protected String toString(String type, Parse theParse) {
-		return type+"["+ParseUtility.toString(theParse)+"]";
-	}
 	public String getTagLine() {
 		if (parse == null)
 			return "";
@@ -136,17 +132,42 @@ public abstract class ParseNode<To> {
 		return tagLine.substring(index+1,tagLine.length()-1);
 	}
 	public void setTagLine(String tagLine) {
-		int index = parse.tag.indexOf(" ");
-		if (index < 0)
-			parse.tag += " "+tagLine+">";
+		if (tagLine.isEmpty())
+			parse.tag = "<"+getTag()+">";
 		else
-			parse.tag = parse.tag.substring(0,index+1)+tagLine+">";
+			parse.tag = "<"+getTag()+" "+tagLine+">";
 	}
-    public void addToTag(String annotation) {
-    	parse.addToTag(annotation);
+    private String getTag() {
+    	int index = parse.tag.indexOf(" ");
+		if (index < 0) // Eg "<row>"
+			return parse.tag.substring(1,parse.tag.length()-1);
+		// Eg "<table columnsize=2>"
+		return parse.tag.substring(1,index);
+	}
+	public void addToTag(String annotation) {
+    	parse.addToTag(" "+annotation.trim());
     }
 	public void toHtml(StringBuilder builder) {
-		//
+		boolean everything = this.getClass() != TablesOnParse.class;
+		if (everything) {
+			builder.append(getLeader());
+			if (parse.tag.length() > 1)
+				builder.append(parse.tag);
+			if (parse.body != null)
+				builder.append(parse.body);
+		}
+		for (int i = 0; i < size(); i++)
+			((ParseNode)at(i)).toHtml(builder);
+		if (everything) {
+			builder.append(parse.end);
+			builder.append(getTrailer());
+		}
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		toHtml(builder);
+		return builder.toString();
 	}
 
     protected abstract To at(int i);

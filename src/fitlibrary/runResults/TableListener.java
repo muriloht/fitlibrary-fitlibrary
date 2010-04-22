@@ -4,13 +4,11 @@
 */
 package fitlibrary.runResults;
 
-import fit.Counts;
-import fit.FixtureListener;
-import fit.Parse;
+import fitlibrary.suite.ReportListener;
 import fitlibrary.table.Table;
 
 public class TableListener implements ITableListener {
-	private FixtureListener listener;
+	private ReportListener listener;
 	private TestResults testResults;
 
 	public TableListener() {
@@ -19,30 +17,27 @@ public class TableListener implements ITableListener {
 	public TableListener(TestResults testResults) {
 		this(new EmptyFixtureListener(),testResults);
 	}
-	public TableListener(FixtureListener listener) {
+	public TableListener(ReportListener listener) {
 		this(listener,TestResultsFactory.testResults());
 	}
-	public TableListener(FixtureListener listener, TestResults testResults) {
+	public TableListener(ReportListener listener, TestResults testResults) {
 		this.listener = listener;
 		this.testResults = testResults;
 	}
 	public void tableFinished(Table table) {
-		listener.tableFinished(table.parse());
-	}
-	public FixtureListener getListener() {
-		return listener;
+		listener.tableFinished(table);
 	}
 	public void storytestFinished() {
-		listener.tablesFinished(testResults.getCounts());
+		listener.tablesFinished(testResults);
 	}
 	public TestResults getTestResults() {
 		return testResults;
 	}
-	public static class EmptyFixtureListener implements FixtureListener	{
-		public void tableFinished(Parse table) {
+	public static class EmptyFixtureListener implements ReportListener	{
+		public void tableFinished(Table table) {
 			//
 		}
-		public void tablesFinished(Counts count) {
+		public void tablesFinished(TestResults testResults) {
 			//
 		}
 	}

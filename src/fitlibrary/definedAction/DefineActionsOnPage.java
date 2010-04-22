@@ -11,6 +11,7 @@ import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.FileIO;
 import fitlibrary.utility.SimpleWikiTranslator;
 
@@ -46,7 +47,8 @@ public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 			try {
 				if (html.contains("<table")) {
 					String fileName = file.getAbsolutePath().replaceAll("/",".").replaceAll("\\\\",".");
-					parseDefinitions(TableFactory.tables(html),determineClassName("",fileName),fileToPageName(file));
+					Tables tables = TableFactory.tables(html);
+					parseDefinitions(tables,determineClassName("",fileName),fileToPageName(file));
 				}
 			} catch (Exception e) {
 				errors += "<li>"+e.getMessage()+"</li>\n";

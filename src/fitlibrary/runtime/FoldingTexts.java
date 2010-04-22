@@ -11,7 +11,8 @@ import java.util.Map;
 import fitlibrary.table.Table;
 
 public class FoldingTexts {
-	private int nextId = 12345;
+	private static int NEXT_ID = 12345;
+	private static int nextId = NEXT_ID++;
 	private Map<String,String> folds = new HashMap<String, String>();
 	
 	public void logAsAfterTable(String title, String message) {
@@ -33,12 +34,12 @@ public class FoldingTexts {
 		nextId++;
 		final String foldText =
 			"<div class=\"included\">\n<div style=\"float: right;\" class=\"meta\">\n"+
-			"<a href=\"javascript:expandAll();\">Expand All</a> | <a href=\"javascript:collapseAll();\">Collapse All</a></div>\n"+
+			"<a href=\"javascript:expandAll();\">Expand All</a> |\n <a href=\"javascript:collapseAll();\">Collapse All</a></div>\n"+
 			"<a href=\"javascript:toggleCollapsable('"+id+"');\">\n"+
 			"<img src=\"/files/images/collapsableClosed.gif\" class=\"left\" id=\"img"+id+"\"/></a>\n"+
 			"&nbsp;<span class=\"meta\">"+title+"</span><div class=\"hidden\" id=\""+id+"\">\n<pre>"+
 			text+
-			"</pre>\n</div></div>";
+			"</pre>\n</div></div>\n";
 		table.addFoldingText(foldText);
 		folds.put(title,"");
 	}

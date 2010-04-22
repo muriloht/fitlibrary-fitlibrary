@@ -22,7 +22,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
 
 @RunWith(JMock.class)
-public class TestCell {
+public class TestCellOnList {
 	Mockery context = new Mockery();
 	VariableResolver resolver = context.mock(VariableResolver.class);
 	TestResults testResults = context.mock(TestResults.class);
@@ -390,5 +390,11 @@ public class TestCell {
 		cellA.fail(testResults);
 		cellA.toHtml(stringBuilder);
 		assertThat(stringBuilder.toString(),is("<td class=\"fail\">AbC</td>"));
+	}
+	@Test public void withPreamble() {
+		CellOnList cell = new CellOnList(TableFactory.tables(TableFactory.table()));
+		cell.addPrefixToFirstInnerTable("preamble");
+		assertThat(cell.at(0).getLeader(),is(" <span class=\"fit_label\">preamble</span>"));
+		assertThat(cell.toString(),is("<td> <span class=\"fit_label\">preamble</span><table border=\"1\" cellspacing=\"0\"></table></td>"));
 	}
 }

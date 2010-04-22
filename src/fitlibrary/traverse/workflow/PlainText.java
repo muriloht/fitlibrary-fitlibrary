@@ -7,7 +7,6 @@ package fitlibrary.traverse.workflow;
 import java.util.ArrayList;
 import java.util.List;
 
-import fit.Fixture;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
@@ -63,7 +62,7 @@ public class PlainText {
 			row.addCell("<b>"+infixAction+"</b>");
 			row.addCell(infixPart);
 		}
-		doTraverse.interpretRow(row,testResults,(Fixture)null);
+		doTraverse.interpretRowBeforeWrapping(row,testResults);
 	}
 	private void findDefinedActionCallsFromPlainText(String textCall, List<ValidCall> results) {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().findPlainTextCall(textCall, results);

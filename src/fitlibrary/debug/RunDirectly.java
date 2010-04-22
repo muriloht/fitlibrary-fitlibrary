@@ -4,27 +4,26 @@
 */
 package fitlibrary.debug;
 
-import fit.Counts;
 import fit.FitServerBridge;
-import fit.FixtureListener;
-import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
+import fitlibrary.suite.ReportListener;
+import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class RunDirectly {
-	protected FixtureListener fixtureListener = new FixtureListener() {
-		public void tableFinished(Parse table) {
+	protected ReportListener reportListener = new ReportListener() {
+		public void tableFinished(Table table) {
 			//
 		}
-		public void tablesFinished(Counts count) {
+		public void tablesFinished(TestResults testResults) {
 			//
 		}
 	};
-	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(fixtureListener));
+	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(reportListener));
 
 	private void run(String wiki) throws FitParseException {
 		String html = html(wiki);

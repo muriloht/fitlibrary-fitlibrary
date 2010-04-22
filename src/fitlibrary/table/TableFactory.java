@@ -12,7 +12,9 @@ import fit.exception.FitParseException;
 
 public class TableFactory {
 	private static Stack<Boolean> stack = new Stack<Boolean>();
-	private static boolean CREATE_LIST_BASED = false;
+	private static boolean RUN_WITH_LIST_BASED = true;
+	private static boolean CREATE_LIST_BASED = RUN_WITH_LIST_BASED;
+	
 	
 	public static Tables tables() {
 		if (CREATE_LIST_BASED)
@@ -30,17 +32,27 @@ public class TableFactory {
 		return new TablesOnParse(tables);
 	}
 	public static Tables tables(String html) throws FitParseException {
-		return tables(new Parse(html));
+		Tables tables = new TablesOnParse(new Parse(html));
+		if (RUN_WITH_LIST_BASED) {
+			useOnLists(true);
+			Tables convert = TableConversion.convert(tables);
+			pop();
+			return convert;
+		}
+		return tables;
 	}
 	public static Tables tables(Parse parse) {
 		if (CREATE_LIST_BASED)
-			throw new RuntimeException("Unable to");
+			throw new RuntimeException("Unable to use Parse with List-based Tables");
 		return new TablesOnParse(parse);
 	}
 
 	public static Table table() {
-		if (CREATE_LIST_BASED)
-			return new TableOnList();
+		if (CREATE_LIST_BASED) {
+			TableOnList tableOnList = new TableOnList();
+			tableOnList.setTagLine("border=\"1\" cellspacing=\"0\"");
+			return tableOnList;
+		}
 		return new TableOnParse();
 	}
 	public static Table table(Row... rows) {
@@ -86,11 +98,6 @@ public class TableFactory {
 		if (CREATE_LIST_BASED)
 			return new CellOnList(innerTables);
 		return new CellOnParse(innerTables);
-	}
-	public static Cell cell(String preamble, Tables innerTables) {
-		if (CREATE_LIST_BASED)
-			return new CellOnList(preamble,innerTables);
-		return new CellOnParse(preamble,innerTables);
 	}
 	public static void useOnLists(boolean useLists) {
 		stack.push(CREATE_LIST_BASED);

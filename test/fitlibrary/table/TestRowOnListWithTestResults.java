@@ -92,14 +92,6 @@ public class TestRowOnListWithTestResults {
 		row12.ignore(testResults);
 	}
 	@Test
-	public void setHidden() {
-		context.checking(new Expectations() {{
-			oneOf(cell0).setIsHidden();
-			oneOf(cell1).setIsHidden();
-		}});
-		row12.setIsHidden();
-	}
-	@Test
 	public void passKeywords() {
 		context.checking(new Expectations() {{
 			oneOf(cell0).pass(testResults);

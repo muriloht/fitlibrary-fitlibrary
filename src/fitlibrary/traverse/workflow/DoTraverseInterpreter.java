@@ -7,10 +7,6 @@ package fitlibrary.traverse.workflow;
 import java.util.ArrayList;
 import java.util.List;
 
-import fit.Counts;
-import fit.Fixture;
-import fit.Parse;
-import fitlibrary.DoFixture;
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.AbandonException;
@@ -22,18 +18,14 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.flow.DoAutoWrapper;
 import fitlibrary.flow.IDoAutoWrapper;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
-import fitlibrary.table.TableFactory;
-import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.CreateFromClassNameCaller;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.DoActionCaller;
-import fitlibrary.traverse.workflow.caller.FixtureCaller;
 import fitlibrary.traverse.workflow.caller.MultiDefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.PostFixSpecialCaller;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
@@ -59,118 +51,20 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
-		TypedObject result = null;
-		for (int rowNo = 1; rowNo < table.size(); rowNo++) {
-			Row row = table.at(rowNo);
-			if (getRuntimeContext().isAbandoned(testResults))
-				row.ignore(testResults);
-			else
-				try {
-					result = interpretRow(row,testResults,null);
-					if (result != null) {
-						Object subject = result.getSubject();
-						if (subject instanceof DoEvaluator) {
-							DoEvaluator doEvaluator = (DoEvaluator)subject;
-							doEvaluator.setRuntimeContext(runtimeContext);
-							doEvaluator.interpretInFlow(TableFactory.table(row),testResults);
-							break;
-						} else if (subject instanceof Evaluator) {
-							Evaluator evaluator = (Evaluator)subject;
-							evaluator.setRuntimeContext(runtimeContext);
-							interpretEvaluator(evaluator,TableFactory.table(row),testResults);
-							break;
-						} else if (subject instanceof Fixture) {
-							getFitHandler().doTable((Fixture) subject, TableFactory.table(row),testResults,this);
-							break;
-						}
-					}
-				} catch (Exception ex) {
-					row.error(testResults,ex);
-				}
-		}
-		if (result == null)
-			return null;
-		return result.getSubject();
-	}
-	// overridden in DomainTraverse (with quite separate code)
-    public Object interpretWholeTable(Table table, ITableListener tableListener) {
-    	return interpretWholeTable(table, tableListener.getTestResults());
-	}
-	public Object interpretWholeTable(Table table, TestResults testResults) {
-		System.out.println("DTI.interpretWholeTable used in "+this);
-		try {
-			Fixture fixtureByName = fixtureOrDoTraverseByName(table,testResults);
-			if (fixtureByName != null && fixtureByName.getClass() == Fixture.class)
-				fixtureByName = null;
-			TypedObject typedResult = interpretRow(table.at(0),testResults,fixtureByName);
-			Object result = null;
-			if (typedResult != null)
-				result = typedResult.getSubject();
-			if (getRuntimeContext().isAbandoned(testResults)) {
-				interpretInFlow(table,testResults);
-				return null;
-			}
-			if (result instanceof Evaluator) {
-				Evaluator evaluator = (Evaluator)result;
-				evaluator.setRuntimeContext(runtimeContext);
-				interpretEvaluator(evaluator, table, testResults);
-				return result;
-			}
-			if (result instanceof Fixture)
-				getFitHandler().doTable((Fixture) result,table,testResults,this);
-			else // do the rest of the table with this traverse
-				return interpretInFlow(table,testResults);
-		} catch (Throwable e) {
-            table.error(testResults,e);
-		}
+		// Now handled by DoFlow
 		return null;
-	}
-	private void interpretEvaluator(Evaluator evaluator, Table table, TestResults testResults) {
-		evaluator.setRuntimeContext(runtimeContext);
-		evaluator.interpretAfterFirstRow(table,testResults);
-	}
-	public Fixture fixtureOrDoTraverseByName(Table table, TestResults testResults) {
-        String className = table.at(0).text(0,this).trim();
-		if (className.equals(""))
-            return null;
-		try {
-			return new OpenFixture(testResults.getCounts()).getLinkedFixtureWithArgs(table.parse());
-		} catch (Throwable e) {
-			if (table.at(0).size() == 1) {
-				try {
-					Object traverse = Class.forName(className).newInstance();
-					if (traverse instanceof DoTraverse) {
-						DoFixture doFixture = new DoFixture();
-						doFixture.setTraverse((DoTraverse) traverse);
-						return doFixture;
-					}
-				} catch (Throwable e1) {
-					//
-				}
-			}
-			return null;
-		}
-	}
-	public static class OpenFixture extends Fixture {
-		public OpenFixture(Counts counts) {
-			this.counts = counts;
-		}
-		@Override
-		public Fixture getLinkedFixtureWithArgs(Parse tables) throws Throwable {
-			return super.getLinkedFixtureWithArgs(tables);
-		}
 	}
     // @Overridden in CollectionSetUpTraverse
     public Object interpretInFlow(Table table, TestResults testResults) {
-    	return interpretAfterFirstRow(table,testResults);
+    	return null; // Leave it here, as override it.
     }
     public TypedObject interpretRow(Row row, TestResults testResults) {
-    	return doAutoWrapper.wrap(interpretRow(row,testResults,null));
+    	return doAutoWrapper.wrap(interpretRowBeforeWrapping(row,testResults));
     }
-    public TypedObject interpretRow(Row row, TestResults testResults, Fixture fixtureByName) {
+    public TypedObject interpretRowBeforeWrapping(Row row, TestResults testResults) {
     	try {
-    		DoCaller[] actions = createDoCallers(row, fixtureByName);
-    		Option<TypedObject> result = interpretSimpleRow(row,testResults,actions,fixtureByName);
+    		DoCaller[] actions = createDoCallers(row);
+    		Option<TypedObject> result = interpretSimpleRow(row,testResults,actions);
     		if (result.isSome())
     			return result.get();
     		methodsAreMissing(actions,possibleSeq(row));
@@ -183,23 +77,23 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
     	}
     	return GenericTypedObject.NULL;
     }
-    protected Option<TypedObject> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions, Fixture fixtureByName) throws Exception {
+    protected Option<TypedObject> interpretSimpleRow(Row row, TestResults testResults, DoCaller[] actions) throws Exception {
 		Option<TypedObject> result = pickCaller(actions, row, testResults);
 		if (result.isSome())
 			return result;
 		if (row.size() > 2) {
-			Option<TypedObject> seqResult = trySequenceCall(row, testResults, fixtureByName);
+			Option<TypedObject> seqResult = trySequenceCall(row, testResults);
 			if (seqResult.isSome())
 				return seqResult;
 		}
 		return None.none();
     }
-    protected Option<TypedObject> trySequenceCall(Row row, TestResults testResults, Fixture fixtureByName) throws Exception {
+    protected Option<TypedObject> trySequenceCall(Row row, TestResults testResults) throws Exception {
     	if (sequencing)
     		return None.none();
     	sequencing = true;
     	try {
-    		return interpretSimpleRow(row, testResults, createDoCallers(row,fixtureByName),fixtureByName);
+    		return interpretSimpleRow(row, testResults, createDoCallers(row));
     	} finally {
     		sequencing = false;
     	}
@@ -214,13 +108,12 @@ public abstract class DoTraverseInterpreter extends Traverse implements DoEvalua
 			}
 		return None.none();
     }
-	public DoCaller[] createDoCallers(Row row, Fixture fixtureByName) {
+	public DoCaller[] createDoCallers(Row row) {
 		DoCaller[] actions = { 
 				new DefinedActionCaller(row, getRuntimeContext()),
 				new MultiDefinedActionCaller(row, getRuntimeContext()),
 				new SpecialCaller(row,this,PlugBoard.lookupTarget),
 				new PostFixSpecialCaller(row,this),
-				new FixtureCaller(fixtureByName),
 				new CreateFromClassNameCaller(row,this),
 				new DoActionCaller(row,this) };
 		checkForAmbiguity(actions);
