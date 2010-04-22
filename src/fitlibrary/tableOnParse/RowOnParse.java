@@ -2,7 +2,7 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,9 +14,12 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Cell;
+import fitlibrary.table.Row;
+import fitlibrary.table.TableFactory;
 import fitlibrary.utility.ExtendedCamelCase;
 
-public class RowOnParse extends ParseNode<Cell> implements Row {
+public class RowOnParse extends TableElementOnParse<Cell> implements Row {
     private boolean rowIsHidden = false;
     
 	public RowOnParse(Parse parse) {

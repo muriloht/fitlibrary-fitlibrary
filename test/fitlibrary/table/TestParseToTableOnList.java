@@ -10,6 +10,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 
+import fitlibrary.tableOnParse.CellOnParse;
+import fitlibrary.tableOnParse.RowOnParse;
+import fitlibrary.tableOnParse.TableOnParse;
+import fitlibrary.tableOnParse.TablesOnParse;
+
 public class TestParseToTableOnList {
 	@Test public void setTagLineOnCellOnParse() {
 		TableFactory.useOnLists(false);

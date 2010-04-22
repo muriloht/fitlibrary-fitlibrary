@@ -145,26 +145,18 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    		} else if (subject instanceof SuiteEvaluator) {
 			    			handleSuiteFixture((SuiteEvaluator)subject, typedResult, row, testResults);
 			    		} else {
-							Table restOfTable = rowNo == 0 ? table : table.fromAt(rowNo);
 							if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
-								handleOtherEvaluator(typedResult,(Evaluator)subject, row, restOfTable,testResults);
-								if (restOfTable != table)
-									for (int i = 0; i < restOfTable.size(); i++)
-										table.replaceAt(rowNo+i, restOfTable.at(i));
+								handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
 								return;// have finished table
 							} else if (subject instanceof DoEvaluator) {
 								pushOnScope(typedResult,row,testResults);
 							} else if (subject instanceof Evaluator) { // Calculate, etc
-								handleOtherEvaluator(typedResult,(Evaluator)subject, row, restOfTable, testResults);
-								if (restOfTable != table)
-									for (int i = 0; i < restOfTable.size(); i++)
-										table.replaceAt(rowNo+i, restOfTable.at(i));
+								handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
 								return; // have finished table
 							} else if (subject instanceof Fixture) {
-								Table remainingTable = restOfTable.asTableOnParse();
+								Table remainingTable = tableFromHere(table, rowNo).asTableOnParse();
 								flowEvaluator.fitHandler().doTable((Fixture) subject,remainingTable,testResults,flowEvaluator);
-								if (restOfTable != table)
-									for (int i = 0; i < remainingTable.size(); i++)
+								for (int i = 0; i < remainingTable.size(); i++)
 										table.replaceAt(rowNo+i, remainingTable.at(i));
 								return; // have finished table
 							}
@@ -176,16 +168,23 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			}
 		}
 	}
-	public static Row mapOddBalls(Row row, Evaluator evaluator) {
-		// |add|class|as|name| => |add named|name|class|
-		if (row.size() == 4 && "add".equals(row.text(0,evaluator)) && "as".equals(row.text(2,evaluator))) {
-			String className = row.text(1,evaluator);
-			row.at(0).setText("add named");
-			row.at(1).setText(row.text(3,evaluator));
-			row.at(2).setText(className);
-			row.removeElementAt(3);
-		}
-		return row;
+	private Table tableFromHere(Table table, int rowNo) {
+		return rowNo == 0 ? table : table.fromAt(rowNo);
+	}
+	private void handleEvaluator(TypedObject typedResult, Evaluator subject,
+			int rowNo, Table table, TestResults testResults) {
+		Table restOfTable = tableFromHere(table, rowNo);
+		int rest = restOfTable.size();
+		Row row = table.at(rowNo);
+		setRuntimeContextOf(subject);
+		callSetUpSutChain(subject,row,testResults);
+		if (!(subject instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
+			pushOnScope(typedResult,row,testResults);
+		subject.interpretAfterFirstRow(restOfTable, testResults);
+		setUpTearDown.callTearDownSutChain(subject, row, testResults);
+		if (restOfTable != table && restOfTable.size() > rest)
+			for (int i = rest; i < restOfTable.size(); i++)
+				table.add(restOfTable.at(i));
 	}
 	private void handleInnerTables(final Cell cell, ITableListener tableListener) {
 		Tables innerTables = cell.getEmbeddedTables();
@@ -199,14 +198,6 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		// Unwrap an auto-wrap, keeping the type information
 		if (doEvaluator.getSystemUnderTest() != null)
 			pushOnScope(doEvaluator.getTypedSystemUnderTest(),row,testResults);
-	}
-	private void handleOtherEvaluator(TypedObject typedResult, Evaluator evaluator, Row row, Table remainingTable, TestResults testResults) {
-		setRuntimeContextOf(evaluator);
-		callSetUpSutChain(evaluator,row,testResults);
-		if (!(evaluator instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
-			pushOnScope(typedResult,row,testResults);
-		evaluator.interpretAfterFirstRow(remainingTable, testResults);
-		setUpTearDown.callTearDownSutChain(evaluator, row, testResults);
 	}
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
 		if (suiteFixtureOption.isNone())
@@ -268,5 +259,16 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	@Override
 	public void select(String name) {
 		scopeStack.select(name);
+	}
+	public static Row mapOddBalls(Row row, Evaluator evaluator) {
+		// |add|class|as|name| => |add named|name|class|
+		if (row.size() == 4 && "add".equals(row.text(0,evaluator)) && "as".equals(row.text(2,evaluator))) {
+			String className = row.text(1,evaluator);
+			row.at(0).setText("add named");
+			row.at(1).setText(row.text(3,evaluator));
+			row.at(2).setText(className);
+			row.removeElementAt(3);
+		}
+		return row;
 	}
 }

@@ -22,15 +22,15 @@ import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 
 @RunWith(JMock.class)
-public class TestTableOnListWithTestResults {
+public class TestTableOnList {
 	Mockery context = new Mockery();
 	TestResults testResults = context.mock(TestResults.class);
 	VariableResolver resolver = context.mock(VariableResolver.class);
 	Row row0 = row().mock(context, "", 0);
 	Row row1 = row().mock(context, "", 1);
 	Row row2 = row().mock(context, "", 2);
-	Table table12 = table(row0,row1);
-	Table table123 = table(row0,row1,row2);
+	Table table01 = table(row0,row1);
+	Table table012 = table(row0,row1,row2);
 	
 	@Before
 	public void useListsFactory() {
@@ -45,14 +45,14 @@ public class TestTableOnListWithTestResults {
 		context.checking(new Expectations() {{
 			oneOf(row0).pass(testResults);
 		}});
-		table12.pass(testResults);
+		table01.pass(testResults);
 	}
 	@Test
 	public void ignore() {
 		context.checking(new Expectations() {{
 			oneOf(row0).ignore(testResults);
 		}});
-		table12.ignore(testResults);
+		table01.ignore(testResults);
 	}
 	@Test
 	public void error() {
@@ -60,7 +60,7 @@ public class TestTableOnListWithTestResults {
 		context.checking(new Expectations() {{
 			oneOf(row0).error(testResults,e);
 		}});
-		table12.error(testResults, e);
+		table01.error(testResults, e);
 	}
 	@Test
 	public void errorWithTableListener() {
@@ -68,35 +68,64 @@ public class TestTableOnListWithTestResults {
 		context.checking(new Expectations() {{
 			oneOf(row0).error(testResults,e);
 		}});
-		table12.error(new TableListener(testResults), e);
+		table01.error(new TableListener(testResults), e);
 	}
 	@Test
 	public void newRow() {
-		table12.newRow();
-		assertThat(table12.size(),is(3));
+		table01.newRow();
+		assertThat(table01.size(),is(3));
 	}
 	@Test
 	public void phaseBoundaryCount() {
-		table12.setLeader("12<hr/>34<hr/>456<hr/>");
-		assertThat(table12.phaseBoundaryCount(),is(2));
+		table01.setLeader("12<hr/>34<hr/>456<hr/>");
+		assertThat(table01.phaseBoundaryCount(),is(2));
 	}
 	@Test
 	public void addFoldingText() {
-		table12.addFoldingText("12");
-		assertThat(table12.getTrailer(),is("12"));
+		table01.addFoldingText("12");
+		assertThat(table01.getTrailer(),is("12"));
 	}
 	@Test
 	public void replaceAt() {
-		table12.replaceAt(0,row2);
-		assertThat(table12.size(),is(2));
-		assertThat(table12.at(0),is(row2));
-		assertThat(table12.at(1),is(row1));
+		table01.replaceAt(0,row2);
+		assertThat(table01.size(),is(2));
+		assertThat(table01.at(0),is(row2));
+		assertThat(table01.at(1),is(row1));
+	}
+	@Test
+	public void replaceAtAfter() {
+		table01.replaceAt(2,row2);
+		assertThat(table01.size(),is(3));
+		assertThat(table01.at(0),is(row0));
+		assertThat(table01.at(1),is(row1));
+		assertThat(table01.at(2),is(row2));
+	}
+	@Test
+	public void fromAt0() {
+		Table fromAt = table012.fromAt(0);
+		assertThat(fromAt.size(),is(3));
+		assertThat(fromAt.at(0),is(row0));
+		assertThat(fromAt.at(1),is(row1));
+		assertThat(fromAt.at(2),is(row2));
+	}
+	@Test
+	public void fromAt1() {
+		Table fromAt = table012.fromAt(1);
+		assertThat(fromAt.size(),is(2));
+		assertThat(fromAt.at(0),is(row1));
+		assertThat(fromAt.at(1),is(row2));
+	}
+	@Test
+	public void fromAt2() {
+		Table fromAt = table012.fromAt(2);
+		assertThat(fromAt.size(),is(1));
+		assertThat(fromAt.at(0),is(row2));
 	}
 	@Test
 	public void hasRowsAfter() {
-		assertThat(table12.hasRowsAfter(row0),is(true));
-		assertThat(table12.hasRowsAfter(row1),is(false));
-		assertThat(table12.hasRowsAfter(row2),is(false)); // Not in the table!
+		assertThat(table01.hasRowsAfter(row0),is(true));
+		assertThat(table01.hasRowsAfter(row1),is(false));
+		assertThat(table01.hasRowsAfter(row2),is(false)); // Not in the table!
 	}
 	@Test
 	public void deepCopy() {
@@ -106,9 +135,9 @@ public class TestTableOnListWithTestResults {
 			oneOf(row0).deepCopy(); will(returnValue(row1copy));
 			oneOf(row1).deepCopy(); will(returnValue(row2copy));
 		}});
-		table12.setLeader("LL");
-		table12.setTrailer("TT");
-		Table deepCopy = table12.deepCopy();
+		table01.setLeader("LL");
+		table01.setTrailer("TT");
+		Table deepCopy = table01.deepCopy();
 		assertThat(deepCopy.size(), is(2));
 		assertThat(deepCopy.at(0), is(row1copy));
 		assertThat(deepCopy.at(1), is(row2copy));
@@ -121,13 +150,11 @@ public class TestTableOnListWithTestResults {
 			oneOf(row0).toHtml(stringBuilder);
 			oneOf(row1).toHtml(stringBuilder);
 		}});
-		table12.setLeader("LL");
-		table12.setTrailer("TT");
-		table12.toHtml(stringBuilder);
+		table01.setLeader("LL");
+		table01.setTrailer("TT");
+		table01.toHtml(stringBuilder);
 		assertThat(stringBuilder.toString(),is("LL<table border=\"1\" cellspacing=\"0\"></table>TT"));
 	}
-
-	
 	
 	protected static Table table(Row... rows) {
 		Table table = new TableOnList();

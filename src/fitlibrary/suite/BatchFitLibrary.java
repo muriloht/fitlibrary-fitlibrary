@@ -16,10 +16,10 @@ import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
-import fitlibrary.table.ParseNode;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
+import fitlibrary.tableOnParse.TableElementOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
@@ -61,7 +61,7 @@ public class BatchFitLibrary implements StorytestRunner {
 			try {
 				recorder.write();
 			} catch (IOException e) {
-				Table errorTable = TableFactory.table(TableFactory.row("note",ParseNode.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
+				Table errorTable = TableFactory.table(TableFactory.row("note",TableElementOnParse.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
 				errorTable.at(0).at(1).error(tableListener.getTestResults());
 				theTables.add(errorTable );
 			}

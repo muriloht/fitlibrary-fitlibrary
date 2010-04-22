@@ -9,6 +9,7 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.tableOnParse.CellOnParse;
 import fitlibrary.utility.ExtendedCamelCase;
 
 public class RowOnList extends TableElementOnList<Cell> implements Row {

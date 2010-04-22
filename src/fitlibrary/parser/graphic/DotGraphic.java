@@ -35,9 +35,7 @@ public class DotGraphic implements GraphicInterface {
 	public boolean equals(Object other) {
         if (!(other instanceof DotGraphic))
             return false;
-        boolean equals = dot.equals(((DotGraphic)other).dot);
-        Logging.log(this,"equals(): '"+dot+"' and '"+other+"' equals="+equals);
-        return equals;
+        return dot.equals(((DotGraphic)other).dot);
     }
     public LocalFile toGraphic() {
         try {
@@ -78,6 +76,10 @@ public class DotGraphic implements GraphicInterface {
         if (process.exitValue() != 0)
             throw new RuntimeException("Problems with actual Dot:\n"+actualDot);
 	    return imageFileName;
+	}
+	@Override
+	public int hashCode() {
+		return dot.hashCode();
 	}
 	private static String getDot(LocalFile file) {
         return getFileContents(file.withSuffix("dot").getFile());

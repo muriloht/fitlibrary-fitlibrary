@@ -2,7 +2,7 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import java.util.List;
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
 
-public abstract class ParseNode<To> {
+public abstract class TableElementOnParse<To> {
     public final static String PASS = " class=\"pass\"";
     public final static String FAIL = " class=\"fail\"";
     public final static String IGNORE = " class=\"ignore\"";
@@ -20,7 +20,7 @@ public abstract class ParseNode<To> {
     public final static String CALLS = " bgcolor=#DADAFF";
     protected Parse parse;
 
-    public ParseNode(Parse parse) {
+    public TableElementOnParse(Parse parse) {
         this.parse = parse;
     }
     public Parse parse() {
@@ -147,6 +147,7 @@ public abstract class ParseNode<To> {
 	public void addToTag(String annotation) {
     	parse.addToTag(" "+annotation.trim());
     }
+	@SuppressWarnings("unchecked")
 	public void toHtml(StringBuilder builder) {
 		boolean everything = this.getClass() != TablesOnParse.class;
 		if (everything) {
@@ -157,7 +158,7 @@ public abstract class ParseNode<To> {
 				builder.append(parse.body);
 		}
 		for (int i = 0; i < size(); i++)
-			((ParseNode)at(i)).toHtml(builder);
+			((TableElementOnParse)at(i)).toHtml(builder);
 		if (everything) {
 			builder.append(parse.end);
 			builder.append(getTrailer());

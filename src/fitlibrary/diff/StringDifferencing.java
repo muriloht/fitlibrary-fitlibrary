@@ -4,7 +4,7 @@
  * 20/10/2009
 */
 
-package fitlibrary.table;
+package fitlibrary.diff;
 
 import fitlibrary.utility.MustBeThreadSafe;
 

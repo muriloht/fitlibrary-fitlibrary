@@ -9,10 +9,10 @@ import fitlibrary.closure.LookupClosureStandard;
 import fitlibrary.closure.LookupClosure;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.closure.LookupMethodTargetStandard;
-import fitlibrary.table.ExceptionHandling;
-import fitlibrary.table.ExceptionHandlingStandard;
-import fitlibrary.table.StringDifferencing;
-import fitlibrary.table.StringDifferencingStandard;
+import fitlibrary.diff.StringDifferencing;
+import fitlibrary.diff.StringDifferencingStandard;
+import fitlibrary.exception.ExceptionHandling;
+import fitlibrary.exception.ExceptionHandlingStandard;
 
 /*
  * A PlugBoard for Thread-safe objects that can be substituted.

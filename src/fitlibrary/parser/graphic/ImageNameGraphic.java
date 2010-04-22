@@ -27,10 +27,8 @@ public class ImageNameGraphic implements GraphicInterface {
 	public boolean equals(Object object) {
         if (!(object instanceof ImageNameGraphic))
                 return false;
-        boolean equals = expectedFile.equals(
+        return expectedFile.equals(
                 ((ImageNameGraphic)object).expectedFile);
-        Logging.log(this,"equals(): "+expectedFile+" and "+object+" equals="+equals);
-        return equals;
     }
     public static GraphicInterface parseGraphic(LocalFile expectedFile) {
         Logging.log(GraphicInterface.class,"parseGraphic(): "+expectedFile);
@@ -40,4 +38,8 @@ public class ImageNameGraphic implements GraphicInterface {
 	public String toString() {
         return "ImageNameGraphic["+expectedFile+"]";
     }
+	@Override
+	public int hashCode() {
+		return expectedFile.hashCode();
+	}
 }

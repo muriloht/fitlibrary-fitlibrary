@@ -4,15 +4,12 @@
  * 20/10/2009
 */
 
-package fitlibrary.table;
+package fitlibrary.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import fit.Fixture;
-import fitlibrary.exception.FitLibraryException;
-import fitlibrary.exception.FitLibraryExceptionInHtml;
-import fitlibrary.exception.IgnoredException;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.HtmlUtils;
 

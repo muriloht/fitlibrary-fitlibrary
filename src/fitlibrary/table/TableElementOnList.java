@@ -11,6 +11,7 @@ import java.util.List;
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
 
+@SuppressWarnings("unchecked")
 public abstract class TableElementOnList<To extends TableElement> {
     public final static String PASS = "class=\"pass\"";
     public final static String FAIL = "class=\"fail\"";
@@ -174,7 +175,8 @@ public abstract class TableElementOnList<To extends TableElement> {
 			builder.append(getTrailer());
 		}
 	}
-    protected void appendBody(StringBuilder builder) {
+	@SuppressWarnings("unused")
+	protected void appendBody(StringBuilder builder) {
 		// Overridden in Cell
 	}
 	protected abstract TableElementOnList<To> newObject();

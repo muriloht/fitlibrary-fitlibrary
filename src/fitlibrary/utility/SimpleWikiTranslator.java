@@ -16,7 +16,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.TableConversion;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.table.TablesOnParse;
+import fitlibrary.tableOnParse.TablesOnParse;
 
 public class SimpleWikiTranslator {
 	private final FileAccess fileAccess;

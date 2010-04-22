@@ -4,12 +4,12 @@
  * 20/10/2009
 */
 
-package fitlibrary.table;
+package fitlibrary.diff;
 
 import java.util.LinkedList;
 
-import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
+import fitlibrary.tableOnParse.TableElementOnParse;
 
 public class StringDifferencingStandard implements StringDifferencing {
 	public void mustBeThreadSafe() {
@@ -47,7 +47,7 @@ public class StringDifferencingStandard implements StringDifferencing {
 		String result = s.toString();
 		if (result.contains("  ") || result.contains("&nbsp"))
 			result = result.replace("  ",visibleSpace()+visibleSpace()); //.replaceAll("&nbsp","<font color='blue'>&Delta;</font>");
-		return "<hr>" + result + ParseNode.label("diff");
+		return "<hr>" + result + TableElementOnParse.label("diff");
 	}
 	protected String visibleSpace() {
 		return "&Delta;";

@@ -2,13 +2,16 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
 
-public class TablesOnParse extends ParseNode<Table> implements Tables {
+public class TablesOnParse extends TableElementOnParse<Table> implements Tables {
 
     public TablesOnParse(Parse parse) {
     	super(parse);

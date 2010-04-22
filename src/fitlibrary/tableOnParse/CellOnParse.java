@@ -2,7 +2,7 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -14,6 +14,10 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.table.SingleNestedTableExpected;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Cell;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.ParseUtility;

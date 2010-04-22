@@ -9,6 +9,10 @@ import java.util.Stack;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.tableOnParse.CellOnParse;
+import fitlibrary.tableOnParse.RowOnParse;
+import fitlibrary.tableOnParse.TableOnParse;
+import fitlibrary.tableOnParse.TablesOnParse;
 
 public class TableFactory {
 	private static Stack<Boolean> stack = new Stack<Boolean>();

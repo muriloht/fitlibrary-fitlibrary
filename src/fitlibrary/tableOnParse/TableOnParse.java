@@ -2,14 +2,17 @@
  * Copyright (c) 2006 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import fit.Parse;
 import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Row;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 
-public class TableOnParse extends ParseNode<Row> implements Table {
+public class TableOnParse extends TableElementOnParse<Row> implements Table {
     private int firstErrorRow = 0;
     
     public TableOnParse(Parse parse) {

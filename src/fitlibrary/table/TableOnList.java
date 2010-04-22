@@ -8,6 +8,7 @@ import fit.Parse;
 import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.tableOnParse.TablesOnParse;
 
 public class TableOnList extends TableElementOnList<Row> implements Table {
     private int firstErrorRow = 0;
