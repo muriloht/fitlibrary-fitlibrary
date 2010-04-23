@@ -1,0 +1,22 @@
+A business process concerns the order that things happen, and their consequences.
+
+|''with a calculator''|
+
+|''given the total is''|10|
+
+|+|5|
+
+|*|10|
+
+|''the total now is''|150|
+
+But we don't get any useful feedback if the expected value is wrong:
+
+|''the total now is''|140|
+
+So we can do this instead:
+
+|''the total now''|'''is'''|140|
+
+
+Next: ChatBusinessProcessExample

@@ -115,19 +115,6 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 			maxLength = Math.max(maxLength, row.getColumnSpan());
 		return maxLength;
 	}
-	// Following is only needed for TestDefinedActionBodyCollector -- remove it when that is gone.
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TableOnParse))
-			return false;
-		TableOnParse other = (TableOnParse) obj;
-		if (size() != other.size())
-			return false;
-		for (int i = 0; i < size(); i++)
-			if (!at(i).equals(other.at(i)))
-				return false;
-		return true;
-	}
 	@Override
 	public boolean isPlainTextTable() {
 		return parse().tag.contains("plain_text_table");
@@ -151,10 +138,6 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	@Override
 	public boolean isEmpty() {
 		return parse.more == null;
-	}
-	@Override
-	public int hashCode() {
-		return super.hashCode();
 	}
 	@Override
 	public String getType() {

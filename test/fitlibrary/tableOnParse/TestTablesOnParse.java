@@ -2,7 +2,7 @@
  * Copyright (c) 2009 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import static fitlibrary.matcher.TableBuilderForTests.table;
 import static org.hamcrest.CoreMatchers.is;
@@ -20,6 +20,10 @@ import org.junit.runner.RunWith;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
+import fitlibrary.table.TablesOnList;
 
 @RunWith(JMock.class)
 public class TestTablesOnParse {

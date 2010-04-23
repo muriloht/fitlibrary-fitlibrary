@@ -611,6 +611,17 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		TypedObject typedObject = interpretRow(row.elementsFrom(2), testResults);
 		getRuntimeContext().getTableEvaluator().addNamedObject(row.text(1,this),typedObject,row,testResults);
 	}
+	/*
+	 * |''add global''|...action or fixture|
+	 */
+	public void addGlobal(Row row, TestResults testResults) throws Exception {
+		int less = 2;
+		if (row.size() < less)
+			throw new MissingCellsException("addGlobal");
+		TypedObject typedObject = interpretRow(row.elementsFrom(1), testResults);
+		getRuntimeContext().getScope().addGlobal(typedObject);
+		row.at(0).pass(testResults);
+	}
 	@Override
 	public FitHandler fitHandler() {
 		return getFitHandler();

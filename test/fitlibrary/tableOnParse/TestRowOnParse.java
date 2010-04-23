@@ -2,7 +2,7 @@
  * Copyright (c) 2009 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.table;
+package fitlibrary.tableOnParse;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import fitlibrary.DoFixture;
 import fitlibrary.parser.ParserTestCase;
+import fitlibrary.table.Row;
+import fitlibrary.table.Table;
+import fitlibrary.table.TableFactory;
 
 public class TestRowOnParse {
 	Row row = TableFactory.row();

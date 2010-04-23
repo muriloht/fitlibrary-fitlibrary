@@ -24,6 +24,7 @@ import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
+import fitlibrary.typed.TypedObject;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";

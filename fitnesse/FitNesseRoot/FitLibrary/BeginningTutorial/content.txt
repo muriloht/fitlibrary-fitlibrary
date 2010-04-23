@@ -1,0 +1,11 @@
+!2 Business Rules
+#
+|>FirstRuleTableExample|
+|>SecondRuleTableExample|
+#
+!2 Business Processes
+#
+|^CalculatorBusinessProcessExample|
+|>ChatBusinessProcessExample|
+
+^SuiteSetUp

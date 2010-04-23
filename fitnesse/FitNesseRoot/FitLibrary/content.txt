@@ -4,6 +4,7 @@
 
 .FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.UseTheTextThisInClassBasedActions
 
+|!3 ^BeginningTutorial|''First tutorial for FitLibrary''|
 |!3 ^UserGuide|''User guide for FitLibrary''|
 |!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 |!3 ^ReferenCe|''Reference for FitLibrary''|

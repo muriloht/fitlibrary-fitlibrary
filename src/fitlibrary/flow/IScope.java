@@ -15,4 +15,5 @@ public interface IScope {
 	List<Class<?>> possibleClasses();
 	void temporarilyAdd(Evaluator evaluator);
 	void removeTemporary(Evaluator evaluator);
+	void addGlobal(TypedObject typedObject);
 }

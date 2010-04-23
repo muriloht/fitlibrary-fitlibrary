@@ -162,4 +162,8 @@ public class ScopeStack implements IScopeStack {
 		selectObjects.remove(typedObject);
 		selectObjects.add(0,typedObject);
 	}
+	@Override
+	public void addGlobal(TypedObject typedObject) {
+		globals.add(typedObject);
+	}
 }

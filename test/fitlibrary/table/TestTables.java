@@ -13,7 +13,7 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.traverse.workflow.DoEvaluator;
 
-public class TestParseTables extends TestCase {
+public class TestTables extends TestCase {
     private Tables tables;
     private TestResults testResults = TestResultsFactory.testResults();
     private Counts counts = testResults.getCounts();

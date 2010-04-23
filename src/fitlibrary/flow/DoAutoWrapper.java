@@ -14,6 +14,8 @@ import fitlibrary.parser.collection.MapParser;
 import fitlibrary.parser.collection.SetParser;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.traverse.Evaluator;
+import fitlibrary.traverse.function.Rule;
+import fitlibrary.traverse.function.RuleTable;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
@@ -34,6 +36,8 @@ public class DoAutoWrapper implements IDoAutoWrapper {
 			return typedResult;
 		if (result instanceof Evaluator || result instanceof Fixture)
 			return typedResult;
+		if (result instanceof Rule)
+			return new GenericTypedObject(new RuleTable(result));
 
 		Class<?> returnType = result.getClass();
 		if (MapParser.applicableType(returnType) || ArrayParser.applicableType(returnType))
