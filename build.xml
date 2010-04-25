@@ -1,11 +1,11 @@
 <project name="FitLibrary" default="jar" basedir=".">
 	<property name="home" value="${basedir}" />
-	<property name="lib" value="${home}/fitnesse/lib" />
+	<property name="fitnesse.dir" value="${home}/fitnesse" />
+	<property name="lib" value="${fitnesse.dir}/lib" />
 	<property name="src" value="${home}/src" />
 	<property name="bin" value="${home}/bin" />
 	<property name="test.src" value="${home}/test" />
-	<property name="fitnesse.dir" value="${home}/fitnesse" />
-	<property name="port" value="8980" />
+	<property name="port" value="8080" />
 	
 	<!-- batch runner properties -->
 	<property name="showpassesinreport" value="showpasses" />   <!-- set any value here to switch this on, leave blank to switch off -->
@@ -16,7 +16,7 @@
 	
 	<target name="jar-no-test" depends="clean, compile">
 	    <echo message="Create fitlibrary jar file in local FitNesse"/>
-	    <jar destfile="${fitnesse.dir}/fitlibrary.jar" basedir="bin"   />
+	    <jar destfile="${fitnesse.dir}/fitlibrary.jar" basedir="bin"/>
 	    <echo message="Create source zip file"/>
 	    <zip destfile="${fitnesse.dir}/fitlibrarySrc.zip">
 	        <fileset dir="src"/>
@@ -29,16 +29,22 @@
 
 	<target name="compile">
 		<mkdir dir="${bin}" />
+		<echo message="lib is ${lib}"/>
 		<javac srcdir="${src}" destdir="${bin}">
 			<classpath>
+				<fileset dir="${fitnesse.dir}">
+					<include name="fitnesse.jar" />
+				</fileset>
 				<fileset dir="${lib}">
-
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
 		</javac>
 		<javac srcdir="${test.src}" destdir="${bin}">
 			<classpath>
+				<fileset dir="${fitnesse.dir}">
+					<include name="fitnesse.jar" />
+				</fileset>
 				<fileset dir="${lib}">
 					<include name="**/*.jar" />
 				</fileset>
@@ -63,6 +69,7 @@
 		  	</classpath>
 			<batchtest fork="yes" haltonfailure="yes" haltonerror="yes" filtertrace="no">
 				<fileset dir="${test.src}">
+				  <exclude name="**/TestFitLibraryRunner.java"/>
 				  <include name="**/Test*.java"/>
 				</fileset>
 
@@ -129,10 +136,6 @@
 					<include name="fitnesse.jar" />
 				     </fileset>
 			  	</classpath>
-	
-				<sysproperty key="overrideEnvironment" value="${environment}"/>
-				<sysproperty key="overrideShutdownBrowserAutomatically" value="true"/>
-				<sysproperty key="onlyTheseStoreFronts" value="${test-only-these-storefronts}"/>
 			</java>
 		</sequential>
 	</macrodef>
