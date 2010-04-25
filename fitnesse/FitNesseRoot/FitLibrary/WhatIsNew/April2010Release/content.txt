@@ -28,9 +28,17 @@
  * This means that it's not necessary to subclass fixtures for usual development
  * Bare objects used to be auto-wrapped by !-DomainFixture-!. If that behaviour is still required, include the following in a WasSuiteSetUp page:
 
-!|fitlibrary.Configuration|
+... TO BE COMPLETED
+#
+!3 ''!-SelectFixture-!'' capability now part of flow
+#
+It's no longer necessary to use a ''!-SelectFixture-!'' to switch between ''!-DoFixture-!''s. This switching behaviour has been generalised and included as a part of standard flow.
 
-|auto wrap pojo with !-DoFixture-!|
+So you can simply remove the ''!-SelectFixture-!'' table in your storytests. See .FitLibrary.AdvancedTutorial.MultipleFlowObjects for how to use the new, generalised features.
+#
+!3 Globals
+#
+... TO BE COMPLETED
 #
 !3 Using Fit variables in !-FitLibrary-!
 #
@@ -56,6 +64,8 @@
  * For example, see .FitLibrary.SpecifiCations.DefinedActions.DefinedElsewhereExpanded
 #
 !2 4. Rule Table
+#
+A ''!-RuleTable-!'' acts rather like a ''!-ColumnFixture-!'' tables, except that setters are used for the inputs. See the example at .FitLibrary.BeginningTutorial.FirstRuleTableExample.
 #
 !2 5. Fixed Problems
 !3 Bug fixes

@@ -1,0 +1,1 @@
+|>MultipleFlowObjects|''For when a storytest has to affect different parts of a system, or several systems. Eg, running through a web browser and updating/checking a database''|
