@@ -1,4 +1,3 @@
-
 !**> technical infrastructure
 
 The following is needed to run this as a test. It's discussed HERE. It can be set up by someone who has some technical knowledge.
@@ -6,4 +5,3 @@ The following is needed to run this as a test. It's discussed HERE. It can be se
 |''add global''|!-fitlibrary.tutorial.Global-!|
 
 **!
-

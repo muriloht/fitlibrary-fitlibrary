@@ -50,7 +50,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td>string property</td>
 <td><b>eventually contains</b></td>
-<td class="fail">orange <span class="fit_label">expected</span><hr>apple pie <span class="fit_label">actual</span><hr><strike>or</strike><font color='white'>a</font><strike>ng</strike><b>pple pi</b><font color='white'>e</font> <span class="fit_label">diff</span></td>
+<td class="fail">orange <span class="fit_label">expected</span><hr>apple pie <span class="fit_label">actual</span></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -68,6 +68,6 @@
 <td><i>y</i></td>
 <td>3</td>
 <td><b>eventually contains</b></td>
-<td class="fail">(x, <span class="fit_label">expected</span><hr>(1,3) <span class="fit_label">actual</span><hr><font color='white'>(</font><strike>x</strike><b>1</b><font color='white'>,</font><b>3)</b> <span class="fit_label">diff</span></td>
+<td class="fail">(x, <span class="fit_label">expected</span><hr>(1,3) <span class="fit_label">actual</span></td>
 </tr>
 </table>-!|

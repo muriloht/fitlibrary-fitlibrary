@@ -87,21 +87,43 @@ public class TablesCompare {
 		}
 		return true;
 	}
-	private boolean equals(String actual, String expected) {
-		String canonicalActual = canonical(actual);
-		String canonicalExpected = canonical(expected);
+	public boolean equals(String actualString, String expectedString) {
+		String actual = canonical(actualString);
+		String expected = canonical(expectedString);
 		
-		if ("IGNORE".equals(canonicalExpected))
+		if ("IGNORE".equals(expected))
 			return true;
 		String stackTrace = "class=\"fit_stacktrace\">";
-		int start = canonicalExpected.indexOf(stackTrace);
-		if (start >= 0)
-			return canonicalActual.startsWith(canonicalExpected.substring(0,start+stackTrace.length()));
+		int startExpected = expected.indexOf(stackTrace);
+		int startActual = actual.indexOf(stackTrace);
+		if (startExpected != startActual)
+			return false;
+		if (startExpected >= 0)
+			return actual.startsWith(expected.substring(0,startExpected));
 		String fitLabel = "<span class=\"fit_label\">";
-		start = canonicalExpected.indexOf(fitLabel);
-		if (start >= 0)
-			return canonicalActual.startsWith(canonicalExpected.substring(0,start+fitLabel.length()));
-		return canonicalActual.equals(canonicalExpected);
+		String endFitLabel = "</span>";
+		while (true) {
+			startExpected = expected.indexOf(fitLabel);
+			startActual = actual.indexOf(fitLabel);
+			if (startExpected != startActual)
+				return false;
+			if (startExpected < 0)
+				return actual.equals(expected);
+			
+			String expectedPrefix = expected.substring(0,startExpected);
+			if (!actual.substring(0,startActual).equals(expectedPrefix))
+				return false;
+			int endExpected = expected.indexOf(endFitLabel,startExpected);
+			int endActual = actual.indexOf(endFitLabel,startActual);
+			if (endExpected < 0 || endActual < 0)
+				return false;
+			String actualLabel = actual.substring(startActual+fitLabel.length(),endActual);
+			String expectedLabel = expected.substring(startExpected+fitLabel.length(),endExpected);
+			if (!actualLabel.startsWith(expectedLabel))
+				return false;
+			actual = actual.substring(endActual+endFitLabel.length());
+			expected = expected.substring(endExpected+endFitLabel.length());
+		}
 	}
 	private String canonical(String s) {
 		return ignoreFold(s).replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").trim();

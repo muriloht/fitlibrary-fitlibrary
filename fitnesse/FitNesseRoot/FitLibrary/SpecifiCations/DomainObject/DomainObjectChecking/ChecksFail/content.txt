@@ -22,15 +22,15 @@
 <tr><td>fitlibrary.specify.domain.UserAdapter</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>checks</i></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><i>slow paying user</i></td>
 <td><table border="1" cellspacing="0">
 <tr><td><i>name</i></td>
-<td class="fail">P. oor Payer <span class="fit_label">expected</span><hr>Poor Payer <span class="fit_label">actual</span></td>
+<td class="fail">P. oor Payer <span class="fit_label">expected</span><hr>Poor Payer <span class="fit_label">actual</span><hr><divv style='color:white'>P</divv><strike>.&Delta;</strike><divv style='color:white'>oor Payer</divv> <span class="fit_label">diff</span></td>
 </tr>
 <tr><td><i>phones</i></td>
 <td><table border="1" cellspacing="0">

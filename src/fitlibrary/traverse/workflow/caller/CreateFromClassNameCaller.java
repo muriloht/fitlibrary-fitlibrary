@@ -36,8 +36,8 @@ public class CreateFromClassNameCaller extends DoCaller {
 	private Object object = null;
 	private Exception exceptionToThrow = null;
 
-	public CreateFromClassNameCaller(Row row, Evaluator doTraverse) {
-		String name = row.text(0,doTraverse).trim();
+	public CreateFromClassNameCaller(Row row, Evaluator evaluator) {
+		String name = row.text(0,evaluator).trim();
 		this.className = substituteName(name);
 		// Later, the following will handle constructor arguments, and etc
 		if (DoFlow.IS_ACTIVE && validClassName())

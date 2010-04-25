@@ -60,7 +60,7 @@ public class RuleTable extends Traverse {
 				if (input)
 					columnTargets.add(new InputColumnTarget(PlugBoard.lookupTarget.findSetterOnSut(fn, this)));
 				else {
-					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(fn,this);
+					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(fn,this,"Rule");
 					if (target.returnsVoid())
 						throw new VoidMethodException(fn,"RuleTable");
 					columnTargets.add(new OutputColumnTarget(target));

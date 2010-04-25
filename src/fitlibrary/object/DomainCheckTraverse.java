@@ -63,7 +63,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 //				target.invokeAndCheckCell(cell2,true,testResults);
 			} else {
 				try {
-			    	CalledMethodTarget target =PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
+			    	CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
 			    	target.invokeAndCheck(TableFactory.row(),cell2,testResults,false);
 				} catch (MissingMethodException ex) {
 					cell.error(testResults,ex);

@@ -13,7 +13,7 @@
 </tr>
 <tr><td>in</td>
 <td class="error">in3<hr/> <span class="fit_label">Missing method, possibly: <ul><li>public void setIn3(ArgType in3) { }</li></ul><hr/>In:<ul><li>fitlibrary.specify.calculate.RuleTableExample</li><li>fitlibrary.specify.calculate.RuleTableExample.Sut</li></ul></span></td>
-<td class="error">out3?<hr/> <span class="fit_label">Missing method, possibly: <ul><li>public void getOut3() { }</li></ul><hr/>In:<ul><li>fitlibrary.specify.calculate.RuleTableExample</li><li>fitlibrary.specify.calculate.RuleTableExample.Sut</li></ul></span></td>
+<td class="error">out3?<hr/> <span class="fit_label">Missing method, possibly: <ul><li>public Rule getOut3() { }</li></ul><hr/>In:<ul><li>fitlibrary.specify.calculate.RuleTableExample</li><li>fitlibrary.specify.calculate.RuleTableExample.Sut</li></ul></span></td>
 </tr>
 <tr><td>1</td>
 <td>1</td>

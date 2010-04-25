@@ -11,7 +11,9 @@ In our next rule table example, the credit limit is determined from several inpu
 |14|no|5000.00|no|0.00|
 |14|yes|6000.00|no|0.00|
 
-Here we have three inputs and two results. We name the columns to be clear about their role. As the business rule is so long, we've summarised it in the first row of the table.
+As the business rule is so long, we've summarised it in the first row of the table.
+
+Here we have three inputs and two results. We name the columns to be clear about their role.
 #
 !3 Splitting the business rule into two
 #
@@ -35,7 +37,7 @@ Now, you may have noticed that whenever credit is allowed, the credit limit is f
 #
 !3 Splitting into separate tables for each major case
 #
-Sometimes it's convenient to have a table for each of the major cases fof business rule. For example, we could split into tables based on how long the customer has been trading with us.
+Sometimes it's convenient to have a table for each of the major cases of a business rule. For example, we could split into tables based on whether the customer has been trading with us for long enough, or not.
 
 |''Credit is allowed for worthy customers''|
 |''months as customer''|''has paid reliably''|''balance owing''|''credit is allowed?''|
@@ -51,4 +53,6 @@ We can now include the fixed value in the header of the table.
 |no|5000.00|no|
 |yes|6000.00|no|
 
-The first row now also provides some input. The input is in the second cell of that row. As we'll see soon, such inputs are in evenly-numbered cells.
+The first row now also provides an input that applies to all the data rows in that table.
+
+The input is in the second cell of that header row. As we'll see soon, such inputs are in evenly-numbered cells, with the odd cells containing explanatory text.

@@ -112,12 +112,12 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
 	public CalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
-		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName));
+		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName),"void");
 	}
-	public CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator) {
-		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"");
+	public CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType) {
+		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"",returnType);
 	}
-	private CalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg) {
+	private CalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg, String returnType) {
 		TypedObject typedObject = evaluator.getTypedSystemUnderTest();
 		while (true) {
 			if (typedObject.isNull())
@@ -133,7 +133,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			}
 			else break;
 		}
-		throw new MissingMethodException(signatures("public void "+methodName+"("+arg+") { }"),scopeOf(evaluator).possibleClasses());
+		throw new MissingMethodException(signatures("public "+returnType+" "+methodName+"("+arg+") { }"),scopeOf(evaluator).possibleClasses());
 	}
 	public CalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, String propertyName, boolean considerContext) {
 		CalledMethodTarget target;

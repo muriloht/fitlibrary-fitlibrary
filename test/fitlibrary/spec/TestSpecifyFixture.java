@@ -140,10 +140,6 @@ public class TestSpecifyFixture {
 	public void treatsTheSameWhenTextAfterStacktraceIsIgnored() {
 		theseAreConsideredTheSame("ab class=\"fit_stacktrace\"> XYZ", "ab class=\"fit_stacktrace\">");
 	}
-	@Test
-	public void treatsTheSameWhenTextAfterFitLabelIsIgnored() {
-		theseAreConsideredTheSame("ab <span class=\"fit_label\"> XYZ", "ab <span class=\"fit_label\">");
-	}
 
 	
 	private void theseAreConsideredTheSame(String cellText1,

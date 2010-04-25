@@ -25,7 +25,7 @@ public interface LookupMethodTarget extends MustBeThreadSafe {
 	CalledMethodTarget findMethodOrGetter(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception;
 	CalledMethodTarget findMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator);
 	CalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator);
-	CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator);
+	CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType);
 	CalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, 
 			String propertyName, boolean considerContext);
 	List<Class<?>> possibleClasses(Evaluator firstObject);

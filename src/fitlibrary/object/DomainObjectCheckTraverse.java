@@ -48,7 +48,7 @@ public class DomainObjectCheckTraverse extends Traverse {
 				checkClass(testResults, cell, row.at(i+1));
 			} else {
 				try {
-					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this);
+					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
 					target.invokeAndCheck(TableFactory.row(),row.at(i+1),testResults,false);
 				} catch (Exception e) {
 					cell.error(testResults,e);

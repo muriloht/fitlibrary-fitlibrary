@@ -12,13 +12,13 @@
 <tr><td>fitlibrary.specify.setParser.Match</td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><b>check</b></td>
 <td><i>set of 123</i></td>
-<td class="fail">4,5 <span class="fit_label">expected</span><hr></span></td>
+<td class="fail">4,5 <span class="fit_label">expected</span><hr>1, 2, 3 <span class="fit_label">actual</span></td>
 </tr>
 </table>
-<br><table border="1" cellspacing="0">
+<br/><table border="1" cellspacing="0">
 <tr><td><b>check</b></td>
 <td><i>set empty</i></td>
 <td class="fail">0 <span class="fit_label">expected</span><hr> <span class="fit_label">actual</span></td>
