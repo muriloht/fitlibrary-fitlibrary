@@ -24,6 +24,7 @@ public class FitLibraryRunner {
 			System.err.println("Usage: fitlibrary.batch.FitLibraryRunner suiteName fitNesseDiry resultsDiry [showPasses]");
 			System.exit(-1);
 		}
+		System.out.println("FitLibraryRunner");
 		String suiteName = args[0];
 		String fitNesseDirectoryPath = args[1];
 		String resultsDirectoryPath = args[2];
@@ -48,7 +49,7 @@ public class FitLibraryRunner {
 			throw new FitLibraryException("Does not contain FitNesseRoot: "+fitNesseDirectoryPath);
 	}
 	private static void report(long start, Counts counts) {
-		System.err.println("Total right="+counts.right+", wrong="+counts.wrong+", ignores"+counts.ignores+", exceptions="+counts.exceptions);
+		System.err.println("Total right="+counts.right+", wrong="+counts.wrong+", ignores="+counts.ignores+", exceptions="+counts.exceptions);
 		System.err.println("Time to run = "+(System.currentTimeMillis()-start)+" milliseconds.");
 		System.exit(counts.wrong+counts.exceptions);
 	}

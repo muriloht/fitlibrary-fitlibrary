@@ -55,4 +55,4 @@ We can now include the fixed value in the header of the table.
 
 The first row now also provides an input that applies to all the data rows in that table.
 
-The input is in the second cell of that header row. As we'll see soon, such inputs are in evenly-numbered cells, with the odd cells containing explanatory text.
+The ''months'' input is in the second cell of that header row. As we'll see soon, such inputs are in evenly-numbered cells, with the odd cells containing explanatory text.

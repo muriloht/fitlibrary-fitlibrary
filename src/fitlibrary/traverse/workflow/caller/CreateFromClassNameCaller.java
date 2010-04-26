@@ -42,11 +42,14 @@ public class CreateFromClassNameCaller extends DoCaller {
 		// Later, the following will handle constructor arguments, and etc
 		if (DoFlow.IS_ACTIVE && validClassName())
 			try {
-				object = ClassUtility.newInstance(determineFullClass());
+				Class<?> determineFullClass = determineFullClass();
+				object = ClassUtility.newInstance(determineFullClass);
 				if (object instanceof Fixture && row.size() > 1)
 					handleArgs((Fixture)object,row);
 			} catch (NoSuchMethodException ex) {
 				exceptionToThrow = new NoNullaryConstructor(className);
+			} catch (NoClassDefFoundError ex) { // "The definition can no longer be found"
+				exceptionToThrow = new RuntimeException(ex);
 			} catch (InstantiationException ex) {
 				exceptionToThrow = new NoNullaryConstructor(className);
 			} catch (IllegalAccessException ex) {
@@ -62,17 +65,18 @@ public class CreateFromClassNameCaller extends DoCaller {
 			(className.contains(".") || Character.isUpperCase(className.charAt(0)));
 	}
 	private String substituteName(String name) {
-		if ("Import".equals(name) || "fit.Import".equals(name) || "ImportFixture".equals(name) || "fit.ImportFixture".equals(name))
+		if ("Import".equals(name) || "fit.Import".equals(name) || "ImportFixture".equals(name) || "fit.ImportFixture".equals(name)) {
 			return "fitlibrary.DefaultPackages";
+		}
 		return name;
 	}
 	private Class<?> determineFullClass() throws ClassNotFoundException {
 		try {
 			return Class.forName(className);
-		} catch (ClassNotFoundException e) {
+		} catch (Throwable e) {
 			try {
 				return Class.forName(className+"Fixture");
-			} catch (Exception e1) {
+			} catch (Throwable e1) {
 				for (String s : packages.get()) {
 					try {
 						return Class.forName(s+className);
@@ -80,6 +84,8 @@ public class CreateFromClassNameCaller extends DoCaller {
 						try {
 							return Class.forName(s+className+"Fixture");
 						} catch (ClassNotFoundException e3) {
+							// Do nothing
+						} catch (NoClassDefFoundError e4) {
 							// Do nothing
 						}
 					}

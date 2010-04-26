@@ -58,6 +58,8 @@ public class LookupPropertyEditorBasedParser {
 				setValue(Class.forName(text));
 			} catch (ClassNotFoundException e) {
 				throw new CouldNotParseException(Class.class,text);
+			} catch (NoClassDefFoundError e) {
+				throw new CouldNotParseException(Class.class,text);
 			}
 		}
 	}

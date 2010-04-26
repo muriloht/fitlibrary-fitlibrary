@@ -3,15 +3,15 @@
 
 |''start stop watch''|
 
-|''stop watch''|<|100|
+|''stop watch''|<|200|
 
 |''sleep for''|20|
 
-|''stop watch''|<|100|
+|''stop watch''|<|200|
 
 |''sleep for''|100|
 
-|''stop watch''|<|100|
+|''stop watch''|<|200|
 
 |''stop watch''|>|100|
 )
@@ -28,7 +28,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td><i>stop watch</i></td>
 <td>&lt;</td>
-<td class="pass">100</td>
+<td class="pass">200</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -39,7 +39,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td><i>stop watch</i></td>
 <td>&lt;</td>
-<td class="pass">100</td>
+<td class="pass">200</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -50,7 +50,7 @@
 <br/><table border="1" cellspacing="0">
 <tr><td><i>stop watch</i></td>
 <td>&lt;</td>
-<td class="fail">IGNORE</td>
+<td class="pass">200</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
