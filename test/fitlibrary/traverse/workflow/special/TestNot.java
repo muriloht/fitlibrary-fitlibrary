@@ -23,7 +23,7 @@ import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
 
 @RunWith(JMock.class)
-public class TestNot extends TestSpecialAction {
+public class TestNot extends SpecialActionTest {
 	class NotExpectations extends Expectations {
 		public NotExpectations() throws Exception {
 			allowing(initialRow).size();will(returnValue(3));

@@ -14,7 +14,7 @@ import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 
 @RunWith(JMock.class)
-public class TestLog extends TestSpecialAction {
+public class TestLog extends SpecialActionTest {
 	@Test
 	public void textIsLogged() throws Exception {
 		context.checking(new Expectations() {{

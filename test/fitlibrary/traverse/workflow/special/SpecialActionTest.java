@@ -13,7 +13,7 @@ import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 
-public abstract class TestSpecialAction {
+public abstract class SpecialActionTest {
 	Mockery context = new Mockery();
 	SpecialActionContext actionContext = context.mock(SpecialActionContext.class);
 	Row initialRow = context.mock(Row.class,"initialRow");

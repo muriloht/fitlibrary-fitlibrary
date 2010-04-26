@@ -15,7 +15,7 @@ import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 
 @RunWith(JMock.class)
-public class TestSet extends TestSpecialAction {
+public class TestSet extends SpecialActionTest {
 	class SetExpectations extends Expectations {
 		public SetExpectations(String eq) throws Exception {
 			allowing(initialRow).size(); will(returnValue(4));
