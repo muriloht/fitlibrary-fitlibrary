@@ -22,7 +22,7 @@ public class TestSet extends SpecialActionTest {
 			allowing(initialRow).text(2,actionContext); will(returnValue(eq));
 			allowing(initialRow).at(0); will(returnValue(firstCell));
 			allowing(initialRow).text(1,actionContext); will(returnValue("2nd"));
-			allowing(initialRow).elementsFrom(3);will(returnValue(subRow));
+			allowing(initialRow).fromAt(3);will(returnValue(subRow));
 		}
 	}
 	@Test

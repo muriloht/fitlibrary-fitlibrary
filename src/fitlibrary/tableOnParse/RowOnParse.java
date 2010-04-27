@@ -107,10 +107,6 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
                 return false;
         return true;
     }
-	public RowOnParse elementsFrom(int i) {
-		// Can be an empty row
-		return new RowOnParse(new Parse("tr","",parse.parts.at(i),null));
-	}
 	public void ignore(TestResults testResults) {
 		for (int i = 0; i < size(); i++)
 			at(i).ignore(testResults);
@@ -126,7 +122,7 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
 	public Cell lastCell() {
 		return at(size()-1);
 	}
-	public void addCommentRow(CellOnParse cell) {
+	public void addCommentRow(Cell cell) {
 		RowOnParse commentRow = new RowOnParse();
 		commentRow.addCell("note");
 		commentRow.add(cell);
@@ -134,7 +130,11 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
 		parse.more = commentRow.parse;
 		commentRow.parse.more = next;
 	}
-	public Row rowFromTo(int from, int upto) {
+	@Override
+	public Row fromAt(int rowNo) {
+		return TableFactory.row(at(rowNo));
+	}
+	public Row fromTo(int from, int upto) {
 		Row row = TableFactory.row();
 		for (int i = from; i < upto; i++)
 			row.add(TableFactory.cell(at(i)));

@@ -22,7 +22,6 @@ public interface Row extends TableElement<Row,Cell> {
 	void ignore(TestResults testResults);
 	void missing(TestResults testResults);
 	void shown();
-	Row elementsFrom(int i);
 	
 	int argumentCount();
 	String methodNameForCamel(VariableResolver resolver);
@@ -34,6 +33,5 @@ public interface Row extends TableElement<Row,Cell> {
 	boolean didPass();
 	boolean didFail();
 	void removeElementAt(int i);
-	Row rowFromTo(int from, int upto);
 	void clear();
 }

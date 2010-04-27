@@ -15,7 +15,9 @@ public interface TableElement<From, To> extends Iterable<To> {
 	To at(int i);
 	boolean atExists(int i);
 	To last();
+	From fromAt(int i);
 	Iterable<To> iterableFrom(int start);
+	From fromTo(int from, int upto);
 	From deepCopy();
 	void setLeader(String leader);
 	void setTrailer(String trailer);

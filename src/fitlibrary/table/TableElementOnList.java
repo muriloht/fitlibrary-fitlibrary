@@ -12,7 +12,7 @@ import fit.Parse;
 import fitlibrary.runResults.TestResults;
 
 @SuppressWarnings("unchecked")
-public abstract class TableElementOnList<To extends TableElement> {
+public abstract class TableElementOnList<From extends TableElement, To extends TableElement> {
     public final static String PASS = "class=\"pass\"";
     public final static String FAIL = "class=\"fail\"";
     public final static String IGNORE = "class=\"ignore\"";
@@ -58,10 +58,15 @@ public abstract class TableElementOnList<To extends TableElement> {
 			list.add(at(i));
 		return list;
 	}
-	public TableElementOnList<To> from(int start) {
-		TableElementOnList<To> result = newObject();
-		for (To to: iterableFrom(start))
-			result.add(to);
+	public From fromAt(int start) {
+		if (start == 0)
+			return (From) this;
+		return fromTo(start,size());
+	}
+	public From fromTo(int from, int upto) {
+		From result = newObject();
+		for (int i = from; i < upto; i++)
+			result.add(at(i));
 		return result;
 	}
 	public void clear() {
@@ -179,5 +184,5 @@ public abstract class TableElementOnList<To extends TableElement> {
 	protected void appendBody(StringBuilder builder) {
 		// Overridden in Cell
 	}
-	protected abstract TableElementOnList<To> newObject();
+	protected abstract From newObject();
 }

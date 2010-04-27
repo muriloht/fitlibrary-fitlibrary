@@ -251,7 +251,7 @@ public class CellOnList extends TablesOnList implements Cell {
 		return " colspan=\""+colspan+"\"";
 	}
     public Tables getEmbeddedTables() {
-		return (Tables) from(0);
+		return fromAt(0);
     }
     public boolean hasEmbeddedTables() {
         return !isEmpty();

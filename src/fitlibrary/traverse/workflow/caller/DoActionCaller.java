@@ -36,7 +36,7 @@ public class DoActionCaller extends DoCaller {
 	@Override
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		try {
-			TypedObject typedResult = target.invokeTyped(row.elementsFrom(1),testResults);
+			TypedObject typedResult = target.invokeTyped(row.fromAt(1),testResults);
 			Object result = null;
 			if (typedResult != null)
 				result = typedResult.getSubject();

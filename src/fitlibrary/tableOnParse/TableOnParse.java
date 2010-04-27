@@ -154,6 +154,12 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	public Table fromAt(int rowNo) {
 		return TableFactory.table(at(rowNo));
 	}
+	public Table fromTo(int from, int upto) {
+		Table result = TableFactory.table();
+		for (int i = from; i < upto; i++)
+			result.add(at(i).deepCopy());
+		return result;
+	}
 	@Override
 	public Table asTableOnParse() {
 		return this;

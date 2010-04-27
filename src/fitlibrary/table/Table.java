@@ -8,7 +8,6 @@ package fitlibrary.table;
 import fit.Parse;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.tableOnParse.TablesOnParse;
 
 public interface Table extends TableElement<Table,Row> {
 	void error(TestResults testResults, Throwable e);
@@ -17,14 +16,12 @@ public interface Table extends TableElement<Table,Row> {
 	Row newRow();
 	void ignore(TestResults testResults);
 	void pass(TestResults testResults);
-	TablesOnParse getTables();
 	void replaceAt(int r, Row newRow);
 	void evenUpRows();
 	void addFoldingText(String foldingText);
 	boolean isPlainTextTable();
 	boolean hasRowsAfter(Row currentRow);
 	Parse asParse();
-	Table fromAt(int rowNo);
 	Table asTableOnParse();
 	void add(int i, Row row);
 	void removeElementAt(int i);

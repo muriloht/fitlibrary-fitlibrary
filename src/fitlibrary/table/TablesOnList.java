@@ -6,7 +6,7 @@ package fitlibrary.table;
 
 import fit.Parse;
 
-public class TablesOnList extends TableElementOnList<Table> implements Tables {
+public class TablesOnList extends TableElementOnList<Tables,Table> implements Tables {
     public TablesOnList() {
     	super("");
     }
@@ -31,14 +31,14 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 		return copy;
 	}
 	public Tables followingTables() {
-		return (TablesOnList) from(1);
+		return fromAt(1);
 	}
 	public void addTables(Tables tables) {
 		for (Table table: tables)
 			add(table);
 	}
 	@Override
-	protected TableElementOnList<Table> newObject() {
+	protected Tables newObject() {
 		return new TablesOnList();
 	}
 	@Override
@@ -60,5 +60,15 @@ public class TablesOnList extends TableElementOnList<Table> implements Tables {
 		} finally {
 			TableFactory.pop();
 		}
+	}
+	public Tables fromTo(int from, int upto) {
+		TablesOnList tables = new TablesOnList();
+		for (int i = from; i < upto; i++)
+			tables.add(at(i));
+		return tables;
+	}
+	@Override
+	public Tables fromAt(int i) {
+		return fromTo(i,size());
 	}
 }

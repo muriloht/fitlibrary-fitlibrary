@@ -90,7 +90,7 @@ public class TestTablesOnParse {
 	}
 	@Test
 	public void followingTables() {
-		Tables followingTables = tables12.followingTables();
+		Tables followingTables = tables12.fromAt(1);
 		assertThat(followingTables.size(), is(1));
 		assertThat(followingTables.at(0), is(table2));
 	}

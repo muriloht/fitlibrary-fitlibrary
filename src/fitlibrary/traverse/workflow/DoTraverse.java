@@ -215,7 +215,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseIs");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		target.invokeAndCheckForSpecial(row.rowFromTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
+		target.invokeAndCheckForSpecial(row.fromTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
 	public void equals(TestResults testResults, Row row) throws Exception {
 		is(testResults,row);
@@ -231,7 +231,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Object result = target.invoke(row.rowFromTo(1,row.size()-2),testResults,true);
+			Object result = target.invoke(row.fromTo(1,row.size()-2),testResults,true);
 			target.notResult(expectedCell, result, testResults);
         } catch (IgnoredException e) {
             //
@@ -303,7 +303,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Object result = target.invoke(row.rowFromTo(1,row.size()-2),testResults,true);
+			Object result = target.invoke(row.fromTo(1,row.size()-2),testResults,true);
 			if (result instanceof Comparable) {
 				target.compare(expectedCell, (Comparable)result, testResults, compare);
 			} else
@@ -339,7 +339,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches();
 			if (matches)
 				expectedCell.pass(testResults);
@@ -364,7 +364,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = compile.matcher(result).matches();
 			if (matches) {
 				expectedCell.pass(testResults);
@@ -389,7 +389,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				throw new MissingCellsException("DoTraverseMatches");
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			if (!Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches())
 				expectedCell.pass(testResults);
 			else if (expectedCell.text(this).equals(result))
@@ -409,7 +409,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("contains");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+		String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (matches)
 			expectedCell.pass(testResults);
@@ -429,7 +429,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+			result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 			boolean matches = result.contains(expectedCell.text(this));
 			if (matches) {
 				expectedCell.pass(testResults);
@@ -447,7 +447,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("doesNoContain");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.rowFromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
+		String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
 		boolean matches = result.contains(expectedCell.text(this));
 		if (!matches)
 			expectedCell.pass(testResults);
@@ -463,7 +463,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		Row actionPartOfRow = row.rowFromTo(1,row.size()-2);
+		Row actionPartOfRow = row.fromTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
@@ -581,7 +581,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Object className = getDynamicVariable(object+".class");
 		if (className == null || "".equals(className))
 			className = object; // then use the object name as a class name
-		Row macroRow = row.elementsFrom(2);
+		Row macroRow = row.fromAt(2);
 		TypedObject typedObject = new DefinedActionCaller(object,className.toString(),macroRow,getRuntimeContext()).run(row, testResults);
 		return typedObject.getSubject();
 	}
@@ -609,7 +609,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("addNamed");
-		TypedObject typedObject = interpretRow(row.elementsFrom(2), testResults);
+		TypedObject typedObject = interpretRow(row.fromAt(2), testResults);
 		getRuntimeContext().getTableEvaluator().addNamedObject(row.text(1,this),typedObject,row,testResults);
 	}
 	/*
@@ -619,7 +619,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		int less = 2;
 		if (row.size() < less)
 			throw new MissingCellsException("addGlobal");
-		TypedObject typedObject = interpretRow(row.elementsFrom(1), testResults);
+		TypedObject typedObject = interpretRow(row.fromAt(1), testResults);
 		if (typedObject.getSubject().getClass() == DoTraverse.class)
 			typedObject = ((DoEvaluator)typedObject.getSubject()).getTypedSystemUnderTest();
 		if (typedObject.getSubject() instanceof RuntimeContextual)

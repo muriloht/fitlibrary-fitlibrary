@@ -10,7 +10,7 @@ import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.tableOnParse.TablesOnParse;
 
-public class TableOnList extends TableElementOnList<Row> implements Table {
+public class TableOnList extends TableElementOnList<Table,Row> implements Table {
     private int firstErrorRow = 0;
     
 	public TableOnList() {
@@ -113,7 +113,7 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 		return "Table";
 	}
 	@Override
-	protected TableElementOnList<Row> newObject() {
+	protected Table newObject() {
 		return new TableOnList();
 	}
 	@Override
@@ -125,12 +125,6 @@ public class TableOnList extends TableElementOnList<Row> implements Table {
 	}
 	public Parse asParse() {
 		return asTableOnParse().asParse();
-	}
-	@Override
-	public Table fromAt(int rowNo) {
-		if (rowNo == 0)
-			return this;
-		return (Table) from(rowNo);
 	}
 	@Override
 	public Table asTableOnParse() {

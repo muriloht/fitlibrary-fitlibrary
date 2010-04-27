@@ -29,7 +29,7 @@ public class TestNot extends SpecialActionTest {
 			allowing(initialRow).size();will(returnValue(3));
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
 
-			allowing(initialRow).elementsFrom(2);will(returnValue(subRow));
+			allowing(initialRow).fromAt(2);will(returnValue(subRow));
 			allowing(initialRow).at(0);will(returnValue(firstCell));
 		}
 	}

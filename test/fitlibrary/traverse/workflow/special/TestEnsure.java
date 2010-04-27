@@ -23,7 +23,7 @@ public class TestEnsure extends SpecialActionTest {
 		public EnsureExpectations() throws Exception {
 			allowing(initialRow).size();will(returnValue(3));
 			allowing(initialRow).at(0);will(returnValue(firstCell));
-			allowing(initialRow).elementsFrom(2);will(returnValue(subRow));
+			allowing(initialRow).fromAt(2);will(returnValue(subRow));
 			one(actionContext).findMethodFromRow(initialRow,1,0);
 			   will(returnValue(target));
 		}

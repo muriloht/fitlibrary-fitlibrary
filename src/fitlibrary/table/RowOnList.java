@@ -12,7 +12,7 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.tableOnParse.CellOnParse;
 import fitlibrary.utility.ExtendedCamelCase;
 
-public class RowOnList extends TableElementOnList<Cell> implements Row {
+public class RowOnList extends TableElementOnList<Row,Cell> implements Row {
     private boolean rowIsHidden = false;
     
     public RowOnList() {
@@ -45,15 +45,6 @@ public class RowOnList extends TableElementOnList<Cell> implements Row {
     }
 	public Cell lastCell() {
 		return last();
-	}
-	public Row rowFromTo(int from, int upto) {
-		RowOnList row = new RowOnList();
-		for (int i = from; i < upto; i++)
-			row.add(at(i));
-		return row;
-	}
-	public Row elementsFrom(int start) {
-		return rowFromTo(start,size());
 	}
     @Override
 	public void pass(TestResults testResults) {
@@ -134,7 +125,7 @@ public class RowOnList extends TableElementOnList<Cell> implements Row {
 		return "Row";
 	}
 	@Override
-	protected TableElementOnList<Cell> newObject() {
+	protected Row newObject() {
 		return new RowOnList();
 	}
     private void handleShow(FitLibraryShowException exception) {

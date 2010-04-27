@@ -127,7 +127,7 @@ public class TestRowOnList {
 	@Test
 	public void elementsFrom0() {
 		Row row0 = row("a","b","c");
-		Row copy = row0.elementsFrom(0);
+		Row copy = row0.fromAt(0);
 		assertThat(copy.size(),is(3));
 		assertThat(copy.at(0),is(row0.at(0)));
 		assertThat(copy.at(1),is(row0.at(1)));
@@ -136,14 +136,14 @@ public class TestRowOnList {
 	@Test
 	public void elementsFrom2() {
 		Row row0 = row("a","b","c");
-		Row copy = row0.elementsFrom(2);
+		Row copy = row0.fromAt(2);
 		assertThat(copy.size(),is(1));
 		assertThat(copy.at(0),is(row0.at(2)));
 	}
 	@Test
 	public void elementsFromTo() {
 		Row row0 = row("a","b","c");
-		Row copy = row0.rowFromTo(1,2);
+		Row copy = row0.fromTo(1,2);
 		assertThat(copy.size(),is(1));
 		assertThat(copy.at(0),is(row0.at(1)));
 	}

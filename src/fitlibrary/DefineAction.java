@@ -79,7 +79,7 @@ public class DefineAction extends Traverse {
 	}
 	private Tables copyBody(Tables tables) {
 		if (tables.atExists(1))
-			return tables.followingTables().deepCopy(); 
+			return tables.fromAt(1).deepCopy(); 
 		Row row = TableFactory.row();
 		row.addCell("comment");
 		return TableFactory.tables(TableFactory.table(row));

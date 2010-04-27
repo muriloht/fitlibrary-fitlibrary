@@ -63,6 +63,16 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
 	public int hashCode() {
 		return super.hashCode();
 	}
+	@Override
+	public Tables fromAt(int i) {
+		return TableFactory.tables(at(i));
+	}
+	public Tables fromTo(int from, int upto) {
+		Tables result = TableFactory.tables();
+		for (int i = from; i < upto; i++)
+			result.add(at(i).deepCopy());
+		return result;
+	}
 	public Tables followingTables() {
 		return new TablesOnParse(parse.more);
 	}
