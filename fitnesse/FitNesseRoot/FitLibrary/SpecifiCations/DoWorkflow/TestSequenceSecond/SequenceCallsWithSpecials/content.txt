@@ -122,7 +122,7 @@
 <td>a</td>
 <td>&nbsp;</td>
 </tr>
-<tr><td class="error"><b>not</b><hr/> <span class="fit_label">some error</span></td>
+<tr><td class="pass"><b>not</b></td>
 <td>fitLibraryException</td>
 <td>some error</td>
 <td>&nbsp;</td>

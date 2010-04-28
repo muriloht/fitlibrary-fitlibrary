@@ -37,7 +37,7 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.JavaSpecific.ClassParsing"
+				"FitLibrary.SpecifiCations.DoWorkflow.TestSequenceSecond.SequenceCallsWithSpecials"
 		};
 		run(pageNames);
 	}

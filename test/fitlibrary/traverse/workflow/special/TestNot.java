@@ -91,33 +91,78 @@ public class TestNot extends SpecialActionTest {
 		lazySpecial.run(testResults);
 	}
 	@Test
-	public void reportsPassWithParseExceptionInIgnoredException() throws Exception {
+	public void reportsErrorWithShowExceptionInIgnoredExceptionWhenPassesOnException() throws Exception {
+		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
 		context.checking(new NotExpectations() {{
 			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			   will(throwException(new IgnoredException(new BadNumberException())));
+			  will(throwException(new IgnoredException(show)));
+			one(initialRow).error(testResults,show);
+		}});
+		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void reportsErrorWithShowExceptionInIgnoredExceptionWhenErrorOnException() throws Exception {
+		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
+		context.checking(new NotExpectations() {{
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
+			  will(throwException(new IgnoredException(show)));
+			one(initialRow).error(testResults,show);
+		}});
+		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void reportsErrorWithShowExceptionWhenPassesOnException() throws Exception {
+		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
+		context.checking(new NotExpectations() {{
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
+			  will(throwException(show));
+			one(initialRow).error(testResults,show);
+		}});
+		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void reportsErrorWithShowExceptionWhenErrorOnException() throws Exception {
+		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
+		context.checking(new NotExpectations() {{
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
+			  will(throwException(show));
+			one(initialRow).error(testResults,show);
+		}});
+		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void reportsPassWithOtherFitLibraryExceptionThrown() throws Exception {
+		final FitLibraryException exception = new FitLibraryException("");
+		context.checking(new NotExpectations() {{
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
+			    will(throwException(exception));
 			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
 		lazySpecial.run(testResults);
 	}
 	@Test
-	public void reportsFailWithParseExceptionInIgnoredException() throws Exception {
-		final BadNumberException embeddedException = new BadNumberException();
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(new IgnoredException(embeddedException)));
-			one(initialRow).error(testResults,embeddedException);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithOtherFitLibraryExceptionThrown() throws Exception {
-		final FitLibraryException exception = new FitLibraryException("");
+	public void reportsPassWithBadNumberExceptionThrown() throws Exception {
+		final BadNumberException exception = new BadNumberException();
 		context.checking(new NotExpectations() {{
 			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
 			    will(throwException(exception));
-			one(initialRow).error(testResults,exception);
+			one(firstCell).pass(testResults);
+		}});
+		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void reportsPassWithBadNumberInInvocationTargetExceptionThrown() throws Exception {
+		final BadNumberException exception = new BadNumberException();
+		context.checking(new NotExpectations() {{
+			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
+			    will(throwException(new InvocationTargetException(exception)));
+			one(firstCell).pass(testResults);
 		}});
 		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
 		lazySpecial.run(testResults);

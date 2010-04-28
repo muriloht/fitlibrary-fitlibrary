@@ -15,6 +15,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.parse.NoValueProvidedException;
+import fitlibrary.exception.parse.ParseException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
@@ -106,6 +107,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				collectCells(row,2,testResults,catchParseError);
 			else
 				collectCells(row,1,testResults,catchParseError);
+		} catch (ParseException e) {
+			throw e; // Unable to call
 		} catch (Exception e) {
 			throw new IgnoredException(e); // Unable to call
 		}

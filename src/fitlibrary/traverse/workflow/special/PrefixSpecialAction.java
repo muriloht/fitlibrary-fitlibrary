@@ -11,6 +11,7 @@ import ognl.Ognl;
 import fit.Fixture;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.NotRejectedException;
 import fitlibrary.exception.parse.ParseException;
@@ -157,21 +158,22 @@ public class PrefixSpecialAction {
 				    else
 				        notCell.pass(testResults);
 				} catch (IgnoredException e) {
-					if (e.getIgnoredException() instanceof ParseException)
-						if (notStyle == NotSyle.PASSES_ON_EXCEPION)
-							notCell.pass(testResults);
-						else
-							row.error(testResults,e.getIgnoredException());
+					if (e.getIgnoredException() instanceof FitLibraryShowException)
+						row.error(testResults,e.getIgnoredException());
+				} catch (FitLibraryShowException e) {
+					row.error(testResults,e);
 				} catch (FitLibraryException e) {
-					if (notStyle == NotSyle.PASSES_ON_EXCEPION && e instanceof ParseException)
+					if (notStyle == NotSyle.PASSES_ON_EXCEPION)
 						notCell.pass(testResults);
 					else
 						row.error(testResults,e);
 				} catch (InvocationTargetException e) {
 					Throwable embedded = ExceptionHandler.unwrap(e);
-					if (notStyle == NotSyle.PASSES_ON_EXCEPION && embedded instanceof ParseException)
+					if (embedded instanceof FitLibraryShowException)
+						row.error(testResults, embedded);
+					else if (notStyle == NotSyle.PASSES_ON_EXCEPION)
 						notCell.pass(testResults);
-					else if (notStyle == NotSyle.ERROR_ON_EXCEPION || embedded instanceof FitLibraryException)
+					else if (notStyle == NotSyle.ERROR_ON_EXCEPION)
 						row.error(testResults, embedded);
 					else
 						notCell.pass(testResults);
