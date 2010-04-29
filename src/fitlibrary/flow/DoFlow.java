@@ -108,6 +108,14 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	public void runTable(Table table, ITableListener tableListener) {
 		runtime.setCurrentTable(table);
 		TestResults testResults = tableListener.getTestResults();
+		runtime.pushTestResults(testResults);
+		try {
+			runTable(table, testResults);
+		} finally {
+			runtime.popTestResults();
+		}
+	}
+	private void runTable(Table table, TestResults testResults) {
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 			Row row = table.at(rowNo);
 			if (row.at(0).hadError()) {
@@ -122,15 +130,14 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.at(0);
 			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
-			    		handleInnerTables(cell, tableListener);
+			    		handleInnerTables(cell, testResults);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
 			    		runtime.setCurrentRow(row);
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
 //			    		System.out.println("DoFlow got "+subject);
-			    		if (subject instanceof Evaluator)
-			    			((Evaluator)subject).setRuntimeContext(flowEvaluator.getRuntimeContext());
+			    		setRuntimeContextOf(subject);
 			    		if (subject == null) {
 			    			// Can't do anything useful with a null
 			    		} else if (subject.getClass() == Fixture.class) {
@@ -186,18 +193,20 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			for (int i = rest; i < restOfTable.size(); i++)
 				table.add(restOfTable.at(i));
 	}
-	private void handleInnerTables(final Cell cell, ITableListener tableListener) {
+	private void handleInnerTables(final Cell cell, TestResults testResults) {
 		Tables innerTables = cell.getEmbeddedTables();
 		IScopeState state = scopeStack.currentState();
 		for (Table iTable: innerTables) {
-			runTable(iTable,tableListener);
+			runTable(iTable,testResults);
 			state.restore();
 		}
 	}
 	private void handleActualDoFixture(DoEvaluator doEvaluator, Row row, TestResults testResults) {
 		// Unwrap an auto-wrap, keeping the type information
-		if (doEvaluator.getSystemUnderTest() != null)
+		if (doEvaluator.getSystemUnderTest() != null) {
 			pushOnScope(doEvaluator.getTypedSystemUnderTest(),row,testResults);
+			setRuntimeContextOf(doEvaluator.getSystemUnderTest());
+		}
 	}
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
 		if (suiteFixtureOption.isNone())

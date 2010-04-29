@@ -12,6 +12,7 @@
 |^GoingIntoFlow|''Using !-FitLibraryServer-!, it's not necessary for the first table to have a !-DoFixture-! table in order to be in flow''|
 |[[!-ShowAfter-!][>DoWorkflow.SpecialActions.TestShowAfter]]|''Logging useful information after the current table''|
 |^PlainTextInsteadOfTables|''Flow actions can be written in plain text, instead of in tables''|
+|^PojoAccessToCurrentRow|''How ordinary methods can colour cells and add cells to the current row.''|
 
 |^CollectionSpecifications|''Various collections of elements, such as lists, sets, maps, arrays, etc (both checking and setup)''|
 |^BusinessRules|''Calculation rules, constraints, and combinations''|

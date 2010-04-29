@@ -8,6 +8,7 @@ package fitlibrary.runtime;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
@@ -22,13 +23,13 @@ import fitlibrary.log.FileLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.tableProxy.CellProxy;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
-import fitlibrary.typed.TypedObject;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";
-	private DynamicVariables dynamicVariables = new GlobalDynamicVariables();
+	protected DynamicVariables dynamicVariables = new GlobalDynamicVariables();
 	private Map<String,Integer> timeouts = new HashMap<String, Integer>();
 	private FileLogger fileLogger = new FileLogger();
 	private IScope scope;
@@ -41,8 +42,10 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	private DynamicVariablesRecording dynamicVariablesRecording = new DynamicVariablesRecordingThatFails();
 	private DefinedActionCallManager definedActionCallManager = new DefinedActionCallManager();
 	private FoldingTexts foldingTexts = new FoldingTexts();
-	private Row currentRow;
-	private Table currentTable;
+	protected Row currentRow;
+	protected Table currentTable;
+	protected TestResults testResults;
+	private Stack<TestResults> testResultsStack = new Stack<TestResults>();
 
 	public RuntimeContextContainer() {
 		//
@@ -183,5 +186,44 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		if (currentTable == null || currentRow == null)
 			return false;
 		return currentTable.hasRowsAfter(currentRow);
+	}
+	@Override
+	public void addShow(String s) {
+		currentRow.addCell(s).shown();
+	}
+	@Override
+	public TestResults getTestResults() {
+		return testResults;
+	}
+	public void pushTestResults(TestResults results) {
+		testResultsStack.push(this.testResults);
+		this.testResults = results;
+	}
+	@Override
+	public void popTestResults() {
+		this.testResults = testResultsStack.pop();
+	}
+	@Override
+	public CellProxy cellAt(final int i) {
+		return new CellProxy() {
+			@Override
+			public void pass() {
+				currentRow.at(i).pass(testResults);
+			}
+			@Override
+			public void fail(String msg) {
+				if (msg.isEmpty())
+					currentRow.at(i).fail(testResults);
+				else
+					currentRow.at(i).fail(testResults,msg,dynamicVariables);
+			}
+			@Override
+			public void error(String msg) {
+				if (msg.isEmpty())
+					currentRow.at(i).error(testResults);
+				else
+					currentRow.at(i).error(testResults,msg);
+			}
+		};
 	}
 }
