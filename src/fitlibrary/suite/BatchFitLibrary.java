@@ -11,6 +11,7 @@ import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
 import fitlibrary.flow.GlobalScope;
 import fitlibrary.flow.ScopeStack;
+import fitlibrary.flow.SetUpTearDownCache;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
@@ -49,7 +50,7 @@ public class BatchFitLibrary implements StorytestRunner {
 		runtime.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 		global.setRuntimeContext(runtime);
 		flowEvaluator.setRuntimeContext(runtime);
-		DoFlow doFlow2 = new DoFlow(flowEvaluator,scopeStack,runtime);
+		DoFlow doFlow2 = new DoFlow(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		runtime.SetTableEvaluator(doFlow2);
 		return doFlow2;
 	}

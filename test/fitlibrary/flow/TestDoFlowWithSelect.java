@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
@@ -27,8 +27,9 @@ public class TestDoFlowWithSelect {
 	final IScopeStack scopeStack = context.mock(IScopeStack.class);
 	final Object something = "something";
 	final TypedObject someTypedObject = context.mock(TypedObject.class);
-	final RuntimeContextContainer runtime = new RuntimeContextContainer();
-	final DoFlow doFlow = new DoFlow(flowEvaluator,scopeStack,runtime);
+	final RuntimeContextInternal runtime = context.mock(RuntimeContextInternal.class);
+	final SetUpTearDown setUpTearDown = context.mock(SetUpTearDown.class);
+	final DoFlow doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
 
 	@Test(expected=FitLibraryException.class)
 	public void selectUnknown() {
@@ -42,6 +43,7 @@ public class TestDoFlowWithSelect {
 		final TestResults testResults = TestResultsFactory.testResults();
 		context.checking(new Expectations() {{
 			oneOf(someTypedObject).getSubject(); will(returnValue(something));
+			oneOf(setUpTearDown).callSetUpSutChain(something, row, testResults);
 			oneOf(scopeStack).addNamedObject("x",someTypedObject,row, testResults);
 			oneOf(scopeStack).select("x");
 		}});

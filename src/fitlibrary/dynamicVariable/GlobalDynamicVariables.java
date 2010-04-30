@@ -51,7 +51,6 @@ public class GlobalDynamicVariables extends DynamicVariablesMap {
 		}
 		reader.close();
 	}
-	@SuppressWarnings("unused")
 	public void putParameter(String key, Object value) {
 		throw new RuntimeException("Cannot put a parameter to a GlobalDynamicVariables");
 	}

@@ -11,6 +11,7 @@ import java.io.IOException;
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
+import fitlibrary.differences.FitNesseLocalFile;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
@@ -23,7 +24,10 @@ public class DebugPage {
 	protected int tablesFinished = 0;
 	protected int storytestsFinished = 0;
 	protected int expectedTablesFinished = 0;
-	private static String FITNESSE_URL = "http://localhost:8080/";
+	private static String FITNESSE_URL = "http://localhost:8980/";
+	private static String FITNESSE_DIRY = "fitnesse";
+	private static String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
+	private static String DIRY = FITNESSE_FOR_WEB_DIRY;
 	
 	protected ReportListener reportListener = new ReportListener() {
 		public void tableFinished(Table table) {
@@ -37,11 +41,13 @@ public class DebugPage {
 
 	public static void main(String[] args) throws Exception {
 		String[] pageNames = new String[] {
-				"FitLibrary.SpecifiCations.DoWorkflow.TestSequenceSecond.SequenceCallsWithSpecials"
+//				"FitLibrary.SpecifiCations.PojoAccessToCurrentRow.AddShowCell"
+				"FitLibraryWeb.SpiderFixture.SpecifySpiderFixture.SpecifyFindElement"
 		};
 		run(pageNames);
 	}
 	public static void run(String[] pageNames) throws Exception {
+		FitNesseLocalFile.fitNessePrefix("fitnesse");
 		DebugPage runPage = new DebugPage();
 		runPage.runs(pageNames);
 	}
@@ -59,7 +65,7 @@ public class DebugPage {
 					" tables but instead got "+tablesFinished);
 	}
 	public void run(String pageName) throws IOException, FitParseException {
-		String html = new ParallelFitNesseRepository("fitnesse").getTest(pageName).getContent();
+		String html = new ParallelFitNesseRepository(DIRY).getTest(pageName).getContent();
 		System.out.println("\n----------\nHTML for "+pageName+"\n----------\n"+html);
 		Tables tables = TableFactory.tables(html);
 		expectedTablesFinished += tables.size();

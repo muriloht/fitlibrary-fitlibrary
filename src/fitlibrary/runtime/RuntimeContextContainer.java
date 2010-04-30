@@ -24,6 +24,7 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.tableProxy.CellProxy;
+import fitlibrary.tableProxy.RowProxy;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
 
@@ -35,17 +36,15 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	private IScope scope;
 	private TableEvaluator tableEvaluator;
 	private GlobalScope global;
-	// Remember to copy across any added valuable thing inside freshCopy()
+	// Remember to copy across any added valuable thing inside copyFromSuite()
 	// Following are local to a storytest and so are not copied across a suite:
-	private boolean abandonedStorytest = false;
-	private boolean stopOnError = false;
 	private DynamicVariablesRecording dynamicVariablesRecording = new DynamicVariablesRecordingThatFails();
 	private DefinedActionCallManager definedActionCallManager = new DefinedActionCallManager();
 	private FoldingTexts foldingTexts = new FoldingTexts();
-	protected Row currentRow;
-	protected Table currentTable;
 	protected TestResults testResults;
 	private Stack<TestResults> testResultsStack = new Stack<TestResults>();
+	protected Row currentRow;
+	protected Table currentTable;
 
 	public RuntimeContextContainer() {
 		//
@@ -67,7 +66,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		this.tableEvaluator = tableEvaluator;
 		this.global = global;
 	}
-	public RuntimeContextInternal freshCopy() {
+	public RuntimeContextInternal copyFromSuite() {
 		return new RuntimeContextContainer(
 				new GlobalDynamicVariables(dynamicVariables.top()),
 				timeouts,
@@ -75,6 +74,11 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 				scope,
 				tableEvaluator,
 				global);
+	}
+	@Override
+	public void reset() {
+		dynamicVariables = new GlobalDynamicVariables();
+		timeouts = new HashMap<String, Integer>();
 	}
 	public DynamicVariables getDynamicVariables() {
 		return dynamicVariables;
@@ -150,20 +154,17 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public DynamicVariablesRecording getDynamicVariableRecorder() {
 		return dynamicVariablesRecording;
 	}
-	public boolean abandonedStorytest() {
-		return abandonedStorytest;
+	@Override
+	public void setAbandon(boolean abandon) {
+		scope.setAbandon(abandon);
 	}
 	@Override
-	public void setAbandon(boolean b) {
-		abandonedStorytest = b;
-	}
-	@Override
-	public boolean isAbandoned(TestResults testResults) {
-		return abandonedStorytest || (stopOnError && testResults.problems());
+	public boolean isAbandoned(TestResults testResults2) {
+		return scope.isAbandon() || (scope.isStopOnError() && testResults2.problems());
 	}
 	@Override
 	public void setStopOnError(boolean stop) {
-		stopOnError = stop;
+		scope.setStopOnError(stop);
 	}
 	@Override
 	public DefinedActionCallManager getDefinedActionCallManager() {
@@ -186,10 +187,6 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		if (currentTable == null || currentRow == null)
 			return false;
 		return currentTable.hasRowsAfter(currentRow);
-	}
-	@Override
-	public void addShow(String s) {
-		currentRow.addCell(s).shown();
 	}
 	@Override
 	public TestResults getTestResults() {
@@ -223,6 +220,15 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 					currentRow.at(i).error(testResults);
 				else
 					currentRow.at(i).error(testResults,msg);
+			}
+		};
+	}
+	@Override
+	public RowProxy currentRow() {
+		return new RowProxy() {
+			@Override
+			public void addShow(String s) {
+				currentRow.addCell(s).shown();
 			}
 		};
 	}

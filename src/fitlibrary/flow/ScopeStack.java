@@ -32,6 +32,8 @@ public class ScopeStack implements IScopeStack {
 	protected List<TypedObject> globals = new ArrayList<TypedObject>();
 	protected final TypedObject global;
 	private Map<String,TypedObject> selectNames = new HashMap<String, TypedObject>();
+	private boolean abandon = false;
+	private boolean stopOnError = false;
 
 	public ScopeStack(FlowEvaluator flowEvaluator, TypedObject global) {
 		this.flowEvaluator = new GenericTypedObject(flowEvaluator);
@@ -165,5 +167,21 @@ public class ScopeStack implements IScopeStack {
 	@Override
 	public void addGlobal(TypedObject typedObject) {
 		globals.add(typedObject);
+	}
+	@Override
+	public void setAbandon(boolean abandon) {
+		this.abandon  = abandon;
+	}
+	@Override
+	public boolean isAbandon() {
+		return abandon;
+	}
+	@Override
+	public boolean isStopOnError() {
+		return stopOnError;
+	}
+	@Override
+	public void setStopOnError(boolean stop) {
+		this.stopOnError = stop;
 	}
 }

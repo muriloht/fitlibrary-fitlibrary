@@ -10,7 +10,7 @@ import fitlibrary.utility.StringUtility;
 
 public class FitNesseLocalFile implements LocalFile {
 	protected final static String LOCAL_FILES = "/files";
-	protected final static String FITNESSE_FILES_LOCATION = 
+	protected static String FITNESSE_FILES_LOCATION = 
 		"FitNesseRoot"+LOCAL_FILES;
 	private String fileName;
 	
@@ -54,6 +54,9 @@ public class FitNesseLocalFile implements LocalFile {
 		if (last >= 0)
 			name = name.substring(last+1);
 		return "<a href=\""+LOCAL_FILES+"/"+fileName+"\">"+name+"</a>";
+	}
+	public static void fitNessePrefix(String prefix) {
+		FITNESSE_FILES_LOCATION = prefix + FITNESSE_FILES_LOCATION;
 	}
 	@Override
 	public boolean equals(Object object) {

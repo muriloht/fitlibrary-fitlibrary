@@ -25,7 +25,6 @@ import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.tableOnParse.TableOnParse;
 import fitlibrary.traverse.Traverse;
 
 public class DefinedActionTraverse extends Traverse {

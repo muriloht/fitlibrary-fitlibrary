@@ -21,9 +21,9 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.DomainAdapter;
 
 @RunWith(JMock.class)
-public class TestSetUpTearDown {
+public class TestSetUpTearDownCache {
 	Mockery context = new Mockery();
-	SetUpTearDown setUpTearDown = new SetUpTearDown();
+	SetUpTearDownCache setUpTearDown = new SetUpTearDownCache();
 	TestInterface object = context.mock(TestInterface.class,"object");
 	TestInterface sut = context.mock(TestInterface.class,"sut");
 	TestResults testResults = TestResultsFactory.testResults();

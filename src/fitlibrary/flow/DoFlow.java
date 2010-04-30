@@ -51,17 +51,18 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	public static final boolean IS_ACTIVE = true;
 	private final FlowEvaluator flowEvaluator;
 	private final IScopeStack scopeStack;
-	private final RuntimeContextInternal runtime;
-	private final SetUpTearDown setUpTearDown = new SetUpTearDown();
+	private RuntimeContextInternal runtime;
+	private final SetUpTearDown setUpTearDown;
 	private Option<SuiteEvaluator> suiteFixtureOption = None.none();
 	private DomainInjectionTraverse domainInject = null;
 	private DomainCheckTraverse domainCheck = null;
 	private TableEvaluator current = this;
 	
-	public DoFlow(FlowEvaluator flowEvaluator, IScopeStack scopeStack, RuntimeContextInternal runtime) {
+	public DoFlow(FlowEvaluator flowEvaluator, IScopeStack scopeStack, RuntimeContextInternal runtime, SetUpTearDown setUpTearDown) {
 		this.flowEvaluator = flowEvaluator;
 		this.scopeStack = scopeStack;
 		this.runtime = runtime;
+		this.setUpTearDown = setUpTearDown;
 	}
 	public void runStorytest(Tables tables, ITableListener tableListener) {
 		TestResults testResults = tableListener.getTestResults();
@@ -85,14 +86,17 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		tableListener.storytestFinished();
 	}
 	private void reset() {
-		runtime.setAbandon(false);
+		scopeStack.setAbandon(false);
 		runtime.setStopOnError(false);
 		scopeStack.clearAllButSuite();
 		current = this;
 		domainInject = null;
 		domainCheck = null;
-		if (suiteFixtureOption.isSome())
-			flowEvaluator.setRuntimeContext(suiteFixtureOption.get().getCopyOfRuntimeContext());
+		if (suiteFixtureOption.isSome()) {
+			runtime = suiteFixtureOption.get().getCopyOfRuntimeContext();
+			setRuntimeContextOf(flowEvaluator);
+		} else
+			runtime.reset();
 	}
 	private void handleDomainPhases(Table table) {
         int phaseBreaks = table.phaseBoundaryCount();
@@ -121,8 +125,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			if (row.at(0).hadError()) {
 				// Already failed due to plain text problems
 			} else if (runtime.isAbandoned(testResults)) {
-//				if (!testResults.problems())
-					row.ignore(testResults);
+				row.ignore(testResults);
 			} else if (domainCheck != null && row.size() == 1 && row.text(0, flowEvaluator).equals("checks")) {
 				setCurrentCheck(); // Remove this hack later
 			} else {
@@ -133,7 +136,9 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    		handleInnerTables(cell, testResults);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
+//			    		System.out.println("DoFlow set current Row "+row);
 			    		runtime.setCurrentRow(row);
+//			    		System.out.println("DoFlow runtime = "+runtime.hashCode());
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
 //			    		System.out.println("DoFlow got "+subject);
@@ -230,7 +235,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	private void setRuntimeContextOf(Object object) {
 		if (object instanceof RuntimeContextual)
-			((RuntimeContextual)object).setRuntimeContext(flowEvaluator.getRuntimeContext());
+			((RuntimeContextual)object).setRuntimeContext(runtime);
 		if (object instanceof DomainAdapter)
 			setRuntimeContextOf(((DomainAdapter)object).getSystemUnderTest());
 	}

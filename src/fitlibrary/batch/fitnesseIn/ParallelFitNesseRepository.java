@@ -38,7 +38,7 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 	public static final String SUITE_SETUP_NAME = "SuiteSetUp";
 	public static final String SUITE_TEARDOWN_NAME = "SuiteTearDown";
 
-	public ParallelFitNesseRepository (String rootDir) throws IOException{
+	public ParallelFitNesseRepository(String rootDir) throws IOException{
 		setUri(rootDir);
 	}
 	public BlockingQueue<TestDescriptor> getSuite(String name) throws IOException {

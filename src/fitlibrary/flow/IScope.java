@@ -16,4 +16,8 @@ public interface IScope {
 	void temporarilyAdd(Evaluator evaluator);
 	void removeTemporary(Evaluator evaluator);
 	void addGlobal(TypedObject typedObject);
+	void setAbandon(boolean b);
+	boolean isAbandon();
+	void setStopOnError(boolean stop);
+	boolean isStopOnError();
 }

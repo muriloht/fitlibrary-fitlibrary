@@ -20,7 +20,7 @@ public class CurrentRow implements RuntimeContextual{
 		return null;
 	}
 	public void actionThatAddsAShowCell() {
-		runtime.addShow("hello");
+		runtime.currentRow().addShow("hello");
 	}
 	public void actionThatPassesCell(int i) {
 		runtime.cellAt(i).pass();

@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -36,7 +36,8 @@ public class TestDoFlowWithNestedTables {
 	final TestResults testResults = TestResultsFactory.testResults();
 	final ITableListener tableListener = context.mock(ITableListener.class);
 	final IScopeState scopeState = context.mock(IScopeState.class);
-	final RuntimeContextContainer runtime = new RuntimeContextContainer();
+	final RuntimeContextInternal runtime = context.mock(RuntimeContextInternal.class);
+	final SetUpTearDown setUpTearDown = context.mock(SetUpTearDown.class);
 	DoFlow doFlow;
 	
 	final Tables tables = context.mock(Tables.class,"tables");
@@ -54,11 +55,20 @@ public class TestDoFlowWithNestedTables {
 		context.checking(new Expectations() {{
 			allowing(tableListener).getTestResults(); will(returnValue(testResults));
 			oneOf(scopeStack).clearAllButSuite();
+			oneOf(scopeStack).setAbandon(false);
 			oneOf(tableListener).storytestFinished();
-			allowing(flowEvaluator).getRuntimeContext(); will(returnValue(runtime));
+			oneOf(runtime).setStopOnError(false);
+			oneOf(runtime).reset();
+			oneOf(runtime).setCurrentTable(table1);
+			oneOf(runtime).pushTestResults(with(any(TestResults.class)));
+			allowing(runtime).isAbandoned(with(any(TestResults.class))); will(returnValue(false));
+			oneOf(runtime).setCurrentRow(row1);
+			oneOf(runtime).setCurrentRow(innerRow1);
+			oneOf(runtime).popTestResults();
+			oneOf(runtime).addAccumulatedFoldingText(table1);
 		}});
 		expectTwoRowsInFirstCellOfTable();
-		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime);
+		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
 	}
 	private void expectTwoRowsInFirstCellOfTable() {
 		context.checking(new Expectations() {{
@@ -102,16 +112,20 @@ public class TestDoFlowWithNestedTables {
 			oneOf(flowEvaluator).interpretRow(row1,testResults);
 			  will(returnValue(typedResult1));
 			oneOf(scopeStack).push(genS);
+			oneOf(setUpTearDown).callSetUpSutChain("s", row1, testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("s", row1, testResults);
 			
 			oneOf(scopeStack).currentState(); will(returnValue(scopeState));
 			
 			oneOf(flowEvaluator).interpretRow(innerRow1,testResults);
 			  will(returnValue(typedResult2));
 			oneOf(scopeStack).push(genT);
+			oneOf(setUpTearDown).callSetUpSutChain("t", innerRow1, testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("t", row1, testResults);
 			
 			oneOf(scopeState).restore();
 
-			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(genS)));
+			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(genT,genS)));
 			oneOf(tableListener).tableFinished(table1);
 		}});
 		doFlow.runStorytest(tables,tableListener);

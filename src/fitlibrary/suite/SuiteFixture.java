@@ -28,6 +28,6 @@ public class SuiteFixture extends DoFixture implements SuiteEvaluator {
         	abandon();
     }
 	public RuntimeContextInternal getCopyOfRuntimeContext() {
-		return getRuntimeContext().freshCopy();
+		return getRuntimeContext().copyFromSuite();
 	}
 }

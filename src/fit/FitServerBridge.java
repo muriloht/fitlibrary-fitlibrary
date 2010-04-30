@@ -23,7 +23,6 @@ import fitlibrary.runResults.TestResultsOnCounts;
 import fitlibrary.suite.ReportListener;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
-import fitlibrary.table.TableOnList;
 
 /* This is a variation of FitServer that's needed to run FitLibrary
  */

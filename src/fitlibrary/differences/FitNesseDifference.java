@@ -39,7 +39,7 @@ public class FitNesseDifference implements DifferenceInterface {
 	public LocalFile getGlobalFile(String fileName) {
 		return getLocalFile(fileName);
 	}
-    public void setContext(@SuppressWarnings("unused") File file) {
+    public void setContext(File file) {
         throw new RuntimeException("This should never be called, as the FolderRunner calls it.");
     }
 	public boolean inFitNesse() {

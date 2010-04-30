@@ -23,13 +23,13 @@ import fitlibrary.DoFixture;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.DomainAdapter;
+import fitlibrary.traverse.RuntimeContextual;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.FlowEvaluator;
@@ -43,9 +43,11 @@ public class TestDoFlow {
 	final States stackStates = context.states("stack").startsAs("empty");
 	final FlowEvaluator flowEvaluator = context.mock(FlowEvaluator.class);
 	final IScopeStack scopeStack = context.mock(IScopeStack.class);
+	final RuntimeContextual global = context.mock(RuntimeContextual.class);
 	final TestResults testResults = TestResultsFactory.testResults();
 	final ITableListener tableListener = context.mock(ITableListener.class);
-	final RuntimeContextContainer runtime = new RuntimeContextContainer();
+	final RuntimeContextInternal runtime = context.mock(RuntimeContextInternal.class);
+	final SetUpTearDown setUpTearDown = context.mock(SetUpTearDown.class);
 	DoFlow doFlow;
 	
 	final Tables tables = context.mock(Tables.class);
@@ -57,13 +59,21 @@ public class TestDoFlow {
 	@Before
 	public void createDoFlow() {
 		context.checking(new Expectations() {{
-//			oneOf(flowEvaluator).setRuntimeContext(with(aNonNull(RuntimeContextInternal.class)));
 			allowing(tableListener).getTestResults(); will(returnValue(testResults));
 			oneOf(scopeStack).clearAllButSuite();
+			oneOf(scopeStack).setAbandon(false);
+			oneOf(runtime).setStopOnError(false);
+			oneOf(runtime).reset();
+			exactly(2).of(runtime).setCurrentTable(table1);
+			exactly(2).of(runtime).pushTestResults(with(any(TestResults.class)));
+			allowing(runtime).isAbandoned(with(any(TestResults.class))); will(returnValue(false));
+			exactly(2).of(runtime).setCurrentRow(row1);
+			exactly(2).of(runtime).setCurrentRow(row2);
+			exactly(2).of(runtime).popTestResults();
+			exactly(2).of(runtime).addAccumulatedFoldingText(table1);
 			oneOf(tableListener).storytestFinished();
-			allowing(flowEvaluator).getRuntimeContext(); will(returnValue(runtime));
 		}});
-		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime);
+		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
 	}
 	// FOLLOWING DON'T CHANGE SCOPE AT ALL:
 	@Test
@@ -86,7 +96,7 @@ public class TestDoFlow {
 	public void aDoTraverseWithNoSutSoNoScopeChange() {
 		verifyNoScopeChangeWith(new DoTraverse());
 	}
-	// FOLLOWING CHANGE STACK:
+	// THE FOLLOWING CHANGE THE STACK:
 	@Test
 	public void aDoTraverseWithSutSoScopeChange() {
 		verifyScopePush(new DoTraverse(new Point()),new Point());
@@ -116,18 +126,12 @@ public class TestDoFlow {
 	}
 	@Test
 	public void aDoEvaluatorWithSetUpTearDownSoScopeChange() {
-		final DoEvaluatorWithSetupTearDown doEval = context.mock(DoEvaluatorWithSetupTearDown.class);
+		final DoEvaluator doEval = context.mock(DoEvaluator.class);
 		context.checking(new Expectations() {{
 			exactly(2).of(doEval).setRuntimeContext(with(aNonNull(RuntimeContextInternal.class)));
 			allowing(doEval).getSystemUnderTest(); will(returnValue(null));
-			exactly(2).of(doEval).setUp();
-			exactly(2).of(doEval).tearDown();
 		}});
 		verifyScopePush(doEval,doEval);
-	}
-	interface DoEvaluatorWithSetupTearDown extends DoEvaluator {
-		void setUp();
-		void tearDown();
 	}
 	@Test
 	public void twoDoTraversesSoScopeStackChange() {
@@ -140,13 +144,17 @@ public class TestDoFlow {
 			exactly(2).of(flowEvaluator).interpretRow(row1,testResults);
 			  will(returnValue(typedResult1));
 			exactly(2).of(scopeStack).push(genS);
+			exactly(2).of(setUpTearDown).callSetUpSutChain("s", row1, testResults);
+			exactly(2).of(setUpTearDown).callTearDownSutChain("s", row1, testResults);
 			
 			exactly(2).of(flowEvaluator).interpretRow(row2,testResults);
 			  will(returnValue(typedResult2));
 			exactly(2).of(scopeStack).push(genT);
+			exactly(2).of(setUpTearDown).callSetUpSutChain("t", row2, testResults);
+			exactly(2).of(setUpTearDown).callTearDownSutChain("t", row1, testResults);
 			
-			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(genS)));
-			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(genS)));
+			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(genT,genS)));
+			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(genT,genS)));
 			exactly(2).of(tableListener).tableFinished(table1);
 		}});
 		doFlow.runStorytest(tables,tableListener);
@@ -155,14 +163,17 @@ public class TestDoFlow {
 	
 	private void verifyScopePush(final Object result, final Object sut) {
 		expectTwoRowsInOneTableAndOneInAnother();
+		final GenericTypedObject typedSut = new GenericTypedObject(sut);
 		context.checking(new Expectations() {{
 			exactly(2).of(flowEvaluator).interpretRow(row1,testResults);
 			  will(returnValue(new GenericTypedObject(result)));
-			exactly(2).of(scopeStack).push(new GenericTypedObject(sut));
+			exactly(2).of(scopeStack).push(typedSut);
+			exactly(2).of(setUpTearDown).callSetUpSutChain(sut, row1, testResults);
+			exactly(2).of(setUpTearDown).callTearDownSutChain(sut, row1, testResults);
 			exactly(2).of(flowEvaluator).interpretRow(row2,testResults);
 			  will(returnValue(GenericTypedObject.NULL));
-			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(new GenericTypedObject(sut))));
-			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(new GenericTypedObject(sut))));
+			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(typedSut)));
+			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(typedSut)));
 			exactly(2).of(tableListener).tableFinished(table1);
 		}});
 		doFlow.runStorytest(tables,tableListener);
@@ -190,6 +201,7 @@ public class TestDoFlow {
 			allowing(table1).isPlainTextTable(); will(returnValue(false));
 			allowing(table1).at(0); will(returnValue(row1));
 			allowing(table1).at(1); will(returnValue(row2));
+			allowing(table1).last(); will(returnValue(row2));
 			allowing(row1).at(0); will(returnValue(cell1));
 			allowing(row1).size(); will(returnValue(2));
 			allowing(row2).size(); will(returnValue(2));
