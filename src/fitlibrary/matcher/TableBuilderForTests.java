@@ -94,9 +94,9 @@ public class TableBuilderForTests {
 			with(fresh,els);
 			return fresh;
 		}
-		public CellBuilder withTagLine(String tagLine) {
+		public CellBuilder withTagLine(String tagLiner) {
 			CellBuilder fresh = new CellBuilder(optionalText);
-			withTagLine(fresh,tagLine);
+			withTagLine(fresh,tagLiner);
 			return fresh;
 		}
 	}

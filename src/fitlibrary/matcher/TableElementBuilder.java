@@ -21,7 +21,7 @@ public abstract class TableElementBuilder<From extends TableElement, Builder ext
 	final List<To> listOfMockElements = new ArrayList<To>();
 	protected String leader = "";
 	protected String trailer = "";
-	private String tagLine = "";
+	protected String tagLine = "";
 
 	public TableElementBuilder(Class<From> type) {
 		this.type = type;

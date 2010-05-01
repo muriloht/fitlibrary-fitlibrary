@@ -69,13 +69,18 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		reset();
 		for (int t = 0; t < tables.size(); t++) {
 			Table table = tables.at(t);
+			boolean plainTextFailed = false;
 			if (current == this && table.isPlainTextTable()) {
 				PlainTextAnalyser plainTextAnalyser = new PlainTextAnalyser(runtime,TemporaryPlugBoardForRuntime.definedActionsRepository());
-				plainTextAnalyser.analyseAndReplaceRowsIn(table, testResults);
+				TestResults testResults2 = TestResultsFactory.testResults();
+				plainTextAnalyser.analyseAndReplaceRowsIn(table, testResults2);
+				plainTextFailed = testResults2.problems();
+				testResults.add(testResults2);
 			}
 			if (domainCheck != null)
 				handleDomainPhases(table);
-			current.runTable(table,tableListener);
+			if (!plainTextFailed)
+				current.runTable(table,tableListener);
 			if (t < tables.size() - 1)
 				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
 			else
@@ -122,9 +127,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	private void runTable(Table table, TestResults testResults) {
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 			Row row = table.at(rowNo);
-			if (row.at(0).hadError()) {
-				// Already failed due to plain text problems
-			} else if (runtime.isAbandoned(testResults)) {
+			if (runtime.isAbandoned(testResults)) {
 				row.ignore(testResults);
 			} else if (domainCheck != null && row.size() == 1 && row.text(0, flowEvaluator).equals("checks")) {
 				setCurrentCheck(); // Remove this hack later
@@ -157,23 +160,21 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    			handleDomainFixture(typedResult, subject, row, testResults);
 			    		} else if (subject instanceof SuiteEvaluator) {
 			    			handleSuiteFixture((SuiteEvaluator)subject, typedResult, row, testResults);
-			    		} else {
-							if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
-								handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
-								return;// have finished table
-							} else if (subject instanceof DoEvaluator) {
-								pushOnScope(typedResult,row,testResults);
-							} else if (subject instanceof Evaluator) { // Calculate, etc
-								handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
-								return; // have finished table
-							} else if (subject instanceof Fixture) {
-								Table remainingTable = tableFromHere(table, rowNo).asTableOnParse();
-								flowEvaluator.fitHandler().doTable((Fixture) subject,remainingTable,testResults,flowEvaluator);
-								for (int i = 0; i < remainingTable.size(); i++)
-										table.replaceAt(rowNo+i, remainingTable.at(i));
-								return; // have finished table
-							}
-						}
+			    		} else if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
+			    			handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
+			    			return;// have finished table
+			    		} else if (subject instanceof DoEvaluator) {
+			    			pushOnScope(typedResult,row,testResults);
+			    		} else if (subject instanceof Evaluator) { // Calculate, etc
+			    			handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
+			    			return; // have finished table
+			    		} else if (subject instanceof Fixture) {
+			    			Table remainingTable = tableFromHere(table, rowNo).asTableOnParse();
+			    			flowEvaluator.fitHandler().doTable((Fixture) subject,remainingTable,testResults,flowEvaluator);
+			    			for (int i = 0; i < remainingTable.size(); i++)
+			    				table.replaceAt(rowNo+i, remainingTable.at(i));
+			    			return; // have finished table
+			    		}
 			    	}
 				} catch (Exception ex) {
 					row.error(testResults, ex);
