@@ -23,7 +23,7 @@ public interface TypedObject {
 	public Object getSubject();
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] args);
 	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
-	public Class<?> getClassType();
+	public Class<?> classType();
 	public Parser[] parameterParsers(Evaluator evaluator, Method method);
 	public ResultParser resultParser(Evaluator evaluator, Method method);
 	public ResultParser resultParser(Evaluator evaluator, Field field);

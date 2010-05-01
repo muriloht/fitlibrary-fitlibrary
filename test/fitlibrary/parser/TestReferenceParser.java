@@ -14,7 +14,6 @@ import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.ref.EntityReference;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;

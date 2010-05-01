@@ -27,7 +27,6 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.FitHandler;
-import fitlibrary.traverse.RuntimeContextual;
 import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
@@ -620,7 +619,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		if (row.size() < less)
 			throw new MissingCellsException("addGlobal");
 		TypedObject typedObject = interpretRow(row.fromAt(1), testResults);
-		if (typedObject.getSubject().getClass() == DoTraverse.class)
+		if (typedObject.classType() == DoTraverse.class)
 			typedObject = ((DoEvaluator)typedObject.getSubject()).getTypedSystemUnderTest();
 		typedObject.injectRuntime(getRuntimeContext());
 		getRuntimeContext().getScope().addGlobal(typedObject);

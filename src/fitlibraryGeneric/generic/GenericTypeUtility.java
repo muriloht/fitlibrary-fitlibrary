@@ -55,34 +55,7 @@ public class GenericTypeUtility {
 		if (type == null)
 			throw new RuntimeException("Type is null");
 		return type.toString();
-//		switch (typeCases(type)) {
-//		case GENERIC_ARRAY:
-//			return "GenericArray["+toString(asGenericArrayType(type).getGenericComponentType())+"]";
-//		case PARAMETERIZED_TYPE:
-//			ParameterizedType parameterizedType = asParameterizedType(type);
-//			Type[] types = parameterizedType.getActualTypeArguments();
-//			String args = toString(types);
-//			return toString(parameterizedType.getRawType())+"<"+args+">";
-//		case TYPE_VARIABLE:
-//			return asTypeVariable(type).getName();
-//		case WILDCARD_TYPE:
-//			WildcardType wildCard = asWildcardType(type);
-//			return "WildCardType[<"+toString(wildCard.getLowerBounds())+
-//				">,<"+toString(wildCard.getUpperBounds())+">]";
-//		case CLASS_TYPE:
-//			return asClass(type).getName();
-//		}
-//		return null;
 	}
-//	private static String toString(Type[] types) {
-//		String args = "";
-//		for (Type t : types) {
-//			if (!args.equals(""))
-//				args += ", ";
-//			args += toString(t);
-//		}
-//		return args;
-//	}
 	public static GenericArrayType asGenericArrayType(Type type) {
 		return (GenericArrayType)type;
 	}

@@ -74,7 +74,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	private void checkClass(TestResults testResults, Cell cell, Cell classCell) {
 		String typeName = classCell.text(this);
 		try {
-			Class<?> sutClass = PlugBoard.lookupTarget.findClassFromFactoryMethod(this, getTypedSystemUnderTest().getClassType(), typeName);
+			Class<?> sutClass = PlugBoard.lookupTarget.findClassFromFactoryMethod(this, getTypedSystemUnderTest().classType(), typeName);
 			if (getSystemUnderTest().getClass().equals(sutClass))
 				classCell.pass(testResults);
 			else

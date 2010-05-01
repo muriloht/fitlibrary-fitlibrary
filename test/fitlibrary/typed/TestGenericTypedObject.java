@@ -8,6 +8,8 @@ package fitlibrary.typed;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.awt.Point;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -88,6 +90,22 @@ public class TestGenericTypedObject {
 		}});
 		GenericTypedObject typedObject2 = new GenericTypedObject(new WithSut(runtimeContextual));
 		typedObject2.injectRuntime(runtime);
+	}
+	@Test
+	public void isNullWhenNullSubject() {
+		assertThat(new GenericTypedObject(null).isNull(),is(true));
+	}
+	@Test
+	public void isNotNullWhenNotNullSubject() {
+		assertThat(new GenericTypedObject("s").isNull(),is(false));
+	}
+	@Test
+	public void classOfSubjectIsString() {
+		assertThat(new GenericTypedObject("s").classType(),is((Object)String.class));
+	}
+	@Test
+	public void classOfSubjectIsPoint() {
+		assertThat(new GenericTypedObject(new Point()).classType(),is((Object)Point.class));
 	}
 
 	

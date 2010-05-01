@@ -27,7 +27,7 @@ public class DomainObjectCheckTraverse extends Traverse {
 	}
 	public DomainObjectCheckTraverse(TypedObject typedObject) {
 		super(typedObject);
-		this.type = typedObject.getClassType();
+		this.type = typedObject.classType();
 	}
 	public DomainObjectCheckTraverse(Object sut, Typed typed) {
 		super(typed.typedObject(sut));

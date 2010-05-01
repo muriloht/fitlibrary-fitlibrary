@@ -19,7 +19,7 @@ public class MethodClosure implements Closure {
 	private Method method;
 
 	public MethodClosure(TypedObject typedObject, Method method) {
-		if (typedObject == null || typedObject.getSubject() == null || method == null)
+		if (typedObject == null || typedObject.isNull() || method == null)
 			throw new RuntimeException("MethodClosure requires non-null args");
 		this.typedObject = typedObject;
 		this.method = method;

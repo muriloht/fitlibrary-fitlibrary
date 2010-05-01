@@ -147,7 +147,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		if (considerContext)
 			possibleClasses = scopeOf(evaluator).possibleClasses();
 		else
-			possibleClasses.add(typedObject.getSubject().getClass());
+			possibleClasses.add(typedObject.classType());
 		throw new MissingMethodException(signatures("public ResultType "+ camel("get "+propertyName)+"() { }"),possibleClasses);
 	}
 	private List<String> signatures(String... signature) {

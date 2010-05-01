@@ -18,7 +18,7 @@ public class ClassMethodTarget implements MethodTarget {
 	public ClassMethodTarget(Class<?> componentType, Evaluator evaluator, TypedObject typedObject) {
 		this.componentType = componentType;
 		this.evaluator = evaluator;
-		this.actualType = typedObject.getClassType();
+		this.actualType = typedObject.classType();
 	}
 	public void setTypedSubject(TypedObject typedObject) {
 		//

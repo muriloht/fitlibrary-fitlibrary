@@ -24,7 +24,7 @@ public class LookupClosureStandard implements LookupClosure{
 	public Closure findMethodClosure(TypedObject typedObject, String methodName, int argCount) {
 		if (typedObject.isNull())
 			return null;
-		Method chosenMethod = findMethod(typedObject.getSubject().getClass(), methodName, argCount, typedObject.getSubject());
+		Method chosenMethod = findMethod(typedObject.classType(), methodName, argCount, typedObject.getSubject());
 		if (chosenMethod == null && aGetter(methodName, argCount))
 			return findField(typedObject,extractFieldName(methodName));
 		if (chosenMethod == null)
@@ -32,11 +32,10 @@ public class LookupClosureStandard implements LookupClosure{
 		return new MethodClosure(typedObject,chosenMethod);
 	}
 	public Closure findPublicMethodClosure(TypedObject typedObject, String name, Class<?>[] argTypes) {
-		Object subject = typedObject.getSubject();
-		if (subject == null)
+		if (typedObject.isNull())
 			return null;
 		try {
-			return new MethodClosure(typedObject,subject.getClass().getMethod(name,argTypes));
+			return new MethodClosure(typedObject,typedObject.classType().getMethod(name,argTypes));
         } catch (Exception e) {
             return null;
         }
@@ -50,14 +49,14 @@ public class LookupClosureStandard implements LookupClosure{
 	}
 	protected Closure findField(TypedObject typedObject, String fieldName) {
 		try {
-			Class<?> type = typedObject.getSubject().getClass();
+			Class<?> type = typedObject.classType();
 			return new FieldClosure(typedObject,type.getField(fieldName));
 		} catch (Exception e) {
 			return findPrivateField(typedObject,fieldName);
 		}
 	}
 	protected Closure findPrivateField(TypedObject typedObject, String fieldName) {
-		Class<?> type = typedObject.getSubject().getClass();
+		Class<?> type = typedObject.classType();
 		Field[] declaredFields = type.getDeclaredFields();
 		for (int i = 0; i < declaredFields.length; i++) {
 			Field field = declaredFields[i];

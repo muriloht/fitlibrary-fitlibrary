@@ -73,8 +73,8 @@ public class GenericTypedObject implements TypedObject {
 		return new GenericTypedObject(sut);
 	}
 	@Override
-	public Class<?> getClassType() {
-		return typed.asClass();
+	public Class<?> classType() {
+		return subject.getClass();
 	}
 	protected Typed resultTyped(Method method) {
 		Type genericReturnType = typed.bind(method.getGenericReturnType(),describe(method));

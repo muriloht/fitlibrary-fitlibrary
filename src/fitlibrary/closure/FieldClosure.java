@@ -29,13 +29,13 @@ public class FieldClosure implements Closure {
 	public Object invoke() throws IllegalAccessException, InvocationTargetException {
 		return field.get(typedObject.getSubject());
 	}
-	public Object invoke(@SuppressWarnings("unused") Object[] arguments) throws IllegalAccessException, InvocationTargetException {
+	public Object invoke(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
 		return invoke();
 	}
-	public TypedObject invokeTyped(@SuppressWarnings("unused") Object[] arguments) throws IllegalAccessException, InvocationTargetException {
+	public TypedObject invokeTyped(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
 		return typedObject.asReturnTypedObject(invoke(),field);
 	}
-	public Parser[] parameterParsers(@SuppressWarnings("unused") Evaluator evaluator) {
+	public Parser[] parameterParsers(Evaluator evaluator) {
 		return new Parser[0];
 	}
 	public ResultParser resultParser(Evaluator evaluator) {
