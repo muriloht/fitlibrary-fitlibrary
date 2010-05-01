@@ -5,6 +5,11 @@
 
 package fitlibrary.flow;
 
+import static fitlibrary.matcher.TableBuilderForTests.cell;
+import static fitlibrary.matcher.TableBuilderForTests.row;
+import static fitlibrary.matcher.TableBuilderForTests.table;
+import static fitlibrary.matcher.TableBuilderForTests.tables;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
+import fitlibrary.matcher.TableBuilderForTests.TableBuilder;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
@@ -50,11 +56,11 @@ public class TestDoFlow {
 	final SetUpTearDown setUpTearDown = context.mock(SetUpTearDown.class);
 	DoFlow doFlow;
 	
-	final Tables tables = context.mock(Tables.class);
-	final Table table1 = context.mock(Table.class,"table1");
-	final Row row1 = context.mock(Row.class,"row1");
-	final Cell cell1 = context.mock(Cell.class,"cell1");
-	final Row row2 = context.mock(Row.class,"row2");
+	final Tables tables = makeTables();
+	final Table table0 = tables.at(0);
+	final Row row0 = table0.at(0);
+	final Cell cell0 = row0.at(0);
+	final Row row1 = table0.at(1);
 	
 	@Before
 	public void createDoFlow() {
@@ -64,14 +70,22 @@ public class TestDoFlow {
 			oneOf(scopeStack).setAbandon(false);
 			oneOf(runtime).setStopOnError(false);
 			oneOf(runtime).reset();
-			exactly(2).of(runtime).setCurrentTable(table1);
+			oneOf(runtime).setCurrentTable(table0);
 			exactly(2).of(runtime).pushTestResults(with(any(TestResults.class)));
 			allowing(runtime).isAbandoned(with(any(TestResults.class))); will(returnValue(false));
-			exactly(2).of(runtime).setCurrentRow(row1);
-			exactly(2).of(runtime).setCurrentRow(row2);
+			oneOf(runtime).setCurrentRow(row0);
+			oneOf(runtime).setCurrentRow(row1);
 			exactly(2).of(runtime).popTestResults();
-			exactly(2).of(runtime).addAccumulatedFoldingText(table1);
+			oneOf(runtime).addAccumulatedFoldingText(table0);
 			oneOf(tableListener).storytestFinished();
+
+			oneOf(runtime).setCurrentTable(tables.at(1));
+			oneOf(runtime).setCurrentRow(tables.at(1).at(0));
+			oneOf(runtime).setCurrentRow(tables.at(1).at(1));
+			oneOf(runtime).addAccumulatedFoldingText(tables.at(1));
+
+			allowing(table0).isPlainTextTable(); will(returnValue(false));
+			allowing(tables.at(1)).isPlainTextTable(); will(returnValue(false));
 		}});
 		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
 	}
@@ -139,76 +153,87 @@ public class TestDoFlow {
 		final GenericTypedObject typedResult2 = new GenericTypedObject(new DoTraverse("t"));
 		final GenericTypedObject genS = new GenericTypedObject("s");
 		final GenericTypedObject genT = new GenericTypedObject("t");
-		expectTwoRowsInOneTableAndOneInAnother();
 		context.checking(new Expectations() {{
-			exactly(2).of(flowEvaluator).interpretRow(row1,testResults);
+			oneOf(flowEvaluator).interpretRow(row0,testResults);
+			  will(returnValue(typedResult1));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(0),testResults);
 			  will(returnValue(typedResult1));
 			exactly(2).of(scopeStack).push(genS);
-			exactly(2).of(setUpTearDown).callSetUpSutChain("s", row1, testResults);
-			exactly(2).of(setUpTearDown).callTearDownSutChain("s", row1, testResults);
+			oneOf(setUpTearDown).callSetUpSutChain("s", row0, testResults);
+			oneOf(setUpTearDown).callSetUpSutChain("s", tables.at(1).at(0), testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("s", row0, testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("s", tables.at(1).at(0), testResults);
 			
-			exactly(2).of(flowEvaluator).interpretRow(row2,testResults);
+			oneOf(flowEvaluator).interpretRow(row1,testResults);
+			  will(returnValue(typedResult2));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(1),testResults);
 			  will(returnValue(typedResult2));
 			exactly(2).of(scopeStack).push(genT);
-			exactly(2).of(setUpTearDown).callSetUpSutChain("t", row2, testResults);
-			exactly(2).of(setUpTearDown).callTearDownSutChain("t", row1, testResults);
+			oneOf(setUpTearDown).callSetUpSutChain("t", row1, testResults);
+			oneOf(setUpTearDown).callSetUpSutChain("t", tables.at(1).at(1), testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("t", row0, testResults);
+			oneOf(setUpTearDown).callTearDownSutChain("t", tables.at(1).at(0), testResults);
 			
 			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(genT,genS)));
 			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(genT,genS)));
-			exactly(2).of(tableListener).tableFinished(table1);
+			oneOf(tableListener).tableFinished(table0);
+			oneOf(tableListener).tableFinished(tables.at(1));
 		}});
 		doFlow.runStorytest(tables,tableListener);
 	}
 	
 	
 	private void verifyScopePush(final Object result, final Object sut) {
-		expectTwoRowsInOneTableAndOneInAnother();
 		final GenericTypedObject typedSut = new GenericTypedObject(sut);
 		context.checking(new Expectations() {{
-			exactly(2).of(flowEvaluator).interpretRow(row1,testResults);
+			oneOf(flowEvaluator).interpretRow(row0,testResults);
+			  will(returnValue(new GenericTypedObject(result)));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(0),testResults);
 			  will(returnValue(new GenericTypedObject(result)));
 			exactly(2).of(scopeStack).push(typedSut);
-			exactly(2).of(setUpTearDown).callSetUpSutChain(sut, row1, testResults);
-			exactly(2).of(setUpTearDown).callTearDownSutChain(sut, row1, testResults);
-			exactly(2).of(flowEvaluator).interpretRow(row2,testResults);
+			oneOf(setUpTearDown).callSetUpSutChain(sut, row0, testResults);
+			oneOf(setUpTearDown).callSetUpSutChain(sut, tables.at(1).at(0), testResults);
+			oneOf(setUpTearDown).callTearDownSutChain(sut, row0, testResults);
+			oneOf(setUpTearDown).callTearDownSutChain(sut, tables.at(1).at(0), testResults);
+			oneOf(flowEvaluator).interpretRow(row1,testResults);
+			  will(returnValue(GenericTypedObject.NULL));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(1),testResults);
 			  will(returnValue(GenericTypedObject.NULL));
 			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list(typedSut)));
 			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list(typedSut)));
-			exactly(2).of(tableListener).tableFinished(table1);
+			oneOf(tableListener).tableFinished(table0);
+			oneOf(tableListener).tableFinished(tables.at(1));
 		}});
 		doFlow.runStorytest(tables,tableListener);
 	}
 	private void verifyNoScopeChangeWith(final Object result) {
-		expectTwoRowsInOneTableAndOneInAnother();
 		context.checking(new Expectations() {{
-			exactly(2).of(flowEvaluator).interpretRow(row1,testResults);
+			oneOf(flowEvaluator).interpretRow(row0,testResults);
 			  will(returnValue(new GenericTypedObject(result)));
-			exactly(2).of(flowEvaluator).interpretRow(row2,testResults);
+			oneOf(flowEvaluator).interpretRow(row1,testResults);
+			  will(returnValue(GenericTypedObject.NULL));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(0),testResults);
+			  will(returnValue(new GenericTypedObject(result)));
+			oneOf(flowEvaluator).interpretRow(tables.at(1).at(1),testResults);
 			  will(returnValue(GenericTypedObject.NULL));
 			oneOf(scopeStack).poppedAtEndOfTable(); will(returnValue(list()));
 			oneOf(scopeStack).poppedAtEndOfStorytest(); will(returnValue(list()));
-			exactly(2).of(tableListener).tableFinished(table1);
+			oneOf(tableListener).tableFinished(table0);
+			oneOf(tableListener).tableFinished(tables.at(1));
 		}});
 		doFlow.runStorytest(tables,tableListener);
 	}
-	private void expectTwoRowsInOneTableAndOneInAnother() {
-		context.checking(new Expectations() {{
-			allowing(tables).size(); will(returnValue(2));
-			allowing(tables).at(0); will(returnValue(table1));
-			allowing(tables).at(1); will(returnValue(table1));
-			allowing(tables).last(); will(returnValue(table1));
-			allowing(table1).size(); will(returnValue(2));
-			allowing(table1).isPlainTextTable(); will(returnValue(false));
-			allowing(table1).at(0); will(returnValue(row1));
-			allowing(table1).at(1); will(returnValue(row2));
-			allowing(table1).last(); will(returnValue(row2));
-			allowing(row1).at(0); will(returnValue(cell1));
-			allowing(row1).size(); will(returnValue(2));
-			allowing(row2).size(); will(returnValue(2));
-			allowing(cell1).hasEmbeddedTables(); will(returnValue(false));
-			allowing(row2).at(0); will(returnValue(cell1));
-			allowing(cell1).hadError(); will(returnValue(false));
-		}});
+	private Tables makeTables() {
+		return tables().with(
+				tableWith2RowsOf2(),
+				tableWith2RowsOf2()
+		).mock(context);
+	}
+	private TableBuilder tableWith2RowsOf2() {
+		return table().with(
+				row().with(cell(),cell()),
+				row().with(cell(),cell())
+		);
 	}
 	protected ArrayList<TypedObject> scopeList(Object... objects) {
 		ArrayList<TypedObject> list = new ArrayList<TypedObject>();
