@@ -91,14 +91,8 @@ public class ScopeStack implements IScopeStack {
 		if (accumulatingObjects.contains(typedObject))
 			return;
 		accumulatingObjects.add(typedObject);
-		Object subject = typedObject.getSubject();
-		if (subject instanceof Evaluator)
-			addObject(((Evaluator)subject).getTypedSystemUnderTest(),accumulatingObjects);
-		else if (subject instanceof DomainAdapter) {
-			Object sut = ((DomainAdapter)subject).getSystemUnderTest();
-			if (sut != null)
-				addObject(new GenericTypedObject(sut),accumulatingObjects);
-		}
+		if (typedObject.hasTypedSystemUnderTest())
+			addObject(typedObject.getTypedSystemUnderTest(),accumulatingObjects);
 	}
 	public List<Class<?>> possibleClasses() {
 		ArrayList<Class<?>> results = new ArrayList<Class<?>>();

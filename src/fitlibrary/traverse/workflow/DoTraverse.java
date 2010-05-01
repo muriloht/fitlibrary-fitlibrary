@@ -620,7 +620,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 			throw new MissingCellsException("addGlobal");
 		TypedObject typedObject = interpretRow(row.fromAt(1), testResults);
 		if (typedObject.classType() == DoTraverse.class)
-			typedObject = ((DoEvaluator)typedObject.getSubject()).getTypedSystemUnderTest();
+			typedObject = typedObject.getTypedSystemUnderTest();
 		typedObject.injectRuntime(getRuntimeContext());
 		getRuntimeContext().getScope().addGlobal(typedObject);
 		row.at(0).pass(testResults);
