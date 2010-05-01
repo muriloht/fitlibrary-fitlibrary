@@ -14,6 +14,7 @@ import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserSelectorForType;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.utility.ClassUtility;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class NonGenericTyped implements Typed {
 	private Class<?> classType;
@@ -58,7 +59,7 @@ public class NonGenericTyped implements Typed {
 		return ClassUtility.simpleClassName(asClass());
 	}
 	public TypedObject typedObject(Object subject) {
-		return new NonGenericTypedObject(subject);
+		return new GenericTypedObject(subject);
 	}
 	public TypedObject newTypedInstance() throws InstantiationException, IllegalAccessException, SecurityException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
 		return typedObject(newInstance());

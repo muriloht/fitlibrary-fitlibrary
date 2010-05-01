@@ -17,7 +17,8 @@ import org.junit.runner.RunWith;
 import fitlibrary.closure.Closure;
 import fitlibrary.closure.LookupClosure;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.typed.NonGenericTypedObject.MethodTargetFactory;
+import fitlibraryGeneric.typed.GenericTypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject.MethodTargetFactory;
 
 @RunWith(JMock.class)
 public class TestNonGenericTypedObject {
@@ -27,7 +28,7 @@ public class TestNonGenericTypedObject {
 	final LookupClosure lookupClosure = context.mock(LookupClosure.class);
 	final Closure closure = context.mock(Closure.class);
 	final MethodTargetFactory methodTargetFactory = context.mock(MethodTargetFactory.class);
-	final NonGenericTypedObject typedObject = new NonGenericTypedObject(subject,lookupClosure,methodTargetFactory);
+	final GenericTypedObject typedObject = new GenericTypedObject(subject,lookupClosure,methodTargetFactory);
 
 	@Test
 	public void methodDoesNotExist() throws Exception {

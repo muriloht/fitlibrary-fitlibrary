@@ -14,6 +14,7 @@ import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.option.Option;
@@ -21,7 +22,6 @@ import fitlibrary.utility.option.Option;
 public interface TypedObject {
 	public Object getSubject();
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] args);
-	public CalledMethodTarget optionallyFindMethodOnTypedObject(String name, int argCount, Evaluator evaluator, boolean includeSut);
 	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
 	public Class<?> getClassType();
 	public Parser[] parameterParsers(Evaluator evaluator, Method method);
@@ -38,4 +38,7 @@ public interface TypedObject {
 	Option<CalledMethodTarget> new_findSpecificMethod(String methodName,
 			int argCount, Evaluator evaluator);
 	public boolean isNull();
+	boolean hasTypedSystemUnderTest();
+	TypedObject getTypedSystemUnderTest();
+	void injectRuntime(RuntimeContextInternal runtime);
 }

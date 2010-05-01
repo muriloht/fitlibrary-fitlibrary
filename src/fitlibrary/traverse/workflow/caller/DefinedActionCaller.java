@@ -22,8 +22,8 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.DoCaller;
-import fitlibrary.typed.NonGenericTypedObject;
 import fitlibrary.typed.TypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class DefinedActionCaller extends DoCaller {
 	private ParameterSubstitution parameterSubstitution;
@@ -76,7 +76,7 @@ public class DefinedActionCaller extends DoCaller {
 		}
 		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
 			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
-		return new NonGenericTypedObject(null);
+		return GenericTypedObject.NULL;
 	}
 	@Override
 	public String ambiguityErrorMessage() {

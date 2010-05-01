@@ -18,10 +18,9 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.flow.IScope;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.typed.NonGenericTypedObject;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.typed.NonGenericTypedObject.MethodTargetFactory;
 import fitlibraryGeneric.typed.GenericTypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject.MethodTargetFactory;
 
 @RunWith(JMock.class)
 public class TestLookupMethodTarget {
@@ -33,8 +32,8 @@ public class TestLookupMethodTarget {
 	final LookupClosure lookupClosure = context.mock(LookupClosure.class);
 	final Closure closure = context.mock(Closure.class);
 	final MethodTargetFactory methodTargetFactory = context.mock(MethodTargetFactory.class);
-	final TypedObject typedObjectS = new NonGenericTypedObject("S",lookupClosure,methodTargetFactory);
-	final TypedObject typedObjectT = new NonGenericTypedObject("T",lookupClosure,methodTargetFactory);
+	final TypedObject typedObjectS = new GenericTypedObject("S",lookupClosure,methodTargetFactory);
+	final TypedObject typedObjectT = new GenericTypedObject("T",lookupClosure,methodTargetFactory);
 
 	@Test(expected=MissingMethodException.class)
 	public void methodOrGetterMissingWithEmptyStack() throws Exception {

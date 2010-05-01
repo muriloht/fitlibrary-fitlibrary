@@ -9,11 +9,11 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import fitlibrary.global.PlugBoard;
-import fitlibrary.typed.NonGenericTypedObject;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class TestLookupClosure {
 	private Derived subject= new Derived();
-	private NonGenericTypedObject target= new NonGenericTypedObject(subject);
+	private GenericTypedObject target= new GenericTypedObject(subject);
 
 	@Test
 	public void cannotFindPrivateMethod() throws Exception {
