@@ -92,7 +92,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	private void reset() {
 		scopeStack.setAbandon(false);
-		runtime.setStopOnError(false);
+		scopeStack.setStopOnError(false);
 		scopeStack.clearAllButSuite();
 		current = this;
 		domainInject = null;
@@ -145,7 +145,6 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
 //			    		System.out.println("DoFlow got "+subject);
-//			    		setRuntimeContextOf(subject);
 			    		typedResult.injectRuntime(runtime);
 			    		if (subject == null) {
 			    			// Can't do anything useful with a null
@@ -191,9 +190,10 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		int rest = restOfTable.size();
 		Row row = table.at(rowNo);
 		typedResult.injectRuntime(runtime);
-		callSetUpSutChain(subject,row,testResults);
 		if (!(subject instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
 			pushOnScope(typedResult,row,testResults);
+		else
+			callSetUpSutChain(subject,row,testResults);
 		subject.interpretAfterFirstRow(restOfTable, testResults);
 		setUpTearDown.callTearDownSutChain(subject, row, testResults);
 		if (restOfTable != table && restOfTable.size() > rest)

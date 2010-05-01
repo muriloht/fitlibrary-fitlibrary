@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
+import fitlibrary.SelectFixture;
 import fitlibrary.matcher.TableBuilderForTests.TableBuilder;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
@@ -68,7 +69,7 @@ public class TestDoFlow {
 			allowing(tableListener).getTestResults(); will(returnValue(testResults));
 			oneOf(scopeStack).clearAllButSuite();
 			oneOf(scopeStack).setAbandon(false);
-			oneOf(runtime).setStopOnError(false);
+			oneOf(scopeStack).setStopOnError(false);
 			oneOf(runtime).reset();
 			oneOf(runtime).setCurrentTable(table0);
 			exactly(2).of(runtime).pushTestResults(with(any(TestResults.class)));
@@ -109,6 +110,13 @@ public class TestDoFlow {
 	@Test
 	public void aDoTraverseWithNoSutSoNoScopeChange() {
 		verifyNoScopeChangeWith(new DoTraverse());
+	}
+	@Test
+	public void aSelectFixtureWithNoSutSoNoScopeChange() {
+		context.checking(new Expectations() {{
+			exactly(2).of(runtime).showAsAfterTable(with(any(String.class)),with(any(String.class)));
+		}});
+		verifyNoScopeChangeWith(new SelectFixture());
 	}
 	// THE FOLLOWING CHANGE THE STACK:
 	@Test

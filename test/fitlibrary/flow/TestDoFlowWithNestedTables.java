@@ -55,7 +55,7 @@ public class TestDoFlowWithNestedTables {
 			oneOf(scopeStack).clearAllButSuite();
 			oneOf(scopeStack).setAbandon(false);
 			oneOf(tableListener).storytestFinished();
-			oneOf(runtime).setStopOnError(false);
+			oneOf(scopeStack).setStopOnError(false);
 			oneOf(runtime).reset();
 			oneOf(runtime).setCurrentTable(tables.at(0));
 			oneOf(runtime).pushTestResults(with(any(TestResults.class)));

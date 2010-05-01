@@ -40,7 +40,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     }
     // Dispatched to from Fixture when Fixture is doTabling the tables one by one (not in flow)
 	@Override
-	final public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	return ((DoTraverse)traverse()).interpretInFlow(table,testResults);
     }
 	/**

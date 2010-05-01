@@ -20,7 +20,6 @@ import fitlibrary.closure.MethodTarget;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.NoSuchPropertyException;
-import fitlibrary.exception.table.MissingRowException;
 import fitlibrary.object.DomainObjectSetUpTraverse;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
