@@ -622,8 +622,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		TypedObject typedObject = interpretRow(row.fromAt(1), testResults);
 		if (typedObject.getSubject().getClass() == DoTraverse.class)
 			typedObject = ((DoEvaluator)typedObject.getSubject()).getTypedSystemUnderTest();
-		if (typedObject.getSubject() instanceof RuntimeContextual)
-			((RuntimeContextual)typedObject.getSubject()).setRuntimeContext(getRuntimeContext());
+		typedObject.injectRuntime(getRuntimeContext());
 		getRuntimeContext().getScope().addGlobal(typedObject);
 		row.at(0).pass(testResults);
 	}

@@ -142,7 +142,8 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
 //			    		System.out.println("DoFlow got "+subject);
-			    		setRuntimeContextOf(subject);
+//			    		setRuntimeContextOf(subject);
+			    		typedResult.injectRuntime(runtime);
 			    		if (subject == null) {
 			    			// Can't do anything useful with a null
 			    		} else if (subject.getClass() == Fixture.class) {
@@ -188,7 +189,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		Table restOfTable = tableFromHere(table, rowNo);
 		int rest = restOfTable.size();
 		Row row = table.at(rowNo);
-		setRuntimeContextOf(subject);
+		typedResult.injectRuntime(runtime);
 		callSetUpSutChain(subject,row,testResults);
 		if (!(subject instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
 			pushOnScope(typedResult,row,testResults);
@@ -208,15 +209,16 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	private void handleActualDoFixture(DoEvaluator doEvaluator, Row row, TestResults testResults) {
 		// Unwrap an auto-wrap, keeping the type information
-		if (doEvaluator.getSystemUnderTest() != null) {
-			pushOnScope(doEvaluator.getTypedSystemUnderTest(),row,testResults);
-			setRuntimeContextOf(doEvaluator.getSystemUnderTest());
+		TypedObject typedSystemUnderTest = doEvaluator.getTypedSystemUnderTest();
+		if (!typedSystemUnderTest.isNull()) {
+			pushOnScope(typedSystemUnderTest,row,testResults);
+			typedSystemUnderTest.injectRuntime(runtime);
 		}
 	}
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
 		if (suiteFixtureOption.isNone())
 			suiteFixtureOption = new Some<SuiteEvaluator>(suiteEvaluator);
-		setRuntimeContextOf(suiteEvaluator); // Subsequent tables are global for now.
+		typedResult.injectRuntime(runtime); // Subsequent tables are global for now.
 		setUpTearDown.callSuiteSetUp(suiteEvaluator, row, testResults);
 		pushOnScope(typedResult,row,testResults);
 	}

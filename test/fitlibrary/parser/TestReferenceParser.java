@@ -79,9 +79,6 @@ public class TestReferenceParser extends TestCase {
 		return list.get(2);
 	}
 	public class MyDoFixture extends DoFixture {
-		public MyDoFixture() {
-			setRuntimeContext(new RuntimeContextContainer());
-		}
 		public MyClass findMyClass(int index) {
             return list.get(index);
         }

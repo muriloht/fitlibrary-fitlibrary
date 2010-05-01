@@ -66,9 +66,6 @@ public class TestDirectAccessToParser {
 	}
 	
 	public static class MyFixture extends DoFixture {
-		public MyFixture() {
-			setRuntimeContext(new RuntimeContextContainer());
-		}
 		public X findX(String s) {
 			return new X(s);
 		}
