@@ -8,6 +8,7 @@ package fitlibrary.flow;
 import static fitlibrary.matcher.TableBuilderForTests.cell;
 import static fitlibrary.matcher.TableBuilderForTests.row;
 import static fitlibrary.matcher.TableBuilderForTests.table;
+import static fitlibrary.matcher.TableBuilderForTests.tables;
 
 import java.util.List;
 
@@ -19,35 +20,24 @@ import org.junit.runner.RunWith;
 
 import fitlibrary.SetUpFixture;
 import fitlibrary.collection.CollectionSetUpTraverse;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.runResults.TestResultsFactory;
-import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.utility.CollectionUtility;
-import fitlibraryGeneric.typed.GenericTypedObject;
 
 @RunWith(JMock.class)
 public class TestDoFlowWithEvaluator {
 	final Mockery context = new Mockery();
-	final FlowEvaluator flowEvaluator = context.mock(FlowEvaluator.class);
-	final IScopeStack scopeStack = context.mock(IScopeStack.class);
-	final TestResults testResults = TestResultsFactory.testResults();
-	final ITableListener tableListener = context.mock(ITableListener.class);
-	final IScopeState scopeState = context.mock(IScopeState.class);
-	final RuntimeContextInternal runtime = context.mock(RuntimeContextInternal.class);
-	final SetUpTearDown setUpTearDown = context.mock(SetUpTearDown.class);
-	final DoFlow doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
+	final DoFlowDriver doFlowDriver = new DoFlowDriver(context);
 	
-	final Table table = table().with(
+	final Tables tables = tables().with(table().with(
 			row().with(cell(),cell()),
-			row().with(cell(),cell())).mock(context);
+			row().with(cell(),cell()))).mock(context);
 	
 	@Test
 	public void runWithCollectionSetUpTraverse() {
-		final Evaluator mockEvaluator = context.mock(Evaluator.class);
+		final Evaluator mockEvaluator = context.mock(Evaluator.class,"mockCollectionSetUpTraverse");
 		final Evaluator evaluator = new CollectionSetUpTraverse() {
 			@Override
 			public Object interpretAfterFirstRow(Table table2, TestResults testResults2) {
@@ -58,7 +48,7 @@ public class TestDoFlowWithEvaluator {
 	}
 	@Test
 	public void runWithCollectionSetUpFixture() {
-		final Evaluator mockEvaluator = context.mock(Evaluator.class);
+		final Evaluator mockEvaluator = context.mock(Evaluator.class,"mockSetUpFixture");
 		final Evaluator evaluator = new SetUpFixture() {
 			@Override
 			public Object interpretAfterFirstRow(Table table2, TestResults testResults2) {
@@ -69,34 +59,30 @@ public class TestDoFlowWithEvaluator {
 	}
 	@Test
 	public void runWithEvaluator() {
-		final Evaluator mockEvaluator = context.mock(Evaluator.class);
+		final Evaluator mockEvaluator = context.mock(Evaluator.class,"mockEvaluator");
 		context.checking(new Expectations() {{
-			allowing(mockEvaluator).setRuntimeContext(runtime);
+			allowing(mockEvaluator).setRuntimeContext(doFlowDriver.getRuntime());
 			allowing(mockEvaluator).getSystemUnderTest(); will(returnValue(null));
 		}});
 		verifyWithEvaluator(mockEvaluator, mockEvaluator);
 	}
 
-	private void verifyWithEvaluator(final Evaluator evaluator, final Evaluator mockEvaluator) {
-		final GenericTypedObject typedResult1 = new GenericTypedObject(evaluator);
-		context.checking(new Expectations() {{
-			allowing(tableListener).getTestResults(); will(returnValue(testResults));
-			oneOf(runtime).pushTestResults(with(any(TestResults.class)));
-			allowing(runtime).isAbandoned(with(any(TestResults.class))); will(returnValue(false));
+	private void verifyWithEvaluator(Evaluator evaluator, Evaluator mockEvaluator) {
+		doFlowDriver.showTearDown = true;
+		Table table0 = tables.at(0);
+		
+		doFlowDriver.startingOnTable(table0);
+		doFlowDriver.interpretingRowReturning(table0.at(0), evaluator);
+		doFlowDriver.pushingObjectOnScopeStack(evaluator);
+		doFlowDriver.callingSetUpOn(evaluator,table0.at(0));
+		doFlowDriver.interpretingEvaluator(mockEvaluator,table0);
+		doFlowDriver.poppingScopeStackAtEndOfLastTable(list(evaluator));
+		doFlowDriver.callingTearDownOn(evaluator, table0.at(0));
+		doFlowDriver.finishingTable(table0);
 
-			oneOf(runtime).setCurrentTable(table);
-			oneOf(runtime).setCurrentRow(table.at(0));
-			oneOf(flowEvaluator).interpretRow(table.at(0),testResults);
-			  will(returnValue(typedResult1));
-			oneOf(setUpTearDown).callSetUpSutChain(evaluator, table.at(0), testResults);
-			oneOf(scopeStack).push(typedResult1);
-			oneOf(mockEvaluator).interpretAfterFirstRow(table, testResults);
-			oneOf(setUpTearDown).callTearDownSutChain(evaluator, table.at(0), testResults);
-			oneOf(runtime).popTestResults();
-		}});
-		doFlow.runTable(table,tableListener);
+		doFlowDriver.runStorytest(tables);
 	}
-	protected <T> List<T> list(T... ss) {
+	protected List<Object> list(Object... ss) {
 		return CollectionUtility.list(ss);
 	}
 }

@@ -29,6 +29,9 @@ public abstract class TableElementBuilder<From extends TableElement, Builder ext
 	public From mock(final Mockery context) {
 		return mock(context,"",0);
 	}
+	public From mock(final Mockery context, String name) {
+		return mock(context,name,0);
+	}
 	public From mock(final Mockery context, String path, int index) {
 		String localPath = localPath(path, index);
 		final From from = context.mock(type,localPath);

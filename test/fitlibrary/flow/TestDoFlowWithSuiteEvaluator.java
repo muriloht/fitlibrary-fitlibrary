@@ -43,13 +43,13 @@ public class TestDoFlowWithSuiteEvaluator {
 	final Tables storytest1 = tables().with(
 			table().with(
 					row().with(cell(),cell()))
-			).mock(context);
+			).mock(context,"storytest1");
 	final Table table1 = storytest1.at(0);
 	
 	final Tables storytest2 = tables().with(
 			table().with(
 					row().with(cell(),cell()))
-			).mock(context,"storytest2",0);
+			).mock(context,"storytest2");
 	final Table table2 = storytest2.at(0);
 
 	@Before

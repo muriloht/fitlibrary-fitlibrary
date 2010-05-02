@@ -66,7 +66,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	public void runStorytest(Tables tables, ITableListener tableListener) {
 		TestResults testResults = tableListener.getTestResults();
-		reset();
+		resetToStartStorytest();
 		for (int t = 0; t < tables.size(); t++) {
 			Table table = tables.at(t);
 			boolean plainTextFailed = false;
@@ -90,7 +90,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		}
 		tableListener.storytestFinished();
 	}
-	private void reset() {
+	private void resetToStartStorytest() {
 		scopeStack.setAbandon(false);
 		scopeStack.setStopOnError(false);
 		scopeStack.clearAllButSuite();
@@ -195,7 +195,8 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		else
 			callSetUpSutChain(subject,row,testResults);
 		subject.interpretAfterFirstRow(restOfTable, testResults);
-		setUpTearDown.callTearDownSutChain(subject, row, testResults);
+		if (subject instanceof DefineAction)
+			setUpTearDown.callTearDownSutChain(subject, row, testResults);
 		if (restOfTable != table && restOfTable.size() > rest)
 			for (int i = rest; i < restOfTable.size(); i++)
 				table.add(restOfTable.at(i));
