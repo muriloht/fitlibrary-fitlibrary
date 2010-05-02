@@ -220,7 +220,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
 		if (suiteFixtureOption.isNone())
 			suiteFixtureOption = new Some<SuiteEvaluator>(suiteEvaluator);
-		typedResult.injectRuntime(runtime); // Subsequent tables are global for now.
+//		typedResult.injectRuntime(runtime); // Subsequent tables are global for now.
 		setUpTearDown.callSuiteSetUp(suiteEvaluator, row, testResults);
 		pushOnScope(typedResult,row,testResults);
 	}
