@@ -57,7 +57,7 @@ public class TestDoFlowWithSuiteEvaluator {
 		driver.callingSuiteSetUpOn(suiteEvaluator,table1.at(0));
 		driver.pushingObjectOnScopeStack(suiteEvaluator);
 		driver.callingSetUpOn(suiteEvaluator, table1.at(0));
-		driver.poppingScopeStackAtEndOfLastTable(list());
+		driver.poppingScopeStackAtEndOfLastTableGiving(list());
 		driver.finishingTable(table1);
 		driver.runStorytest(storytest1);
 		
@@ -68,7 +68,7 @@ public class TestDoFlowWithSuiteEvaluator {
 		driver.interpretingRowReturning(table2.at(0),new DoTraverse(s),runtimeCopy);
 		driver.pushingObjectOnScopeStack(s);
 		driver.callingSetUpOn(s, table2.at(0));
-		driver.poppingScopeStackAtEndOfLastTable(runtimeCopy,list(s));
+		driver.poppingScopeStackAtEndOfLastTableGiving(runtimeCopy,list(s));
 		driver.callingTearDownOn(s, table2.at(0));
 		driver.finishingTable(table2,runtimeCopy);
 		driver.runStorytest(storytest2);

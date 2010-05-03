@@ -139,9 +139,11 @@ public class ScopeStack implements IScopeStack {
 		final int size = stack.size();
 		return new IScopeState() {
 			@Override
-			public void restore() {
+			public List<TypedObject> restore() {
+				List<TypedObject> results = new ArrayList<TypedObject>();
 				while (stack.size() > size)
-					stack.pop();
+					results.add(stack.pop());
+				return results;
 			}
 		};
 	}

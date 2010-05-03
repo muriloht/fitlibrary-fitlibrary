@@ -46,7 +46,7 @@ public class TestDoFlowWithFixture {
 		doFlowDriver.startingOnTable(table0);
 		doFlowDriver.interpretingRowReturning(table0.at(0),evaluator);
 		doFlowDriver.interpretingFixture(mockFixture, table0);
-		doFlowDriver.poppingAtEndOfLastTable();
+		doFlowDriver.poppingScopeStackAtEndOfLastTableGiving();
 		doFlowDriver.finishingTable(table0);
 
 		doFlowDriver.runStorytest(tables);

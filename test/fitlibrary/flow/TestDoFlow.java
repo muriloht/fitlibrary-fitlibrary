@@ -34,7 +34,7 @@ import fitlibrary.utility.CollectionUtility;
 @RunWith(JMock.class)
 public class TestDoFlow {
 	final Mockery context = new Mockery();
-	final DoFlowDriver doFlowDriver = new DoFlowDriver(context);
+	final DoFlowDriver driver = new DoFlowDriver(context);
 	final Tables tables = makeTables();
 
 	// FOLLOWING DON'T CHANGE SCOPE AT ALL:
@@ -61,7 +61,7 @@ public class TestDoFlow {
 	@Test
 	public void aSelectFixtureWithNoSutSoNoScopeChange() {
 		context.checking(new Expectations() {{
-			exactly(2).of(doFlowDriver.getRuntime()).showAsAfterTable(with(any(String.class)),with(any(String.class)));
+			exactly(2).of(driver.getRuntime()).showAsAfterTable(with(any(String.class)),with(any(String.class)));
 		}});
 		verifyNoScopeChangeWith(new SelectFixture());
 	}
@@ -113,74 +113,74 @@ public class TestDoFlow {
 		Table table0 = tables.at(0);
 		Table table1 = tables.at(1);
 		
-		doFlowDriver.startingOnTable(table0);
-		doFlowDriver.interpretingRowReturning(table0.at(0), doS);
-		doFlowDriver.pushingObjectOnScopeStack(s);
-		doFlowDriver.callingSetUpOn(s,table0.at(0));
-		doFlowDriver.interpretingRowReturning(table0.at(1), doT);
-		doFlowDriver.pushingObjectOnScopeStack(t);
-		doFlowDriver.callingSetUpOn(t,table0.at(1));
-		doFlowDriver.poppingScopeStackAtEndOfTable(list(t,s));
-		doFlowDriver.callingTearDownOn(t, table0.at(0));
-		doFlowDriver.callingTearDownOn(s, table0.at(0));
-		doFlowDriver.finishingTable(table0);
+		driver.startingOnTable(table0);
+		driver.interpretingRowReturning(table0.at(0), doS);
+		driver.pushingObjectOnScopeStack(s);
+		driver.callingSetUpOn(s,table0.at(0));
+		driver.interpretingRowReturning(table0.at(1), doT);
+		driver.pushingObjectOnScopeStack(t);
+		driver.callingSetUpOn(t,table0.at(1));
+		driver.poppingScopeStackAtEndOfTable(list(t,s));
+		driver.callingTearDownOn(t, table0.at(0));
+		driver.callingTearDownOn(s, table0.at(0));
+		driver.finishingTable(table0);
 
-		doFlowDriver.startingOnTable(table1);
-		doFlowDriver.interpretingRowReturning(table1.at(0), doS);
-		doFlowDriver.pushingObjectOnScopeStack(s);
-		doFlowDriver.callingSetUpOn(s,table1.at(0));
-		doFlowDriver.interpretingRowReturning(table1.at(1), doT);
-		doFlowDriver.pushingObjectOnScopeStack(t);
-		doFlowDriver.callingSetUpOn(t,table1.at(1));
-		doFlowDriver.poppingScopeStackAtEndOfLastTable(list(t,s));
-		doFlowDriver.callingTearDownOn(t, table1.at(0));
-		doFlowDriver.callingTearDownOn(s, table1.at(0));
-		doFlowDriver.finishingTable(table1);
+		driver.startingOnTable(table1);
+		driver.interpretingRowReturning(table1.at(0), doS);
+		driver.pushingObjectOnScopeStack(s);
+		driver.callingSetUpOn(s,table1.at(0));
+		driver.interpretingRowReturning(table1.at(1), doT);
+		driver.pushingObjectOnScopeStack(t);
+		driver.callingSetUpOn(t,table1.at(1));
+		driver.poppingScopeStackAtEndOfLastTableGiving(list(t,s));
+		driver.callingTearDownOn(t, table1.at(0));
+		driver.callingTearDownOn(s, table1.at(0));
+		driver.finishingTable(table1);
 
-		doFlowDriver.runStorytest(tables);
+		driver.runStorytest(tables);
 	}
 
 	private void verifyScopePush(final Object result, final Object sut) {
 		Table table0 = tables.at(0);
 		Table table1 = tables.at(1);
 
-		doFlowDriver.startingOnTable(table0);
-		doFlowDriver.interpretingRowReturning(table0.at(0), result);
-		doFlowDriver.pushingObjectOnScopeStack(sut); // -- extra
-		doFlowDriver.callingSetUpOn(sut,table0.at(0)); // -- extra
-		doFlowDriver.interpretingRowReturning(table0.at(1), null);
-		doFlowDriver.poppingScopeStackAtEndOfTable(list(result));
-		doFlowDriver.callingTearDownOn(result, table0.at(0));
-		doFlowDriver.finishingTable(table0);
+		driver.startingOnTable(table0);
+		driver.interpretingRowReturning(table0.at(0), result);
+		driver.pushingObjectOnScopeStack(sut); // -- extra
+		driver.callingSetUpOn(sut,table0.at(0)); // -- extra
+		driver.interpretingRowReturning(table0.at(1), null);
+		driver.poppingScopeStackAtEndOfTable(list(result));
+		driver.callingTearDownOn(result, table0.at(0));
+		driver.finishingTable(table0);
 
-		doFlowDriver.startingOnTable(table1);
-		doFlowDriver.interpretingRowReturning(table1.at(0), result);
-		doFlowDriver.pushingObjectOnScopeStack(sut); // -- extra
-		doFlowDriver.callingSetUpOn(sut,table1.at(0)); // -- extra
-		doFlowDriver.interpretingRowReturning(table1.at(1), null);
-		doFlowDriver.poppingScopeStackAtEndOfLastTable(list(result));
-		doFlowDriver.callingTearDownOn(result, table1.at(0));
-		doFlowDriver.finishingTable(table1);
+		driver.startingOnTable(table1);
+		driver.interpretingRowReturning(table1.at(0), result);
+		driver.pushingObjectOnScopeStack(sut); // -- extra
+		driver.callingSetUpOn(sut,table1.at(0)); // -- extra
+		driver.interpretingRowReturning(table1.at(1), null);
+		driver.poppingScopeStackAtEndOfLastTableGiving(list(result));
+		driver.callingTearDownOn(result, table1.at(0));
+		driver.finishingTable(table1);
 
-		doFlowDriver.runStorytest(tables);
+		driver.runStorytest(tables);
 	}
 	private void verifyNoScopeChangeWith(final Object result) {
 		Table table0 = tables.at(0);
 		Table table1 = tables.at(1);
 		
-		doFlowDriver.startingOnTable(table0);
-		doFlowDriver.interpretingRowReturning(table0.at(0),result);
-		doFlowDriver.interpretingRowReturning(table0.at(1), null);
-		doFlowDriver.poppingAtEndOfTable();
-		doFlowDriver.finishingTable(table0);
+		driver.startingOnTable(table0);
+		driver.interpretingRowReturning(table0.at(0),result);
+		driver.interpretingRowReturning(table0.at(1), null);
+		driver.poppingAtEndOfTable();
+		driver.finishingTable(table0);
 
-		doFlowDriver.startingOnTable(table1);
-		doFlowDriver.interpretingRowReturning(table1.at(0), result);
-		doFlowDriver.interpretingRowReturning(table1.at(1), null);
-		doFlowDriver.poppingAtEndOfLastTable();
-		doFlowDriver.finishingTable(table1);
+		driver.startingOnTable(table1);
+		driver.interpretingRowReturning(table1.at(0), result);
+		driver.interpretingRowReturning(table1.at(1), null);
+		driver.poppingScopeStackAtEndOfLastTableGiving();
+		driver.finishingTable(table1);
 
-		doFlowDriver.runStorytest(tables);
+		driver.runStorytest(tables);
 	}
 	private Tables makeTables() {
 		return tables().with(

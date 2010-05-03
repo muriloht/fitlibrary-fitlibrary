@@ -76,7 +76,7 @@ public class TestDoFlowWithEvaluator {
 		doFlowDriver.pushingObjectOnScopeStack(evaluator);
 		doFlowDriver.callingSetUpOn(evaluator,table0.at(0));
 		doFlowDriver.interpretingEvaluator(mockEvaluator,table0);
-		doFlowDriver.poppingScopeStackAtEndOfLastTable(list(evaluator));
+		doFlowDriver.poppingScopeStackAtEndOfLastTableGiving(list(evaluator));
 		doFlowDriver.callingTearDownOn(evaluator, table0.at(0));
 		doFlowDriver.finishingTable(table0);
 

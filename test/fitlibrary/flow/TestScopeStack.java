@@ -107,7 +107,7 @@ public class TestScopeStack {
 		scopeStack.push(someTypedObject);
 		assertThat(scopeStack.objectsForLookup(),hasSubjects(something,global,flowEvaluator));
 		IScopeState currentState = scopeStack.currentState();
-		currentState.restore();
+		assertThat(currentState.restore().isEmpty(),is(true));
 		assertThat(scopeStack.objectsForLookup(),hasSubjects(something,global,flowEvaluator));
 		assertThat(scopeStack.possibleClasses(),is(classList(something.getClass())));
 	}
@@ -116,7 +116,7 @@ public class TestScopeStack {
 		scopeStack.push(someTypedObject);
 		IScopeState currentState = scopeStack.currentState();
 		scopeStack.push(otherTypedObject);
-		currentState.restore();
+		assertThat(currentState.restore(),is(list(otherTypedObject)));
 		assertThat(scopeStack.objectsForLookup(),hasSubjects(something,global,flowEvaluator));
 		assertThat(scopeStack.possibleClasses(),is(classList(something.getClass())));
 	}

@@ -36,7 +36,6 @@ public class DoFlowDriver {
 	final IScopeStack scopeStack;
 	final TestResults testResults;
 	final ITableListener tableListener;
-	final IScopeState scopeState;
 	final RuntimeContextInternal runtime;
 	final RuntimeContextInternal runtimeCopy;
 	final SetUpTearDown setUpTearDown;
@@ -45,6 +44,7 @@ public class DoFlowDriver {
 	final DoFlow doFlow;
 	final static String BEGIN_STATE = "begin";
 	String currentState = BEGIN_STATE;
+	int storytestNo = 0;
 	int tableNo = 0;
 	int rowNo = 0;
 	
@@ -56,7 +56,6 @@ public class DoFlowDriver {
 		scopeStack = context.mock(IScopeStack.class);
 		testResults = TestResultsFactory.testResults();
 		tableListener = context.mock(ITableListener.class);
-		scopeState = context.mock(IScopeState.class);
 		runtime = context.mock(RuntimeContextInternal.class);
 		runtimeCopy = context.mock(RuntimeContextInternal.class,"runtimeCopy");
 		setUpTearDown = context.mock(SetUpTearDown.class);
@@ -71,11 +70,12 @@ public class DoFlowDriver {
 	public void exit() {
 		doFlow.exit();
 	}
-	private void startingStorytest() {
-		final String endState = "startingStorytest";
+	public void startingStorytest() {
+		final String endState = endState("startingStorytest");
+		storytestNo++;
 		context.checking(new Expectations() {{
 			allowing(tableListener).getTestResults();
-			   will(returnValue(testResults));       when(state.is(currentState));
+			   will(returnValue(testResults));
 			oneOf(scopeStack).setAbandon(false);     when(state.is(currentState));
 			oneOf(scopeStack).setStopOnError(false); when(state.is(currentState));
 			oneOf(scopeStack).clearAllButSuite();    when(state.is(currentState));
@@ -85,7 +85,8 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	private void endingStorytest() {
-		final String endState = "endingStorytest";
+		storytestNo--;
+		final String endState = endState("endingStorytest");
 		context.checking(new Expectations() {{
 			oneOf(tableListener).storytestFinished(); when(state.is(currentState));
 			                                          then(state.is(endState));
@@ -93,7 +94,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public RuntimeContextInternal startingStorytestWithSuite(final SuiteEvaluator suiteEvaluator) {
-		final String endState = "startingStorytestWithSuite";
+		final String endState = endState("startingStorytestWithSuite");
 		context.checking(new Expectations() {{
 			allowing(tableListener).getTestResults();
 			   will(returnValue(testResults));       when(state.is(currentState));
@@ -116,10 +117,10 @@ public class DoFlowDriver {
 	}
 	public void startingOnTable(final Table table, final RuntimeContextInternal runtimeLocal) {
 		tableNo++;
-		final String endState = "startingTable"+tableNo;
+		final String endState = endState("startingOnTable");
 		context.checking(new Expectations() {{
 			allowing(table).isPlainTextTable(); will(returnValue(false));      when(state.is(currentState));
-			oneOf(runtimeLocal).setCurrentTable(table);                             when(state.is(currentState));
+			oneOf(runtimeLocal).setCurrentTable(table);                        when(state.is(currentState));
 			allowing(tableListener).getTestResults();
 			   will(returnValue(testResults));                                 when(state.is(currentState));
 			oneOf(runtimeLocal).pushTestResults(with(any(TestResults.class))); when(state.is(currentState));
@@ -138,7 +139,7 @@ public class DoFlowDriver {
 	}
 	public void poppingScopeStackAtEndOfTable(final RuntimeContextInternal runtimeLocal, final List<Object> popObjects) {
 		final List<TypedObject> popList = asTypedObjects(popObjects);
-		final String endState = "poppingScopeStackAtEndOfTable"+tableNo;
+		final String endState = endState("poppingScopeStackAtEndOfTable");
 		context.checking(new Expectations() {{
 			oneOf(runtimeLocal).popTestResults();                 when(state.is(currentState));
 			oneOf(scopeStack).poppedAtEndOfTable();
@@ -147,23 +148,23 @@ public class DoFlowDriver {
 		}});
 		currentState = endState;
 	}
-	public void poppingAtEndOfLastTable() {
-		poppingAtEndOfLastTable(runtime);
+	public void poppingScopeStackAtEndOfLastTableGiving() {
+		poppingScopeStackAtEndOfLastTableGiving(runtime);
 	}
-	public void poppingAtEndOfLastTable(final RuntimeContextInternal runtimeLocal) {
-		poppingScopeStackAtEndOfLastTable(runtimeLocal, new ArrayList<Object>());
+	public void poppingScopeStackAtEndOfLastTableGiving(final RuntimeContextInternal runtimeLocal) {
+		poppingScopeStackAtEndOfLastTableGiving(runtimeLocal, new ArrayList<Object>());
 	}
-	public void poppingScopeStackAtEndOfLastTable(List<Object> popObjects) {
-		poppingScopeStackAtEndOfLastTable(runtime,popObjects);
+	public void poppingScopeStackAtEndOfLastTableGiving(List<Object> popObjects) {
+		poppingScopeStackAtEndOfLastTableGiving(runtime,popObjects);
 	}
-	public void poppingScopeStackAtEndOfLastTable(final RuntimeContextInternal runtimeLocal, final List<Object> popObjects) {
+	public void poppingScopeStackAtEndOfLastTableGiving(final RuntimeContextInternal runtimeLocal, final List<Object> popObjects) {
 		final List<TypedObject> popList = asTypedObjects(popObjects);
-		final String endState = "poppingScopeStackAtEndOfLastTable"+tableNo;
+		final String endState = endState("poppingScopeStackAtEndOfLastTableGiving");
 		context.checking(new Expectations() {{
-			oneOf(runtimeLocal).popTestResults();                 when(state.is(currentState));
+			oneOf(runtimeLocal).popTestResults();       when(state.is(currentState));
 			oneOf(scopeStack).poppedAtEndOfStorytest();
-			  will(returnValue(popList));                         when(state.is(currentState));
-			                                                      then(state.is(endState));
+			  will(returnValue(popList));               when(state.is(currentState));
+			                                            then(state.is(endState));
 		}});
 		currentState = endState;
 	}
@@ -171,7 +172,7 @@ public class DoFlowDriver {
 		finishingTable(table, runtime);
 	}
 	public void finishingTable(final Table table, final RuntimeContextInternal runtimeLocal) {
-		final String endState = "finishingTable"+tableNo;
+		final String endState = endState("finishingTable");
 		tableNo--;
 		context.checking(new Expectations() {{
 			oneOf(runtimeLocal).addAccumulatedFoldingText(table); when(state.is(currentState));
@@ -185,7 +186,7 @@ public class DoFlowDriver {
 	}
 	public void interpretingRowReturning(final Row row, final Object object, final RuntimeContextInternal runtimeLocal) {
 		rowNo++;
-		final String endState = "interpretingRowReturning"+tableNo+","+rowNo;
+		final String endState = endState("interpretingRowReturning");
 		context.checking(new Expectations() {{
 			allowing(runtimeLocal).isAbandoned(with(any(TestResults.class)));
 			  will(returnValue(false));                           when(state.is(currentState));
@@ -197,7 +198,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void pushingObjectOnScopeStack(final Object sut) {
-		final String endState = "pushingObjectOnScopeStack"+tableNo+","+rowNo;
+		final String endState = endState("pushingObjectOnScopeStack");
 		context.checking(new Expectations() {{
 			oneOf(scopeStack).push(new GenericTypedObject(sut)); when(state.is(currentState));
 			                                                     then(state.is(endState));
@@ -205,7 +206,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void callingSuiteSetUpOn(final Object sut, final Row row) {
-		final String endState = "callingSuiteSetUpOn"+tableNo+","+rowNo;
+		final String endState = endState("callingSuiteSetUpOn");
 		context.checking(new Expectations() {{
 			oneOf(setUpTearDown).callSuiteSetUp(sut, row, testResults); when(state.is(currentState));
 			                                                               then(state.is(endState));
@@ -213,7 +214,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void callingSuiteTearDownOn(final Object sut) {
-		final String endState = "callingSuiteTearDownOn"+tableNo+","+rowNo;
+		final String endState = endState("callingSuiteTearDownOn");
 		context.checking(new Expectations() {{
 			oneOf(setUpTearDown).callSuiteTearDown(with(sut), with(any(TestResults.class))); when(state.is(currentState));
 			                                                          then(state.is(endState));
@@ -221,7 +222,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void callingSetUpOn(final Object sut, final Row row) {
-		final String endState = "callingSetUpOn"+tableNo+","+rowNo;
+		final String endState = endState("callingSetUpOn");
 		context.checking(new Expectations() {{
 			oneOf(setUpTearDown).callSetUpSutChain(sut, row, testResults); when(state.is(currentState));
 			                                                               then(state.is(endState));
@@ -229,7 +230,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void callingTearDownOn(final Object sut, final Row row) {
-		final String endState = "callingTearDownOn"+tableNo+","+rowNo;
+		final String endState = endState("callingTearDownOn");
 		context.checking(new Expectations() {{
 			oneOf(setUpTearDown).callTearDownSutChain(sut, row, testResults); when(state.is(currentState));
 			                                                                  then(state.is(endState));
@@ -244,7 +245,7 @@ public class DoFlowDriver {
 	}
 	public void interpretingFixture(final MockFixture mockFixture, final Table table) throws FitParseException {
 		final Parse parse = new Parse("<table><tr><td>1</td></tr></table>");
-		final String endState = "interpretingFixture"+tableNo+","+rowNo;
+		final String endState = endState("interpretingFixture"+tableNo);
 		context.checking(new Expectations() {{
 			oneOf(table).asTableOnParse(); will(returnValue(table)); when(state.is(currentState));
 			oneOf(flowEvaluator).fitHandler();
@@ -258,7 +259,7 @@ public class DoFlowDriver {
 		currentState = endState;
 	}
 	public void interpretingEvaluator(final Evaluator mockEvaluator, final Table table) {
-		final String endState = "interpretingEvaluator"+tableNo+","+rowNo;
+		final String endState = endState("interpretingEvaluator");
 		context.checking(new Expectations() {{
 			oneOf(mockEvaluator).interpretAfterFirstRow(table, testResults); 
 			                                                     when(state.is(currentState));
@@ -270,10 +271,43 @@ public class DoFlowDriver {
 		return runtime;
 	}
 	public void injectingWithRuntime(final RuntimeContextual runtimeContextual) {
-		final String endState = "injectingWithRuntime"+tableNo+","+rowNo;
+		final String endState = endState("injectingWithRuntime");
 		context.checking(new Expectations() {{
 			oneOf(runtimeContextual).setRuntimeContext(runtime);  when(state.is(currentState));
 			                                                      then(state.is(endState));
+		}});
+		currentState = endState;
+	}
+	public IScopeState startingOnInnerTablesWithCurrentScopeState() {
+		return startingOnInnerTablesWithCurrentScopeState(runtime);
+	}
+	public IScopeState startingOnInnerTablesWithCurrentScopeState(final RuntimeContextInternal runtimeLocal) {
+		final IScopeState currentScopeState = context.mock(IScopeState.class);
+		final String endState = endState("startingOnInnerTables");
+		context.checking(new Expectations() {{
+			allowing(runtimeLocal).isAbandoned(with(any(TestResults.class)));
+			  will(returnValue(false));                           when(state.is(currentState));
+			oneOf(scopeStack).currentState();
+			  will(returnValue(currentScopeState));  when(state.is(currentState));
+			                                    then(state.is(endState));
+		}});
+		currentState = endState;
+		return currentScopeState;
+	}
+	private String endState(String name) {
+		return name+"."+storytestNo+"."+tableNo+"."+rowNo;
+	}
+	public void restoringScopeGiving(final IScopeState scopeState, final List<Object> popObjects) {
+		restoringScope(scopeState, popObjects, runtime);
+	}
+	public void restoringScope(final IScopeState scopeState, final List<Object> popObjects, final RuntimeContextInternal runtimeLocal) {
+		final List<TypedObject> popList = asTypedObjects(popObjects);
+		final String endState = endState("restoring");
+		context.checking(new Expectations() {{
+			oneOf(runtimeLocal).popTestResults();  when(state.is(currentState));
+			oneOf(scopeState).restore();
+			  will(returnValue(popList));           when(state.is(currentState));
+			                                       then(state.is(endState));
 		}});
 		currentState = endState;
 	}

@@ -119,12 +119,12 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		TestResults testResults = tableListener.getTestResults();
 		runtime.pushTestResults(testResults);
 		try {
-			runTable(table, testResults);
+			runTable(table, testResults,tableListener);
 		} finally {
 			runtime.popTestResults();
 		}
 	}
-	private void runTable(Table table, TestResults testResults) {
+	private void runTable(Table table, TestResults testResults, ITableListener tableListener) {
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 			Row row = table.at(rowNo);
 			if (runtime.isAbandoned(testResults)) {
@@ -136,7 +136,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.at(0);
 			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
-			    		handleInnerTables(cell, testResults);
+			    		handleInnerTables(cell, tableListener);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
 //			    		System.out.println("DoFlow set current Row "+row);
@@ -201,12 +201,12 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			for (int i = rest; i < restOfTable.size(); i++)
 				table.add(restOfTable.at(i));
 	}
-	private void handleInnerTables(final Cell cell, TestResults testResults) {
+	private void handleInnerTables(final Cell cell, ITableListener tableListener) {
 		Tables innerTables = cell.getEmbeddedTables();
 		IScopeState state = scopeStack.currentState();
 		for (Table iTable: innerTables) {
-			runTable(iTable,testResults);
-			state.restore();
+			runTable(iTable,tableListener);
+			tearDown(state.restore(), iTable.at(0), tableListener.getTestResults());
 		}
 	}
 	private void handleActualDoFixture(DoEvaluator doEvaluator, Row row, TestResults testResults) {
@@ -220,7 +220,6 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	private void handleSuiteFixture(SuiteEvaluator suiteEvaluator, TypedObject typedResult, Row row, TestResults testResults) {
 		if (suiteFixtureOption.isNone())
 			suiteFixtureOption = new Some<SuiteEvaluator>(suiteEvaluator);
-//		typedResult.injectRuntime(runtime); // Subsequent tables are global for now.
 		setUpTearDown.callSuiteSetUp(suiteEvaluator, row, testResults);
 		pushOnScope(typedResult,row,testResults);
 	}

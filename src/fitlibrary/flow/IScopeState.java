@@ -5,6 +5,10 @@
 
 package fitlibrary.flow;
 
+import java.util.List;
+
+import fitlibrary.typed.TypedObject;
+
 public interface IScopeState {
-	void restore();
+	List<TypedObject> restore();
 }
