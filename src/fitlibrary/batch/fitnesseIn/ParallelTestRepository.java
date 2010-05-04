@@ -11,7 +11,7 @@ import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.batch.trinidad.TestResultRepository;
 
 public interface ParallelTestRepository {
-	public void setUri(String uri) throws IOException;
+	public void setUri(String uri, int port) throws IOException;
 	public TestDescriptor getTest(String name) throws IOException;
 	public BlockingQueue<TestDescriptor> getSuite(String name)throws IOException;
 	public void prepareResultRepository(TestResultRepository resultRepository)throws IOException;

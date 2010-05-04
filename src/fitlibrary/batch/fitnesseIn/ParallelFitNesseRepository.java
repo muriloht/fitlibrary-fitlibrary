@@ -39,7 +39,10 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 	public static final String SUITE_TEARDOWN_NAME = "SuiteTearDown";
 
 	public ParallelFitNesseRepository(String rootDir) throws IOException{
-		setUri(rootDir);
+		this(rootDir,80);
+	}
+	public ParallelFitNesseRepository(String rootDir, int port) throws IOException{
+		setUri(rootDir,port);
 	}
 	public BlockingQueue<TestDescriptor> getSuite(String name) throws IOException {
 		BlockingQueue<TestDescriptor> queue = new LinkedBlockingQueue<TestDescriptor>();
@@ -81,14 +84,15 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 		resultRepository.addFile(new File(images,"collapsableClosed.gif"), "collapsableClosed.gif");
 		resultRepository.addFile(new File(images,"collapsableOpen.gif"), "collapsableOpen.gif");
 	}
-	public void setUri(String uri) throws IOException {
-		context = makeContext(uri);
+	public void setUri(String uri, int port) throws IOException {
+		context = makeContext(uri,port);
 		fitnesseRoot = uri;
 	}
-	private FitNesseContext makeContext(String rootPath) throws IOException {
+	private FitNesseContext makeContext(String rootPath, int port) throws IOException {
 		try{
 			FitNesseContext resultContext = new FitNesseContext();
-			resultContext.port = 0;
+			FitNesseContext.globalContext = resultContext; // Make the port visible so that ${FITNESSE_PORT} will work
+			resultContext.port = port;
 			resultContext.rootPath = rootPath;
 			ComponentFactory componentFactory = new ComponentFactory(resultContext.rootPath);
 			resultContext.rootDirectoryName = "FitNesseRoot"; //arguments.getRootDirectory();

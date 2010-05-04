@@ -28,6 +28,7 @@ public class DebugPage {
 	private static String FITNESSE_DIRY = "fitnesse";
 	private static String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
 	private static String DIRY = FITNESSE_FOR_WEB_DIRY;
+	private static int PORT = 8990; // This determines the value of ${FITNESSE_PORT}
 	
 	protected ReportListener reportListener = new ReportListener() {
 		public void tableFinished(Table table) {
@@ -65,7 +66,7 @@ public class DebugPage {
 					" tables but instead got "+tablesFinished);
 	}
 	public void run(String pageName) throws IOException, FitParseException {
-		String html = new ParallelFitNesseRepository(DIRY).getTest(pageName).getContent();
+		String html = new ParallelFitNesseRepository(DIRY,PORT).getTest(pageName).getContent();
 		System.out.println("\n----------\nHTML for "+pageName+"\n----------\n"+html);
 		Tables tables = TableFactory.tables(html);
 		expectedTablesFinished += tables.size();

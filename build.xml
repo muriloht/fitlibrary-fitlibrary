@@ -8,7 +8,7 @@
 	<property name="port" value="8080" />
 	
 	<!-- batch runner properties -->
-	<property name="showpassesinreport" value="showpasses" />   <!-- set any value here to switch this on, leave blank to switch off -->
+	<property name="showpassesinreport" value="true" />   <!-- true or false -->
 	<property name="results-dir" value="${home}/runnerResults" />  
 	<property name="timeout" value="600000" />  <!-- 10 mins default timeout -->  
 
@@ -120,10 +120,10 @@
 		<sequential>
 	    <echo message="Batch run of ${suite} with fitnesse at ${fitnesse.dir}, bin at ${bin}, fitnesse.jar at ${fitnesse.dir} and lib at ${lib} with results at ${results-dir}" />
 			<java classname="fitlibrary.batch.FitLibraryRunner" fork="true" dir="${fitnesse.dir}" timeout="@{timeout}" failonerror="true">
-				<arg value="@{suite}"/>
-				<arg value="."/>
-				<arg value="${results-dir}"/>
-				<arg value="${showpassesinreport}"/>
+				<arg value="-suiteName"/>    <arg value="@{suite}"/>
+				<arg value="-fitNesseDiry"/> <arg value="."/>
+				<arg value="-resultsDiry"/>  <arg value="${results-dir}"/>
+				<arg value="-showPasses"/>   <arg value="${showpassesinreport}"/>
 				
 				<classpath>
 				    <dirset dir="${bin}">
