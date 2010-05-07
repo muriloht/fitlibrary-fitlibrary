@@ -18,7 +18,7 @@
 	    <echo message="Create fitlibrary jar file in local FitNesse"/>
 	    <jar destfile="${fitnesse.dir}/fitlibrary.jar" basedir="bin"/>
 	    <echo message="Create source zip file"/>
-	    <zip destfile="${fitnesse.dir}/fitlibrarySrc.zip">
+	    <zip destfile="${lib}/src/fitlibrarySrc.zip">
 	        <fileset dir="src"/>
 	    </zip>
 	</target>
@@ -118,7 +118,7 @@
 		<attribute name="suite"/>
 		<attribute name="timeout" default="600000"/> <!-- 10 mins default timeout --> 
 		<sequential>
-	    <echo message="Batch run of ${suite} with fitnesse at ${fitnesse.dir}, bin at ${bin}, fitnesse.jar at ${fitnesse.dir} and lib at ${lib} with results at ${results-dir}" />
+	                <echo message="Batch run of @{suite} with fitnesse at ${fitnesse.dir} and results at ${results-dir}" />
 			<java classname="fitlibrary.batch.FitLibraryRunner" fork="true" dir="${fitnesse.dir}" timeout="@{timeout}" failonerror="true">
 				<arg value="-suiteName"/>    <arg value="@{suite}"/>
 				<arg value="-fitNesseDiry"/> <arg value="."/>
@@ -126,14 +126,12 @@
 				<arg value="-showPasses"/>   <arg value="${showpassesinreport}"/>
 				
 				<classpath>
-				    <dirset dir="${bin}">
-					<include name="**"/>
-				    </dirset>
 				    <fileset dir="${lib}">
 					<include name="**/*.jar"/>
 				     </fileset>
 				     <fileset dir="${fitnesse.dir}">
 					<include name="fitnesse.jar" />
+					<include name="fitlibrary.jar" />
 				     </fileset>
 			  	</classpath>
 			</java>

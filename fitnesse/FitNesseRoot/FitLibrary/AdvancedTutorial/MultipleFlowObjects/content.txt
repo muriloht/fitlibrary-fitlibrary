@@ -13,4 +13,23 @@ Let's continue with the browser/database example, for now:
 
 But what happens if the actions of two flow objects are the same? This would happen if we were using two web services, for example.
 
-As we see in the next example, it's necessary to explicitly select between them. ... TO BE COMPLETED.
+As we see in the next example, it's necessary to explicitly select between them:
+
+|''add''|!-fitlibrary.specify.select.FirstSelect-!|''as''|first|
+|''add''|!-fitlibrary.specify.select.SecondSelect-!|''as''|second|
+
+|''select''|first|
+
+|''count''|'''is'''|1|
+
+|''select''|second|
+
+|''count''|'''is'''|2|
+
+|''select''|first|
+
+|''count''|'''is'''|1|
+
+|''select''|second|
+
+|''count''|'''is'''|2|

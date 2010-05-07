@@ -1,6 +1,1 @@
-|^InFlow|
-|^DynamicVariables|
-|^DefinedActions|
-|^CreatingAndCheckingCollections|
-|^CreatingAndCheckingObjects|
-|^UsingSuites|
+^DoTables

@@ -44,16 +44,16 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
     	return ((DoTraverse)traverse()).interpretInFlow(table,testResults);
     }
 	/**
-	 * if (stopOnError) then we don't continue intepreting a table
+	 * if (stopOnError) then we don't continue interpreting a table
 	 * as there's been a problem
 	 */
 	public void setStopOnError(boolean stopOnError) {
 		doTraverse.setStopOnError(stopOnError);
 	}
-	protected void abandon() {
+	public void abandon() {
 		doTraverse.abandonStorytest();
 	}
-	protected void showAfterTable(String s) {
+	public void showAfterTable(String s) {
 		doTraverse.showAfterTable(s);
 	}
 	public void showAsAfterTable(String title,String s) {
@@ -62,7 +62,7 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
 	}
-	protected void setExpandDefinedActions(boolean expandDefinedActions) {
+	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		doTraverse.setExpandDefinedActions(expandDefinedActions);
 	}
 	public Object interpretInFlow(Table firstTable, TestResults testResults) {

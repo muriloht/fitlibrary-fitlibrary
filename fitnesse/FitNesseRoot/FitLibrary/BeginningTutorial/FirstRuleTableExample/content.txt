@@ -2,7 +2,7 @@
 #
 A rule table is a way of defining, and testing, a business rule by providing several examples.
 
-In our first example, the discount is determined from a price (From FitBook, p13):
+In our first example, the discount is determined from a price (From ${fitBook}, p13):
 
 |''A 5% discount is provided whenever the total purchase is greater than $1,000''|
 |''given amount''|''expected discount?''|

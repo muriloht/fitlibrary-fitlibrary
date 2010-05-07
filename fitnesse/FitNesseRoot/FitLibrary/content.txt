@@ -7,8 +7,8 @@
 |!3 ^BeginningTutorial|''First tutorial for FitLibrary''|
 |!3 ^AdvancedTutorial|''Advanced (and more technical) features of FitLibrary''|
 |!3 ^UserGuide|''User guide for FitLibrary''|
-|!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 |!3 ^ReferenCe|''Reference for FitLibrary''|
+|!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 
 |!3 ^WhatIsNew|''What's new in this release.''|
 
@@ -90,7 +90,7 @@
 !define workflow ([[''workflow''][.FitLibrary.GlosSary.WorkFlow]])
 !define workflowTraverse ([[''doTraverse {doFixture}''][.FitLibrary.GlosSary.DoTraverse]])
 
-!path ../bin
+!path fitlibrary.jar
 !path fitnesse.jar
 !path lib/*.jar
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}

@@ -97,16 +97,16 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	//------ THE FOLLOWING ARE HERE SO THAT THEY'RE STILL ACCESSIBLE FROM A SUBCLASS:
 	
 	//--- BECOMES, ETC TIMEOUTS:
-	protected void becomesTimeout(int timeout) {
+	public void becomesTimeout(int timeout) {
 		global().becomesTimeout(timeout);
 	}
-	protected int becomesTimeout() {
+	public int becomesTimeout() {
 		return global().becomesTimeout();
 	}
-	protected int getTimeout(String name) {
+	public int getTimeout(String name) {
 		return global().getTimeout(name);
 	}
-	protected void putTimeout(String name, int timeout) {
+	public void putTimeout(String name, int timeout) {
 		global().putTimeout(name,timeout);
 	}
 	//--- STOP ON ERROR AND ABANDON:
@@ -118,81 +118,81 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		global().abandonStorytest();
 	}
 	//--- DYNAMIC VARIABLES:
-	protected boolean addDynamicVariablesFromFile(String fileName) {
+	public boolean addDynamicVariablesFromFile(String fileName) {
 		return global().addDynamicVariablesFromFile(fileName);
 	}
-	protected void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
+	public void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
 		global().addDynamicVariablesFromUnicodeFile(fileName);
 	}
-	protected boolean clearDynamicVariables() {
+	public boolean clearDynamicVariables() {
 		return global().clearDynamicVariables();
 	}
-	protected boolean setSystemPropertyTo(String property, String value) {
+	public boolean setSystemPropertyTo(String property, String value) {
 		return global().setSystemPropertyTo(property, value);
 	}
 	public void setFitVariable(String variableName, Object result) {
 		global().setFitVariable(variableName, result);
 	}
-	protected Object getSymbolNamed(String fitSymbolName) {
+	public Object getSymbolNamed(String fitSymbolName) {
 		return global().getSymbolNamed(fitSymbolName);
 	}
 	//--- SLEEP & STOPWATCH:
-	protected boolean sleepFor(int milliseconds) {
+	public boolean sleepFor(int milliseconds) {
 		return global().sleepFor(milliseconds);
 	}
-	protected void startStopWatch() {
+	public void startStopWatch() {
 		global().startStopWatch();
 	}
-	protected long stopWatch() {
+	public long stopWatch() {
 		return global().stopWatch();
 	}
 	//--- FIXTURE SELECTION
-	protected SetVariableTraverse setVariables() {
+	public SetVariableTraverse setVariables() {
 		return global().setVariables();
 	}
-	protected DoTraverse file(String fileName) {
+	public DoTraverse file(String fileName) {
 		return global().file(fileName);
 	}
-	protected CrossReferenceFixture xref(String suiteName) {
+	public CrossReferenceFixture xref(String suiteName) {
 		return global().xref(suiteName);
 	}
 	//--- DEFINED ACTIONS
-	protected DefineAction defineAction(String wikiClassName) {
+	public DefineAction defineAction(String wikiClassName) {
 		return global().defineAction(wikiClassName);
 	}
-	protected DefineAction defineAction() {
+	public DefineAction defineAction() {
 		return global().defineAction();
 	}
-	protected DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
+	public DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
 		return global().defineActionsSlowlyAt(pageName);
 	}
-	protected DefineActionsOnPage defineActionsAt(String pageName) {
+	public DefineActionsOnPage defineActionsAt(String pageName) {
 		return global().defineActionsAt(pageName);
 	}
-	protected DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
+	public DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
 		return global().defineActionsAtFrom(pageName,rootLocation);
 	}
-	protected void clearDefinedActions() {
+	public void clearDefinedActions() {
 		global().clearDefinedActions();
 	}
-	protected boolean toExpandDefinedActions() {
+	public boolean toExpandDefinedActions() {
 		return global().toExpandDefinedActions();
 	}
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		global().setExpandDefinedActions(expandDefinedActions);
 	}
 	//--- RANDOM, TO, GET, FILE, HARVEST
-	protected RandomSelectTraverse selectRandomly(String var) {
+	public RandomSelectTraverse selectRandomly(String var) {
 		return global().selectRandomly(var);
 	}
-	protected boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
+	public boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
 		return global().harvestUsingPatternFrom(vars, pattern, text);
 	}
 	//--- FILE LOGGING
-	protected void recordToFile(String fileName) {
+	public void recordToFile(String fileName) {
 		global().recordToFile(fileName);
 	}
-	protected void startLogging(String fileName) {
+	public void startLogging(String fileName) {
 		global().startLogging(fileName);
 	}
 	public void logMessage(String s) {

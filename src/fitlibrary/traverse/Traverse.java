@@ -15,7 +15,7 @@ import fitlibrary.differences.LocalFile;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.CycleException;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.lookup.ParseDelegation;
@@ -225,7 +225,7 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 	public void showAsAfterTable(String title,String s) {
 		global().showAsAfterTable(title,s);
 	}
-	protected GlobalScope global() {
+	protected GlobalActionScope global() {
 		return getRuntimeContext().getGlobal();
 	}
 	public abstract Object interpretAfterFirstRow(Table table, TestResults testResults);

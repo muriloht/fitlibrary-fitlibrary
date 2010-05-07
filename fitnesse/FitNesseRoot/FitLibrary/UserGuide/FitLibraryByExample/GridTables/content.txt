@@ -1,7 +1,7 @@
 GridTables checks that a grid of values in the table matches the values in a 2D array.
 
 !|fitlibrary.specify.GridFixtureUnderTest|
-----
+
 |strings|
 |a|b|
 |c|d|

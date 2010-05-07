@@ -1,0 +1,141 @@
+<project name="project" default="release" basedir=".">
+
+        <tstamp prefix="start"/>
+
+	<property name="release.version" value="${start.DSTAMP}" />
+
+	<property name="home" value="${user.home}/My Documents" />
+	<property name="work" value="${home}/work" />
+
+
+<!--  ==================== Where the files come from ==================== -->
+	<property name="here" value="${basedir}" />
+
+<!--  ==================== Release Location ==================== -->
+	<property name="creations.home" value="${home}/Creations" />
+	<property name="release" value="${creations.home}/FitLibrary${release.version}" />
+	<property name="release.zip.file" value="FitLibrary${release.version}.zip" />
+
+<!--  ==================== Test Release Location ==================== -->
+	<property name="releaseTests.home" value="${creations.home}/ReleaseTests" />
+	<property name="releaseTest" value="${releaseTests.home}/Test${release.version}" />
+	<property name="port" value="8089" />
+		
+<!-- ==================== Release Target ================================== -->
+
+	<target name="release" depends="releasePages" description="Release software">
+		<echo message="This assumes that a build of the jar has already been carried out!"/>
+		<copy todir="${release}/fitnesse">
+			<fileset dir="${here}">
+				<include name="fitlibrary.jar" />
+				<include name="runFitNesseDirectly.bat" />
+			</fileset>
+		</copy>
+		<copy todir="${release}">
+			<fileset file="../batchRunFitLibrarySpecifications.bat" />
+			<fileset file="../build.xml" />
+			<fileset file="../releaseREAD-ME.html" />
+			<fileset file="../runFitNesse.bat" />
+		</copy>
+
+		<mkdir dir="${release}/fitnesse/lib" />
+		<copy todir="${release}/fitnesse/lib">
+			<fileset dir="${here}/lib">
+				<include name="fitbook.jar" />
+				<include name="rentEz.jar" />
+				<include name="hamcrest-all-1.1.jar" />
+				<include name="jmock-2.5.1.jar" />
+				<include name="jmock-junit4-2.5.1.jar" />
+				<include name="junit-4.6.jar" />
+				<include name="ognl-2.7.2.jar" />
+				<include name="poi-3.1-FINAL-20080629.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${release}/fitnesse/lib/src" />
+		<copy todir="${release}/fitnesse/lib/src">
+			<fileset dir="${here}/lib/src">
+				<include name="fitbookSrc.jar" />
+				<include name="fitlibrarySrc.zip" />
+				<include name="rentEzSrc.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${release}/fitNesse/FitNesseRoot/files/testFiles">
+			<fileset dir="${here}/FitNesseRoot/files/testFiles" />
+		</copy>
+		<copy todir="${release}/fitNesse/FitNesseRoot/files/dots">
+			<fileset dir="${here}/FitNesseRoot/files/dots"/>
+		</copy>
+		<copy todir="${release}/fitNesse/FitNesseRoot/files/gameImages">
+			<fileset dir="${here}/FitNesseRoot/files/gameImages"/>
+		</copy>
+		<copy todir="${release}/fitNesse/FitNesseRoot/files/images">
+			<fileset file="${here}/FitNesseRoot/files/images/FitBookCover.jpeg"/>
+		</copy>
+
+		<zip basedir="${release}" destfile="${creations.home}/${release.zip.file}"/>
+	</target>
+
+<!-- ==================== Release Pages Target ================================== -->
+
+	<target name="releasePages" description="Release FitNesse Pages">
+		<mkdir dir="${release}" />
+		<copy todir="${release}/fitnesse/FitNesseRoot/FitLibrary">
+			<fileset dir="${here}/fitNesseRoot/FitLibrary" />
+		</copy>
+	</target>
+
+<!-- ==================== Set up the Release with FitNesse so we can check it's OK ================================== -->
+<!-- This will become part of CI once all batch tests pass (2 image ones currently fail in batch)  -->
+
+	<target name="setUpReleaseForTest" depends="createDiry, setUpNewFitNesse, moveFilesOver, cleanUpZip"
+                description="Test FitLibrary Release against latest FitNesse">
+	</target>
+
+	<target name="createDiry" description="Set up latest FitNesse ready to test release against it">
+		<mkdir dir="${releaseTests.home}" />
+		<delete dir="${releaseTest}" />
+		<mkdir dir="${releaseTest}/fitnesse" />
+	</target>
+
+	<target name="setUpNewFitNesse" description="Set up latest FitNesse ready to test release against it">
+		<copy todir="${releaseTest}/fitnesse">
+			<fileset file="fitnesse.jar" />
+		</copy>
+		<copy todir="${releaseTest}">
+			<fileset file="${creations.home}/${release.zip.file}" />
+		</copy>
+		<unzip src="${releaseTest}/${release.zip.file}" dest="${releaseTest}/FitLibraryInFitNesse"/>
+		<sequential>
+		<java jar="${releaseTest}/fitnesse/fitnesse.jar" fork="true" dir="${releaseTest}/fitnesse" failonerror="true">
+			<arg value="-i"/>
+		</java>
+		</sequential>
+	</target>
+
+	<target name="moveFilesOver" description="Test FitLibrary Release against latest FitNesse">
+		<move todir="${releaseTest}/fitnesse/lib">
+		    <fileset dir="${releaseTest}/FitLibraryInFitNesse/fitnesse/lib"/>
+		</move>
+		<move todir="${releaseTest}/fitnesse/FitNesseRoot">
+		    <fileset dir="${releaseTest}/FitLibraryInFitNesse/fitnesse/FitNesseRoot"/>
+		</move>
+		<move todir="${releaseTest}/fitnesse">
+		    <fileset file="${releaseTest}/FitLibraryInFitNesse/fitnesse/*"/>
+		</move>
+		<move todir="${releaseTest}">
+		    <fileset file="${releaseTest}/FitLibraryInFitNesse/*.xml"/>
+		    <fileset file="${releaseTest}/FitLibraryInFitNesse/*.bat"/>
+		    <fileset file="${releaseTest}/FitLibraryInFitNesse/*.html"/>
+		</move>
+	</target>
+
+	<target name="cleanUpZip" description="Test FitLibrary Release against latest FitNesse">
+		<delete dir="${releaseTest}/FitLibraryInFitNesse" />
+		<delete file="${releaseTest}/${release.zip.file}" />
+	</target>
+
+
+
+</project>

@@ -5,7 +5,7 @@
 package fitlibrary.runtime;
 
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
@@ -26,7 +26,7 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	boolean hasScope();
 	IScope getScope();
 	TableEvaluator getTableEvaluator();
-	GlobalScope getGlobal();
+	GlobalActionScope getGlobal();
 	void addAccumulatedFoldingText(Table table);
 	void showAsAfterTable(String title, String s);
 	void recordToFile(String fileName);

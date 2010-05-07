@@ -9,7 +9,7 @@ import java.io.IOException;
 import fit.FitServerBridge;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.ScopeStack;
 import fitlibrary.flow.SetUpTearDownCache;
 import fitlibrary.parser.lookup.ParseDelegation;
@@ -43,7 +43,7 @@ public class BatchFitLibrary implements StorytestRunner {
 	}
 	private static DoFlow wiredUpDoFlow() {
 		FlowEvaluator flowEvaluator = new DoTraverse();
-		GlobalScope global = new GlobalScope();
+		GlobalActionScope global = new GlobalActionScope();
 		TypedObject globalTO = new GenericTypedObject(global);
 		ScopeStack scopeStack = new ScopeStack(flowEvaluator,globalTO);
 		RuntimeContextContainer runtime = new RuntimeContextContainer(scopeStack,global);

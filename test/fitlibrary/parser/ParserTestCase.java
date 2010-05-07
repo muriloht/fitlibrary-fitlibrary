@@ -7,7 +7,7 @@ package fitlibrary.parser;
 
 import junit.framework.TestCase;
 import fitlibrary.DoFixture;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.ScopeStack;
 import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.traverse.workflow.DoTraverse;
@@ -16,7 +16,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public abstract class ParserTestCase extends TestCase {
-	static GlobalScope global = new GlobalScope();
+	static GlobalActionScope global = new GlobalActionScope();
 	static TypedObject globalTO = new GenericTypedObject(global);
 	
 	public static DoFixture evaluatorWithRuntime() {

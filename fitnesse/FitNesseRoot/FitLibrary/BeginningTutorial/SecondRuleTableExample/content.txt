@@ -1,6 +1,6 @@
 !3 A Rule Table for Credit Limits
 #
-In our next rule table example, the credit limit is determined from several inputs (From FitBook, p17):
+In our next rule table example, the credit limit is determined from several inputs (From ${fitBook}, p17):
 
  * Credit is allowed, up to an amount of $1000, for a customer who has been trading with us for more than 12 months, has paid reliably over that period, and has a current balance owing of less than $6,000.
 

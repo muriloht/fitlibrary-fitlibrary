@@ -15,7 +15,7 @@ import java.util.List;
 import fitlibrary.CompareFilesFixture;
 import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
@@ -33,7 +33,7 @@ public class ClassUtility {
 		return result;
 	}
 	public static boolean aFitLibraryClass(Class<?> declaringClass) {
-		if (declaringClass == GlobalScope.class || declaringClass == CompareFilesFixture.class ||
+		if (declaringClass == GlobalActionScope.class || declaringClass == CompareFilesFixture.class ||
 				declaringClass == CompareFilesTraverse.class)
 			return false;
 		Package thePackage = declaringClass.getPackage();

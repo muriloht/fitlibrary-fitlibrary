@@ -9,11 +9,12 @@ A table for an array with simple values (such as numbers) doesn't have a label r
  * The rest of the rows contain the expected elements, in order. If there are no elements at all in the array, there's no further rows
 
 !|fitlibrary.eg.Collections|
-----
+
 |''ints are''|1,2,3|
 
-|'''check'''|''ints''|${array}|
-----
-|''ints''|${array}|
+|''ints''|
+|1|
+|2|
+|3|
 
 See CollectionsCode for the Java code for this storytest.

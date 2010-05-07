@@ -17,7 +17,7 @@ import fitlibrary.dynamicVariable.DynamicVariablesRecordingToFile;
 import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.dynamicVariable.LocalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
-import fitlibrary.flow.GlobalScope;
+import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.log.FileLogger;
 import fitlibrary.runResults.TestResults;
@@ -35,7 +35,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	private FileLogger fileLogger = new FileLogger();
 	private IScope scope;
 	private TableEvaluator tableEvaluator;
-	private GlobalScope global;
+	private GlobalActionScope global;
 	// Remember to copy across any added valuable thing inside copyFromSuite()
 	// Following are local to a storytest and so are not copied across a suite:
 	private DynamicVariablesRecording dynamicVariablesRecording = new DynamicVariablesRecordingThatFails();
@@ -49,7 +49,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public RuntimeContextContainer() {
 		//
 	}
-	public RuntimeContextContainer(IScope scope, GlobalScope global) {
+	public RuntimeContextContainer(IScope scope, GlobalActionScope global) {
 		this.scope = scope;
 		this.global = global;
 	}
@@ -58,7 +58,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 			dynamicVariables.put(s[i],s[i+1]);
 	}
 	public RuntimeContextContainer(DynamicVariables dynamicVariables, Map<String,Integer> timeouts, 
-			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalScope global) {
+			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalActionScope global) {
 		this.dynamicVariables = dynamicVariables;
 		this.timeouts = timeouts;
 		this.fileLogger = fileLogger;
@@ -136,7 +136,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		return tableEvaluator;
 	}
 	@Override
-	public GlobalScope getGlobal() {
+	public GlobalActionScope getGlobal() {
 		return global;
 	}
 	public void showAsAfterTable(String title, String s) {

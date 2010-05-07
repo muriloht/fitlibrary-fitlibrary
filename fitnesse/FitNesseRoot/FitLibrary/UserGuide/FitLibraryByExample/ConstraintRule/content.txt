@@ -3,7 +3,7 @@ Constraint rules are a variation of calculation rules. Constraint rules don't sp
 For example, the following constraint rule table is checking the constraint that the ''a'' value is less than the ''b'' value. It only has ''given'' columns:
 
 |!-fitlibrary.eg.Constraints-!|
-----
+
 |''constraint''|
 |''a''|''b''|
 |1|2|

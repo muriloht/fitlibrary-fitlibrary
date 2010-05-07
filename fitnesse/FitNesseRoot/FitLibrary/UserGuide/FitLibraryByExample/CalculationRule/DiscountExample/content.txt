@@ -1,7 +1,7 @@
 Let's start with a simple example, computing the discount. The general rule can be stated as: ''If the amount is more than $1000.00, the discount is 5%'':
 
 |!-fitlibrary.eg.Discount-!|
-----
+
 |''calculate''|
 |''$''||''discount''|
 |0.00||0.00|

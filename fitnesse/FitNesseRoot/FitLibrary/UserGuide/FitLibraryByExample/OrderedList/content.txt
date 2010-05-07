@@ -1,11 +1,3 @@
-!**< defs
-!define list (|''item''|
-|1|
-|2|
-|3|
-|4|
-)
-**!
 Let's consider a table for  specifying an ordered list that's expected.
  * The left cell of the table identifies the property (an ordered list)
  * The right cell contains a table for the ordered list:
@@ -13,7 +5,7 @@ Let's consider a table for  specifying an ordered list that's expected.
   * The rest of the rows contain the expected elements, in order. If there are no elements at all in the collection, there's no further rows
  * This passes:
 |!-fitlibrary.eg.Collections-!|
-----
+
  * Create a list with 4 elements
 |list is|1,2,3,4|
 
@@ -23,11 +15,8 @@ Let's consider a table for  specifying an ordered list that's expected.
 |2|
 |3|
 |4|
-----
- * Here's the list to be checked
-|''ordered list''|${list}|
+
 And here's further details:
- * ^OneWithNoElements
+ * When the list is empty ^EmptyList
  * One ^ThatFails
- * How to include checks within the ${actions} ^CheckInActions
  * The code: CollectionsCode

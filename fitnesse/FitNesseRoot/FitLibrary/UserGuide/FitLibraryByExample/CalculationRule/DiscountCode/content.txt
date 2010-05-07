@@ -2,8 +2,6 @@ Let's start by looking at the code for the previous example, shown in part again
 
 |!-fitlibrary.eg.Discount-!|
 
-|''actions''|
-
 |''calculate''|
 |''$''||''discount''|
 |0.00||0.00|
