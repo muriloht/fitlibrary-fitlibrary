@@ -13,6 +13,7 @@
 >SharedDynamicProperties
 >CanSwitchWithinDefinedAction
 >AddingFixtureFromAnAction
+^WhenAddedObjectIsFixtureOrTraverseRuntimeIsInjectedIntoIt
 
 
 >SelectIsManagedByDoFlow

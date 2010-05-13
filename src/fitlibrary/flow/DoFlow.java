@@ -270,6 +270,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 	}
 	@Override
 	public void addNamedObject(String name, TypedObject typedObject, Row row, TestResults testResults) {
+		typedObject.injectRuntime(runtime);
 		callSetUpSutChain(typedObject.getSubject(), row, testResults);
 		scopeStack.addNamedObject(name, typedObject, row, testResults);
 	}

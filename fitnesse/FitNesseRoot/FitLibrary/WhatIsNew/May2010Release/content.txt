@@ -1,7 +1,11 @@
+!1 Important
+#
 To use ''!-FitLibrary-!'', it is now necessary to include the following in the top-most page of your suite:
 {{{
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
 }}}
+
+It may be necessary to recompile/jar all fixturing code, as the underlying implementation has changed in several significant ways.
 ----^ImplementationChanges
 ----!2 Additions
 #

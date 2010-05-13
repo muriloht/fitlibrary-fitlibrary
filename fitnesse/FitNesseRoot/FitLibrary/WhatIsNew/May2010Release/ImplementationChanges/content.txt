@@ -6,6 +6,7 @@ There are many changes to the underlying implementation of ''!-FitLibrary-!'':
  * Tables, Table, Row and Cell are now Java interfaces, rather than classes.
  * The functionality of ''!-DoFixture-!'', ''!-SelectFixture-!'', ''!-DomainFixture-!'' and some of ''!-SuiteFixture-!'' is now handled by ''!-DoFlow-!''.
  * ''!-TestResults-!'' is now a Java interface, with ''!-TestResultsOnCount-!'' the corresponding class.
+ * Some classes have shifted to new packages
 #
 !3 Table, Row, Cell
 #
