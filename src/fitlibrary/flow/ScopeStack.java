@@ -13,10 +13,12 @@ import java.util.Stack;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.suite.SuiteEvaluator;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
+import fitlibrary.traverse.RuntimeContextual;
 import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.option.None;
@@ -179,5 +181,17 @@ public class ScopeStack implements IScopeStack {
 	@Override
 	public void setStopOnError(boolean stop) {
 		this.stopOnError = stop;
+	}
+	@Override
+	public void switchRuntime(RuntimeContextInternal runtime) {
+		setRuntimeContextOf(flowEvaluator.getSubject(),runtime);
+		for (TypedObject aGlobal: globals)
+			setRuntimeContextOf(aGlobal.getSubject(),runtime);
+	}
+	private void setRuntimeContextOf(Object object, RuntimeContextInternal runtime) {
+		if (object instanceof RuntimeContextual)
+			((RuntimeContextual)object).setRuntimeContext(runtime);
+		if (object instanceof DomainAdapter)
+			setRuntimeContextOf(((DomainAdapter)object).getSystemUnderTest(),runtime);
 	}
 }

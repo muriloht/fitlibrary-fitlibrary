@@ -19,5 +19,7 @@ eg3=abc\n
 
 |get|@{eg3}|is|abc|
 
+|get|@{eg333}|is|@{eg333}|
+
 |''file''|vars.properties|
 |''delete''|

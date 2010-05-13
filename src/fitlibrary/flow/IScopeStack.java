@@ -8,6 +8,7 @@ package fitlibrary.flow;
 import java.util.List;
 
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.typed.TypedObject;
 
@@ -20,4 +21,5 @@ public interface IScopeStack extends IScope {
 	IScopeState currentState();
 	void select(String name);
 	void addNamedObject(String string, TypedObject typedObject, Row row, TestResults testResults);
+	void switchRuntime(RuntimeContextInternal runtime);
 }

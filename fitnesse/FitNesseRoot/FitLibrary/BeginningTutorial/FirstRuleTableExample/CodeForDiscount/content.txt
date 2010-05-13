@@ -1,0 +1,38 @@
+We repeat the table for convenience:
+
+|''A 5% discount is provided whenever the total purchase is greater than $1,000''|
+|''given amount''|''expected discount?''|
+|0.00|0.00|
+|999.95|0.00|
+|1000.00|0.00|
+|1010.00|50.50|
+
+The class ''Global'' is loaded due to the first (infrastructure) table, that's included in .FitLibrary.BeginningTutorial.SuiteSetUp
+
+Ths ''Global'' class includes the following method:
+----{{{	public Rule a5PercentDiscountIsProvidedWheneverTheTotalPurchaseIsGreaterThanDollar1Comma000() {
+		return new DiscountRule();
+	}
+}}}----This method is called when the first (visible) table of the storytest is executed. The first row of that table is turned into a method name (using extended camel casing).
+
+And here's the code for ''!-DiscountRule-!'':
+----{{{public class DiscountRule implements Rule {
+	private double givenAmount;
+
+	public void setGivenAmount(double givenAmount) {
+		this.givenAmount = givenAmount;
+	}
+	public double getExpectedDiscount() {
+		if (givenAmount > 1000.00)
+			return givenAmount * 0.05;
+		return 0.00;
+	}
+}
+}}}----Because the ''!-DiscountRule-!'' class implements ''Rule'' (a marker interface), the rest of the table is treated as a rule table:
+
+ * The second row of the table names the input and expected columns. These are mapped directly to the setter and getter methods in ''!-DiscountRule-!''
+ * The third row leads to:
+   * The method ''setGivenAmount()'' being called with the value 0.00
+   * The method ''getExpectedDiscount()'' being called and it's result compared against the expected value of 0.00.
+   * As the expected value matches, it is coloured green
+ * The 4th, 5th and 6th rows are treated similarly to the third row, as decribed above

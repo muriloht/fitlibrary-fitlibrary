@@ -16,7 +16,7 @@ A rule table is a way of defining, and testing, a business rule by providing sev
 |>FirstRuleTableExample|''Discount business rules''|
 |>SecondRuleTableExample|''Credit limit rules''|
 
-An older approach to rules tables is here: .FitLibrary.UserGuide.FitLibraryByExample.CalculationRule
+Another approach to rules tables is here: .FitLibrary.UserGuide.FitLibraryByExample.CalculationRule
 #
 !2 Business Processes
 #

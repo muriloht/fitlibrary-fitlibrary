@@ -103,10 +103,8 @@ public class DoFlowDriver {
 			oneOf(scopeStack).clearAllButSuite();    when(state.is(currentState));
 			oneOf(suiteEvaluator).getCopyOfRuntimeContext();
 			  will(returnValue(runtimeCopy));        when(state.is(currentState));
-			oneOf(flowEvaluator).setRuntimeContext(runtimeCopy);
+			oneOf(scopeStack).switchRuntime(runtimeCopy);
                                                      when(state.is(currentState));
-			oneOf(flowEvaluator).getSystemUnderTest();
-			                                         when(state.is(currentState));
 			                                         then(state.is(endState));
 		}});
 		currentState = endState;

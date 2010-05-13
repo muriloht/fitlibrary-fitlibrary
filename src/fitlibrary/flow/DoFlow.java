@@ -99,7 +99,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		domainCheck = null;
 		if (suiteFixtureOption.isSome()) {
 			runtime = suiteFixtureOption.get().getCopyOfRuntimeContext();
-			setRuntimeContextOf(flowEvaluator);
+			scopeStack.switchRuntime(runtime);
 		} else
 			runtime.reset();
 	}
