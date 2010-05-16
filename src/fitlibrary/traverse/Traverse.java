@@ -189,6 +189,8 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 		callCreatingMethod("endCreatingObject", element);
 	}
     public RuntimeContextInternal getRuntimeContext() {
+    	if (runtimeContext == null)
+    		throw new NullPointerException("Runtime has not been injected into "+this+". Please do this explicitly.");
 		return runtimeContext;
 	}
     public void setRuntimeContext(RuntimeContextInternal runtimeContext) {

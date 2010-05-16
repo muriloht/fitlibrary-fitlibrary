@@ -21,6 +21,10 @@ The table format:
 
  * The input column is to the left of the results column. Results are distinguished with a ''?'' at the end of the name.
 
+!3 Code
+#
 Here's the [[code for this example][^CodeForDiscount]]
 
-Next: SecondRuleTableExample
+!3 Next
+#
+SecondRuleTableExample

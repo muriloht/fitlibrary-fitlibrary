@@ -8,6 +8,7 @@ package fitlibrary.tutorial;
 import fitlibrary.traverse.function.Rule;
 
 public class CreditRule implements Rule {
+	private CreditApplication sut = new CreditApplication();
 	private int monthsAsCustomer;
 	private boolean hasPaidReliably;
 	private double balanceOwing;
@@ -22,11 +23,9 @@ public class CreditRule implements Rule {
 		this.balanceOwing = balanceOwing;
 	}
 	public boolean getCreditIsAllowed() {
-		return monthsAsCustomer > 12 && hasPaidReliably && balanceOwing < 6000.0;
+		return sut.creditPermitted(monthsAsCustomer, hasPaidReliably, balanceOwing);
 	}
 	public double getCreditLimit() {
-		if (getCreditIsAllowed())
-			return 1000.0;
-		return 0.00;
+		return sut.creditLimit(monthsAsCustomer, hasPaidReliably, balanceOwing);
 	}
 }
