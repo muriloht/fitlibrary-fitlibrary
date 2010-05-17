@@ -73,8 +73,7 @@ public class MultiDefinedActionTraverse extends Traverse {
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
-		for (Table table: body)
-			tableEvaluator.runTable(table, new TableListener(subTestResults));
+		tableEvaluator.runInnerTables(body, new TableListener(subTestResults));
 	}
 	private void colourReport(Row row, TestResults testResults, TestResults subTestResults) {
 		if (runtime.isAbandoned(testResults))

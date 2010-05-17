@@ -136,7 +136,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.at(0);
 			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
-			    		handleInnerTables(cell, tableListener);
+			    		runInnerTables(cell.getEmbeddedTables(), tableListener);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
 //			    		System.out.println("DoFlow set current Row "+row);
@@ -201,8 +201,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			for (int i = rest; i < restOfTable.size(); i++)
 				table.add(restOfTable.at(i));
 	}
-	private void handleInnerTables(final Cell cell, ITableListener tableListener) {
-		Tables innerTables = cell.getEmbeddedTables();
+	public void runInnerTables(Tables innerTables, ITableListener tableListener) {
 		IScopeState state = scopeStack.currentState();
 		for (Table iTable: innerTables) {
 			runTable(iTable,tableListener);

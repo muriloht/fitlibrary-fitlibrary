@@ -24,11 +24,11 @@ Here's some of the tables again, for convenience:
 	public Rule creditIsAllowedForWorthyCustomers() {
 		return new CreditRule();
 	}
-	
+
 	public Rule creditLimitDependsOnWhetherCreditIsAllowed() {
 		return new CreditLimitRule();
 	}
-	
+
 	public Rule creditIsAllowedForWorthyCustomersWhoHaveBeenTradingWithUsForMonths(int months) {
 		CreditRule creditLimitRule = new CreditRule();
 		creditLimitRule.setMonthsAsCustomer(months);
@@ -41,7 +41,7 @@ Here's some of the tables again, for convenience:
 	private int monthsAsCustomer;
 	private boolean hasPaidReliably;
 	private double balanceOwing;
-	
+
 	public void setMonthsAsCustomer(int monthsAsCustomer) {
 		this.monthsAsCustomer = monthsAsCustomer;
 	}

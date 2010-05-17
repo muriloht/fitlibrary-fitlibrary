@@ -98,8 +98,7 @@ public class DefinedActionCaller extends DoCaller {
 	private void processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
 		TestResults subTestResults = TestResultsFactory.testResults();
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
-		for (Table table: definedActionBody)
-			tableEvaluator.runTable(table, new TableListener(subTestResults));
+		tableEvaluator.runInnerTables(definedActionBody, new TableListener(subTestResults));
 		colourReport(definedActionBody, row, testResults, subTestResults);
 	}
 	private void colourReport(Tables body, Row row,

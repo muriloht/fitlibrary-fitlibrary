@@ -14,6 +14,7 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
@@ -95,6 +96,12 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	}
 	@Override
 	public void select(String name) {
+		// TODO Auto-generated method stub
+		// Remove this later
+	}
+	@Override
+	public void runInnerTables(Tables definedActionBody,
+			ITableListener tableListener) {
 		// TODO Auto-generated method stub
 		// Remove this later
 	}

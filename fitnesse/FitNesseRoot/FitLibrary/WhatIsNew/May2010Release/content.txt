@@ -66,6 +66,23 @@ The ''onFailure()'' method can be defined in a fixture. It is called if the stor
 
 See .FitLibrary.AdvancedTutorial.SetUpTearDownOnFailure for further details.
 #
+!3 ''Scope''
+#
+When a fixture executes now, an action can lead to a call to any method of an object that is in ''scope''. Such scope includes the following:
+
+ * The standard global action methods, such as to set dynamic variables, change a timeout, etc
+ * The user-provided globals, if any (see above for details)
+ * The suite fixture, if any
+ * The main fixture for the storytest, if any
+ * Any fixtures that are in action within a table, if any. This arises when an action returns a fixture (or auto-wrapped object) that interprets the rest of the table.
+
+Any fixtures introduced within a table (other than the main fixture for the storytest) go out of scope at the end of that table.
+
+When a defined action is called, the scope for the execution of the body of the defined action is the same as the scope in action at the point of call. This means that:
+
+ * If a defined action is called as a row in a larger table, it will include any fixtures in scope that are due to that table
+ * When defined actions call defined actions they may expand the scope further. Any scope that is introduced in a table within a defined action is removed when that table is finished executing.
+#
 ----!2 3. Defined Actions
 #
 !3 Loading defined actions
@@ -94,6 +111,12 @@ address is at Waimauku
 Such plain text tables can only refer to defined actions; other actions are ignored. If more than one defined action matches, the one with more keywords is used.
 
 See .FitLibrary.SpecifiCations.PlainTextInsteadOfTables
+#
+!3 ''Scope'' when a defined action is executing
+#
+As explained above, the scope that's active when a defined action is executing depends on the scope at the time of the call.
+
+This changes the execution model slightly, such as when a defined action is called within the third row of a table and the first row has introduced a new fixture (or object).
 #
 ----!2 4. Rule Table
 #

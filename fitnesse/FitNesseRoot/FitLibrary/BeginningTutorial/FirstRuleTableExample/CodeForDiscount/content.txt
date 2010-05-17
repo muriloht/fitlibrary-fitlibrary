@@ -36,7 +36,7 @@ And here's the code for ''!-DiscountRule-!'':
    * As the expected value matches, it is coloured green
  * The 4th, 5th and 6th rows are treated similarly to the third row, as decribed above
 
-So the ''!-DiscountRule-!'' acts as a "fixture" to manage the test, calling into the appropriate method in the application under test. 
+So the ''!-DiscountRule-!'' acts as a "fixture" to manage the test, calling into the appropriate method in the application under test.
 
 The relevant code for the ''!-DiscountingApplication -!'' is as follows:
 ----{{{public class DiscountingApplication {

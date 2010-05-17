@@ -41,3 +41,5 @@ See .FitLibrary.UserGuide.FitLibraryByExample.DefinedActions for further details
 ^DuplicatedParameter
 
 ^NestedTablesAsArguments
+
+^AnyObjectsAddedToScopeDuringDefinedActionBodyExecutionAreRemovedAgain
