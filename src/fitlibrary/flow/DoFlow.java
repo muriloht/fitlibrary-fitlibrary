@@ -196,7 +196,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 			callSetUpSutChain(subject,row,testResults);
 		subject.interpretAfterFirstRow(restOfTable, testResults);
 		if (subject instanceof DefineAction)
-			setUpTearDown.callTearDownSutChain(subject, row, testResults);
+			setUpTearDown.callTearDownOnSutChain(subject, row, testResults);
 		if (restOfTable != table && restOfTable.size() > rest)
 			for (int i = rest; i < restOfTable.size(); i++)
 				table.add(restOfTable.at(i));
@@ -247,11 +247,11 @@ public class DoFlow implements DomainTraverser, TableEvaluator {
 		callSetUpSutChain(typedResult.getSubject(), row, testResults);
 	}
 	private void callSetUpSutChain(Object sutInitially, final Row row, final TestResults testResults) {
-		setUpTearDown.callSetUpSutChain(sutInitially, row, testResults);
+		setUpTearDown.callSetUpOnSutChain(sutInitially, row, testResults);
 	}
 	private void tearDown(List<TypedObject> typedObjects, Row row, TestResults testResults) {
 		for (TypedObject typedObject : typedObjects)
-			setUpTearDown.callTearDownSutChain(typedObject.getSubject(), row, testResults);
+			setUpTearDown.callTearDownOnSutChain(typedObject.getSubject(), row, testResults);
 	}
 	@Override
 	public void setCurrentAction() {

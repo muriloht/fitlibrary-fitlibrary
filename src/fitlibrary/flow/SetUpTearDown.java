@@ -9,8 +9,8 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 
 public interface SetUpTearDown {
-	void callSetUpSutChain(Object subject, Row row, TestResults testResults);
-	void callTearDownSutChain(Object subject, Row row, TestResults testResults);
+	void callSetUpOnSutChain(Object subject, Row row, TestResults testResults);
+	void callTearDownOnSutChain(Object subject, Row row, TestResults testResults);
 	void callSuiteSetUp(Object subject, Row row, TestResults testResults);
 	void callSuiteTearDown(Object subject, TestResults testResults);
 }

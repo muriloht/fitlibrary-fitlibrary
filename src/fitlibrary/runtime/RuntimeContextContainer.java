@@ -47,11 +47,12 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	protected Table currentTable;
 
 	public RuntimeContextContainer() {
-		//
+		this(null,new GlobalActionScope()); // For those cases where a fixture is being sued independently of table execution
 	}
 	public RuntimeContextContainer(IScope scope, GlobalActionScope global) {
 		this.scope = scope;
 		this.global = global;
+		global.setRuntimeContext(this);
 	}
 	public RuntimeContextContainer(String[] s) {
 		for (int i = 0; i < s.length-1; i += 2)

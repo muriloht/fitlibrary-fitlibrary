@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Row;
-import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.DomainAdapter;
 
 @RunWith(JMock.class)
@@ -27,7 +26,7 @@ public class TestSetUpTearDownCache {
 	TestInterface object = context.mock(TestInterface.class,"object");
 	TestInterface sut = context.mock(TestInterface.class,"sut");
 	TestResults testResults = TestResultsFactory.testResults();
-	Row row = TableFactory.row("1");
+	Row row = context.mock(Row.class);
 	
 	@Test
 	public void suiteSetUp() {
@@ -41,9 +40,9 @@ public class TestSetUpTearDownCache {
 	public void suiteSetUpWithException() {
 		context.checking(new Expectations() {{
 			oneOf(object).suiteSetUp(); will(throwException(new RuntimeException("error")));
+			oneOf(row).error(with(testResults), with(any(Exception.class)));
 		}});
 		setUpTearDown.callSuiteSetUp(object, row, testResults);
-		assertThat(testResults.problems(),is(true));
 	}
 	@Test
 	public void suiteTearDown() {
@@ -67,7 +66,7 @@ public class TestSetUpTearDownCache {
 			allowing(object).getSystemUnderTest(); will(returnValue(null));
 			oneOf(object).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -78,7 +77,7 @@ public class TestSetUpTearDownCache {
 			allowing(sut).getSystemUnderTest(); will(returnValue(null));
 			oneOf(sut).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -86,11 +85,11 @@ public class TestSetUpTearDownCache {
 		context.checking(new Expectations() {{
 			allowing(object).getSystemUnderTest(); will(returnValue(sut));
 			oneOf(object).setUp(); will(throwException(new RuntimeException("error")));
+			oneOf(row).error(with(testResults), with(any(Exception.class)));
 			allowing(sut).getSystemUnderTest(); will(returnValue(null));
 			oneOf(sut).setUp();
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
-		assertThat(testResults.problems(),is(true));
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
 	}
 	@Test
 	public void setUpTearDown() {
@@ -99,8 +98,8 @@ public class TestSetUpTearDownCache {
 			oneOf(object).setUp();
 			oneOf(object).tearDown();
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
-		setUpTearDown.callTearDownSutChain(object, row, testResults);
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
+		setUpTearDown.callTearDownOnSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -113,8 +112,8 @@ public class TestSetUpTearDownCache {
 			oneOf(object).tearDown();
 			oneOf(sut).tearDown();
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
-		setUpTearDown.callTearDownSutChain(object, row, testResults);
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
+		setUpTearDown.callTearDownOnSutChain(object, row, testResults);
 		assertThat(testResults.problems(),is(false));
 	}
 	@Test
@@ -123,10 +122,35 @@ public class TestSetUpTearDownCache {
 			allowing(object).getSystemUnderTest(); will(returnValue(null));
 			oneOf(object).setUp();
 			oneOf(object).tearDown(); will(throwException(new RuntimeException("error")));
+			oneOf(row).error(with(testResults), with(any(Exception.class)));
 		}});
-		setUpTearDown.callSetUpSutChain(object, row, testResults);
-		setUpTearDown.callTearDownSutChain(object, row, testResults);
-		assertThat(testResults.problems(),is(true));
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
+		setUpTearDown.callTearDownOnSutChain(object, row, testResults);
+	}
+	@Test
+	public void onFailure() {
+		context.checking(new Expectations() {{
+			allowing(object).getSystemUnderTest(); will(returnValue(null));
+			oneOf(object).setUp();
+			oneOf(object).onFailure();
+			oneOf(object).tearDown();
+		}});
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
+		testResults.fail();
+		setUpTearDown.callTearDownOnSutChain(object, row, testResults);
+	}
+	@Test
+	public void onFailureThrowsException() {
+		context.checking(new Expectations() {{
+			allowing(object).getSystemUnderTest(); will(returnValue(null));
+			oneOf(object).setUp();
+			oneOf(object).onFailure(); will(throwException(new RuntimeException("error")));
+			oneOf(row).error(with(testResults), with(any(Exception.class)));
+			oneOf(object).tearDown();
+		}});
+		setUpTearDown.callSetUpOnSutChain(object, row, testResults);
+		testResults.fail();
+		setUpTearDown.callTearDownOnSutChain(object, row, testResults);
 	}
 
 	interface TestInterface extends DomainAdapter {
@@ -134,5 +158,6 @@ public class TestSetUpTearDownCache {
 		void suiteTearDown();
 		void setUp();
 		void tearDown();
+		void onFailure();
 	}
 }

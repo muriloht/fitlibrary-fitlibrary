@@ -16,13 +16,13 @@ import fitlibrary.typed.TypedObject;
 public class SetUpTearDownCache implements SetUpTearDown {
 	private final SetUpTearDownReferenceCounter referenceCounter = new SetUpTearDownReferenceCounter();
 
-	public void callSetUpSutChain(Object sutInitially, final Row row, final TestResults testResults) {
+	public void callSetUpOnSutChain(Object sutInitially, final Row row, final TestResults testResults) {
 		Object sut = sutInitially;
 		if (sut instanceof TypedObject)
 			sut = ((TypedObject)sut).getSubject();
 		referenceCounter.callSetUpOnNewReferences(sut, methodCaller(row, testResults));
 	}
-	public void callTearDownSutChain(Object sut, Row row, TestResults testResults) {
+	public void callTearDownOnSutChain(Object sut, Row row, TestResults testResults) {
 		referenceCounter.callTearDownOnReferencesThatAreCountedDown(sut, methodCaller(row, testResults));
 	}
 	public void callSuiteSetUp(Object suiteFixture, Row row, TestResults testResults) {
@@ -31,24 +31,30 @@ public class SetUpTearDownCache implements SetUpTearDown {
 	public void callSuiteTearDown(Object suiteFixture, TestResults testResults) {
 		callMethod(suiteFixture,"suiteTearDown",TableFactory.row("a"),testResults);
 	}
-	private MethodCaller methodCaller(final  Row row, final TestResults testResults) {
+	private MethodCaller methodCaller(final Row row, final TestResults testResults) {
 		return new MethodCaller(){
 			public void setUp(Object object) {
 				callMethod(object,"setUp",row,testResults);
 			}
 			public void tearDown(Object object) {
+				if (testResults.problems()) {
+					Object result = callMethod(object,"onFailure",row,testResults);
+					if (result != null)
+						row.addCell(result.toString()).shown();
+				}
 				callMethod(object,"tearDown",row,testResults);
 			}
 		};
 	}
-	protected void callMethod(Object object, String methodName, Row row, TestResults testResults) {
+	protected Object callMethod(Object object, String methodName, Row row, TestResults testResults) {
 		try {
 			Method method = object.getClass().getMethod(methodName, new Class[]{});
-			method.invoke(object, new Object[]{});
+			return method.invoke(object, new Object[]{});
 		} catch (NoSuchMethodException e) {
 			//
 		} catch (Exception e) {
 			row.error(testResults, e);
 		}
+		return null;
 	}
 }

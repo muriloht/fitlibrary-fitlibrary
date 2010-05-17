@@ -222,7 +222,7 @@ public class DoFlowDriver {
 	public void callingSetUpOn(final Object sut, final Row row) {
 		final String endState = endState("callingSetUpOn");
 		context.checking(new Expectations() {{
-			oneOf(setUpTearDown).callSetUpSutChain(sut, row, testResults); when(state.is(currentState));
+			oneOf(setUpTearDown).callSetUpOnSutChain(sut, row, testResults); when(state.is(currentState));
 			                                                               then(state.is(endState));
 		}});
 		currentState = endState;
@@ -230,7 +230,7 @@ public class DoFlowDriver {
 	public void callingTearDownOn(final Object sut, final Row row) {
 		final String endState = endState("callingTearDownOn");
 		context.checking(new Expectations() {{
-			oneOf(setUpTearDown).callTearDownSutChain(sut, row, testResults); when(state.is(currentState));
+			oneOf(setUpTearDown).callTearDownOnSutChain(sut, row, testResults); when(state.is(currentState));
 			                                                                  then(state.is(endState));
 		}});
 		currentState = endState;

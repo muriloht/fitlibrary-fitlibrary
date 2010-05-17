@@ -9,3 +9,8 @@ Specific Sorts of Collections:
 |[[Handling Subsets][.FitLibrary.UserGuide.FitLibraryByExample.SubSet]]|''Checking a subset of a collection''|
 |[[Handling Maps][.FitLibrary.UserGuide.FitLibraryByExample.MapHandling]]|''Checking when the underlying data is stored as a Map''|
 |[[Handling Arrays][.FitLibrary.UserGuide.FitLibraryByExample.SimpleArray]]|''Checking when the underlying (simple) data is stored as an array''|
+
+Implementation details:
+
+|[[set up, tear down, on failure methods][^SetUpTearDownOnFailure]]|''How to have code run when a fixture or storytest starts or finishes, and when it finishes with errors''|
+|[[Runtime injection][^RuntimeInjection]]|''Technical details for advanced use of fixtures''|

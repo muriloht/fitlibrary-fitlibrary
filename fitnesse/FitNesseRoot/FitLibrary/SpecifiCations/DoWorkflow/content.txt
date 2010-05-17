@@ -22,6 +22,8 @@
 
 ^TestSetUpTearDown
 
+^OnFailureIsCalledIfAnErrorHasOccurred
+
 ^TestAbandon
 
 ^TestHarvestFromText

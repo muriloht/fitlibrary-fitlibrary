@@ -60,6 +60,12 @@ See .FitLibrary.SpecifiCations.AddingGlobalActionsObject
  * From !-FitLibrary-!, it is now possible set change and access Fit variables.
  * See .FitLibrary.SpecifiCations.DynamicVariables.SpecifyConvertFromToFitSymbols
 #
+!3 onFailure() method call
+#
+The ''onFailure()'' method can be defined in a fixture. It is called if the storytest has failed (fails/errors), and allow for diagnostic information to be included in the report, such as a screen dump.
+
+See .FitLibrary.AdvancedTutorial.SetUpTearDownOnFailure for further details.
+#
 ----!2 3. Defined Actions
 #
 !3 Loading defined actions
