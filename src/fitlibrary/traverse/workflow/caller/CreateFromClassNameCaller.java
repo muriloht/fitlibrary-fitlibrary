@@ -12,7 +12,6 @@ import java.util.Set;
 import fit.Fixture;
 import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
-import fitlibrary.flow.DoFlow;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
@@ -39,8 +38,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 	public CreateFromClassNameCaller(Row row, Evaluator evaluator) {
 		String name = row.text(0,evaluator).trim();
 		this.className = substituteName(name);
-		// Later, the following will handle constructor arguments, and etc
-		if (DoFlow.IS_ACTIVE && validClassName())
+		if (validClassName())
 			try {
 				Class<?> determineFullClass = determineFullClass();
 				object = ClassUtility.newInstance(determineFullClass);

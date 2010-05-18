@@ -8,9 +8,6 @@ package fitlibrary.flow;
 import static fitlibrary.matcher.TableBuilderForTests.cell;
 import static fitlibrary.matcher.TableBuilderForTests.row;
 import static fitlibrary.matcher.TableBuilderForTests.table;
-import static fitlibrary.matcher.TableBuilderForTests.tables;
-
-import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -23,23 +20,22 @@ import fitlibrary.SetUpFixture;
 import fitlibrary.collection.CollectionSetUpTraverse;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.utility.CollectionUtility;
 
 @RunWith(JMock.class)
-public class TestDoFlowWithEvaluator {
+public class TestDoFlowOnTableWithEvaluator {
 	final Mockery context = new Mockery();
-	final DoFlowDriver doFlowDriver = new DoFlowDriver(context);
+	final DoFlowOnTableDriver doFlowDriver = new DoFlowOnTableDriver(context);
 	
-	final Tables tables = tables().with(table().with(
+	final Table table = table().with(
 			row().with(cell(),cell()),
-			row().with(cell(),cell()))).mock(context);
+			row().with(cell(),cell())
+	).mock(context);
 	
 	@Before
 	public void allows() {
 		context.checking(new Expectations() {{
-			allowing(tables.at(0)).fromAt(0); will(returnValue(tables.at(0)));
+			allowing(table).fromAt(0); will(returnValue(table));
 		}});
 	}
 	@Test
@@ -75,21 +71,13 @@ public class TestDoFlowWithEvaluator {
 	}
 
 	private void verifyWithEvaluator(Evaluator evaluator, Evaluator mockEvaluator) {
-		doFlowDriver.showTearDown = true;
-		Table table0 = tables.at(0);
-		
-		doFlowDriver.startingOnTable(table0);
-		doFlowDriver.interpretingRowReturning(table0.at(0), evaluator);
+		doFlowDriver.startingOnTable(table);
+		doFlowDriver.startingOnRow();
+		doFlowDriver.interpretingRowReturning(table.at(0), evaluator);
 		doFlowDriver.pushingObjectOnScopeStack(evaluator);
-		doFlowDriver.callingSetUpOn(evaluator,table0.at(0));
-		doFlowDriver.interpretingEvaluator(mockEvaluator,table0);
-		doFlowDriver.poppingScopeStackAtEndOfLastTableGiving(list(evaluator));
-		doFlowDriver.callingTearDownOn(evaluator, table0.at(0));
-		doFlowDriver.finishingTable(table0);
+		doFlowDriver.callingSetUpOn(evaluator,table.at(0));
+		doFlowDriver.interpretingEvaluator(mockEvaluator,table);
 
-		doFlowDriver.runStorytest(tables);
-	}
-	protected List<Object> list(Object... ss) {
-		return CollectionUtility.list(ss);
+		doFlowDriver.runTable(table);
 	}
 }

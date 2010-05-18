@@ -8,7 +8,6 @@ package fitlibrary.flow;
 import static fitlibrary.matcher.TableBuilderForTests.cell;
 import static fitlibrary.matcher.TableBuilderForTests.row;
 import static fitlibrary.matcher.TableBuilderForTests.table;
-import static fitlibrary.matcher.TableBuilderForTests.tables;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -22,22 +21,20 @@ import fit.Fixture;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.table.Table;
-import fitlibrary.table.Tables;
 
 @RunWith(JMock.class)
-public class TestDoFlowWithFixture {
+public class TestDoFlowOnTableWithFixture {
 	final Mockery context = new Mockery();
-	final DoFlowDriver doFlowDriver = new DoFlowDriver(context);
-	final Tables tables = tables().with(
-			table().with(
-					row().with(cell(),cell()),
-					row().with(cell(),cell()))
+	final DoFlowOnTableDriver doFlowDriver = new DoFlowOnTableDriver(context);
+	final Table table = table().with(
+			row().with(cell(),cell()),
+			row().with(cell(),cell())
 	).mock(context);
 	
 	@Before
 	public void allows() {
 		context.checking(new Expectations() {{
-			allowing(tables.at(0)).fromAt(0); will(returnValue(tables.at(0)));
+			allowing(table).fromAt(0); will(returnValue(table));
 		}});
 	}
 	@Test
@@ -49,15 +46,12 @@ public class TestDoFlowWithFixture {
 				mockFixture.doTable(parse);
 			}
 		};
-		Table table0 = tables.at(0);
-		
-		doFlowDriver.startingOnTable(table0);
-		doFlowDriver.interpretingRowReturning(table0.at(0),evaluator);
-		doFlowDriver.interpretingFixture(mockFixture, table0);
-		doFlowDriver.poppingScopeStackAtEndOfLastTableGiving();
-		doFlowDriver.finishingTable(table0);
+		doFlowDriver.startingOnTable(table);
+		doFlowDriver.startingOnRow();
+		doFlowDriver.interpretingRowReturning(table.at(0),evaluator);
+		doFlowDriver.interpretingFixture(mockFixture, table);
 
-		doFlowDriver.runStorytest(tables);
+		doFlowDriver.runTable(table);
 	}
 
 	static interface MockFixture {

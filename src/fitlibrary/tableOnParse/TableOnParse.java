@@ -152,6 +152,8 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	}
 	@Override
 	public Table fromAt(int rowNo) {
+		if (rowNo == 0)
+			return this;
 		return TableFactory.table(at(rowNo));
 	}
 	public Table fromTo(int from, int upto) {
