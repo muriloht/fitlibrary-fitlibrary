@@ -6,6 +6,7 @@
 	<property name="bin" value="${home}/bin" />
 	<property name="test.src" value="${home}/test" />
 	<property name="port" value="8080" />
+	<property name="fitlibraryweb.dir" value="../fitlibraryweb" />
 	
 	<!-- batch runner properties -->
 	<property name="showpassesinreport" value="true" />   <!-- true or false -->
@@ -21,6 +22,12 @@
 	    <zip destfile="${lib}/src/fitlibrarySrc.zip">
 	        <fileset dir="src"/>
 	    </zip>
+	    <copy todir="${fitlibraryweb.dir}/fitnesse">
+			<fileset file="${fitnesse.dir}/fitlibrary.jar" />
+	    </copy>
+	    <copy todir="${fitlibraryweb.dir}/fitnesse/lib/src">
+			<fileset file="${lib}/src/fitlibrarySrc.zip" />
+	    </copy>
 	</target>
 
 	<target name="clean">
