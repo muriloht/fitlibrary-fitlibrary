@@ -1,8 +1,6 @@
 !3 Invented and developed in Java by [[''Rick Mugridge''][.FitLibrary.GlosSary.RickMugridge]], http://www.rimuresearch.com
 
-!1 Temporarily disabled tests:
-
-.FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.UseTheTextThisInClassBasedActions
+|!3 ^WhatIsNew|''What's new in this release.''|
 
 |!3 ^BeginningTutorial|''First tutorial for FitLibrary''|
 |!3 ^AdvancedTutorial|''Advanced (and more technical) features of FitLibrary''|
@@ -10,10 +8,7 @@
 |!3 ^ReferenCe|''Reference for FitLibrary''|
 |!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
 
-|!3 ^WhatIsNew|''What's new in this release.''|
-
 |!3 ^SuiteFixture|''Details of suite fixtures''|
-|!3 ^SpecifiCations.CoreFitSpecifications|''Storytests that specify the core parts of Fit''|
 |!3 ^FitBook|''Example storytests from the [[Fit Book][.FitLibrary.GlosSary.FitBook]]''|
 |!3 ^RentEz|''An extended example of storytests for an application. These build on the example in the [[Fit Book][.FitLibrary.GlosSary.FitBook]].''|
 |!3 ^GlosSary|''Glossary of terms used in FitLibrary''|
@@ -21,6 +16,10 @@
 !c !img http://files/images/fitBookCover.jpeg
 
 >WasSuiteSetUp
+
+!1 Temporarily disabled tests:
+
+.FitLibrary.SpecifiCations.DefinedActions.BasedOnClass.UseTheTextThisInClassBasedActions
 
 !**< glossary reference definitions
 !define action ([[''workflow action''][.FitLibrary.GlosSary.WorkflowAction]])

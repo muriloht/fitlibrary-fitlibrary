@@ -6,9 +6,10 @@ package fitlibrary.eg.chat;
 
 import java.util.List;
 
+import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-public class ChatSystem implements DomainAdapter {
+public class ChatSystem implements DomainAdapter, DomainFixtured {
 	private Chat chat = new Chat();
 	
 	public Object getSystemUnderTest() {

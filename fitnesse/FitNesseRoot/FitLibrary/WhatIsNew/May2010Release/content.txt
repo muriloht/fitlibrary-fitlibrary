@@ -4,7 +4,6 @@ To use ''!-FitLibrary-!'', it is now necessary to include the following in the t
 {{{
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
 }}}
-
 It may be necessary to recompile/jar all fixturing code, as the underlying implementation has changed in several significant ways.
 ----^ImplementationChanges
 ----!2 Additions
@@ -129,10 +128,10 @@ A ''!-RuleTable-!'' acts rather like a ''!-ColumnFixture-!'' tables, except that
  * All subclasses of class ''Number'' are now treated as primitive types and are not ${autoWrapped} by !-DoFixture-!.
  * Checks are now made for blank parameters and for duplicated parameters in the definition of a defined action. See .FitLibrary.SpecifiCations.DefinedActions.BlankParameter and .FitLibrary.SpecifiCations.DefinedActions.DuplicatedParameter
  * When a ''stop on error'' is required, when there is an error inside a defined action it now stops the storytest
- * setUp() and tearDown() methods are now called correctly, including when a storytest is abandoned
+ * ''setUp()'' and ''tearDown()'' methods are now called correctly, including when a storytest is abandoned
 #
 ----!2 6. Removed
 #
  * Obscure Functionality: It's no longer possible to have !-DoFixture-! fake the results it expects. This was added to record Selenium results several years ago, but was not effective. However, it's possible to record with dynamic variables.
  * Templates have been removed, as they are now superceded by multi-defined actions.  See .FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters
- * ''!-DomainFixture-!'' is no longer used as the default wrapper for the first object of a storytest. See section 1 above for further details.
+ * ''!-DomainFixture-!'' is no longer used as the default wrapper for the first object of a storytest. See section 2 above for further details.

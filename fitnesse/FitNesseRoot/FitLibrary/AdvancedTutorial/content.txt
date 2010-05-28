@@ -14,3 +14,6 @@ Implementation details:
 
 |[[set up, tear down, on failure methods][^SetUpTearDownOnFailure]]|''How to have code run when a fixture or storytest starts or finishes, and when it finishes with errors''|
 |[[Runtime injection][^RuntimeInjection]]|''Technical details for advanced use of fixtures''|
+|[[Specialised handling of table cell text][^CustomParsing]]|''How to handle null strings, special values, etc with custom parsing''|
+
+This will be expanded further.
