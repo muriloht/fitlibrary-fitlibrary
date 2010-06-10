@@ -195,10 +195,10 @@ public abstract class FitServerBridge {
 		writer.close();
 		return byteBuffer.toByteArray();
 	}
-	public static byte[] readTable(Table table) throws Exception { // FAILS
+	public static byte[] readTable(Table table) throws Exception {
 		StringBuilder builder = new StringBuilder();
-		table.toHtml(builder );
-		return builder.toString().getBytes();
+		table.toHtml(builder);
+		return builder.toString().getBytes("UTF-8");
 	}
 
 	class TableReportListener implements ReportListener {
@@ -206,7 +206,7 @@ public abstract class FitServerBridge {
 		public void tableFinished(Table table) {
 			print("FitServerBridge table is of type "+table.getClass());
 			try {
-				byte[] bytes = readTable(table); // (table); // FAILS
+				byte[] bytes = readTable(table);
 				if (bytes.length > 0)
 					FitProtocol.writeData(bytes, socketOutput);
 			} catch (Exception e) {

@@ -93,6 +93,9 @@ public class TablesCompare {
 		
 		if ("IGNORE".equals(expected))
 			return true;
+		if (actual.isEmpty() && expected.equals("&nbsp;") ||
+				expected.isEmpty() && actual.equals("&nbsp;"))
+			return true;
 		String stackTrace = "class=\"fit_stacktrace\">";
 		int startExpected = expected.indexOf(stackTrace);
 		int startActual = actual.indexOf(stackTrace);
