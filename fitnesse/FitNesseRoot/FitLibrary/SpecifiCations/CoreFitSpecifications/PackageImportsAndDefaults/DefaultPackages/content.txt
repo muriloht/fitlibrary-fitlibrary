@@ -1,10 +1,8 @@
 !**< test
 !define test (!|Import|
-|fitlibrary|
+|fitlibrary.speciallyNamedPackage|
 
-!|do fixture|
-)
-!define test2 (!|do fixture|
+!|ClassInOddPackage|
 )
 
 **!
@@ -12,16 +10,10 @@
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>Import</td>
 </tr>
-<tr><td>fitlibrary</td>
+<tr><td>fitlibrary.speciallyNamedPackage</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td>do fixture</td>
-</tr>
-</table>-!|
-
-|!-fitlibrary.spec.SpecifyFixture-!|
-|${test2}|!-<table border="1" cellspacing="0">
-<tr><td>do fixture</td>
+<tr><td>ClassInOddPackage</td>
 </tr>
 </table>-!|

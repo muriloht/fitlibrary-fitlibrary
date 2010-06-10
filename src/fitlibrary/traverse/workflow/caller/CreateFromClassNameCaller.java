@@ -19,7 +19,6 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class CreateFromClassNameCaller extends DoCaller {
@@ -29,23 +28,21 @@ public class CreateFromClassNameCaller extends DoCaller {
 		protected Set<String> initialValue() {
 			HashSet<String> hashSet = new HashSet<String>();
 			hashSet.add("fit.");
-			hashSet.add("fitlibrary.");
 			return hashSet;
 		}
 	};
-	private final String className;
+	private String className;
 	private Object object = null;
 	private Exception exceptionToThrow = null;
 
 	public CreateFromClassNameCaller(Row row, Evaluator evaluator) {
-		String name = substituteName(row.text(0,evaluator).trim());
-		this.className = ExtendedCamelCase.camelClass(name);
+		this.className = substituteName(row.text(0,evaluator).trim());
 		if (validClassName())
 			try {
 				Class<?> determineFullClass = determineFullClass();
 				object = ClassUtility.newInstance(determineFullClass);
-				if (object instanceof Fixture && row.size() > 1)
-					handleArgs((Fixture)object,row);
+				if (row.size() > 1 && object instanceof Fixture)
+						handleArgs((Fixture)object,row);
 			} catch (NoSuchMethodException ex) {
 				exceptionToThrow = new NoNullaryConstructor(className);
 			} catch (NoClassDefFoundError ex) { // "The definition can no longer be found"
