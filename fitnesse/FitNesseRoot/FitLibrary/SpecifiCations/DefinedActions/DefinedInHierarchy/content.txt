@@ -2,8 +2,12 @@
 
 |''clear defined actions''|
 
-|''define actions at''|.FitLibrary.SpecifiCations.DefinedActions.InHierarchy|
+|''set expand defined actions''|true|
+
+|''define actions slowly at''|.FitLibrary.SpecifiCations.DefinedActions.InHierarchy|
 
 |''login''|rick|''with''||
 
 |''login2''|rick|''with''||
+
+

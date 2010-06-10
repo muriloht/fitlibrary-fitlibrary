@@ -47,9 +47,8 @@ public class DefineActionsOnPageSlowly extends Traverse {
 			if (ParallelFitNesseRepository.isSentinel(test))
 				break;
 			String html = ParseUtility.tabulize(test.getContent());
-			if (html.contains("<table")) {
+			if (html.contains("<table"))
 				parseDefinitions(TableFactory.tables(html),determineClassName(pageName,test.getName()),test.getName());
-			}
 		}
 	}
 	protected String determineClassName(String prefix, String pageName) {

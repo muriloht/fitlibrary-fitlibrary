@@ -17,7 +17,6 @@ import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
@@ -119,7 +118,7 @@ public class DefinedActionCaller extends DoCaller {
 					row.at(i).ignore(testResults);
 			String pageName = parameterSubstitution.getPageName();
 			Cell cell = TableFactory.cell(body);
-			cell.at(0).setLeader(Fixture.label(link(pageName))+cell.getLeader());
+			cell.at(0).setLeader(Fixture.label(link(pageName))+cell.at(0).getLeader());
 			cell.calls();
 			row.add(cell);
 		} else if (!runtime.isAbandoned(testResults))

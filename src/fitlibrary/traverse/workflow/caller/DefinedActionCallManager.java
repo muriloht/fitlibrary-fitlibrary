@@ -32,7 +32,6 @@ public class DefinedActionCallManager {
 		if (callsInProgress.isEmpty())
 			return;
 		Row copy = row.deepCopy();
-//		copy.last().shown();
 		shows.add(copy);
 	}
 	public boolean readyToShow() {

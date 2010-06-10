@@ -41,7 +41,7 @@ public class DefinedActionLoader implements Runnable {
 				WikiPage page = crawler.getPage(root, path);
 				String html = page.getData().getHtml();
 				if (html.contains("<table"))
-					queue.add(new InMemoryTestImpl(pageName,html));
+					queue.add(new InMemoryTestImpl(fullPageName,html));
 			}
 		} 
 		catch(Exception e) {
