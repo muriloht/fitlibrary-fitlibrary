@@ -19,6 +19,7 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
+import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class CreateFromClassNameCaller extends DoCaller {
@@ -28,6 +29,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 		protected Set<String> initialValue() {
 			HashSet<String> hashSet = new HashSet<String>();
 			hashSet.add("fit.");
+			hashSet.add("fitlibrary.");
 			return hashSet;
 		}
 	};
@@ -36,8 +38,8 @@ public class CreateFromClassNameCaller extends DoCaller {
 	private Exception exceptionToThrow = null;
 
 	public CreateFromClassNameCaller(Row row, Evaluator evaluator) {
-		String name = row.text(0,evaluator).trim();
-		this.className = substituteName(name);
+		String name = substituteName(row.text(0,evaluator).trim());
+		this.className = ExtendedCamelCase.camelClass(name);
 		if (validClassName())
 			try {
 				Class<?> determineFullClass = determineFullClass();

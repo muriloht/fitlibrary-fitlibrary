@@ -66,6 +66,12 @@ public class ExtendedCamelCase {
 	        javaKeywordSet.add(javaKeyWords[i]);
 	}
 
+	public static String camelClass(String name) {
+		if (name.contains("."))
+			return name;
+		String result = camel(name);
+		return result.substring(0,1).toUpperCase()+result.substring(1);
+	}
 	public static String camel(String nameInitial) {
 		String name = nameInitial.trim();
 		if (name.length() == 0)

@@ -2,7 +2,9 @@
 !define test (!|Import|
 |fitlibrary|
 
-!|DoFixture|
+!|do fixture|
+)
+!define test2 (!|do fixture|
 )
 
 **!
@@ -14,6 +16,12 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td>DoFixture</td>
+<tr><td>do fixture</td>
+</tr>
+</table>-!|
+
+|!-fitlibrary.spec.SpecifyFixture-!|
+|${test2}|!-<table border="1" cellspacing="0">
+<tr><td>do fixture</td>
 </tr>
 </table>-!|

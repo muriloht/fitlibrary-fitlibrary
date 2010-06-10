@@ -50,7 +50,15 @@ public class TestExtendedCamelCase extends TestCase {
         check("\uFFFF","uFFFF");
         check("\u0041b","ab");
     }
+    public void testCamelClass() {
+        checkClass("do fixture","DoFixture");
+        checkClass("do   Fixture","DoFixture");
+        checkClass("fitlibrary.DoFixture","fitlibrary.DoFixture");
+    }
     private void check(String in, String out) {
         assertEquals(out,ExtendedCamelCase.camel(in));
+    }
+    private void checkClass(String in, String out) {
+        assertEquals(out,ExtendedCamelCase.camelClass(in));
     }
 }
