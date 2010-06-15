@@ -8,9 +8,7 @@ import java.io.File;
 import java.util.List;
 
 import fitlibrary.exception.FitLibraryExceptionInHtml;
-import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.FileIO;

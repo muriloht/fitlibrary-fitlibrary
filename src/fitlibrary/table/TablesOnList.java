@@ -61,12 +61,13 @@ public class TablesOnList extends TableElementOnList<Tables,Table> implements Ta
 			TableFactory.pop();
 		}
 	}
-	public Tables fromTo(int from, int upto) {
-		TablesOnList tables = new TablesOnList();
-		for (int i = from; i < upto; i++)
-			tables.add(at(i));
-		return tables;
-	}
+//	@Override
+//	public Tables fromTo(int from, int upto) {
+//		TablesOnList tables = new TablesOnList();
+//		for (int i = from; i < upto; i++)
+//			tables.add(at(i));
+//		return tables;
+//	}
 	@Override
 	public Tables fromAt(int i) {
 		return fromTo(i,size());

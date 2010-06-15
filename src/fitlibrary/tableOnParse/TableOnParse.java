@@ -53,11 +53,12 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
-    public void add(Row row) {
+    public TableOnParse add(Row row) {
         if (parse.parts == null)
             parse.parts = row.parse();
         else
             parse.parts.last().more = row.parse();
+        return this;
     }
 	@Override
 	public void add(int i, Row row) {

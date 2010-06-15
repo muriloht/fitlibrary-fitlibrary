@@ -288,11 +288,12 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		return getEmbeddedTables().iterator();
 	}
 	@Override
-	public void add(Table table) {
+	public CellOnParse add(Table table) {
 		if (!hasEmbeddedTables())
 			parse.parts = TableFactory.tables(table).parse();
 		else
 			getEmbeddedTables().add(table);
+		return this;
 	}
     public TablesOnParse getEmbeddedTables() {
 //        if (!hasEmbeddedTables())

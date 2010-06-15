@@ -2,6 +2,6 @@
 
 |''with''|//input[@id="userName"]|''enter text''|USER|
 
-|''with''|//input[@id="password"]|''enter text''|PASSWORD|
+|''with''|//input[@id="password"]|''enter text''| PASSWORD |
 
 |''submit''|//form|

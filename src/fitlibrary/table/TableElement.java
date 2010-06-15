@@ -9,7 +9,7 @@ import fit.Parse;
 import fitlibrary.runResults.TestResults;
 
 public interface TableElement<From, To> extends Iterable<To> {
-	void add(To t);
+	From add(To t);
 	int size();
 	boolean isEmpty();
 	To at(int i);

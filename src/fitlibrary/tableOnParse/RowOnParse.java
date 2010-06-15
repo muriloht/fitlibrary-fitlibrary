@@ -76,13 +76,14 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
 		add(cell);
 		return cell;
     }
-    public void add(Cell cell) {
+    public RowOnParse add(Cell cell) {
     	if (rowIsHidden)
     		System.out.println("Bug: Adding a cell to a hidden row in a table");
         if (parse.parts == null)
             parse.parts = cell.parse();
         else
             parse.parts.last().more = cell.parse();
+        return this;
     }
 	public Cell addCell(String text) {
         Cell cell = TableFactory.cell(text);

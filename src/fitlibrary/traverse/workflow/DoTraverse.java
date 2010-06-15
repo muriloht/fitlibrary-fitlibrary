@@ -13,8 +13,6 @@ import java.util.regex.PatternSyntaxException;
 
 import fitlibrary.DefineAction;
 import fitlibrary.closure.ICalledMethodTarget;
-import fitlibrary.definedAction.DefineActionsOnPage;
-import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;

@@ -29,11 +29,12 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
 	public Table at(int i) {
         return new TableOnParse(parse.at(i));
     }
-    public void add(Table table) {
+    public TablesOnParse add(Table table) {
     	if (parse == null)
     		parse = table.parse();
     	else
             parse.last().more = table.parse();
+    	return this;
     }
     @Override
 	public int size() {

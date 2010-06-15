@@ -37,8 +37,9 @@ public abstract class TableElementOnList<From extends TableElement, To extends T
     public To at(int i) {
 		return elements.get(i);
 	}
-    public void add(To to) {
+    public From add(To to) {
     	elements.add(to);
+    	return (From) this;
     }
     public void add(int i, To to) {
     	elements.add(i, to);
