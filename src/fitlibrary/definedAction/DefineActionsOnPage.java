@@ -9,6 +9,7 @@ import java.util.List;
 
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
@@ -18,23 +19,18 @@ import fitlibrary.utility.SimpleWikiTranslator;
 public class DefineActionsOnPage extends DefineActionsOnPageSlowly {
 	private final String rootLocation;
 	
-	public DefineActionsOnPage(String topPageName, String rootLocation) {
-		super(topPageName);
+	public DefineActionsOnPage(String topPageName, String rootLocation, RuntimeContextInternal runtime) {
+		super(topPageName,runtime);
 		this.rootLocation = rootLocation;
 	}
-	public DefineActionsOnPage(String topPageName) {
-		this(topPageName,"FitNesseRoot");
+	public DefineActionsOnPage(String topPageName, RuntimeContextInternal runtime) {
+		this(topPageName,"FitNesseRoot",runtime);
 	}
 	@Override
-	public Object interpretAfterFirstRow(Table tableWithPageName, TestResults testResults) {
-		try {
-			String errors = processPagesAsFiles(topPageName.substring(1));
-			if (!"".equals(errors))
-				throw new FitLibraryExceptionInHtml("<ul>"+errors+"</ul>");
-		} catch (Exception e) {
-			tableWithPageName.error(testResults, e);
-		}
-		return null;
+	public void process() throws Exception {
+		String errors = processPagesAsFiles(topPageName.substring(1));
+		if (!"".equals(errors))
+			throw new FitLibraryExceptionInHtml("<ul>"+errors+"</ul>");
 	}
 	private String processPagesAsFiles(String pageName) throws Exception {
 		String errors = "";

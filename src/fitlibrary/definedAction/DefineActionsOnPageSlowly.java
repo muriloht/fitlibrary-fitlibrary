@@ -11,33 +11,28 @@ import fitlibrary.DefineAction;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
-import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.ParseUtility;
 
-public class DefineActionsOnPageSlowly extends Traverse {
+public class DefineActionsOnPageSlowly { //extends Traverse {
 	protected String topPageName;
 	private static String FITNESSE_DIRY = ".";
+	protected final RuntimeContextInternal runtime;
 
 	public static void setFitNesseDiry(String diry) {
 		FITNESSE_DIRY = diry;
 	}
-	public DefineActionsOnPageSlowly(String topPageName) {
+	public DefineActionsOnPageSlowly(String topPageName, RuntimeContextInternal runtime) {
 		this.topPageName = topPageName;
+		this.runtime = runtime;
 	}
-	@Override
-	public Object interpretAfterFirstRow(Table tableWithPageName, TestResults testResults) {
-		try {
-			processPages(topPageName.substring(1));
-		} catch (Exception e) {
-			tableWithPageName.error(testResults, e);
-		}
-		return null;
+	public void process() throws Exception {
+		processPages(topPageName.substring(1));
 	}
 	private void processPages(String pageName) throws Exception {
 		ParallelFitNesseRepository parallelFitNesseRepository = new ParallelFitNesseRepository(FITNESSE_DIRY);
@@ -73,7 +68,7 @@ public class DefineActionsOnPageSlowly extends Traverse {
 	}
 	protected void defineAction(Tables innerTables, String className, String pageName) {
 		DefineAction defineAction = new DefineAction(className,pageName);
-		defineAction.setRuntimeContext(getRuntimeContext());
+		defineAction.setRuntimeContext(runtime);
 		defineAction.interpret(createDefineActionTable(innerTables), TestResultsFactory.testResults());
 	}
 	private Table createDefineActionTable(Tables innerTables) {

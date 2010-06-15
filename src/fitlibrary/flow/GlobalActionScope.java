@@ -143,14 +143,14 @@ public class GlobalActionScope implements RuntimeContextual {
 	public DefineAction defineAction() {
 		return new DefineAction();
 	}
-	public DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
-		return new DefineActionsOnPageSlowly(pageName);
+	public void defineActionsSlowlyAt(String pageName) throws Exception {
+		new DefineActionsOnPageSlowly(pageName,runtimeContext).process();
 	}
-	public DefineActionsOnPage defineActionsAt(String pageName) {
-		return new DefineActionsOnPage(pageName);
+	public void defineActionsAt(String pageName) throws Exception {
+		new DefineActionsOnPage(pageName,runtimeContext).process();
 	}
-	public DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
-		return new DefineActionsOnPage(pageName,rootLocation);
+	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
+		new DefineActionsOnPage(pageName,rootLocation,runtimeContext).process();
 	}
 	public void clearDefinedActions() {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();

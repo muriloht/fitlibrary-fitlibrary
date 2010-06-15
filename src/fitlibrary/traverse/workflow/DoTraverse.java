@@ -163,14 +163,14 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	public DefineAction defineAction() {
 		return global().defineAction();
 	}
-	public DefineActionsOnPageSlowly defineActionsSlowlyAt(String pageName) {
-		return global().defineActionsSlowlyAt(pageName);
+	public void defineActionsSlowlyAt(String pageName) throws Exception {
+		global().defineActionsSlowlyAt(pageName);
 	}
-	public DefineActionsOnPage defineActionsAt(String pageName) {
-		return global().defineActionsAt(pageName);
+	public void defineActionsAt(String pageName) throws Exception {
+		global().defineActionsAt(pageName);
 	}
-	public DefineActionsOnPage defineActionsAtFrom(String pageName, String rootLocation) {
-		return global().defineActionsAtFrom(pageName,rootLocation);
+	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
+		global().defineActionsAtFrom(pageName,rootLocation);
 	}
 	public void clearDefinedActions() {
 		global().clearDefinedActions();

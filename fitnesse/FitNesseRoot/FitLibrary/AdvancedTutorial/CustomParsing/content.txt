@@ -36,7 +36,7 @@ Consider another example, where we want to handle ''!-TimeStamp-!'' values in a 
   }
 }}}This can then incorporate specialised code for handling odd ''!-TimeStamp-!''s, such as unknown ones.
 
-There is a corresponding method for displaying an object, a ''show method''. 
+There is a corresponding method for displaying an object, a ''show method''.
 
 For example, if we wanted to show a '''null''' String as a empty String in any displays in a report, we could include the following method:
 {{{  public String showString(String s) {

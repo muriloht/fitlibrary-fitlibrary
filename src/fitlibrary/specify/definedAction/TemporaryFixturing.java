@@ -9,4 +9,7 @@ public class TemporaryFixturing {
 	public boolean temporarilyInScope() {
 		return true;
 	}
+	public boolean permanentlyInScope() {
+		return true;
+	}
 }

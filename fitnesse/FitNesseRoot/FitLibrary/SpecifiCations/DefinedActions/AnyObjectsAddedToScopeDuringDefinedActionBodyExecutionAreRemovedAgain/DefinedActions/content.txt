@@ -7,6 +7,11 @@
 !|fitlibrary.specify.definedAction.TemporaryFixturing|
 |temporarily in scope|
 ----
+|''def action 3''|
+
+!|fitlibrary.specify.definedAction.TemporaryFixturing|
+|permanently in scope|
+----
 |''def value''|V|
 
 |value|is|V|
