@@ -4,49 +4,44 @@
  */
 package fitlibrary.definedAction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
-import fitlibrary.table.Tables;
-import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 
 // This could easily be split into separate repositories.
 // But I suspect the map for camel approach may disappear
 public class DefinedActionsRepositoryStandard implements DefinedActionsRepository {
-	private Map<DefinedAction, ParameterSubstitution> definedActionMapForPlainText = new ConcurrentHashMap<DefinedAction, ParameterSubstitution>();
-	private Map<String, Map<DefinedAction, ParameterSubstitution>> classMapForPlainText = new ConcurrentHashMap<String, Map<DefinedAction, ParameterSubstitution>>();
+	private Map<DefinedAction, ParameterBinder> definedActionMapForPlainText = new ConcurrentHashMap<DefinedAction, ParameterBinder>();
+	private Map<String, Map<DefinedAction, ParameterBinder>> classMapForPlainText = new ConcurrentHashMap<String, Map<DefinedAction, ParameterBinder>>();
 
-	private Map<DefinedAction, ParameterSubstitution> definedActionMapForCamel = new ConcurrentHashMap<DefinedAction, ParameterSubstitution>();
-	private Map<String, Map<DefinedAction, ParameterSubstitution>> classMapForCamel = new ConcurrentHashMap<String, Map<DefinedAction, ParameterSubstitution>>();
+	private Map<DefinedAction, ParameterBinder> definedActionMapForCamel = new ConcurrentHashMap<DefinedAction, ParameterBinder>();
+	private Map<String, Map<DefinedAction, ParameterBinder>> classMapForCamel = new ConcurrentHashMap<String, Map<DefinedAction, ParameterBinder>>();
 
-	private Map<DefinedMultiAction, MultiParameterSubstitution> definedMultiActionMap = new ConcurrentHashMap<DefinedMultiAction, MultiParameterSubstitution>();
-	private Map<String, Map<DefinedMultiAction, MultiParameterSubstitution>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, MultiParameterSubstitution>>();
+	private Map<DefinedMultiAction, MultiParameterBinder> definedMultiActionMap = new ConcurrentHashMap<DefinedMultiAction, MultiParameterBinder>();
+	private Map<String, Map<DefinedMultiAction, MultiParameterBinder>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, MultiParameterBinder>>();
 
-	public void define(Row parametersRow, String wikiClassName,
-			ParameterSubstitution parameterSubstitution, Evaluator evaluator,
+	public void define(Row parametersRow, String wikiClassName, ParameterBinder binder, VariableResolver resolver,
 			String absoluteFileName) {
-		defineCamel(parametersRow, wikiClassName, parameterSubstitution,
-				evaluator, absoluteFileName);
-		definePlain(parametersRow, wikiClassName, parameterSubstitution,
-				evaluator, absoluteFileName);
+		defineCamel(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
+		definePlain(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
 	}
-	public ParameterSubstitution lookupByCamel(String name, int argCount) {
+	public ParameterBinder lookupByCamel(String name, int argCount) {
 		return definedActionMapForCamel.get(new DefinedAction(name, argCount));
 	}
-	public ParameterSubstitution lookupByClassByCamel(String className,
+	public ParameterBinder lookupByClassByCamel(String className,
 			String name, int argCount, RuntimeContextInternal variables) {
 		DefinedAction macro = new DefinedAction(name, argCount);
-		Map<DefinedAction, ParameterSubstitution> map = classMapForCamel
+		Map<DefinedAction, ParameterBinder> map = classMapForCamel
 				.get(className);
 		if (map != null) {
-			ParameterSubstitution macroSubstitution = map.get(macro);
+			ParameterBinder macroSubstitution = map.get(macro);
 			if (macroSubstitution != null)
 				return macroSubstitution;
 		}
@@ -62,13 +57,11 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		for (DefinedAction action : definedActionMapForPlainText.keySet())
 			action.findCall(textCall, results);
 	}
-	public void defineMultiDefinedAction(String name, ArrayList<String> formalParameters,
-			Tables body, String absoluteFileName) {
-		definedMultiActionMap.put(new DefinedMultiAction(name),
-				new MultiParameterSubstitution(formalParameters, body,
-						absoluteFileName));
+	@Override
+	public void defineMultiDefinedAction(String name, MultiParameterBinder binder) {
+		definedMultiActionMap.put(new DefinedMultiAction(name),binder);
 	}
-	public MultiParameterSubstitution lookupMulti(String name) {
+	public MultiParameterBinder lookupMulti(String name) {
 		return definedMultiActionMap.get(new DefinedMultiAction(name));
 	}
 	public void clear() {
@@ -80,11 +73,11 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		classMultiActionMap.clear();
 	}
 	protected void definePlain(Row parametersRow, String wikiClassName,
-			ParameterSubstitution parameterSubstitution, Evaluator evaluator, String absoluteFileName) {
-		String name = parametersRow.methodNameForPlain(evaluator);
+			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName) {
+		String name = parametersRow.methodNameForPlain(resolver);
 		DefinedAction definedAction = new DefinedAction(name, parametersRow
 				.argumentCount());
-		Map<DefinedAction, ParameterSubstitution> map = getClassMapForPlain(wikiClassName);
+		Map<DefinedAction, ParameterBinder> map = getClassMapForPlain(wikiClassName);
 		if (map.get(definedAction) != null)
 			throw new FitLibraryException("Duplicate defined action: " + name
 					+ " defined in " + absoluteFileName
@@ -93,10 +86,10 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		map.put(definedAction, parameterSubstitution);
 	}
 	protected void defineCamel(Row parametersRow, String wikiClassName,
-			ParameterSubstitution parameterSubstitution, Evaluator evaluator, String absoluteFileName) {
-		String name = parametersRow.methodNameForCamel(evaluator);
+			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName) {
+		String name = parametersRow.methodNameForCamel(resolver);
 		DefinedAction definedAction = new DefinedAction(name, parametersRow.argumentCount());
-		Map<DefinedAction, ParameterSubstitution> map = getClassMapForCamel(wikiClassName);
+		Map<DefinedAction, ParameterBinder> map = getClassMapForCamel(wikiClassName);
 		if (map.get(definedAction) != null)
 			throw new FitLibraryException("Duplicate defined action: " + name
 					+ "/" + parametersRow.argumentCount() + " defined in "
@@ -104,23 +97,23 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 					+ map.get(definedAction).getPageName());
 		map.put(definedAction, parameterSubstitution);
 	}
-	protected Map<DefinedAction, ParameterSubstitution> getClassMapForPlain(String wikiClassName) {
-		Map<DefinedAction, ParameterSubstitution> currentMap = definedActionMapForPlainText;
+	protected Map<DefinedAction, ParameterBinder> getClassMapForPlain(String wikiClassName) {
+		Map<DefinedAction, ParameterBinder> currentMap = definedActionMapForPlainText;
 		if (wikiClassBased(wikiClassName)) {
 			currentMap = classMapForPlainText.get(wikiClassName);
 			if (currentMap == null) {
-				currentMap = new ConcurrentHashMap<DefinedAction, ParameterSubstitution>();
+				currentMap = new ConcurrentHashMap<DefinedAction, ParameterBinder>();
 				classMapForPlainText.put(wikiClassName, currentMap);
 			}
 		}
 		return currentMap;
 	}
-	protected Map<DefinedAction, ParameterSubstitution> getClassMapForCamel(String wikiClassName) {
-		Map<DefinedAction, ParameterSubstitution> currentMap = definedActionMapForCamel;
+	protected Map<DefinedAction, ParameterBinder> getClassMapForCamel(String wikiClassName) {
+		Map<DefinedAction, ParameterBinder> currentMap = definedActionMapForCamel;
 		if (wikiClassBased(wikiClassName)) {
 			currentMap = classMapForCamel.get(wikiClassName);
 			if (currentMap == null) {
-				currentMap = new ConcurrentHashMap<DefinedAction, ParameterSubstitution>();
+				currentMap = new ConcurrentHashMap<DefinedAction, ParameterBinder>();
 				classMapForCamel.put(wikiClassName, currentMap);
 			}
 		}

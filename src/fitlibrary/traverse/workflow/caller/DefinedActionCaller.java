@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fit.Fixture;
-import fitlibrary.definedAction.ParameterSubstitution;
+import fitlibrary.definedAction.DefinedActionsRepository;
+import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TableListener;
@@ -25,7 +26,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class DefinedActionCaller extends DoCaller {
-	private ParameterSubstitution parameterSubstitution;
+	private ParameterBinder binder;
 	private String methodName;
 	private RuntimeContextInternal runtime;
 	private List<Object> actualArgs = new ArrayList<Object>();
@@ -34,16 +35,21 @@ public class DefinedActionCaller extends DoCaller {
 		this.runtime = runtime;
 		methodName = row.methodNameForCamel(runtime.getResolver());
 		actualArgs = actualArgs(row);
-		parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupByCamel(methodName, actualArgs.size());
-		if (parameterSubstitution == null) {
-			Object objectName = runtime.getDynamicVariable("this");
-			if (objectName != null) {
-				Object className = runtime.getDynamicVariable(objectName+".class");
-				actualArgs.add(0,objectName.toString());
-				if (className != null && !"".equals(className))
-					parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().
+		binder = repository().lookupByCamel(methodName, actualArgs.size());
+		if (binder == null)
+			lookupByClass();
+	}
+	private DefinedActionsRepository repository() {
+		return TemporaryPlugBoardForRuntime.definedActionsRepository();
+	}
+	private void lookupByClass() {
+		Object objectName = runtime.getDynamicVariable("this");
+		if (objectName != null) {
+			Object className = runtime.getDynamicVariable(objectName+".class");
+			actualArgs.add(0,objectName.toString());
+			if (className != null && !"".equals(className))
+				binder = repository().
 					lookupByClassByCamel(className.toString(), methodName, (actualArgs.size()-1), runtime);
-			}
 		}
 	}
 	public DefinedActionCaller(String object, String className, Row row, RuntimeContextInternal runtime) {
@@ -51,27 +57,27 @@ public class DefinedActionCaller extends DoCaller {
 		methodName = row.methodNameForCamel(runtime.getResolver());
 		actualArgs.add(object);
 		actualArgs(row,actualArgs);
-		this.parameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().
+		this.binder = repository().
 			lookupByClassByCamel(className, methodName, (actualArgs.size()-1), runtime);
-		if (parameterSubstitution == null)
+		if (binder == null)
 			throw new FitLibraryException("Unknown defined action for object of class "+className);
 	}
 	@Override
 	public boolean isValid() {
-		return parameterSubstitution != null;
+		return binder != null;
 	}
 	@Override
 	public TypedObject run(Row row, TestResults testResults) {
 		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
-		definedActionCallManager.startCall(parameterSubstitution);
+		definedActionCallManager.startCall(binder);
 		try {
 			Object oldThisValue = runtime.getDynamicVariable("this");
 			if (!actualArgs.isEmpty())
 				runtime.setDynamicVariable("this", actualArgs.get(0));
-			processDefinedAction(parameterSubstitution.substitute(actualArgs),row,testResults);
+			processDefinedAction(binder.substitute(actualArgs),row,testResults);
 			runtime.setDynamicVariable("this", oldThisValue);
 		} finally {
-			definedActionCallManager.endCall(parameterSubstitution);
+			definedActionCallManager.endCall(binder);
 		}
 		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
 			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
@@ -116,7 +122,7 @@ public class DefinedActionCaller extends DoCaller {
 			else
 				for (int i = 0; i < row.size(); i += 2)
 					row.at(i).ignore(testResults);
-			String pageName = parameterSubstitution.getPageName();
+			String pageName = binder.getPageName();
 			Cell cell = TableFactory.cell(body);
 			cell.at(0).setLeader(Fixture.label(link(pageName))+cell.at(0).getLeader());
 			cell.calls();

@@ -4,7 +4,7 @@
 */
 package fitlibrary.traverse.workflow.caller;
 
-import fitlibrary.definedAction.MultiParameterSubstitution;
+import fitlibrary.definedAction.MultiParameterBinder;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -16,14 +16,15 @@ import fitlibraryGeneric.typed.GenericTypedObject;
 public class MultiDefinedActionCaller extends DoCaller {
 	private final RuntimeContextInternal runtime;
 	private final String methodName;
-	private final MultiParameterSubstitution multiParameterSubstitution;
+	private final MultiParameterBinder multiParameterSubstitution;
 	private final boolean furtherRows;
 
 	public MultiDefinedActionCaller(Row row, RuntimeContextInternal runtime) {
 		this.runtime = runtime;
 		this.furtherRows = runtime.hasRowsAfter(row);
 		methodName = row.text(0,runtime.getResolver());
-		multiParameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().lookupMulti(methodName);
+		multiParameterSubstitution = TemporaryPlugBoardForRuntime.definedActionsRepository().
+			lookupMulti(methodName);
 	}
 	@Override
 	public String ambiguityErrorMessage() {
@@ -36,6 +37,6 @@ public class MultiDefinedActionCaller extends DoCaller {
 	@Override
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		return new GenericTypedObject(
-				new MultiDefinedActionTraverse(multiParameterSubstitution,runtime));
+				new MultiDefinedActionRunnerTraverse(multiParameterSubstitution,runtime));
 	}
 }

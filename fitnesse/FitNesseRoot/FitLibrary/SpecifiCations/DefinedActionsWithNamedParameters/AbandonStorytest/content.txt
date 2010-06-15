@@ -11,7 +11,8 @@
 
 *!
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<table border="1" cellspacing="0">
+|${test}|
+|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.DoFixture</td>
 </tr>
 </table>
@@ -28,9 +29,7 @@
 </tr>
 <tr><td class="ignore">adam</td>
 <td class="ignore">paradise</td>
-<td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
-<br/><br/>
-<table border="1" cellspacing="0">
+<td bgcolor=#DADAFF> <span class="fit_label">Defined action call <a href='FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters.DefinedActions.WithStop'>.FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters.DefinedActions.WithStop</a>:</span><table border="1" cellspacing="0">
 <tr><td class="ignore">abandon storytest</td></tr>
 </table>
 <br/><br/>

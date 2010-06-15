@@ -3,7 +3,10 @@ package fitlibrary;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.definedAction.ParameterSubstitution;
+import fitlibrary.definedAction.DefinedActionParameterTranslation;
+import fitlibrary.definedAction.DefinedActionsRepository;
+import fitlibrary.definedAction.MultiParameterBinder;
+import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
@@ -29,16 +32,77 @@ public class DefineAction extends Traverse {
 		this.wikiClassName = className;
 		this.pageName = pathName;
 	}
+    public String getPageName() {
+		return pageName;
+	}
     @Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	try {
-			return interpret(table, testResults);
+			define(table, testResults);
 		} catch (Exception e) {
 			table.error(testResults, e);
-			return null;
 		}
+		return null;
     }
-    public Object interpret(Table table, TestResults testResults) {
+	public void define(Table table, TestResults testResults) {
+		checkSizeWithRegardToTheClass(table);
+		Tables tables = table.at(1).at(0).getEmbeddedTables();
+		Table headerTable = tables.at(0);
+		if (headerTable.size() > 1)
+			processMultiDefinedAction(headerTable,copyBody(tables));
+		else
+			processDefinedAction(headerTable, copyBody(tables), testResults);
+	}
+    private void processDefinedAction(Table headerTable, Tables bodyCopy, TestResults testResults) {
+		Row parametersRow = headerTable.at(0);
+		parametersRow.passKeywords(testResults);
+		List<String> formalParameters = getFormalParameters(parametersRow,1,2);
+		if (DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy))
+			formalParameters = DefinedActionParameterTranslation.translateParameters(formalParameters, bodyCopy);
+		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
+		repository().define(parametersRow, wikiClassName, binder, this, pageName);
+	}
+    private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
+		if (headerTable.size() > 2)
+			error("Unexpected rows in first table of defined action",headerTable.at(0));
+		String definedActionName = headerTable.at(0).at(0).text();
+		List<String> formalParameters = getFormalParameters(headerTable.at(1),0,1);
+		MultiParameterBinder binder = new MultiParameterBinder(formalParameters,bodyCopy,pageName);
+		repository().defineMultiDefinedAction(definedActionName, binder);
+	}
+    private static Tables copyBody(Tables tables) {
+		if (tables.atExists(1))
+			return tables.fromAt(1).deepCopy(); 
+		Row row = TableFactory.row();
+		row.addCell("comment");
+		return TableFactory.tables(TableFactory.table(row));
+	}
+	private void error(String msg, Row parametersRow) {
+		throw new FitLibraryExceptionInHtml(msg +" in <b>"+parametersRow.methodNameForCamel(this)+
+				"</b> in "+DefinedActionCaller.link2(pageName));
+	}
+	private List<String> getFormalParameters(Row parametersRow, int start, int increment) {
+		List<String> formalParameters = new ArrayList<String>();
+    	if (wikiClassBased())
+    		formalParameters.add("this");
+    	for (int i = start; i < parametersRow.size(); i += increment)
+    		if (i < parametersRow.size()) {
+    			String parameter = parametersRow.text(i,this);
+    			if ("".equals(parameter))
+    				error("Parameter name is blank",parametersRow);
+    			if (formalParameters.contains(parameter))
+    				error("Parameter name '<b>"+parameter+"</b>' is duplicated",parametersRow);
+				formalParameters.add(parameter);
+    		}
+		return formalParameters;
+	}
+	private boolean wikiClassBased() {
+		return !"".equals(wikiClassName);
+	}
+	private DefinedActionsRepository repository() {
+		return TemporaryPlugBoardForRuntime.definedActionsRepository();
+	}
+	private void checkSizeWithRegardToTheClass(Table table) {
 		if (table.size() < 2 || table.size() > 3)
     		throw new FitLibraryException("Table for DefineAction needs to be two or three rows, but is "+table.size()+".");
     	boolean hasClass = false;
@@ -55,69 +119,5 @@ public class DefineAction extends Traverse {
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain nested tables.");
     	if (hasClass)
     		wikiClassName = table.at(1).text(0,this);
-    	processDefinition(table.at(1).at(0).getEmbeddedTables(), testResults);
-    	return null;
-	}
-    public String getPageName() {
-		return pageName;
-	}
-	private void processDefinition(Tables tables, TestResults testResults) {
-		Table headerTable = tables.at(0);
-		if (headerTable.size() == 2) {
-			processMultiDefinedAction(headerTable,copyBody(tables));
-			return;
-		}
-		Row parametersRow = headerTable.at(0);
-		if (headerTable.size() > 1)
-			error("Unexpected rows in first table of defined action",parametersRow);
-		parametersRow.passKeywords(testResults);
-		
-		Tables bodyCopy = copyBody(tables);
-		List<String> formalParameters = getDefinedActionParameters(parametersRow);
-		ParameterSubstitution parameterSubstitution = new ParameterSubstitution(formalParameters,bodyCopy,pageName);
-		TemporaryPlugBoardForRuntime.definedActionsRepository().define(parametersRow, wikiClassName, parameterSubstitution, this, pageName);
-	}
-	private Tables copyBody(Tables tables) {
-		if (tables.atExists(1))
-			return tables.fromAt(1).deepCopy(); 
-		Row row = TableFactory.row();
-		row.addCell("comment");
-		return TableFactory.tables(TableFactory.table(row));
-	}
-	private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
-		String definedActionName = headerTable.at(0).at(0).text();
-		ArrayList<String> formalParameters = new ArrayList<String>();
-		Row parametersRow = headerTable.at(1);
-		for (int c = 0; c < parametersRow.size(); c++) {
-			String parameter = parametersRow.at(c).text();
-			if ("".equals(parameter))
-				error("Parameter name is blank",parametersRow);
-			if (formalParameters.contains(parameter))
-				error("Parameter name '<b>"+parameter+"</b>' is duplicated",parametersRow);
-			formalParameters.add(parameter);
-		}
-		TemporaryPlugBoardForRuntime.definedActionsRepository().defineMultiDefinedAction(definedActionName, formalParameters, bodyCopy, "");
-	}
-	private void error(String msg, Row parametersRow) {
-		throw new FitLibraryExceptionInHtml(msg +" in <b>"+parametersRow.methodNameForCamel(this)+
-				"</b> in "+DefinedActionCaller.link2(pageName));
-	}
-	private List<String> getDefinedActionParameters(Row parametersRow) {
-		List<String> formalParameters = new ArrayList<String>();
-    	if (wikiClassBased())
-    		formalParameters.add("this");
-    	for (int i = 1; i < parametersRow.size(); i += 2)
-    		if (i < parametersRow.size()) {
-    			String parameter = parametersRow.text(i,this);
-    			if ("".equals(parameter))
-    				error("Parameter name is blank",parametersRow);
-    			if (formalParameters.contains(parameter))
-    				error("Parameter name '<b>"+parameter+"</b>' is duplicated",parametersRow);
-				formalParameters.add(parameter);
-    		}
-		return formalParameters;
-	}
-	private boolean wikiClassBased() {
-		return !"".equals(wikiClassName);
 	}
 }

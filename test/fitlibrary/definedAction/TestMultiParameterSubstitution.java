@@ -27,9 +27,9 @@ public class TestMultiParameterSubstitution {
 
 	@Test
 	public void fileName() {
-		MultiParameterSubstitution substitutes = 
-			new MultiParameterSubstitution(new ArrayList<String>(), TableFactory.tables(), "fileName");
-		assertThat(substitutes.getAbsoluteFileName(),is("fileName"));
+		MultiParameterBinder substitutes = 
+			new MultiParameterBinder(new ArrayList<String>(), TableFactory.tables(), "fileName");
+		assertThat(substitutes.getPageName(),is("fileName"));
 	}
 	@Test
 	public void actualArgumentsProvided() {
@@ -38,8 +38,8 @@ public class TestMultiParameterSubstitution {
 		}});
 
 		String[] formals = { "a", "b" };
-		MultiParameterSubstitution substitutes = 
-			new MultiParameterSubstitution(Arrays.asList(formals),TableFactory.tables(),"fileName");
+		MultiParameterBinder substitutes = 
+			new MultiParameterBinder(Arrays.asList(formals),TableFactory.tables(),"fileName");
 		String[] actuals = { "1", "2" };
 		LocalDynamicVariables localVars = new LocalDynamicVariables(vars);
 		substitutes.createMappingsForCall(Arrays.asList(actuals),localVars);

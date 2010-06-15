@@ -4,7 +4,8 @@
 */
 package fitlibrary.traverse.workflow.caller;
 
-import fitlibrary.definedAction.MultiParameterSubstitution;
+import fit.Fixture;
+import fitlibrary.definedAction.MultiParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
@@ -18,12 +19,12 @@ import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 
-public class MultiDefinedActionTraverse extends Traverse {
-	private MultiParameterSubstitution multiParameterSubstitution;
+public class MultiDefinedActionRunnerTraverse extends Traverse {
+	private MultiParameterBinder binder;
 	private RuntimeContextInternal runtime;
 
-	public MultiDefinedActionTraverse(MultiParameterSubstitution multiParameterSubstitution, RuntimeContextInternal runtime) {
-		this.multiParameterSubstitution = multiParameterSubstitution;
+	public MultiDefinedActionRunnerTraverse(MultiParameterBinder binder, RuntimeContextInternal runtime) {
+		this.binder = binder;
 		this.runtime = runtime;
 	}
 	@Override
@@ -33,17 +34,17 @@ public class MultiDefinedActionTraverse extends Traverse {
 				throw new FitLibraryException("Missing data rows in table");
 			getRuntimeContext().pushLocalDynamicVariables();
 			Row parameterRow = table.at(1);
-			multiParameterSubstitution.verifyParameters(parameterRow,this);
+			binder.verifyHeaderAgainstFormalParameters(parameterRow,this);
 			parameterRow.pass(testResults);
 			for (int r = 2; r < table.size(); r++) {
-				Row row = table.at(r);
+				Row callRow = table.at(r);
 				if (runtime.isAbandoned(testResults))
-					row.ignore(testResults);
+					callRow.ignore(testResults);
 				else
 					try {
-						runRow(row, parameterRow, testResults);
+						runRow(callRow, parameterRow, testResults);
 					} catch (Exception e) {
-						row.error(testResults, e);
+						callRow.error(testResults, e);
 					}
 			}
 			getRuntimeContext().popLocalDynamicVariables();
@@ -52,45 +53,46 @@ public class MultiDefinedActionTraverse extends Traverse {
 		}
 		return null;
 	}
-	private void runRow(Row row, Row parameterRow, TestResults testResults) {
-		Tables body = multiParameterSubstitution.getCopyOfBody();
+	private void runRow(Row callRow, Row parameterRow, TestResults testResults) {
+		Tables body = binder.getCopyOfBody();
 		TestResults subTestResults = TestResultsFactory.testResults();
 		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
 		try {
-			definedActionCallManager.startCall(multiParameterSubstitution);
-			multiParameterSubstitution.bind(parameterRow,row,getDynamicVariables(),this);
+			definedActionCallManager.startCall(binder);
+			binder.bind(parameterRow,callRow,getDynamicVariables(),this);
 			runBody(body,subTestResults);
-			colourReport(row, testResults, subTestResults);
+			colourReport(callRow,testResults, subTestResults);
 		} finally {
-			definedActionCallManager.endCall(multiParameterSubstitution);
+			definedActionCallManager.endCall(binder);
 		}
 		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults)) {
 			Cell cell = TableFactory.cell(body);
-			cell.addPrefixToFirstInnerTable("Defined action call:");
-			row.add(cell);
+			cell.at(0).setLeader(Fixture.label(DefinedActionCaller.link(binder.getPageName())));
+			cell.calls();
+			callRow.add(cell);
 		} else if (definedActionCallManager.readyToShow())
-			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
+			callRow.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
 		tableEvaluator.runInnerTables(body, new TableListener(subTestResults));
 	}
-	private void colourReport(Row row, TestResults testResults, TestResults subTestResults) {
+	private void colourReport(Row callRow, TestResults testResults, TestResults subTestResults) {
 		if (runtime.isAbandoned(testResults))
-			row.ignore(testResults);
+			callRow.ignore(testResults);
 		else if (runtime.toExpandDefinedActions() || subTestResults.problems()) {
 			if (subTestResults.passed())
-				row.passKeywords(testResults);
+				callRow.passKeywords(testResults);
 			else if (subTestResults.errors())
-				for (int i = 0; i < row.size(); i++)
-					row.at(i).error(testResults, new FitLibraryException(""));
+				for (int i = 0; i < callRow.size(); i++)
+					callRow.at(i).error(testResults, new FitLibraryException(""));
 			else if (subTestResults.failed())
-				for (int i = 0; i < row.size(); i++)
-					row.at(i).fail(testResults);
+				for (int i = 0; i < callRow.size(); i++)
+					callRow.at(i).fail(testResults);
 			else
-				for (int i = 0; i < row.size(); i++)
-					row.at(i).pass(testResults);
+				for (int i = 0; i < callRow.size(); i++)
+					callRow.at(i).pass(testResults);
 		} else
-			row.pass(testResults);
+			callRow.pass(testResults);
 	}
 }

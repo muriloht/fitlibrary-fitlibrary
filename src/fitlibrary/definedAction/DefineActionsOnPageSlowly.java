@@ -69,7 +69,7 @@ public class DefineActionsOnPageSlowly { //extends Traverse {
 	protected void defineAction(Tables innerTables, String className, String pageName) {
 		DefineAction defineAction = new DefineAction(className,pageName);
 		defineAction.setRuntimeContext(runtime);
-		defineAction.interpret(createDefineActionTable(innerTables), TestResultsFactory.testResults());
+		defineAction.define(createDefineActionTable(innerTables),TestResultsFactory.testResults());
 	}
 	private Table createDefineActionTable(Tables innerTables) {
 		Table defineActionTable = TableFactory.table();

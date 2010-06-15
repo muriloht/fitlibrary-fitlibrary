@@ -13,7 +13,8 @@
 
 *!
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<table border="1" cellspacing="0">
+|${test}|
+|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.DoFixture</td>
 </tr>
 </table>
@@ -37,9 +38,7 @@
 </tr>
 <tr><td class="fail">eve</td>
 <td class="fail">paradise</td>
-<td bgcolor=#DADAFF> <span class="fit_label">Defined action call:</span>
-<br/><br/>
-<table border="1" cellspacing="0">
+<td bgcolor=#DADAFF> <span class="fit_label">Defined action call <a href='FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters.DefinedActions.MultiDefineFails'>.FitLibrary.SpecifiCations.DefinedActionsWithNamedParameters.DefinedActions.MultiDefineFails</a>:</span><table border="1" cellspacing="0">
 <tr><td>get</td><td>eve</td><td>is</td><td class="fail">adam <span class="fit_label">expected</span><hr>eve <span class="fit_label">actual</span></td></tr>
 </table>
 <br/><br/>

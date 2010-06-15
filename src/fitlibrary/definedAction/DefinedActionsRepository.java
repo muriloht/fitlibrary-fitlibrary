@@ -6,23 +6,20 @@
 
 package fitlibrary.definedAction;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
-import fitlibrary.table.Tables;
-import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 
 public interface DefinedActionsRepository {
 	void clear();
 	void define(Row parametersRow, String wikiClassName,
-			ParameterSubstitution parameterSubstitution, Evaluator evaluator, String absoluteFileName);
-	ParameterSubstitution lookupByCamel(String name, int argCount);
-	ParameterSubstitution lookupByClassByCamel(String className, String name, int argCount, RuntimeContextInternal variables);
+			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName);
+	ParameterBinder lookupByCamel(String name, int argCount);
+	ParameterBinder lookupByClassByCamel(String className, String name, int argCount, RuntimeContextInternal variables);
 	void findPlainTextCall(String textCall, List<ValidCall> results);
-	void defineMultiDefinedAction(String name, ArrayList<String> formalParameters, 
-			Tables body, String absoluteFileName);
-	MultiParameterSubstitution lookupMulti(String name);
+	MultiParameterBinder lookupMulti(String name);
+	void defineMultiDefinedAction(String name, MultiParameterBinder parameterSubstitution);
 }

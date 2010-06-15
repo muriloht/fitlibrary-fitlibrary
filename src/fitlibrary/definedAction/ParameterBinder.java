@@ -11,28 +11,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fit.exception.FitFailureException;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.StringUtility;
 
-public class ParameterSubstitution {
+public class ParameterBinder {
 	private Tables tables;
 	private String pageName;
 
 	public String getPageName() {
 		return pageName;
 	}
-	public ParameterSubstitution(List<String> formalParameters, Tables tables, String pageName) {
+	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName) {
 		this.tables = tables;
 		this.pageName = pageName;
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
 		for (int c = 0; c < formalParameters.size(); c++) {
 			String formal = formalParameters.get(c);
-			if (mapToRef.get(formal) != null)
-				throw new FitFailureException("Duplicated parameter: "+formal);
 			mapToRef.put(formal,paramRef(c));
 		}
 		macroReplace(tables,mapToRef);
