@@ -15,6 +15,7 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
+import fitlibrary.utility.Pair;
 
 public class CellOnList extends TablesOnList implements Cell {
     static final Pattern COLSPAN_PATTERN = Pattern.compile(".*\\b(colspan\\s*=\\s*\"?\\s*(\\d+)\\s*\"?).*");
@@ -44,11 +45,11 @@ public class CellOnList extends TablesOnList implements Cell {
 		this.fullText = text;
 	}
 	public String text(VariableResolver resolver) {
-		String s = text();
-		String resolve = resolver.resolve(s);
-		if (!s.equals(resolve))
-			fullText = resolve;
-		return resolve;
+		Pair<String,Tables> resolve = resolver.resolve(fullText);
+		addTables(resolve.second);
+		if (!fullText.equals(resolve.first))
+			fullText = resolve.first;
+		return text();
 	}
 	public String text() {
         return Parse.unescape(Parse.unformat(fullText)).trim();
@@ -115,7 +116,7 @@ public class CellOnList extends TablesOnList implements Cell {
     	super.fail(testResults);
     }
     public void fail(TestResults testResults, String msg, VariableResolver resolver) {
-    	if (fullText.isEmpty() && !hasEmbeddedTables()) {
+    	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,msg);
     		return;
     	}
@@ -127,7 +128,7 @@ public class CellOnList extends TablesOnList implements Cell {
                 + label("actual"));
     }
     public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
-    	if (fullText.isEmpty() && !hasEmbeddedTables()) {
+    	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,actual);
     		return;
     	}
@@ -221,8 +222,8 @@ public class CellOnList extends TablesOnList implements Cell {
 		else
 			fail(counts,"",resolver);
 	}
-	public void passIfNotEmbedded(TestResults counts) {
-		if (!hasEmbeddedTables()) // already coloured
+	public void passIfNotEmbedded(TestResults counts, VariableResolver resolver) {
+		if (!hasEmbeddedTables(resolver)) // already coloured
 			pass(counts);
 	}
 	public void setIsHidden() {
@@ -253,7 +254,7 @@ public class CellOnList extends TablesOnList implements Cell {
     public Tables getEmbeddedTables() {
 		return fromAt(0);
     }
-    public boolean hasEmbeddedTables() {
+    public boolean hasEmbeddedTables(VariableResolver resolver) {
         return !isEmpty();
     }
 	@Override

@@ -226,10 +226,10 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				return false;
 			}
 			if (valueParser.matches(expectedCell,result,testResults)) {
-				expectedCell.passIfNotEmbedded(testResults);
+				expectedCell.passIfNotEmbedded(testResults,evaluator);
 				return true;
 			}
-			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables())) {
+			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables(evaluator))) {
 				if (result instanceof String)
 					expectedCell.failWithStringEquals(testResults,valueParser.show(result),evaluator);
 				else
@@ -264,8 +264,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			if (resultParser == null)
 				throw new NoValueProvidedException();
 			else if (!resultParser.matches(expectedCell,result,testResults))
-				expectedCell.passIfNotEmbedded(testResults);
-			else if (!expectedCell.hasEmbeddedTables()) {
+				expectedCell.passIfNotEmbedded(testResults,evaluator);
+			else if (!expectedCell.hasEmbeddedTables(evaluator)) {
 				expectedCell.fail(testResults);
 			}
 		} catch (Exception e) {
@@ -280,8 +280,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			Object expected = resultParser.parseTyped(expectedCell, testResults).getSubject();
 			if (expected instanceof Comparable) {
 				if (compare.compares(actual,(Comparable)expected))
-					expectedCell.passIfNotEmbedded(testResults);
-				else if (!expectedCell.hasEmbeddedTables())
+					expectedCell.passIfNotEmbedded(testResults,evaluator);
+				else if (!expectedCell.hasEmbeddedTables(evaluator))
 					expectedCell.fail(testResults,""+actual,evaluator);
 			} else
 				throw new FitLibraryException("Unable to compare, as expected value is not Comparable");

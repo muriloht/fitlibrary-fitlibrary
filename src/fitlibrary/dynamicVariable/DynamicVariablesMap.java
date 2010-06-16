@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import fit.Fixture;
+import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
+import fitlibrary.utility.Pair;
 
 public abstract class DynamicVariablesMap implements DynamicVariables {
 	private Map<Object,Object> map = new HashMap<Object,Object>(System.getProperties());
@@ -22,8 +25,9 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 	public DynamicVariablesMap(DynamicVariables dynamicVariables) {
 		map = new HashMap<Object,Object>(dynamicVariables.getMap());
 	}
-	public String resolve(String locator) {
+	public Pair<String,Tables> resolve(String locator) {
 		String result = locator;
+		Tables tables = TableFactory.tables();
 		int pos = 0;
 		int loops = 0;
 		while (true) {
@@ -31,7 +35,7 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 			if (pos < 0)
 				break;
 			if (loops++ > 10000)
-				return "INFINITE SUBSTITUTION!";
+				return new Pair<String,Tables>("INFINITE SUBSTITUTION!",tables);
 			int end = result.indexOf("}",pos);
 			if (end >= 0) {
 				Object substitute = get(result.substring(pos+2,end));
@@ -43,7 +47,7 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 					pos += 2;
 			}
 		}
-		return result;
+		return new Pair<String,Tables>(result,tables);
 	}
 	public void put(String key, Object value) {
 		map.put(key, value);

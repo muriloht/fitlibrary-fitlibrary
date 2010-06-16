@@ -96,7 +96,7 @@ public class DomainObjectSetUpTraverse extends Traverse {
 		}
 	}
     public static boolean givesClass(Cell cell, VariableResolver resolver) {
-        return cell.isBlank(resolver) && !cell.hasEmbeddedTables();
+        return cell.isBlank(resolver) && !cell.hasEmbeddedTables(resolver);
     }
 	private static void callSetter(CalledMethodTarget target, Cell nextCell, TestResults testResults) {
 		try {

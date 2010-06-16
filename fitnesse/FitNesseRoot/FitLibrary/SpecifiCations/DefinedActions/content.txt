@@ -7,7 +7,8 @@ A defined action is called with appropriate parameters and the body of the defin
 
 See .FitLibrary.UserGuide.FitLibraryByExample.DefinedActions for further details.
 
->CallPasses
+^CallPasses
+>CallPassesWithOldStyle
 >CallFails
 ^NestedCallPasses
 >NestedCallFails

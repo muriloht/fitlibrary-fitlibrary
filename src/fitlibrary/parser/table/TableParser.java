@@ -5,6 +5,7 @@
 package fitlibrary.parser.table;
 
 import fit.Parse;
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.exception.table.MissingTableException;
 import fitlibrary.parser.HtmlStructureParser;
 import fitlibrary.parser.Parser;
@@ -24,7 +25,7 @@ public class TableParser extends HtmlStructureParser {
 	}
 	@Override
 	protected Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (!cell.hasEmbeddedTables())
+		if (!cell.hasEmbeddedTables(new GlobalDynamicVariables()))
 			throw new MissingTableException();
         Parse parse = cell.getEmbeddedTable().asParse();
 		Object[] args = new Object[]{parse};

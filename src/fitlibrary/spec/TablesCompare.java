@@ -9,28 +9,31 @@ import java.util.Iterator;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableElement;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class TablesCompare {
-	private SpecifyErrorReport errorReport;
+	private final SpecifyErrorReport errorReport;
+	private final VariableResolver resolver;
 
-	public TablesCompare(SpecifyErrorReport errorReport) {
+	public TablesCompare(SpecifyErrorReport errorReport, VariableResolver resolver) {
 		this.errorReport = errorReport;
+		this.resolver = resolver;
 	}
 	public boolean tablesEqual(String path, TableElement actual, TableElement expected) {
 		boolean actualContainsHtmlDueToShow = false;
 		if (actual instanceof Cell) {
 			Cell actualCell = (Cell) actual;
 			Cell expectedCell = (Cell) expected;
-			if (!actualCell.fullText().isEmpty() && expectedCell.fullText().isEmpty() && expectedCell.hasEmbeddedTables()) {
+			if (expectedCell.hasEmbeddedTables(resolver) && !actualCell.fullText().isEmpty() && expectedCell.fullText().isEmpty()) {
 				expectedCell.setText(expectedCell.last().getTrailer());
 				expectedCell.last().setTrailer("");
 			}
 			if (!equals(actualCell.fullText(),expectedCell.fullText())) {
-				if (!actualCell.hasEmbeddedTables() && expectedCell.hasEmbeddedTables()) {
+				if (!actualCell.hasEmbeddedTables(resolver) && expectedCell.hasEmbeddedTables(resolver)) {
 					try {
 						TableFactory.useOnLists(false);
 						Tables actualTables = TableFactory.tables(new Parse(actualCell.fullText()));

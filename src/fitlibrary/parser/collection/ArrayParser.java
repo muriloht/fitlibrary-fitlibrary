@@ -45,7 +45,7 @@ public class ArrayParser implements Parser {
 		return componentType.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTables()) 
+		if (cell.hasEmbeddedTables(evaluator)) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		return parse(cell.text(evaluator),testResults);
 	}
@@ -55,7 +55,7 @@ public class ArrayParser implements Parser {
         return setUp.getResults();
     }
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTables())
+    	if (cell.hasEmbeddedTables(evaluator))
     		return tableMatches(cell.getEmbeddedTable(),result,testResults);
     	return equals(parse(cell,testResults),result,testResults);
     }

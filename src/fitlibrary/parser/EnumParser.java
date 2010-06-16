@@ -42,7 +42,7 @@ public class EnumParser implements Parser {
 		}
 	}
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTables()) {
+		if (cell.hasEmbeddedTables(resolver)) {
 			cell.unexpected(testResults,"collection");
 			return false;
 		}

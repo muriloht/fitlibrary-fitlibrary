@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public interface DynamicVariables extends VariableResolver {
-	String resolve(String key);
 	Object get(String key);
 	void put(String key, Object value);
 	void putParameter(String key, Object value);

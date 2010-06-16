@@ -53,12 +53,14 @@
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12345');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12345"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12345">
 <pre>true</pre>
 </div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td class="pass"><i>login</i></td>
 <td>rick</td>
@@ -67,19 +69,23 @@
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-<a href="javascript:toggleCollapsable('12347');">
-<img src="/files/images/collapsableClosed.gif" class="left" id="img12347"/></a>
-&nbsp;<span class="meta">login</span><div class="hidden" id="12347">
-<pre>Logged in rick with password ""</pre>
-</div></div><div class="included">
-<div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12346');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12346"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12346">
 <pre>About to login rick with password ""</pre>
 </div></div>
+<div class="included">
+<div style="float: right;" class="meta">
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:toggleCollapsable('12347');">
+<img src="/files/images/collapsableClosed.gif" class="left" id="img12347"/></a>
+&nbsp;<span class="meta">login</span><div class="hidden" id="12347">
+<pre>Logged in rick with password ""</pre>
+</div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td class="pass"><i>login2</i></td>
 <td>rick</td>
@@ -88,19 +94,23 @@
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
-<a href="javascript:toggleCollapsable('12349');">
-<img src="/files/images/collapsableClosed.gif" class="left" id="img12349"/></a>
-&nbsp;<span class="meta">login</span><div class="hidden" id="12349">
-<pre>Logged in rick with password ""</pre>
-</div></div><div class="included">
-<div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12348');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12348"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12348">
 <pre>About to login rick with password ""</pre>
 </div></div>
+<div class="included">
+<div style="float: right;" class="meta">
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:toggleCollapsable('12349');">
+<img src="/files/images/collapsableClosed.gif" class="left" id="img12349"/></a>
+&nbsp;<span class="meta">login</span><div class="hidden" id="12349">
+<pre>Logged in rick with password ""</pre>
+</div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td><b>show after</b></td>
 <td>get</td>
@@ -108,12 +118,14 @@
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12350');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12350"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12350">
 <pre><i>Some text</i></pre>
 </div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td><i>set</i></td>
 <td>message</td>
@@ -124,16 +136,18 @@
 <br/><table border="1" cellspacing="0">
 <tr><td><b>show after</b></td>
 <td>get</td>
-<td><b>Some more MessaGe</b></td>
+<td>&lt;b&gt;Some more MessaGe&lt;/b&gt;</td>
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12351');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12351"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12351">
-<pre>Some more MessaGe</pre>
+<pre><b>Some more MessaGe</b></pre>
 </div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td><b>show after</b></td>
 <td><i>a void</i></td>
@@ -146,12 +160,14 @@
 </tr>
 </table><div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12352');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12352"/></a>
 &nbsp;<span class="meta">count folding</span><div class="hidden" id="12352">
 <pre>22</pre>
 </div></div>
+
 <br/><table border="1" cellspacing="0">
 <tr><td><b>show after</b></td>
 <td><i>count</i></td>
@@ -159,7 +175,8 @@
 </table>
 <div class="included">
 <div style="float: right;" class="meta">
-<a href="javascript:expandAll();">Expand All</a> | <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
 <a href="javascript:toggleCollapsable('12353');">
 <img src="/files/images/collapsableClosed.gif" class="left" id="img12353"/></a>
 &nbsp;<span class="meta">Logs</span><div class="hidden" id="12353">

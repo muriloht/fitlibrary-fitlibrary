@@ -14,6 +14,8 @@ import org.jmock.States;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.TestDoFlowWithFixture.MockFixture;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
@@ -39,6 +41,7 @@ public class DoFlowDriver {
 	final RuntimeContextInternal runtime;
 	final RuntimeContextInternal runtimeCopy;
 	final SetUpTearDown setUpTearDown;
+	final VariableResolver resolver = new GlobalDynamicVariables();
 	
 	final States state;
 	final DoFlow doFlow;
@@ -76,6 +79,10 @@ public class DoFlowDriver {
 		context.checking(new Expectations() {{
 			allowing(tableListener).getTestResults();
 			   will(returnValue(testResults));
+			allowing(runtime).getResolver();
+			   will(returnValue(resolver));
+			allowing(runtimeCopy).getResolver();
+			   will(returnValue(resolver));
 			oneOf(scopeStack).setAbandon(false);     when(state.is(currentState));
 			oneOf(scopeStack).setStopOnError(false); when(state.is(currentState));
 			oneOf(scopeStack).clearAllButSuite();    when(state.is(currentState));

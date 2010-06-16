@@ -28,7 +28,7 @@ public class DomainObjectParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
     private Object parse(Cell cell, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTables())
+    	if (cell.hasEmbeddedTables(evaluator))
     		return parseTable(cell.getEmbeddedTable(),testResults);
 //    	if (cell.text().equals("")) // Someone may want to use a pseudo key value of ""
 //    		return null;
@@ -58,8 +58,8 @@ public class DomainObjectParser implements Parser {
 	}
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
-			return !cell.hasEmbeddedTables() && cell.isBlank(evaluator);
-    	if (cell.hasEmbeddedTables())
+			return !cell.hasEmbeddedTables(evaluator) && cell.isBlank(evaluator);
+    	if (cell.hasEmbeddedTables(evaluator))
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return matches(parse(cell,testResults),result);
     }

@@ -5,6 +5,10 @@
 
 package fitlibrary.matcher;
 
+import static fitlibrary.matcher.TableBuilderForTests.cell;
+import static fitlibrary.matcher.TableBuilderForTests.row;
+import static fitlibrary.matcher.TableBuilderForTests.table;
+import static fitlibrary.matcher.TableBuilderForTests.tables;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -18,8 +22,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
-import static fitlibrary.matcher.TableBuilderForTests.*;
+import fitlibrary.matcher.TableBuilderForTests.RowBuilder;
+import fitlibrary.matcher.TableBuilderForTests.TablesBuilder;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -29,6 +36,7 @@ import fitlibrary.traverse.workflow.DoTraverse;
 @RunWith(JMock.class)
 public class TestTableBuilderForTests {
 	final Mockery context = new Mockery();
+	final VariableResolver resolver = new GlobalDynamicVariables();
 
 	@Test
 	public void emptyTablesHasSizeOf0() {
@@ -57,7 +65,7 @@ public class TestTableBuilderForTests {
 	}
 	@Test
 	public void cellHasNoEmbedded() {
-		assertThat(cell().mock(context).hasEmbeddedTables(), is(false));
+		assertThat(cell().mock(context).hasEmbeddedTables(resolver), is(false));
 	}
 	@Test
 	public void cellHasSpecifiedText() {

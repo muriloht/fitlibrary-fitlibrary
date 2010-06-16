@@ -20,6 +20,7 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
+import fitlibrary.utility.Pair;
 import fitlibrary.utility.ParseUtility;
 
 public class CellOnParse extends TablesOnParse implements Cell {
@@ -34,7 +35,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
     }
 	public CellOnParse(Cell cell) {
 		this("");
-		if (cell.hasEmbeddedTables())
+		if (!cell.getEmbeddedTables().isEmpty())
 			setInnerTables(cell.getEmbeddedTables());
 		else
 			setText(cell.fullText());
@@ -48,11 +49,11 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public String text(VariableResolver resolver) {
 		if (parse.body == null)
 			return "";
-		String s = parse.text();
-		String resolve = resolver.resolve(s);
-		if (!s.equals(resolve))
-			parse.body = resolve;
-		return resolve;
+		Pair<String,Tables> resolve = resolver.resolve(parse.body);
+		if (!parse.body.equals(resolve))
+			parse.body = resolve.first;
+		addTables(resolve.second);
+		return text();
 	}
 	public String text() {
         if (parse.body == null)
@@ -126,7 +127,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
     	super.fail(testResults);
     }
     public void fail(TestResults testResults, String msg, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
+    	if ("".equals(parse.body) && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,msg);
     		return;
     	}
@@ -138,7 +139,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
                 + label("actual"));
     }
     public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
-    	if ("".equals(parse.body) && !hasEmbeddedTables()) {
+    	if ("".equals(parse.body) && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,actual);
     		return;
     	}
@@ -207,7 +208,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
                 + label("actual"));
     }
     private void addToBody(String msg) {
-        if (hasEmbeddedTables()) {
+        if (parse.parts != null) {
             if (parse.parts.more == null)
                 parse.parts.trailer = msg;
             else
@@ -242,8 +243,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		else
 			fail(counts,"",resolver);
 	}
-	public void passIfNotEmbedded(TestResults counts) {
-		if (!hasEmbeddedTables()) // already coloured
+	public void passIfNotEmbedded(TestResults counts, VariableResolver resolver) {
+		if (!hasEmbeddedTables(resolver)) // already coloured
 			pass(counts);
 	}
 	public void setIsHidden() {
@@ -277,7 +278,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	}
 	@Override
 	public boolean isEmpty() {
-		return !hasEmbeddedTables() || getEmbeddedTables().isEmpty() ;
+		return getEmbeddedTables().isEmpty() ;
 	}
 	@Override
 	public int size() {
@@ -289,7 +290,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	}
 	@Override
 	public CellOnParse add(Table table) {
-		if (!hasEmbeddedTables())
+		if (parse.parts == null)
 			parse.parts = TableFactory.tables(table).parse();
 		else
 			getEmbeddedTables().add(table);
@@ -300,7 +301,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 //            throw new NestedTableExpectedException();
 		return new TablesOnParse(parse.parts);
     }
-    public boolean hasEmbeddedTables() {
+    public boolean hasEmbeddedTables(VariableResolver resolver) {
         return parse.parts != null;
     }
 	@Override

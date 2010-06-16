@@ -23,12 +23,12 @@ public class SpecifyFixture extends Traverse {
 	public SpecifyFixture() {
 		this.runner = new BatchFitLibrary();
 		errorReport = new SpecifyErrorReported(this);
-		tablesCompare = new TablesCompare(errorReport);
+		tablesCompare = new TablesCompare(errorReport,this);
 	}
 	public SpecifyFixture(StorytestRunner runner, SpecifyErrorReport errorReport) {
 		this.runner = runner;
 		this.errorReport = errorReport;
-		tablesCompare = new TablesCompare(errorReport);
+		tablesCompare = new TablesCompare(errorReport,this);
 	}
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {

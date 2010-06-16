@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 
 import fit.exception.FitParseException;
 import fitlibrary.definedAction.DefinedActionBodyCollector.DefineActionBodyConsumer;
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.matcher.TablesMatcher;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.SimpleWikiTranslator;
@@ -89,7 +90,7 @@ public class TestDefinedActionBodyCollectorWithList {
 	}
 	
 	protected TablesMatcher tablesMatcher(String wiki) {
-		return new TablesMatcher(makeTables(wiki));
+		return new TablesMatcher(makeTables(wiki),new GlobalDynamicVariables());
 	}
 	private void check(String wiki) {
 		collector.parseDefinitions(makeTables(wiki), consumer);

@@ -33,7 +33,7 @@ public class PropertyEditorBasedParser implements Parser {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTables())
+		if (cell.hasEmbeddedTables(evaluator))
 			return parseTable(cell.getEmbeddedTable(),testResults);
 		if (nullOK && cell.isBlank(evaluator)) {
 			return null;
@@ -57,7 +57,7 @@ public class PropertyEditorBasedParser implements Parser {
 		return newInstance;
 	}
     public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTables())
+    	if (cell.hasEmbeddedTables(evaluator))
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return matches(parse(cell,testResults),result);
     }

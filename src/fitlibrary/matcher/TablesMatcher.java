@@ -8,15 +8,18 @@ package fitlibrary.matcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.spec.SpecifyErrorReport;
 import fitlibrary.spec.TablesCompare;
 import fitlibrary.table.Tables;
 
 public class TablesMatcher extends TypeSafeMatcher<Tables>{
 	private final Tables expectedTables;
+	private final VariableResolver resolver;
 	
-	public TablesMatcher(Tables expected) {
+	public TablesMatcher(Tables expected, VariableResolver resolver) {
 		this.expectedTables = expected;
+		this.resolver = resolver;
 	}
 	@Override
 	public boolean matchesSafely(Tables actualTables) {
@@ -52,7 +55,7 @@ public class TablesMatcher extends TypeSafeMatcher<Tables>{
 						"\nExpected:----\n"+expectedText+"\n----");
 			}
 		};
-		return new TablesCompare(specifyErrorReport).tablesEqual("tables", actualTables, expectedTables);
+		return new TablesCompare(specifyErrorReport,resolver).tablesEqual("tables", actualTables, expectedTables);
 	}
 	@Override
 	public void describeTo(Description description) {

@@ -161,6 +161,9 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		runtimeContext.setExpandDefinedActions(expandDefinedActions);
 	}
+	public void autoTranslateDefinedActionParameters() {
+		setDynamicVariable(DefineAction.AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS, "true");
+	}
 	//--- RANDOM, TO, GET, FILE, HARVEST
 	public RandomSelectTraverse selectRandomly(String var) {
 		return new RandomSelectTraverse(var);

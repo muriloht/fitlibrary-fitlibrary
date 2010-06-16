@@ -24,10 +24,12 @@ import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.RowOnList;
 import fitlibrary.table.Table;
+import fitlibrary.table.Tables;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
+import fitlibrary.utility.Pair;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
@@ -207,7 +209,7 @@ public abstract class Traverse implements Evaluator, ShowAfter {
     public VariableResolver getResolver() {
     	return getDynamicVariables();
     }
-    public String resolve(String key) {
+    public Pair<String,Tables> resolve(String key) {
     	return getResolver().resolve(key);
     }
 	public void setDynamicVariable(String key, Object value) {

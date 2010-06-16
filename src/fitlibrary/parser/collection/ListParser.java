@@ -51,7 +51,7 @@ public class ListParser implements Parser {
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
 		List<Object> results = null;
-		if (cell.hasEmbeddedTables())
+		if (cell.hasEmbeddedTables(evaluator))
 			results = parseTable(cell.getEmbeddedTable(),testResults);
 		else
 			results = parse(cell.text(evaluator),testResults);
@@ -79,8 +79,8 @@ public class ListParser implements Parser {
 	}
 	public boolean matches(Cell cell, Object actual, TestResults testResults) throws Exception {
 		if (actual == null)
-			return !cell.hasEmbeddedTables() && cell.isBlank(evaluator);
-    	if (cell.hasEmbeddedTables())
+			return !cell.hasEmbeddedTables(evaluator) && cell.isBlank(evaluator);
+    	if (cell.hasEmbeddedTables(evaluator))
     		return tableMatches(cell.getEmbeddedTable(),actual,testResults);
     	Object expected = parse(cell,testResults);
     	if (isIterator())

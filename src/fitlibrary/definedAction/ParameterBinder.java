@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
@@ -20,11 +21,12 @@ import fitlibrary.utility.StringUtility;
 public class ParameterBinder {
 	private Tables tables;
 	private String pageName;
+	private final VariableResolver resolver;
 
 	public String getPageName() {
 		return pageName;
 	}
-	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName) {
+	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName, VariableResolver resolver) {
 		this.tables = tables;
 		this.pageName = pageName;
 		Map<String,Object> mapToRef = new HashMap<String,Object>();
@@ -32,17 +34,18 @@ public class ParameterBinder {
 			String formal = formalParameters.get(c);
 			mapToRef.put(formal,paramRef(c));
 		}
-		macroReplace(tables,mapToRef);
+		this.resolver = resolver;
+		macroReplace(tables,mapToRef,resolver);
 	}
 	public Tables substitute(List<Object> actualParameters) {
 		Tables copy = tables.deepCopy();
 		Map<String,Object> mapFromRef = new HashMap<String,Object>();
 		for (int i = 0; i < actualParameters.size(); i++)
 			mapFromRef.put(paramRef(i), actualParameters.get(i));
-		macroReplace(copy, mapFromRef);
+		macroReplace(copy, mapFromRef,resolver);
 		return copy;
 	}
-	private static void macroReplace(Tables tables, Map<String,Object> mapToRef) {
+	private static void macroReplace(Tables tables, Map<String,Object> mapToRef, VariableResolver resolver) {
 		List<String> reverseSortOrder = new ArrayList<String>(mapToRef.keySet());
 		Collections.sort(reverseSortOrder,new Comparator<String>() {
 			public int compare(String arg0, String arg1) {
@@ -50,20 +53,20 @@ public class ParameterBinder {
 			}
 		});
 		for (String key : reverseSortOrder)
-			macroReplaceTables(tables, key, mapToRef.get(key));
+			macroReplaceTables(tables, key, mapToRef.get(key),resolver);
 	}
-	private static void macroReplaceTables(Tables tables, String key, Object value) {
+	private static void macroReplaceTables(Tables tables, String key, Object value, VariableResolver resolver) {
 		for (Table table: tables) {
 			for (Row row : table) {
 				for (Cell cell: row)
-					macroReplaceCell(cell, key, value);
+					macroReplaceCell(cell, key, value, resolver);
 			}
 		}
 	}
-	private static void macroReplaceCell(Cell cell, String key, Object value) {
+	private static void macroReplaceCell(Cell cell, String key, Object value, VariableResolver resolver) {
 		// Do NOT do dynamic variable substitution at this stage; it has to be done dynamically.
-		if (cell.hasEmbeddedTables())
-			macroReplaceTables(cell.getEmbeddedTables(),key,value);
+		if (cell.hasEmbeddedTables(resolver))
+			macroReplaceTables(cell.getEmbeddedTables(),key,value,resolver);
 		String text = cell.fullText();
 		if (value instanceof String) {
 			String update = StringUtility.replaceString(text, key, (String)value);

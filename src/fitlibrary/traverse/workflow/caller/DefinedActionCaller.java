@@ -93,7 +93,7 @@ public class DefinedActionCaller extends DoCaller {
 	private List<Object> actualArgs(Row row, List<Object> result) {
 		for (int i = 1; i < row.size(); i += 2) {
 			Cell cell = row.at(i);
-			if (cell.hasEmbeddedTables())
+			if (cell.hasEmbeddedTables(runtime.getResolver()))
 				result.add(cell.getEmbeddedTables());
 			else 
 				result.add(cell.text(runtime.getResolver()));
@@ -104,11 +104,16 @@ public class DefinedActionCaller extends DoCaller {
 		TestResults subTestResults = TestResultsFactory.testResults();
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
 		tableEvaluator.runInnerTables(definedActionBody, new TableListener(subTestResults));
-		colourReport(definedActionBody, row, testResults, subTestResults);
-	}
-	private void colourReport(Tables body, Row row,
-			TestResults testResults, TestResults subTestResults) {
+		colourRowInReport(row, testResults, subTestResults);
 		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults)) {
+			Cell cell = TableFactory.cell(definedActionBody);
+			cell.at(0).setLeader(Fixture.label(link(binder.getPageName()))+cell.at(0).getLeader());
+			cell.calls();
+			row.add(cell);
+		}
+	}
+	private void colourRowInReport(Row row, TestResults testResults, TestResults subTestResults) {
+		if (runtime.toExpandDefinedActions() || subTestResults.problems()) {
 			if (runtime.isAbandoned(testResults)) {
 				// Leave it to caller to ignore the row
 			} else if (subTestResults.passed())
@@ -122,11 +127,6 @@ public class DefinedActionCaller extends DoCaller {
 			else
 				for (int i = 0; i < row.size(); i += 2)
 					row.at(i).ignore(testResults);
-			String pageName = binder.getPageName();
-			Cell cell = TableFactory.cell(body);
-			cell.at(0).setLeader(Fixture.label(link(pageName))+cell.at(0).getLeader());
-			cell.calls();
-			row.add(cell);
 		} else if (!runtime.isAbandoned(testResults))
 			row.passKeywords(testResults);
 	}

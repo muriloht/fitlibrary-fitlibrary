@@ -12,9 +12,11 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.Pair;
 
 /**
  * An abstract superclass of all the flow-style fixtures.
@@ -91,7 +93,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	public void setDynamicVariable(String key, Object value) {
 		traverse().setDynamicVariable(key, value);
 	}
-    public String resolve(String key) {
+    public Pair<String,Tables> resolve(String key) {
     	return traverse().resolve(key);
     }
 }

@@ -63,7 +63,7 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 				try {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.at(0);
-			    	if (cell.hasEmbeddedTables()) { // Doesn't allow for other cells in row...
+			    	if (cell.hasEmbeddedTables(runtime.getResolver())) { // Doesn't allow for other cells in row...
 			    		doFlower.runInnerTables(cell.getEmbeddedTables(), tableListener);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);

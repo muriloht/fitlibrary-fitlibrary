@@ -19,7 +19,7 @@ public interface Cell extends Tables {
 	boolean matchesTextInLowerCase(String text, VariableResolver resolver);
 	String camelledText(VariableResolver resolver);
 	
-	boolean hasEmbeddedTables();
+	boolean hasEmbeddedTables(VariableResolver resolver);
 	Tables getEmbeddedTables();
 	Table getEmbeddedTable();
 	void setInnerTables(Tables tables);
@@ -27,7 +27,7 @@ public interface Cell extends Tables {
 	void pass(TestResults testResults);
 	void passOrFail(TestResults testResults, boolean right);
 	void pass(TestResults testResults, String msg);
-	void passIfNotEmbedded(TestResults testResults);
+	void passIfNotEmbedded(TestResults testResults, VariableResolver resolver);
 	void passOrFailIfBlank(TestResults testResults, VariableResolver resolver);
 	void fail(TestResults testResults);
 	void fail(TestResults testResults, String message, VariableResolver resolver);

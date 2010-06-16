@@ -11,6 +11,8 @@ import org.jmock.States;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.DoFlowOnTable.DoFlower;
 import fitlibrary.flow.TestDoFlowOnTableWithFixture.MockFixture;
 import fitlibrary.object.DomainFixtured;
@@ -37,6 +39,7 @@ public class DoFlowOnTableDriver {
 	final DoFlower doFlower;
 	final TestResults testResults;
 	final DoFlowOnTable doFlowOnTable;
+	final VariableResolver resolver = new GlobalDynamicVariables();
 
 	final States state;
 	final static String BEGIN_STATE = "begin";
@@ -172,6 +175,8 @@ public class DoFlowOnTableDriver {
 		context.checking(new Expectations() {{
 			allowing(tableListener).getTestResults();
 			   will(returnValue(testResults));
+			allowing(runtime).getResolver();
+			   will(returnValue(resolver));
 		}});
 	}
 	private String endState(String name) {

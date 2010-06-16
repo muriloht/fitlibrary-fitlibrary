@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.utility.StringTablesPair;
 
 @RunWith(JMock.class)
 public class TestCellOnList {
@@ -45,13 +46,13 @@ public class TestCellOnList {
 	}
 	@Test public void textWithResolver() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbCD"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbCD")));
 		}});
 		assertThat(cellA.text(resolver),is("AbCD"));
 	}
 	@Test public void textLower() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbCD"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbCD")));
 		}});
 		assertThat(cellA.textLower(resolver),is("abcd"));
 	}
@@ -71,40 +72,40 @@ public class TestCellOnList {
 	}
 	@Test public void isBlank() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue(""));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("")));
 		}});
 		assertThat(cellA.isBlank(resolver),is(true));
 	}
 	@Test public void isNotBlank() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 		}});
 		assertThat(cellA.isBlank(resolver),is(false));
 	}
 	@Test public void matchesTextInLowerCase() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("ABC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("ABC")));
 		}});
 		assertThat(cellA.matchesTextInLowerCase("AbC",resolver),is(true));
 	}
 	@Test public void matchesNoTextInLowerCase() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 		}});
 		assertThat(cellA.matchesTextInLowerCase("AC",resolver),is(false));
 	}
 	@Test public void camelledText() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 		}});
 		assertThat(cellA.camelledText(resolver),is("abC"));
 	}
 	@Test public void hasNoEmbeddedTables() {
-		assertThat(cellA.hasEmbeddedTables(),is(false));
+		assertThat(cellA.hasEmbeddedTables(resolver),is(false));
 	}
 	@Test public void hasEmbeddedTables() {
 		cellA.add(table0);
-		assertThat(cellA.hasEmbeddedTables(),is(true));
+		assertThat(cellA.hasEmbeddedTables(resolver),is(true));
 	}
 	@Test public void getNoEmbeddedTables() {
 		assertThat(cellA.getEmbeddedTables().size(),is(0));
@@ -156,18 +157,18 @@ public class TestCellOnList {
 		context.checking(new Expectations() {{
 			oneOf(testResults).pass();
 		}});
-		cellA.passIfNotEmbedded(testResults);
+		cellA.passIfNotEmbedded(testResults,resolver);
 		assertThat(cellA.didPass(),is(true));
 	}
 	@Test public void passIfNotEmbeddedFails() {
 		cellA.add(table0);
-		cellA.passIfNotEmbedded(testResults);
+		cellA.passIfNotEmbedded(testResults,resolver);
 		assertThat(cellA.didPass(),is(false));
 		assertThat(cellA.didFail(),is(false));
 	}
 	@Test public void passIfBlank() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue(""));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("")));
 			oneOf(testResults).pass();
 		}});
 		cellA.passOrFailIfBlank(testResults,resolver);
@@ -176,7 +177,7 @@ public class TestCellOnList {
 	}
 	@Test public void passOrFailIfBlankFails() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 			oneOf(testResults).fail();
 		}});
 		cellA.passOrFailIfBlank(testResults,resolver);
@@ -192,7 +193,7 @@ public class TestCellOnList {
 	}
 	@Test public void failWithMsg() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 			oneOf(testResults).fail();
 		}});
 		cellA.fail(testResults,"msg",resolver);
@@ -202,7 +203,7 @@ public class TestCellOnList {
 	// Need to check that diffing works correctly with this.
 	@Test public void failWithStringEquals() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue("AbC"));
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 			oneOf(testResults).fail();
 		}});
 		cellA.failWithStringEquals(testResults,"msg",resolver);
@@ -310,13 +311,13 @@ public class TestCellOnList {
 	}
 	@Test public void unresolved() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("@{a}"); will(returnValue("@{a}"));
+			allowing(resolver).resolve("@{a}"); will(returnValue(new StringTablesPair("@{a}")));
 		}});
 		assertThat(cellVar.unresolved(resolver),is(true));
 	}
 	@Test public void resolved() {
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("@{a}"); will(returnValue("A"));
+			allowing(resolver).resolve("@{a}"); will(returnValue(new StringTablesPair("A")));
 		}});
 		assertThat(cellVar.unresolved(resolver),is(false));
 	}

@@ -19,6 +19,7 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 
 public class DefineAction extends Traverse {
+	public static final String AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS = "auto-translate defined action parameters";
 	private String wikiClassName = "";
 	private String pageName;
 	
@@ -57,9 +58,9 @@ public class DefineAction extends Traverse {
 		Row parametersRow = headerTable.at(0);
 		parametersRow.passKeywords(testResults);
 		List<String> formalParameters = getFormalParameters(parametersRow,1,2);
-		if (DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy))
+		if (getDynamicVariable(AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS) == "true" && DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy))
 			formalParameters = DefinedActionParameterTranslation.translateParameters(formalParameters, bodyCopy);
-		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
+		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName,this);
 		repository().define(parametersRow, wikiClassName, binder, this, pageName);
 	}
     private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
@@ -115,7 +116,7 @@ public class DefineAction extends Traverse {
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain one cell.");
     	if (hasClass && table.at(2).size() != 1)
     		throw new FitLibraryException("Third row of table for DefineAction needs to contain one cell.");
-    	if (!table.at(bodyRow).at(0).hasEmbeddedTables())
+    	if (!table.at(bodyRow).at(0).hasEmbeddedTables(this))
     		throw new FitLibraryException("Second row of table for DefineAction needs to contain nested tables.");
     	if (hasClass)
     		wikiClassName = table.at(1).text(0,this);

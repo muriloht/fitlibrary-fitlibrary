@@ -5,6 +5,9 @@
 
 package fitlibrary.dynamicVariable;
 
+import fitlibrary.table.Tables;
+import fitlibrary.utility.Pair;
+
 public interface VariableResolver {
-	String resolve(String key);
+	Pair<String,Tables> resolve(String key);
 }

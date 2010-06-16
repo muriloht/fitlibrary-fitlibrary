@@ -61,7 +61,7 @@ public class MultiDefinedActionRunnerTraverse extends Traverse {
 			definedActionCallManager.startCall(binder);
 			binder.bind(parameterRow,callRow,getDynamicVariables(),this);
 			runBody(body,subTestResults);
-			colourReport(callRow,testResults, subTestResults);
+			colourRowInReport(callRow,testResults, subTestResults);
 		} finally {
 			definedActionCallManager.endCall(binder);
 		}
@@ -77,7 +77,7 @@ public class MultiDefinedActionRunnerTraverse extends Traverse {
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
 		tableEvaluator.runInnerTables(body, new TableListener(subTestResults));
 	}
-	private void colourReport(Row callRow, TestResults testResults, TestResults subTestResults) {
+	private void colourRowInReport(Row callRow, TestResults testResults, TestResults subTestResults) {
 		if (runtime.isAbandoned(testResults))
 			callRow.ignore(testResults);
 		else if (runtime.toExpandDefinedActions() || subTestResults.problems()) {

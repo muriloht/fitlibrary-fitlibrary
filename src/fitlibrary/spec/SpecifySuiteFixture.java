@@ -27,7 +27,7 @@ public class SpecifySuiteFixture extends SpecifyFixture {
 				row.error(testResults, new RowWrongWidthException(2));
             Cell testCell = row.at(0);
             Cell reportCell = row.at(1);
-            if (!testCell.hasEmbeddedTables()) {
+            if (!testCell.hasEmbeddedTables(this)) {
             	row.error(testResults, new NestedTableExpectedException());
                 return null;
             }

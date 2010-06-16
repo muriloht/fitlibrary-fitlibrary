@@ -9,6 +9,8 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -16,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TestTablesCompare {
 	final Mockery context = new Mockery();
 	final SpecifyErrorReport errorReport = context.mock(SpecifyErrorReport.class);
-	final TablesCompare tablesCompare = new TablesCompare(errorReport);
+	final TablesCompare tablesCompare = new TablesCompare(errorReport, new GlobalDynamicVariables());
 
 	@Test public void emptyStringEquals() {
 		assertThat(tablesCompare.equals("", ""),is(true));
