@@ -4,13 +4,13 @@
 |'''set'''|D|''to''|d|
 
 |''select''|colour|''randomly''|
-|<green>|
+|green|
 |re@{D}|
 |yellow|
 |$white|
 
 |''get''|@{colour}|'''is'''|red|
-|''get''|@{colour}|'''is'''|<green>|
+|''get''|@{colour}|'''is'''|green|
 |''get''|@{colour}|'''is'''|yellow|
 |''get''|@{colour}|'''is'''|$white|
 

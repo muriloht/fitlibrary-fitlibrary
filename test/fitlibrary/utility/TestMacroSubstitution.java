@@ -4,23 +4,25 @@
 */
 package fitlibrary.utility;
 
-import java.util.ArrayList;
-import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
-import fitlibrary.DoFixture;
 import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.dynamicVariable.GlobalDynamicVariables;
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.matcher.TablesMatcher;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class TestMacroSubstitution extends TestCase {
-	DoFixture evaluator = new DoFixture();
+	VariableResolver resolver = new GlobalDynamicVariables();
+	
 	public void testNoParameters() {
 		Tables tables = bodyTables("a","b");
-		ParameterBinder macro = new ParameterBinder(new ArrayList<String>(), tables,"",evaluator);
+		ParameterBinder macro = new ParameterBinder(new ArrayList<String>(), tables,"",resolver);
 		Tables substituted = macro.substitute(new ArrayList<Object>());
 		assertThat(substituted, matchesTables(tables));
 	}
@@ -30,7 +32,7 @@ public class TestMacroSubstitution extends TestCase {
 	public void testOneParameter() {
 		Tables tables = bodyTables("A","b");
 		String[] ss = {"A"};
-		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",evaluator);
+		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",resolver);
 		List<Object> actualParameterList = actuals("a");
 		Tables substituted = macro.substitute(actualParameterList);
 		assertThat(substituted, matchesTables(bodyTables("a","b")));
@@ -38,21 +40,21 @@ public class TestMacroSubstitution extends TestCase {
 	public void testOneParameterSubstitutedTwice() {
 		Tables tables = bodyTables("A","A");
 		String[] ss = {"A"};
-		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",evaluator);
+		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",resolver);
 		Tables substituted = macro.substitute(actuals("a"));
 		assertThat(substituted, matchesTables(bodyTables("a","a")));
 	}
 	public void testTwoParameters() {
 		Tables tables = bodyTables("A","B");
 		String[] ss = {"A", "B"};
-		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",evaluator);
+		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",resolver);
 		Tables substituted = macro.substitute(actuals("a","b"));
 		assertThat(substituted, matchesTables(bodyTables("a","b")));
 	}
 	public void testNoDoubleSubstitutions() {
 		Tables tables = bodyTables("A","B");
 		String[] ss = {"A", "B"};
-		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",evaluator);
+		ParameterBinder macro = new ParameterBinder(list(ss), tables,"",resolver);
 		Tables substituted = macro.substitute(actuals("B","b"));
 		assertThat(substituted, matchesTables(bodyTables("B","b")));
 	}

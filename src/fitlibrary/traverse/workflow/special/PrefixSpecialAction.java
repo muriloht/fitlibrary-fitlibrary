@@ -198,7 +198,7 @@ public class PrefixSpecialAction {
 	public TwoStageSpecial set(final Row row) throws Exception {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
-		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);
+		final Option<ICalledMethodTarget> optionalTarget = target(row);
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
@@ -207,7 +207,9 @@ public class PrefixSpecialAction {
 					if (optionalTarget.isSome()) {
 						Object result = optionalTarget.get().invokeForSpecial(row.fromAt(3),testResults,true,row.at(0));
 						actionContext.setDynamicVariable(variableName,result);
-					} else
+					} else if (row.at(3).hasEmbeddedTables(actionContext))
+						actionContext.setDynamicVariable(variableName,row.at(3).getEmbeddedTables());
+					else
 						actionContext.setDynamicVariable(variableName,Ognl.getValue(row.text(3,actionContext), null));
 				} catch (IgnoredException e) {
 					// No result, so ignore
@@ -216,6 +218,11 @@ public class PrefixSpecialAction {
 				}
 			}
 		};
+	}
+	private Option<ICalledMethodTarget> target(Row row) throws Exception {
+		if (row.size() == 4 && row.text(2,actionContext).equals("to") && row.at(3).hasEmbeddedTables(actionContext))
+			return None.none();
+		return getTarget(row);
 	}
 	public TwoStageSpecial setSymbolNamed(final Row row) throws Exception {
 		if (row.size() <= 2)

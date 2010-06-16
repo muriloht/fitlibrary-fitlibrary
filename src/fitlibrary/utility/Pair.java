@@ -13,4 +13,19 @@ public class Pair<A,B> {
 		this.first = first;
 		this.second = second;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Pair))
+			return false;
+		Pair other = (Pair) obj;
+		return first.equals(other.first) && second.equals(other.second);
+	}
+	@Override
+	public int hashCode() {
+		return first.hashCode() ^ second.hashCode();
+	}
+	@Override
+	public String toString() {
+		return "Pair["+first+", "+second+"]";
+	}
 }

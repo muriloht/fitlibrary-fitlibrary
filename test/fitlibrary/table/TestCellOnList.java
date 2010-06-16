@@ -101,10 +101,22 @@ public class TestCellOnList {
 		assertThat(cellA.camelledText(resolver),is("abC"));
 	}
 	@Test public void hasNoEmbeddedTables() {
+		context.checking(new Expectations() {{
+			oneOf(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
+		}});
 		assertThat(cellA.hasEmbeddedTables(resolver),is(false));
 	}
 	@Test public void hasEmbeddedTables() {
+		context.checking(new Expectations() {{
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
+		}});
 		cellA.add(table0);
+		assertThat(cellA.hasEmbeddedTables(resolver),is(true));
+	}
+	@Test public void hasEmbeddedTablesAfterResolving() {
+		context.checking(new Expectations() {{
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC",TableFactory.tables(table0))));
+		}});
 		assertThat(cellA.hasEmbeddedTables(resolver),is(true));
 	}
 	@Test public void getNoEmbeddedTables() {
@@ -155,12 +167,16 @@ public class TestCellOnList {
 	}
 	@Test public void passIfNotEmbedded() {
 		context.checking(new Expectations() {{
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
 			oneOf(testResults).pass();
 		}});
 		cellA.passIfNotEmbedded(testResults,resolver);
 		assertThat(cellA.didPass(),is(true));
 	}
 	@Test public void passIfNotEmbeddedFails() {
+		context.checking(new Expectations() {{
+			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
+		}});
 		cellA.add(table0);
 		cellA.passIfNotEmbedded(testResults,resolver);
 		assertThat(cellA.didPass(),is(false));

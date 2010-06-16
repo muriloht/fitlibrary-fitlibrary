@@ -12,4 +12,7 @@ public class StringTablesPair extends Pair<String,Tables> {
 	public StringTablesPair(String s) {
 		super(s,TableFactory.tables());
 	}
+	public StringTablesPair(String s, Tables tables) {
+		super(s,tables);
+	}
 }

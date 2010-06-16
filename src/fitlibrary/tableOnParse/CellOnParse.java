@@ -302,6 +302,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		return new TablesOnParse(parse.parts);
     }
     public boolean hasEmbeddedTables(VariableResolver resolver) {
+    	text(resolver);
         return parse.parts != null;
     }
 	@Override

@@ -255,6 +255,7 @@ public class CellOnList extends TablesOnList implements Cell {
 		return fromAt(0);
     }
     public boolean hasEmbeddedTables(VariableResolver resolver) {
+    	text(resolver);
         return !isEmpty();
     }
 	@Override

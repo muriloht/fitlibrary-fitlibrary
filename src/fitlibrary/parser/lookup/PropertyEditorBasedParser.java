@@ -51,6 +51,7 @@ public class PropertyEditorBasedParser implements Parser {
     private Object parseTable(Table embeddedTable, TestResults testResults) throws Exception {
     	Object newInstance = typed.newInstance();
     	DomainObjectSetUpTraverse setUp = new DomainObjectSetUpTraverse(newInstance);
+    	setUp.setRuntimeContext(evaluator.getRuntimeContext());
     	setUp.callStartCreatingObjectMethod(newInstance);
 		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator,testResults);
     	setUp.callEndCreatingObjectMethod( newInstance);

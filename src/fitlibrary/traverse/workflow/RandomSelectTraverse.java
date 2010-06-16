@@ -6,6 +6,7 @@ package fitlibrary.traverse.workflow;
 
 import java.util.Random;
 
+import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
@@ -17,9 +18,10 @@ public class RandomSelectTraverse extends Traverse {
 	public RandomSelectTraverse(String var) {
 		this.var = var;
 	}
-
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+		if (table.size() <= 1)
+			throw new FitLibraryException("Possible values are needed in subsequent rows of the table");
 		int select = 1+random.nextInt(table.size()-1);
 		setDynamicVariable(var, table.at(select).text(0,this));
 		for (int i = 1; i < table.size(); i++)

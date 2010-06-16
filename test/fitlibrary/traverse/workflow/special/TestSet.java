@@ -10,6 +10,7 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
@@ -66,7 +67,20 @@ public class TestSet extends SpecialActionTest {
 	public void setWithValueFromOfOgnl() throws Exception {
 		context.checking(new SetExpectations("=") {{
 			one(initialRow).text(3,actionContext); will(returnValue("1+2"));
+			one(initialRow).at(3); will(returnValue(firstCell));
+			one(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(false));
 			one(actionContext).setDynamicVariable("2nd",3);
+		}});
+		TwoStageSpecial lazySpecial = special.set(initialRow);
+		lazySpecial.run(testResults);
+	}
+	@Test
+	public void setNestedTables() throws Exception {
+		context.checking(new SetExpectations("to") {{
+			allowing(initialRow).at(3); will(returnValue(firstCell));
+			atLeast(2).of(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(true));
+			one(firstCell).getEmbeddedTables(); will(returnValue(tables));
+			one(actionContext).setDynamicVariable("2nd",tables);
 		}});
 		TwoStageSpecial lazySpecial = special.set(initialRow);
 		lazySpecial.run(testResults);
