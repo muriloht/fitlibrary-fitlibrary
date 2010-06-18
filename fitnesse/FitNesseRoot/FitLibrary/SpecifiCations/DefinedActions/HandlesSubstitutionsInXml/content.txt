@@ -1,7 +1,7 @@
 !**< def
 !define body (|''make xml for user''|USER|''with''|PASSWORD|
 
-|'''set'''|xml|''to''|<a><user password="PASSWORD">USER</user><a>|
+|'''set'''|xml|''to''|<a><user password="@{PASSWORD}">@{USER}</user><a>|
 
 )
 **!

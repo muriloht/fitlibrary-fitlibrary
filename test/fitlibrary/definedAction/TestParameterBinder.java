@@ -4,6 +4,9 @@
 */
 package fitlibrary.definedAction;
 
+import static fitlibrary.table.TableFactory.row;
+import static fitlibrary.table.TableFactory.table;
+import static fitlibrary.table.TableFactory.tables;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -21,16 +24,16 @@ import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.matcher.TablesMatcher;
 import fitlibrary.table.Tables;
+import fitlibrary.utility.CollectionUtility;
 import fitlibrary.utility.StringTablesPair;
-import static fitlibrary.table.TableFactory.*;
 
 @RunWith(JMock.class)
-public class TestMultiParameterBinder {
+public class TestParameterBinder {
 	Mockery context = new Mockery();
 	protected DynamicVariables resolver = context.mock(DynamicVariables.class);
 	List<String> formals = new ArrayList<String>();
 	Tables tables = tables();
-	MultiParameterBinder binder = new MultiParameterBinder(formals, tables, "fileName");
+	ParameterBinder binder = new ParameterBinder(formals, tables, "fileName");
 
 	@Test
 	public void fileName() {
@@ -126,17 +129,20 @@ public class TestMultiParameterBinder {
 		}});
 		formals.add("a");
 		formals.add("b");
-		binder.bindUni(row("1","2"),resolver);
+		binder.bindUni(actuals("1","2"),resolver);
 	}
 	@Test
 	public void bindUniWorksWithNestedTable() {
 		final Tables inner = tables(table(row("x")));
 		context.checking(new Expectations() {{
-			allowing(resolver).resolve("1"); will(returnValue(new StringTablesPair("22",inner)));
 			allowing(resolver).resolve("x"); will(returnValue(new StringTablesPair("x")));
 			one(resolver).putParameter(with("a"), with(new TablesMatcher(inner, resolver)));
 		}});
 		formals.add("a");
-		binder.bindUni(row("1"),resolver);
+		binder.bindUni(actuals(inner),resolver);
+	}
+	
+	private List<Object> actuals(Object...objects) {
+		return CollectionUtility.list(objects);
 	}
 }

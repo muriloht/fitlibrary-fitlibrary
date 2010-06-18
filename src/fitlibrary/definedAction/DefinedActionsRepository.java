@@ -20,6 +20,6 @@ public interface DefinedActionsRepository {
 	ParameterBinder lookupByCamel(String name, int argCount);
 	ParameterBinder lookupByClassByCamel(String className, String name, int argCount, RuntimeContextInternal variables);
 	void findPlainTextCall(String textCall, List<ValidCall> results);
-	MultiParameterBinder lookupMulti(String name);
-	void defineMultiDefinedAction(String name, MultiParameterBinder parameterSubstitution);
+	ParameterBinder lookupMulti(String name);
+	void defineMultiDefinedAction(String name, ParameterBinder parameterSubstitution);
 }

@@ -70,14 +70,17 @@ public class DefinedActionCaller extends DoCaller {
 	public TypedObject run(Row row, TestResults testResults) {
 		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
 		definedActionCallManager.startCall(binder);
+		runtime.pushLocalDynamicVariables();
 		try {
 			Object oldThisValue = runtime.getDynamicVariable("this");
 			if (!actualArgs.isEmpty())
 				runtime.setDynamicVariable("this", actualArgs.get(0));
-			processDefinedAction(binder.substitute(actualArgs),row,testResults);
+			binder.bindUni(actualArgs,runtime.getDynamicVariables());
+			processDefinedAction(binder.getCopyOfBody(),row,testResults);
 			runtime.setDynamicVariable("this", oldThisValue);
 		} finally {
 			definedActionCallManager.endCall(binder);
+			runtime.popLocalDynamicVariables();
 		}
 		if (!runtime.toExpandDefinedActions() && definedActionCallManager.readyToShow() && !runtime.isAbandoned(testResults))
 			row.add(TableFactory.cell(TableFactory.tables(definedActionCallManager.getShowsTable())));

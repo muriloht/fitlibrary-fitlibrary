@@ -24,8 +24,8 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	private Map<DefinedAction, ParameterBinder> definedActionMapForCamel = new ConcurrentHashMap<DefinedAction, ParameterBinder>();
 	private Map<String, Map<DefinedAction, ParameterBinder>> classMapForCamel = new ConcurrentHashMap<String, Map<DefinedAction, ParameterBinder>>();
 
-	private Map<DefinedMultiAction, MultiParameterBinder> definedMultiActionMap = new ConcurrentHashMap<DefinedMultiAction, MultiParameterBinder>();
-	private Map<String, Map<DefinedMultiAction, MultiParameterBinder>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, MultiParameterBinder>>();
+	private Map<DefinedMultiAction, ParameterBinder> definedMultiActionMap = new ConcurrentHashMap<DefinedMultiAction, ParameterBinder>();
+	private Map<String, Map<DefinedMultiAction, ParameterBinder>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, ParameterBinder>>();
 
 	public void define(Row parametersRow, String wikiClassName, ParameterBinder binder, VariableResolver resolver,
 			String absoluteFileName) {
@@ -38,8 +38,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	public ParameterBinder lookupByClassByCamel(String className,
 			String name, int argCount, RuntimeContextInternal variables) {
 		DefinedAction macro = new DefinedAction(name, argCount);
-		Map<DefinedAction, ParameterBinder> map = classMapForCamel
-				.get(className);
+		Map<DefinedAction, ParameterBinder> map = classMapForCamel.get(className);
 		if (map != null) {
 			ParameterBinder macroSubstitution = map.get(macro);
 			if (macroSubstitution != null)
@@ -58,10 +57,10 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 			action.findCall(textCall, results);
 	}
 	@Override
-	public void defineMultiDefinedAction(String name, MultiParameterBinder binder) {
+	public void defineMultiDefinedAction(String name, ParameterBinder binder) {
 		definedMultiActionMap.put(new DefinedMultiAction(name),binder);
 	}
-	public MultiParameterBinder lookupMulti(String name) {
+	public ParameterBinder lookupMulti(String name) {
 		return definedMultiActionMap.get(new DefinedMultiAction(name));
 	}
 	public void clear() {

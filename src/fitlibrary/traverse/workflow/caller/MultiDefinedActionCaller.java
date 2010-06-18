@@ -4,7 +4,7 @@
 */
 package fitlibrary.traverse.workflow.caller;
 
-import fitlibrary.definedAction.MultiParameterBinder;
+import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -16,7 +16,7 @@ import fitlibraryGeneric.typed.GenericTypedObject;
 public class MultiDefinedActionCaller extends DoCaller {
 	private final RuntimeContextInternal runtime;
 	private final String methodName;
-	private final MultiParameterBinder multiParameterSubstitution;
+	private final ParameterBinder multiParameterSubstitution;
 	private final boolean furtherRows;
 
 	public MultiDefinedActionCaller(Row row, RuntimeContextInternal runtime) {

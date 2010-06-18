@@ -23,3 +23,5 @@ This approach is only intended for advanced storytest writers.
 
 
 >DefinedActions
+
+^SingleClassInOldStyle

@@ -1,5 +1,5 @@
-|''login2''|USER|''with''|PASSWORD|
+|''login2''|user|''with''|password|
 
 1st text
 
-|''login''|USER|''with''|PASSWORD|
+|''login''|@{user}|''with''|@{password}|

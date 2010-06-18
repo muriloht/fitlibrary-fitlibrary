@@ -1,15 +1,15 @@
-|address is|NAME|
+|''address is''|address|
 
-|get|@{place.address}|'''is'''|NAME|
+|''get''|@{place.address}|'''is'''|@{address}|
 ----
-|address is at|NAME|
+|''address is at''| address |
 
-|get|@{place.address}|'''is'''|NAME|
+|''get''|@{place.address}|'''is'''|@{address}|
 ----
-|address is|NAME|in|COUNTRY|
+|''address is''|name|''in''|country|
 
-|get|@{place.address}|'''is'''|NAME|
+|''get''|@{place.address}|'''is'''|@{name}|
 ----
-|address is|NAME|in|COUNTRY|in|YEAR|
+|''address is''|name|''in''|country|''in''|year|
 
-|get|@{place.address}|'''is'''|NAME|
+|''get''|@{place.address}|'''is'''|@{name}|

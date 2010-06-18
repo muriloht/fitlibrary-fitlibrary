@@ -1,7 +1,7 @@
 !**< def
 !define body (|''infinite''|USER|''with''|PASSWORD|
 
-|''infinite''|USER|''with''|PASSWORD|
+|''infinite''|@{USER}|''with''|@{PASSWORD}|
 )
 !define test (
 !|fitlibrary.specify.definedAction.DefinedActionUnderTest|
@@ -32,9 +32,9 @@
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>infinite</i></td>
-<td>USER</td>
+<td>@{USER}</td>
 <td><i>with</i></td>
-<td>PASSWORD</td>
+<td>@{PASSWORD}</td>
 </tr>
 </table>
 </td>

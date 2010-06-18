@@ -1,14 +1,13 @@
 !**< def
-!define body (|''expand''|USER|''with''|PASSWORD|
+!define body (|''expand''|user|''with''|pass|
 
-|''with''|//input[@id="userName"]|''enter text''|USER|
+|''with''|//input[@id="userName"]|''enter text''|@{user}|
 
-|''with''|//input[@id="password"]|''enter text''|PASSWORD|
+|''with''|//input[@id="password"]|''enter text''|@{pass}|
 
 |''submit''|//form|
 )
-!define test (
-|!-fitlibrary.DefineAction-!|
+!define test (|!-fitlibrary.DefineAction-!|
 |${body}|
 
 !|fitlibrary.specify.definedAction.DefinedActionUnderTest|
@@ -24,28 +23,28 @@
 Use the action ''set expand defined actions'', which takes true or false. This can be included in the storytest or can be called in the fixture.
 
 |!-fitlibrary.spec.SpecifyFixture-!|
-|${test}|!-<br/><table border="1" cellspacing="0">
+|${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.DefineAction</td>
 </tr>
 <tr><td><table border="1" cellspacing="0">
 <tr><td class="pass"><i>expand</i></td>
-<td>USER</td>
+<td>user</td>
 <td class="pass"><i>with</i></td>
-<td>PASSWORD</td>
+<td>pass</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>with</i></td>
 <td>//input[@id="userName"]</td>
 <td><i>enter text</i></td>
-<td>USER</td>
+<td>@{user}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>with</i></td>
 <td>//input[@id="password"]</td>
 <td><i>enter text</i></td>
-<td>PASSWORD</td>
+<td>@{pass}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

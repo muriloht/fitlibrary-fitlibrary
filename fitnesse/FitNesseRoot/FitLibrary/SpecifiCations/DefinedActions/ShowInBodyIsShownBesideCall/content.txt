@@ -1,9 +1,9 @@
 !**< def
-!define body (|''login after''|USER|''with''|PASSWORD|
+!define body (|''login after''|user|''with''|pass|
 
-|show|get|USER|
+|show|get|@{user}|
 
-|show|get|USER+PASSWORD|
+|show|get|@{user}+@{pass}|
 )
 !define test (!|fitlibrary.specify.definedAction.DefinedActionUnderTest|
 
@@ -29,21 +29,21 @@
 </tr>
 <tr><td><table border="1" cellspacing="0">
 <tr><td class="pass"><i>login after</i></td>
-<td>USER</td>
+<td>user</td>
 <td class="pass"><i>with</i></td>
-<td>PASSWORD</td>
+<td>pass</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td>show</td>
 <td>get</td>
-<td>USER</td>
+<td>@{user}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td>show</td>
 <td>get</td>
-<td>USER+PASSWORD</td>
+<td>@{user}+@{pass}</td>
 </tr>
 </table>
 </td>

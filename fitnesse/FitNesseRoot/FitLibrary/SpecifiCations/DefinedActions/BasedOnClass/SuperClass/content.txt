@@ -1,7 +1,7 @@
 !**< def
-!define body (|''name is super class''|NAME|
+!define body (|''name is super class''|name|
 
-|''get''|@{this.name}|is|NAME|
+|''get''|@{@{this}.name}|is|@{name}|
 )
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
@@ -29,14 +29,14 @@
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is super class</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
-<td>@{this.name}</td>
+<td>@{@{this}.name}</td>
 <td>is</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>

@@ -1,15 +1,15 @@
 !**< def
-!define body (|''nested login passes''|USER|''with''|PASSWORD|
+!define body (|''nested login passes''|user|''with''|pass|
 
-|''with''|//input[@id="userName"]|''enter text''|USER|
+|''with''|//input[@id="userName"]|''enter text''|@{user}|
 
-|''with''|//input[@id="password"]|''enter text''|PASSWORD|
+|''with''|//input[@id="password"]|''enter text''|@{pass}|
 
 |''submit''|//form|
 )
-!define body2 (|''login2 passes''|USER|''with''|PASSWORD|
+!define body2 (|''login2 passes''|user|''with''|pass|
 
-|''nested login passes''|USER|''with''|PASSWORD|
+|''nested login passes''|@{user}|''with''|@{pass}|
 )
 **!
 |!-fitlibrary.DefineAction-!|

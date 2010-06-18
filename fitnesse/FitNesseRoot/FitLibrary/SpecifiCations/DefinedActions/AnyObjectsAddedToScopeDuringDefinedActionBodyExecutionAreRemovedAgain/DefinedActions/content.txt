@@ -12,31 +12,31 @@
 !|fitlibrary.specify.definedAction.TemporaryFixturing|
 |permanently in scope|
 ----
-|''def value''|V|
+|''def value''|v|
 
-|value|is|V|
+|value|is|@{v}|
 ----
-|''def value again''|V|
+|''def value again''|v|
 
-|value|is|V|
+|value|is|@{v}|
 
 |other|11|
 |''value''|'''is'''|11|
 |other|12|
 |''value''|'''is'''|12|
 
-|value|is|V|
+|value|is|@{v}|
 ----
-|''def value again again''|V|
+|''def value again again''|v|
 
-|value|is|V|
+|value|is|@{v}|
 
-|''def value again''|V|
+|''def value again''|@{v}|
 
 |other|110|
 |''value''|'''is'''|110|
 |other|120|
 |''value''|'''is'''|120|
 
-|value|is|V|
+|value|is|@{v}|
 ----

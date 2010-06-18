@@ -4,89 +4,59 @@
 */
 package fitlibrary.definedAction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
+import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
-import fitlibrary.table.Cell;
+import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Row;
-import fitlibrary.table.Table;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.StringUtility;
 
 public class ParameterBinder {
-	private Tables tables;
-	private String pageName;
-	private final VariableResolver resolver;
+	private final List<String> formalParameters;
+	private final Tables tables;
+	private final String pageName;
 
+	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName) {
+		this.formalParameters = formalParameters;
+		this.tables = tables;
+		this.pageName = pageName;
+	}
+	public Tables getCopyOfBody() {
+		return tables.deepCopy();
+	}
 	public String getPageName() {
 		return pageName;
 	}
-	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName, VariableResolver resolver) {
-		this.tables = tables;
-		this.pageName = pageName;
-		Map<String,Object> mapToRef = new HashMap<String,Object>();
-		for (int c = 0; c < formalParameters.size(); c++) {
-			String formal = formalParameters.get(c);
-			mapToRef.put(formal,paramRef(c));
-		}
-		this.resolver = resolver;
-		macroReplace(tables,mapToRef,resolver);
-	}
-	public Tables substitute(List<Object> actualParameters) {
-		Tables copy = tables.deepCopy();
-		Map<String,Object> mapFromRef = new HashMap<String,Object>();
-		for (int i = 0; i < actualParameters.size(); i++)
-			mapFromRef.put(paramRef(i), actualParameters.get(i));
-		macroReplace(copy, mapFromRef,resolver);
-		return copy;
-	}
-	private static void macroReplace(Tables tables, Map<String,Object> mapToRef, VariableResolver resolver) {
-		List<String> reverseSortOrder = new ArrayList<String>(mapToRef.keySet());
-		Collections.sort(reverseSortOrder,new Comparator<String>() {
-			public int compare(String arg0, String arg1) {
-				return arg1.compareTo(arg0);
-			}
-		});
-		for (String key : reverseSortOrder)
-			macroReplaceTables(tables, key, mapToRef.get(key),resolver);
-	}
-	private static void macroReplaceTables(Tables tables, String key, Object value, VariableResolver resolver) {
-		for (Table table: tables) {
-			for (Row row : table) {
-				for (Cell cell: row)
-					macroReplaceCell(cell, key, value, resolver);
-			}
+	public void verifyHeaderAgainstFormalParameters(Row row, VariableResolver resolver) {
+		if (row.size() != formalParameters.size())
+			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+row.size());
+		HashSet<String> set = new HashSet<String>();
+		for (int c = 0; c < row.size(); c++) {
+			String headerName = row.text(c, resolver);
+			if (!formalParameters.contains(headerName))
+				throw new FitLibraryException("Unknown parameter: '"+headerName+"'");
+			if (set.contains(headerName))
+				throw new FitLibraryException("Duplicate parameter: '"+headerName+"'");
+			set.add(headerName);
 		}
 	}
-	private static void macroReplaceCell(Cell cell, String key, Object value, VariableResolver resolver) {
-		// Do NOT do dynamic variable substitution at this stage; it has to be done dynamically.
-		if (cell.hasEmbeddedTables(resolver))
-			macroReplaceTables(cell.getEmbeddedTables(),key,value,resolver);
-		String text = cell.fullText();
-		if (value instanceof String) {
-			String update = StringUtility.replaceString(text, key, (String)value);
-			if (!update.equals(text))
-				cell.setText(update);
-		} else { // Embedded tables: Just replace once
-			Tables valueTables = (Tables) value;
-			int at = text.indexOf(key);
-			if (at < 0)
-				return;
-			cell.addTables(valueTables.deepCopy());
-			cell.setLeader(text.substring(0,at));
-			cell.last().setTrailer(text.substring(at+key.length()));
+	public void bindMulti(Row parameterRow, Row callRow, DynamicVariables dynamicVariables) {
+		if (callRow.size() != formalParameters.size())
+			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+callRow.size());
+		for (int c = 0; c < callRow.size(); c++) {
+			String parameter = parameterRow.text(c, dynamicVariables);
+			if (callRow.at(c).hasEmbeddedTables(dynamicVariables))
+				dynamicVariables.putParameter(parameter, callRow.at(c).getEmbeddedTables());
+			else
+				dynamicVariables.putParameter(parameter, callRow.text(c, dynamicVariables));
 		}
 	}
-	private static String paramRef(int c) {
-		return "%__%"+c+"%__%";
-	}
-	@Override
-	public String toString() {
-		return "MacroSubstitution["+tables.toString()+"]";
+	public void bindUni(List<Object> actualArgs, DynamicVariables dynamicVariables) {
+		if (actualArgs.size() != formalParameters.size())
+			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+actualArgs.size());
+		for (int c = 0; c < formalParameters.size(); c++)
+			dynamicVariables.putParameter(formalParameters.get(c),actualArgs.get(c));
 	}
 }

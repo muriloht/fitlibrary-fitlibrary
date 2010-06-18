@@ -1,7 +1,7 @@
 !**< def
-!define body (|''name is''|NAME|
+!define body (|''name is''|name|
 
-|''get''|@{this.name}|is|NAME|
+|''get''|@{@{this}.name}|is|@{name}|
 )
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
@@ -27,14 +27,14 @@ If there is only one object of a class, we can use the class directly.
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
-<td>@{this.name}</td>
+<td>@{@{this}.name}</td>
 <td>is</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>

@@ -1,15 +1,15 @@
 !**< def
-!define body (|''login''|USER|''with''|PASSWORD|
+!define body (|''login''|user|''with''| password |
 
-|''with''|//input[@id="userName"]|''enter text''|@{USER}|
+|''with''|//input[@id="userName"]|''enter text''|@{user}|
 
-|''with''|//input[@id="password"]|''enter text''|@{PASSWORD}|
+|''with''|//input[@id="password"]|''enter text''|@{password}|
 
 |''submit''|//form|
 )
-!define body2 (|''login2''|USER|''with''|PASSWORD|
+!define body2 (|''login2''| user |''with''| password |
 
-|''login''|@{USER}|''with''|@{PASSWORD}|
+|''login''|@{user}|''with''|@{password}|
 )
 **!
 |!-fitlibrary.DefineAction-!|

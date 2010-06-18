@@ -35,12 +35,13 @@ public class DefinedActionParameterTranslation {
 						String parameter = sorted.get(i);
 						String pattern = Pattern.quote(parameter);
 						String fullText = cell.fullText();
-						String atParameter = "@{paRameRer__"+i+"}";
+						String newParameter = "paRameRer__"+i;
+						String atParameter = "@{"+newParameter+"}";
 						if (!fullText.contains(atParameter)) {
 							String replaced = fullText.replaceAll(pattern, atParameter);
 							if (!replaced.equals(fullText)) {
 								cell.setText(replaced);
-								newNames.set(parameters.indexOf(parameter), atParameter);
+								newNames.set(parameters.indexOf(parameter), newParameter);
 							}
 						}
 					}

@@ -1,7 +1,7 @@
-|act|X|duplicate|
+|act|x|duplicate|
 
-|'''show'''|''get''|X|
+|'''show'''|''get''|@{x}|
 ----
-|act duplicate|BOOKING_REF|
+|act duplicate|bookingRef|
 
-|'''show'''|''get''|BOOKING_REF|
+|'''show'''|''get''|@{bookingRef}|

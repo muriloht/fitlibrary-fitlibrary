@@ -5,7 +5,6 @@ import java.util.List;
 
 import fitlibrary.definedAction.DefinedActionParameterTranslation;
 import fitlibrary.definedAction.DefinedActionsRepository;
-import fitlibrary.definedAction.MultiParameterBinder;
 import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
@@ -58,9 +57,11 @@ public class DefineAction extends Traverse {
 		Row parametersRow = headerTable.at(0);
 		parametersRow.passKeywords(testResults);
 		List<String> formalParameters = getFormalParameters(parametersRow,1,2);
-		if (getDynamicVariable(AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS) == "true" && DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy))
+		if (getDynamicVariable(AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS) == "true" && 
+				DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy)) {
 			formalParameters = DefinedActionParameterTranslation.translateParameters(formalParameters, bodyCopy);
-		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName,this);
+		}
+		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
 		repository().define(parametersRow, wikiClassName, binder, this, pageName);
 	}
     private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
@@ -68,7 +69,7 @@ public class DefineAction extends Traverse {
 			error("Unexpected rows in first table of defined action",headerTable.at(0));
 		String definedActionName = headerTable.at(0).at(0).text();
 		List<String> formalParameters = getFormalParameters(headerTable.at(1),0,1);
-		MultiParameterBinder binder = new MultiParameterBinder(formalParameters,bodyCopy,pageName);
+		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
 		repository().defineMultiDefinedAction(definedActionName, binder);
 	}
     private static Tables copyBody(Tables tables) {

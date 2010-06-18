@@ -46,12 +46,12 @@ public class TestDefinedActionAutoTranslation {
 		Tables body = tables("A","b","A c");
 		List<String> list = list("A");
 		assertThat(DefinedActionParameterTranslation.needToTranslateParameters(list,body),is(true));
-		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("@{paRameRer__0}")));
+		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("paRameRer__0")));
 		assertThat(body,new TablesMatcher(tables("@{paRameRer__0}","b","@{paRameRer__0} c"),resolver));
 	}
 	@Test public void autoTranslationWithOneParameterWithRegExp() {
 		Tables body = tables("A.* bc","AAB","c");
-		assertThat(DefinedActionParameterTranslation.translateParameters(list("A.*"),body),is(list("@{paRameRer__0}")));
+		assertThat(DefinedActionParameterTranslation.translateParameters(list("A.*"),body),is(list("paRameRer__0")));
 		assertThat(body,new TablesMatcher(tables("@{paRameRer__0} bc","AAB","c"),resolver));
 	}
 	@Test public void autoTranslationWithTwoParametersIsUnnecessary() {
@@ -62,13 +62,13 @@ public class TestDefinedActionAutoTranslation {
 	@Test public void autoTranslationWithTwoParameters() {
 		Tables body = tables("A bc","AAB","cBc");
 		List<String> list = list("A","B");
-		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("@{paRameRer__0}","@{paRameRer__1}")));
+		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("paRameRer__0","paRameRer__1")));
 		assertThat(body,new TablesMatcher(tables("@{paRameRer__0} bc","@{paRameRer__0}@{paRameRer__0}@{paRameRer__1}","c@{paRameRer__1}c"),resolver));
 	}
 	@Test public void autoTranslationWithTwoParametersWithOneASubstringOfTheOther() {
 		Tables body = tables("A bc AB","AAB","cBc");
 		List<String> list = list("A","AB");
-		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("@{paRameRer__1}","@{paRameRer__0}")));
+		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("paRameRer__1","paRameRer__0")));
 		assertThat(body,new TablesMatcher(tables("@{paRameRer__1} bc @{paRameRer__0}","@{paRameRer__1}@{paRameRer__0}","cBc"),resolver));
 	}
 	

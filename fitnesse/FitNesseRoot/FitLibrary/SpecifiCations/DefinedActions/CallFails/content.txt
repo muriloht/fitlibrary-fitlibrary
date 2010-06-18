@@ -1,9 +1,9 @@
 !**< def
-!define body (|''login''|USER|''with''|PASSWORD|''fails''|
+!define body (|''login''|user|''with''| password |''fails''|
 
-|''with''|//input[@id="userName"]|''enter text''|USER|
+|''with''|//input[@id="userName"]|''enter text''|@{user}|
 
-|''with''|//input[@id="password"]|''enter text''|PASSWORD|
+|''with''|//input[@id="password"]|''enter text''|@{password}|
 
 |''submit''|//form|
 )
@@ -31,9 +31,9 @@
 </tr>
 <tr><td><table border="1" cellspacing="0">
 <tr><td class="pass"><i>login</i></td>
-<td>USER</td>
+<td>user</td>
 <td class="pass"><i>with</i></td>
-<td>PASSWORD</td>
+<td>password</td>
 <td class="pass"><i>fails</i></td>
 </tr>
 </table>
@@ -41,14 +41,14 @@
 <tr><td><i>with</i></td>
 <td>//input[@id="userName"]</td>
 <td><i>enter text</i></td>
-<td>USER</td>
+<td>@{user}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>with</i></td>
 <td>//input[@id="password"]</td>
 <td><i>enter text</i></td>
-<td>PASSWORD</td>
+<td>@{password}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

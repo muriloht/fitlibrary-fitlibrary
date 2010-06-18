@@ -1,7 +1,7 @@
 !**< def
-!define body (|''name is for default object''|NAME|
+!define body (|''name is for default object''|name|
 
-|''get''|@{this.name}|is|NAME|
+|''get''|@{@{this}.name}|is|@{name}|
 )
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
@@ -27,14 +27,14 @@ If the dynamic variable ''this'' is set, it's treated as the default object. Thi
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is for default object</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
-<td>@{this.name}</td>
+<td>@{@{this}.name}</td>
 <td>is</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>

@@ -1,10 +1,10 @@
 !2 When an action throws a !-FitLibraryShowException-!, it defines what text is to be shown in an extra cell added to the row:
 !**< def
-!define body (|''add''|NAME|
+!define body (|''add''|name|
 
-|add cell to|NAME|
+|add cell to|@{name}|
 
-|add cell to|NAME+NAME|
+|add cell to|@{name}+@{name}|
 )
 !define test (!|fitlibrary.specify.workflow.ExceptionAddsCells|
 
@@ -28,17 +28,17 @@
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>add</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td>add cell to</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td>add cell to</td>
-<td>NAME+NAME</td>
+<td>@{name}+@{name}</td>
 </tr>
 </table>
 </td>

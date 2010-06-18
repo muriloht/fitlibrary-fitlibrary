@@ -1,11 +1,11 @@
 !**< def
-!define body (|''name is override''|NAME|
+!define body (|''name is override''|name|
 
-|''get''|@{this.name}|is|NAME|
+|''get''|@{this.name}|is|@{name}|
 )
-!define body2 (|''name is override''|NAME|
+!define body2 (|''name is override''|name|
 
-|'''show'''|''get''|@{this.name}|
+|'''show'''|''get''|@{@{this}.name}|
 )
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
@@ -36,14 +36,14 @@
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is override</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
 <td>@{this.name}</td>
 <td>is</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>
@@ -55,13 +55,13 @@
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is override</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><b>show</b></td>
 <td><i>get</i></td>
-<td>@{this.name}</td>
+<td>@{@{this}.name}</td>
 </tr>
 </table>
 </td>
@@ -91,13 +91,12 @@
 <td>ella</td>
 <td class="pass"><i>name is override</i></td>
 <td>Ella</td>
-<td>
-<table border="1" cellspacing="0">
-<tr>
-<td><b>show</b></td>
+<td><table border="1" cellspacing="0">
+<tr><td><b>show</b></td>
 <td><i>get</i></td>
 <td>Ella</td>
-<td bgcolor=#C0C0FF>Ella</td></tr></table></td></tr>
+<td bgcolor=#C0C0FF>Ella</td></tr>
+</table></td></tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td class="pass"><i>expected test results</i></td>

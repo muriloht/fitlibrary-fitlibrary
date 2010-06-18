@@ -5,7 +5,7 @@
 package fitlibrary.traverse.workflow.caller;
 
 import fit.Fixture;
-import fitlibrary.definedAction.MultiParameterBinder;
+import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
@@ -20,10 +20,10 @@ import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.Traverse;
 
 public class MultiDefinedActionRunnerTraverse extends Traverse {
-	private MultiParameterBinder binder;
+	private ParameterBinder binder;
 	private RuntimeContextInternal runtime;
 
-	public MultiDefinedActionRunnerTraverse(MultiParameterBinder binder, RuntimeContextInternal runtime) {
+	public MultiDefinedActionRunnerTraverse(ParameterBinder binder, RuntimeContextInternal runtime) {
 		this.binder = binder;
 		this.runtime = runtime;
 	}

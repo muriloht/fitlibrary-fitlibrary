@@ -1,11 +1,11 @@
 !**< def
-!define body (|''name is default within''|NAME|
+!define body (|''name is default within''|name|
 
-|''get''|@{this.name}|is|NAME|
+|''get''|@{@{this}.name}|is|@{name}|
 )
-!define body2 (|''other''|NAME|
+!define body2 (|''other''|name|
 
-|''name is default within''|NAME|
+|''name is default within''|@{name}|
 )
 !define test (!|fitlibrary.specify.dynamicVariable.DynamicVariablesUnderTest|
 
@@ -36,14 +36,14 @@ There is no need to explicitly use an '''oo''' special action inside a defined a
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>name is default within</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
-<td>@{this.name}</td>
+<td>@{@{this}.name}</td>
 <td>is</td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>
@@ -55,12 +55,12 @@ There is no need to explicitly use an '''oo''' special action inside a defined a
 </tr>
 <tr><td colspan="2"><table border="1" cellspacing="0">
 <tr><td class="pass"><i>other</i></td>
-<td>NAME</td>
+<td>name</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>name is default within</i></td>
-<td>NAME</td>
+<td>@{name}</td>
 </tr>
 </table>
 </td>
@@ -87,8 +87,8 @@ There is no need to explicitly use an '''oo''' special action inside a defined a
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>get</i></td>
-<td>@{this}</td>
+<td>rick</td>
 <td><b>is</b></td>
-<td class="pass">@{this}</td>
+<td class="pass">rick</td>
 </tr>
 </table>-!|

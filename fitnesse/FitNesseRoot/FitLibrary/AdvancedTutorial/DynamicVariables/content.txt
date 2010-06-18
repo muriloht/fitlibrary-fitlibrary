@@ -1,18 +1,18 @@
 Dynamic variables allow for storytests to take different values, depending on the values that have been defined.
 
+As a general rule, it's better to set a single value to a ''dynamic variable''.
+
+ * Rather than using an !-!include-! and revising the value of variables and dynamic variables to alter the contents of the !-!include-!, make use of ''defined actions'' with appropriate parameters.
+
 Dynamic variables  can be loaded from a properties file, as well as being set within storytests.
 !2 Using Dynamic variables
  * The value of a dynamic variable is accessed using the @{} form. Eg:
 
 |''with''|//input|''set text''|@{simone.name}|
 
- * They may be nested. Eg:
+ * They may be nested, such as within ''defined actions''. Eg, where ''person'' is a parameter, the value of the variable is resolved before resolving the dynamic variable value:
 
-|''with''|//input|''set text''|@{@{person.manager}.name}|
-
- * And they may be used within defined actions. Eg, where PERSON is a parameter, the value of the variable is resolved before resolving the dynamic variable value:
-
-|''with''|//input|''set text''|@{PERSON.name}|
+|''with''|//input|''set text''|@{@{person}.name}|
 
  * To show the value of one or more dynamic variables:
 
