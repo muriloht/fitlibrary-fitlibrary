@@ -8,27 +8,20 @@ import java.util.HashSet;
 import java.util.List;
 
 import fitlibrary.dynamicVariable.DynamicVariables;
-import fitlibrary.dynamicVariable.LocalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Row;
 import fitlibrary.table.Tables;
 
 public class MultiParameterBinder {
-	private List<String> formalParameters;
-	private Tables tables;
-	private String pageName;
+	private final List<String> formalParameters;
+	private final Tables tables;
+	private final String pageName;
 
 	public MultiParameterBinder(List<String> formalParameters, Tables tables, String pageName) {
 		this.formalParameters = formalParameters;
 		this.tables = tables;
 		this.pageName = pageName;
-	}
-	public void createMappingsForCall(List<String> actuals, LocalDynamicVariables vars) {
-		if (actuals.size() != formalParameters.size())
-			throw new RuntimeException("Formals and actuals don't match");
-		for (int i = 0; i < actuals.size(); i++)
-			vars.putParameter(formalParameters.get(i), actuals.get(i));
 	}
 	public Tables getCopyOfBody() {
 		return tables.deepCopy();
@@ -49,14 +42,26 @@ public class MultiParameterBinder {
 			set.add(headerName);
 		}
 	}
-	public void bind(Row parameterRow, Row row, DynamicVariables dynamicVariables,
-			VariableResolver resolver) {
-		if (row.size() != formalParameters.size())
-			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+row.size());
-		for (int c = 0; c < row.size(); c++) {
-			String parameter = parameterRow.text(c, resolver);
-			String actual = row.text(c, resolver);
-			dynamicVariables.putParameter(parameter, actual);
+	public void bindMulti(Row parameterRow, Row callRow, DynamicVariables dynamicVariables) {
+		if (callRow.size() != formalParameters.size())
+			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+callRow.size());
+		for (int c = 0; c < callRow.size(); c++) {
+			String parameter = parameterRow.text(c, dynamicVariables);
+			if (callRow.at(c).hasEmbeddedTables(dynamicVariables))
+				dynamicVariables.putParameter(parameter, callRow.at(c).getEmbeddedTables());
+			else
+				dynamicVariables.putParameter(parameter, callRow.text(c, dynamicVariables));
+		}
+	}
+	public void bindUni(Row callRow, DynamicVariables dynamicVariables) {
+		if (callRow.size() != formalParameters.size())
+			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+callRow.size());
+		for (int c = 0; c < callRow.size(); c++) {
+			String parameter = formalParameters.get(c);
+			if (callRow.at(c).hasEmbeddedTables(dynamicVariables))
+				dynamicVariables.putParameter(parameter, callRow.at(c).getEmbeddedTables());
+			else
+				dynamicVariables.putParameter(parameter, callRow.text(c, dynamicVariables));
 		}
 	}
 }

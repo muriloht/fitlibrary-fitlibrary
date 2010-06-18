@@ -39,6 +39,16 @@ public class DefinedActionCaller extends DoCaller {
 		if (binder == null)
 			lookupByClass();
 	}
+	public DefinedActionCaller(String object, String className, Row row, RuntimeContextInternal runtime) {
+		this.runtime = runtime;
+		methodName = row.methodNameForCamel(runtime.getResolver());
+		actualArgs.add(object);
+		actualArgs(row,actualArgs);
+		this.binder = repository().
+			lookupByClassByCamel(className, methodName, (actualArgs.size()-1), runtime);
+		if (binder == null)
+			throw new FitLibraryException("Unknown defined action for object of class "+className);
+	}
 	private DefinedActionsRepository repository() {
 		return TemporaryPlugBoardForRuntime.definedActionsRepository();
 	}
@@ -51,16 +61,6 @@ public class DefinedActionCaller extends DoCaller {
 				binder = repository().
 					lookupByClassByCamel(className.toString(), methodName, (actualArgs.size()-1), runtime);
 		}
-	}
-	public DefinedActionCaller(String object, String className, Row row, RuntimeContextInternal runtime) {
-		this.runtime = runtime;
-		methodName = row.methodNameForCamel(runtime.getResolver());
-		actualArgs.add(object);
-		actualArgs(row,actualArgs);
-		this.binder = repository().
-			lookupByClassByCamel(className, methodName, (actualArgs.size()-1), runtime);
-		if (binder == null)
-			throw new FitLibraryException("Unknown defined action for object of class "+className);
 	}
 	@Override
 	public boolean isValid() {

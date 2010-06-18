@@ -94,6 +94,8 @@
 !path fitnesse.jar
 !path lib/*.jar
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
+!define REGRACE_LINK {false}
+!define REGRACE_TOC {false}
 
 **!
 ----'''The following copyright notice applies to all the pages/files in the ${fitLibrary} user guide and specifications that are provided in a release.'''

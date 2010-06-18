@@ -1,3 +1,4 @@
+package fitlibrary.aboutToBeRemoved;
 import fitlibrary.suite.SuiteFixture;
 
 

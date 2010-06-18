@@ -2,6 +2,6 @@
 
 |''clear defined actions''|
 
-|''define actions at''|.FitLibrary.SpecifiCations.DefinedActions.OneDefinedAction|''from''|!-../fitnesse/FitNesseRoot-!|
+|''define actions at''|.FitLibrary.SpecifiCations.DefinedActions.OneDefinedAction|''from''|!-./FitNesseRoot-!|
 
 |''login''|rick|''with''||

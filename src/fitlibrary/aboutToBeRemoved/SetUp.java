@@ -1,3 +1,4 @@
+package fitlibrary.aboutToBeRemoved;
 import fitlibrary.DoFixture;
 
 public class SetUp extends DoFixture {

@@ -39,8 +39,7 @@ public class DoTree {
         public String getText() {
             return tree.getText();
         }
-        @SuppressWarnings("unchecked")
-		public List getChildren() {
+		public List<Tree> getChildren() {
            return tree.getChildren();
         }
         public String text() {
@@ -48,6 +47,9 @@ public class DoTree {
         }
         public static Tree parseTree(Tree tree) {
             return new TeeTree(tree);
+        }
+        public Tree findTree(String child) {
+        	return new ListTree(child);
         }
         @Override
 		public String toString() {

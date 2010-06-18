@@ -132,7 +132,8 @@ public class TablesCompare {
 		}
 	}
 	private String canonical(String s) {
-		return ignoreFold(s).replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").trim();
+		return ignoreFold(s).replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").
+			replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").replaceAll("\n","").trim();
 	}
 	private String ignoreFold(String text) {
 		String s = text;

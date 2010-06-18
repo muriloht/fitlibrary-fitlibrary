@@ -59,7 +59,7 @@ public class MultiDefinedActionRunnerTraverse extends Traverse {
 		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
 		try {
 			definedActionCallManager.startCall(binder);
-			binder.bind(parameterRow,callRow,getDynamicVariables(),this);
+			binder.bindMulti(parameterRow,callRow,getDynamicVariables());
 			runBody(body,subTestResults);
 			colourRowInReport(callRow,testResults, subTestResults);
 		} finally {

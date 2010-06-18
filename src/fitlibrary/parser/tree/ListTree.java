@@ -24,19 +24,6 @@ public class ListTree implements Tree, TreeInterface {
         this.children = children;
         setTitle(title);
     }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title.trim();
-        setText(this.title);
-    }
-    public String getText() {
-        return text;
-    }
-    public void setText(String title) {
-        text = removeTags(title).trim();
-    }
     public ListTree(List<Tree> children) {
         this("",children);
     }
@@ -51,6 +38,19 @@ public class ListTree implements Tree, TreeInterface {
     }
     public ListTree(String name, ListTree tree) {
         this(name, new Tree[]{ tree });
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title.trim();
+        setText(this.title);
+    }
+    public String getText() {
+        return text;
+    }
+    public void setText(String title) {
+        text = removeTags(title).trim();
     }
     public List<Tree> getChildren() {
         return children;
