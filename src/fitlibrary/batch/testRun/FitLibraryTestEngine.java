@@ -53,6 +53,7 @@ public class FitLibraryTestEngine implements TestEngine {
         try {
 			Tables tables = TableFactory.tables(content);
 			TableListener listener = new TableListener();
+			batching.setCurrentPageName(test.getName());
 			batching.doTables(tables,listener);
 			String report = tables.report();
 			report = add("out",out,report);
@@ -81,6 +82,10 @@ public class FitLibraryTestEngine implements TestEngine {
 
 		public void doTables(Tables tables, TableListener listener) {
 			batching.doTables(tables,listener);
+		}
+		@Override
+		public void setCurrentPageName(String name) {
+			batching.setCurrentPageName(name);
 		}
 	}
 }

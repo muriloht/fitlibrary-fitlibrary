@@ -10,7 +10,7 @@ An earlier version of ^DoFixture was ^SequenceFixture, which doesn't have inter-
 
 !3 Tables for checking (and creating) collections (lists, sets, arrays, etc)
 #
-!4 This section has now been included in the [[advanced tutorial][.FitLibrary.AdvancedTutorial]]
+!4 This section has now been included in the [[advanced tutorial][.FitLibrary.AdvancedTutorials]]
 Tables are often used to check that collections, such as lists, are as expected. Here's some more detail of checking (different sorts of collections:
 
 |^OrderedList|''A list, array, etc''|

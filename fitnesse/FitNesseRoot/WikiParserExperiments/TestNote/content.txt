@@ -1,0 +1,3 @@
+!note ''abc'' plain
+
+!note aasd ''asdad'' |a| WikiWordq

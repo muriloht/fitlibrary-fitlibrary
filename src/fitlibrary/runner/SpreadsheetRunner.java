@@ -24,14 +24,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import fit.Counts;
 import fit.Parse;
-import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 
 /**
  * Run Fit tests from a spreadsheet.
  */
-public class SpreadsheetRunner {
+public class SpreadsheetRunner extends AbstractRunner {
 	private boolean tableStarted = false;
     private Report report = null;
 
@@ -56,13 +56,15 @@ public class SpreadsheetRunner {
                 Parse parse = customRunner.getTables();
                 parse.leader = report.addLinks(parse.leader,inFile);
             }
-            Parse parseTables = customRunner.getTables();
-			TestResults testResults = batchFitLibrary.doStorytest(TableFactory.tables(parseTables));
-			parseTables.print(output);
-			output.close();
-			return testResults.getCounts();
-         } catch (CustomRunnerException e) {
-            throw new RuntimeException(e.getMessage()+" in file "+inFile.getAbsolutePath());
+            Tables tables = TableFactory.tables(customRunner.getTables());
+			Counts counts = batchFitLibrary.doStorytest(tables).getCounts();
+			outputHtml(output, tables);
+			return counts;
+         } catch (Exception e) {
+         	stackTrace(output, e);
+        	return new Counts(0,0,0,0);
+        } finally  {
+            output.close();
         }
     }
     public Parse collectTable(File setUpFile) throws FileNotFoundException, IOException, CustomRunnerException {

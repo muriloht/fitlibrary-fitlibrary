@@ -202,4 +202,8 @@ public class ListTree implements Tree, TreeInterface {
 //        
 //		return title + togglingHtml(result + "</ul>","Sub-Folders");
 //	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

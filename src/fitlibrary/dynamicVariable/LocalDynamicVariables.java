@@ -26,9 +26,9 @@ public class LocalDynamicVariables extends DynamicVariablesMap {
 	@Override
 	public Object get(String key) {
 		Object result = super.get(key);
-		if (result != null)
-			return result;
-		return outer.get(key);
+		if (result == null || result.toString().contains("@{"+key+"}"))
+			return outer.get(key);
+		return result;
 	}
 	@Override
 	public void put(String key, Object value) {

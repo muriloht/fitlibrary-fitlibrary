@@ -18,6 +18,7 @@ See .FitLibrary.UserGuide.FitLibraryByExample.DefinedActions for further details
 >ShowInBodyIsShownBesideCall
 ^EmptyBody
 ^HandlesSubstitutionsInXml
+^HandlesXmlArguments
 
 ^ReturnsLastValue
 >DoesNotReturnLastValue

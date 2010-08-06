@@ -31,6 +31,11 @@ public class TestDynamicVariablesMap {
 		vars.put("cd", "CD");
 		verify(vars.resolve("@{ab}+@{cd}"), "AB+CD");
 	}
+	@Test public void xmlSubstitutions() {
+		vars.put("ab", "<a>b</a>");
+		vars.put("cd", "<c a='b'/>");
+		verify(vars.resolve("@{ab}+@{cd}"), "&lt;a>b&lt;/a>+&lt;c a='b'/>");
+	}
 
 	@Test public void oneTablesSubstitutions() {
 		Tables tables = tables(table(row("a","b","c")));

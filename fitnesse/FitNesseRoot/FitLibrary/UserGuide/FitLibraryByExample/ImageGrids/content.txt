@@ -2,8 +2,6 @@ ImageGrids just needs the names of the image files:
 
 !|fitlibrary.specify.GridFixtureUnderTest|
 
-|''actions''|
-
 |images for image fixture|
 |!img http://files/gameImages/wall.jpg|!img http://files/gameImages/space.jpg |!img http://files/gameImages/box.jpg |!img http://files/gameImages/space.jpg |!img http://files/gameImages/wall.jpg |
 

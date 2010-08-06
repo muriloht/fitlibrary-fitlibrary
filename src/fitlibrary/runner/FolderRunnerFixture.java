@@ -7,33 +7,36 @@ package fitlibrary.runner;
 import java.io.File;
 
 import fitlibrary.DoFixture;
+import fitlibrary.differences.DifferenceInterface;
 import fitlibrary.log.Logging;
+import fitlibrary.traverse.Traverse;
 import fitlibrary.utility.StringUtility;
 
 public class FolderRunnerFixture extends DoFixture {
-    public static final String MY_DOCUMENTS;
-    public static final String CREATIONS;
-    
-    static {
-        MY_DOCUMENTS = System.getProperty("user.home")+"\\My Documents";
-        CREATIONS = MY_DOCUMENTS+File.separator+"Creations";
-    }
-    
+	private static final String TESTFILES = "../";
+	
     public void log() {
         Logging.setLogging(true);
     }
-	public String runGiving(String testDirectoryName, String reportDirectoryName) throws Exception {
-        long start = System.currentTimeMillis();
-		String separator = File.separator;
-		String TESTFILES = CREATIONS+separator+"MyOwnFitReleases"+separator;
-		String theCounts = new FolderRunner().run(TESTFILES+testDirectoryName,TESTFILES+reportDirectoryName).getCounts();
-		String fileName = TESTFILES+reportDirectoryName+separator+"reportIndex.html";
-        long end = System.currentTimeMillis();
-        return urlFile(fileName,theCounts)+" in "+(end-start)/1000+" seconds";
+
+	public boolean runGiving(String testDirectoryName, String reportDirectoryName) throws Exception {
+		DifferenceInterface previousDifferenceStrategy = Traverse.getDifferenceStrategy();
+		try {
+			long start = System.currentTimeMillis();
+			Report run = new FolderRunner().run(TESTFILES + testDirectoryName,
+					TESTFILES + reportDirectoryName);
+			String theCounts = run.getCounts();
+			long end = System.currentTimeMillis();
+			// showAfterTable(urlFile(TESTFILES+reportDirectoryName+File.separator+"reportIndex.html","report"));
+			showAfterTable(theCounts + " in " + (end - start) / 1000 + " seconds");
+			return !run.failing();
+		} finally {
+			Traverse.setDifferenceStrategy(previousDifferenceStrategy);
+		}
 	}
     private String urlFile(String fileName, String title) {
-        String url = StringUtility.replaceString("file:///"+fileName," ","%20");
+        String url = StringUtility.replaceString("file:///"+new File(fileName).getAbsolutePath()," ","%20");
         url = StringUtility.replaceString(url,"\\","/");
-        return "<a href=\"" + url+ "\">"+title+"</a>";
+        return "<a href=\"" + url+ "\">"+title+url+"</a>";
     }
 }

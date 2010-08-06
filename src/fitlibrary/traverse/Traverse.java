@@ -101,6 +101,9 @@ public abstract class Traverse implements Evaluator, ShowAfter {
     public static void setDifferenceStrategy(DifferenceInterface difference) {
 		FITNESSE_DIFFERENCES = difference;
 	}
+    public static DifferenceInterface getDifferenceStrategy() {
+		return FITNESSE_DIFFERENCES;
+	}
     public static LocalFile getLocalFile(String localFileName) {
     	return FITNESSE_DIFFERENCES.getLocalFile(localFileName);
     }

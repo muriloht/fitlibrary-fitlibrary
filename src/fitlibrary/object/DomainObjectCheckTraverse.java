@@ -12,7 +12,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
-import fitlibrary.tableOnParse.RowOnParse;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;

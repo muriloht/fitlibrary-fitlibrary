@@ -5,7 +5,9 @@
 package fitlibrary.runner;
 
 public class CustomRunnerException extends RuntimeException {
-    public CustomRunnerException(String message) {
+	private static final long serialVersionUID = 1L;
+
+	public CustomRunnerException(String message) {
         super(message);
     }
 }

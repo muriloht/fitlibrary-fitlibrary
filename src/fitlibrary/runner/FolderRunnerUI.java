@@ -18,7 +18,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class FolderRunnerUI extends JFrame {
-    private final JTextField pageCounts = new JTextField();
+	private static final long serialVersionUID = 1L;
+	private final JTextField pageCounts = new JTextField();
     private final JTextField assertionCounts = new JTextField();
     private final JButton stopButton = new JButton("Quit");
     private final JTextArea textArea = new JTextArea();
@@ -43,7 +44,6 @@ public class FolderRunnerUI extends JFrame {
         getContentPane().add(new JScrollPane(textArea),BorderLayout.CENTER);
         getContentPane().add(stopButton,BorderLayout.SOUTH);
         stopButton.addActionListener(new ActionListener() {
-        	@SuppressWarnings("unused")
             public void actionPerformed(ActionEvent ev) {
                 runner.exit();
             }});

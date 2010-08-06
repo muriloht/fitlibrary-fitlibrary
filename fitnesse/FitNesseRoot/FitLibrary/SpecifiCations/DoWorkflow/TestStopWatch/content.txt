@@ -1,7 +1,5 @@
 !**< def
-!define test (!|fitlibrary.DoFixture|
-
-|''start stop watch''|
+!define test (|''start stop watch''|
 
 |''stop watch''|<|200|
 
@@ -18,10 +16,6 @@
 **!
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
-<tr><td>fitlibrary.DoFixture</td>
-</tr>
-</table>
-<br/><table border="1" cellspacing="0">
 <tr><td><i>start stop watch</i></td>
 </tr>
 </table>
@@ -59,3 +53,11 @@
 <td class="pass">100</td>
 </tr>
 </table>-!|
+
+|''start stop watch''|
+
+|''sleep for''|20|
+
+|'''show'''|''stop watch''|
+
+

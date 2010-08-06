@@ -42,7 +42,7 @@ Fit can continue to be used with ''!-FitServer-!''. However, if you want to mix 
 #
 It's no longer necessary to use a ''!-SelectFixture-!'' to switch between ''!-DoFixture-!''s. This switching behaviour has been generalised and included as a part of standard flow.
 
-So you can simply remove the ''!-SelectFixture-!'' table in your storytests. See .FitLibrary.AdvancedTutorial.MultipleFlowObjects for how to use the new, generalised features.
+So you can simply remove the ''!-SelectFixture-!'' table in your storytests. See .FitLibrary.AdvancedTutorials.MultipleFlowObjects for how to use the new, generalised features.
 #
 !3 Tailored colouring of table cells
 #
@@ -63,7 +63,7 @@ See .FitLibrary.SpecifiCations.AddingGlobalActionsObject
 #
 The ''onFailure()'' method can be defined in a fixture. It is called if the storytest has failed (fails/errors), and allow for diagnostic information to be included in the report, such as a screen dump.
 
-See .FitLibrary.AdvancedTutorial.SetUpTearDownOnFailure for further details.
+See .FitLibrary.AdvancedTutorials.SetUpTearDownOnFailure for further details.
 #
 !3 ''Scope''
 #

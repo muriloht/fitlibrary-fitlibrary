@@ -45,6 +45,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	private Stack<TestResults> testResultsStack = new Stack<TestResults>();
 	protected Row currentRow;
 	protected Table currentTable;
+	private String currentPageName = "";
 
 	public RuntimeContextContainer() {
 		this(null,new GlobalActionScope()); // For those cases where a fixture is being sued independently of table execution
@@ -232,5 +233,16 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 				currentRow.addCell(s).shown();
 			}
 		};
+	}
+	public Table currentTable() {
+		return currentTable;
+	}
+	@Override
+	public void setCurrentPageName(String pageName) {
+		this.currentPageName = pageName;
+	}
+	@Override
+	public String getCurrentPageName() {
+		return currentPageName;
 	}
 }

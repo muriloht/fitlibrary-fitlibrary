@@ -3,6 +3,6 @@
 |''pay with cash $''|25.00|
 |''complete transaction''|
 
-|!-rent.SalesGoodsSubset-!|
+|sales goods subset|
 | name             | count |
 | chips | 5    |

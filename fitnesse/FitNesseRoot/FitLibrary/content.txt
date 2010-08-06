@@ -1,12 +1,39 @@
+!**< defines
+!path fitlibrary.jar
+#!path ../bin
+!path fitnesse.jar
+!path lib/*.jar
+!define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
+!define REGRACE_LINK {false}
+!define REGRACE_TOC {false}
+
+!define advanced {Advanced (and more technical) features of FitLibrary, including:
+
+ * Specific sorts of collections:
+  * ordered, unordered, subsets, maps, arrays
+
+ * ''Defined actions''
+ * ''Dynamic variables''
+ * Multiple flow objects
+
+ * Implementation details:
+  * setUp, tearDown, onFailure methods
+  * runtime information access in fixture code
+  * specialised handling of table cell text
+
+ * Migrating from Slim to FitLibrary
+}
+
+**!
 !3 Invented and developed in Java by [[''Rick Mugridge''][.FitLibrary.GlosSary.RickMugridge]], http://www.rimuresearch.com
 
 |!3 ^WhatIsNew|''What's new in this release.''|
 
 |!3 ^BeginningTutorial|''First tutorial for FitLibrary''|
-|!3 ^AdvancedTutorial|''Advanced (and more technical) features of FitLibrary''|
+|!3 >AdvancedTutorials|''${advanced}''|
 |!3 ^UserGuide|''User guide for FitLibrary''|
 |!3 ^ReferenCe|''Reference for FitLibrary''|
-|!3 ^SpecifiCations|''Storytests that specify FitLibrary''|
+|!3 ^SpecifiCations|''Storytests that specify FitLibrary. These are used to drive the development of FitLibrary''|
 
 |!3 ^SuiteFixture|''Details of suite fixtures''|
 |!3 ^FitBook|''Example storytests from the [[Fit Book][.FitLibrary.GlosSary.FitBook]]''|
@@ -88,14 +115,6 @@
 !define valueObject ([[''Value Object''][.FitLibrary.GlosSary.ValueObject]])
 !define workflow ([[''workflow''][.FitLibrary.GlosSary.WorkFlow]])
 !define workflowTraverse ([[''doTraverse {doFixture}''][.FitLibrary.GlosSary.DoTraverse]])
-
-!path fitlibrary.jar
-#!path ../bin
-!path fitnesse.jar
-!path lib/*.jar
-!define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
-!define REGRACE_LINK {false}
-!define REGRACE_TOC {false}
 
 **!
 ----'''The following copyright notice applies to all the pages/files in the ${fitLibrary} user guide and specifications that are provided in a release.'''

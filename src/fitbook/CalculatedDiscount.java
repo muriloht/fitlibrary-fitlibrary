@@ -5,10 +5,6 @@
  */
 package fitbook;
 
-
-/**
- * 
- */
 public class CalculatedDiscount extends fitlibrary.CalculateFixture{
 	private Discount application = new Discount(); //COPY:ALL
 	//COPY:ALL

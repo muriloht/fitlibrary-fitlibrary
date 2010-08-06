@@ -1,6 +1,6 @@
 !2 Defined actions Parameters
 #
-''Defined action'' parameters are now used in the body of the ''defined action'' in the same way as ''dynamic variables''. 
+''Defined action'' parameters are now used in the body of the ''defined action'' in the same way as ''dynamic variables''.
 
 Eg, the parameter ''x'' is now used in the body as ''@{x}''. This makes ''defined actions'' consistent with ''multi defined actions''.
 
@@ -17,7 +17,7 @@ This action can be included in ''!-SuiteSetUp-!'', for example.
 It's possible to have a mix of defined actions, some using this new style and some using the old style:
 
  * The auto-translation first checks whether any parameter ''x'' is already used in the body as ''@{x}''.
- * If so, it doesn't carry out the auto-translation. 
+ * If so, it doesn't carry out the auto-translation.
 
 See .FitLibrary.SpecifiCations.DefinedActions.CallPassesWithOldStyle
 

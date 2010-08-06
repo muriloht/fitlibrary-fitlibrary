@@ -29,7 +29,7 @@ public class FitLibraryRunner {
 	private static final String RESULTS_DIRY = "resultsDiry";
 	private static final String SHOW_PASSES = "showPasses";
 	private static final String PORT = "port";
-	static int PORT_NO = 8990;
+	static int PORT_NO = 8980;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		if (args.length > 0 && args[0].startsWith("-"))

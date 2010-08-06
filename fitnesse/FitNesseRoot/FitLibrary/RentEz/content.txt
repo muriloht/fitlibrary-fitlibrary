@@ -11,6 +11,8 @@ In both years, the students met for 6 hours a week for one semester to do their 
 
 The storytests distributed here are from the end of the 2005 project course. The code supplied here was from one of the best teams from that year. All the students involved from 2005 have given permission to make these examples available.
 
+|!contents|
+
 ^SetUp
 !2 Storytests
 ^CashRentals
@@ -48,8 +50,7 @@ The storytests distributed here are from the end of the 2005 project course. The
 ^LateReturns
 ^CompositeTemplate
 
-#!path fitlibrary.jar
-#!path fitlibraryGeneric.jar
 !path lib/rentEz.jar
+#!path C:\Documents and Settings\RimuResearch\My Documents\work\RentEz\classes
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
 

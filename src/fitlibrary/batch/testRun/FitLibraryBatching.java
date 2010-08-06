@@ -9,4 +9,5 @@ import fitlibrary.table.Tables;
 
 public interface FitLibraryBatching {
 	void doTables(Tables tables, TableListener listener);
+	void setCurrentPageName(String name);
 }

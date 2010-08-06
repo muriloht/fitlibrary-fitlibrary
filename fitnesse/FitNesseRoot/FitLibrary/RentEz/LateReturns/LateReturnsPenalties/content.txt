@@ -1,4 +1,3 @@
-
 |!-hire.TestLate-!|
 |hoursLate|grace|countGrace|highDemand|extraHours()|
 |0|1|true|0|0|

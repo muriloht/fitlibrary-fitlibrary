@@ -4,8 +4,6 @@ For example, in the following tests, the tags are included in the comparison bet
 
 !|fitlibrary.specify.DoWithTags|
 
-|''actions''|
-
 |check|tag text|!-<b>bold</b>-!|!-<b>bold</b>-!|
 
 |check|tag text|!-<table><tr><td>one</td></tr></table>-!|!-<table><tr><td>one</td></tr></table>-!|

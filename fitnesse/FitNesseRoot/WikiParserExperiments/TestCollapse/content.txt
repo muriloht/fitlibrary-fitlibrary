@@ -1,0 +1,11 @@
+!* WikiWord other
+This ''italics''
+*!
+
+!*   WikiWord other
+This ''italics''
+*!
+
+!*** WikiWord other
+This ''italics''
+***!abc

@@ -39,6 +39,7 @@
 |^ExperiMental|''Some experimental features that may well be dropped''|
 
 |^CoreFitSpecifications|''Specifications for the Java version of Fit''|
+|>FolderRunner|''Checks that ''!-FolderRunner-!'' is working ok''|
 
 Contents in alphabetical order:
 |!contents|

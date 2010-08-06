@@ -77,7 +77,7 @@ public class PropertyEditorBasedParser implements Parser {
 	}
 	@Override
 	public String toString() {
-		return "PrimitiveParser["+editor.toString()+"]";
+		return "PropertyEditorBasedParser["+editor+"]";
 	}
 	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");

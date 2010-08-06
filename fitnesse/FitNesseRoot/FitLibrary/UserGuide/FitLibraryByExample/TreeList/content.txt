@@ -2,8 +2,6 @@ Table cells may contain HTML lists. Consider the following tests:
 
 !|fitlibrary.specify.DoTree|
 
-|''actions''|
-
 |check|tree|!-<ul><li>a</li><li>BB</li></ul>-!|
 
 |check|tree|!-Top<ul><li>a</li><li>BB</li></ul>-!|

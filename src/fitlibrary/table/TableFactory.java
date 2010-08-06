@@ -19,7 +19,6 @@ public class TableFactory {
 	private static boolean RUN_WITH_LIST_BASED = true;
 	private static boolean CREATE_LIST_BASED = RUN_WITH_LIST_BASED;
 	
-	
 	public static Tables tables() {
 		if (CREATE_LIST_BASED)
 			return new TablesOnList();
@@ -46,9 +45,10 @@ public class TableFactory {
 		return tables;
 	}
 	public static Tables tables(Parse parse) {
-		if (CREATE_LIST_BASED)
-			throw new RuntimeException("Unable to use Parse with List-based Tables");
-		return new TablesOnParse(parse);
+		TablesOnParse tablesOnParse = new TablesOnParse(parse);
+		if (CREATE_LIST_BASED) 
+			return tablesOnParse.deepCopy();
+		return tablesOnParse;
 	}
 
 	public static Table table() {

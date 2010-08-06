@@ -19,9 +19,10 @@ import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
 
-public class HtmlRunner {
+public class HtmlRunner extends AbstractRunner {
     private Report report;
     
     public HtmlRunner() {
@@ -32,12 +33,6 @@ public class HtmlRunner {
     }
     public Counts runInSuite(File inFile, File theReport, String encoding, Parse setUp,
             Parse tearDown, BatchFitLibrary batchFitLibrary) throws IOException {
-//        if (!theReport.canWrite() && false) {//////////////////////
-//            System.err.println("HtmlRunner: Unable to write "+theReport.getAbsolutePath());/////
-//            Counts counts = new Counts();
-//            counts.ignores++;
-//            return counts;
-//        }
         PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(theReport),encoding));
         String fileContents = read(inFile,encoding);
         if (fileContents.indexOf("<i>[Not a TEST]</i>") >= 0) {
@@ -46,16 +41,16 @@ public class HtmlRunner {
         	return new Counts(0,0,0,0);
         }
         try {
-            Parse tables = new Parse(fileContents);
-            Parse whole = integrateSetUpAndTearDown(tables, setUp, tearDown);
-            Counts counts = batchFitLibrary.doStorytest(TableFactory.tables(whole)).getCounts();
-            whole.print(output);
+            Parse whole = integrateSetUpAndTearDown(new Parse(fileContents), setUp, tearDown);
+            Tables tables = TableFactory.tables(whole);
+			Counts counts = batchFitLibrary.doStorytest(tables).getCounts();
+			outputHtml(output, tables);
             return counts;
         } catch (FitParseException e) {
             output.print(fileContents);
             return new Counts();
         } catch (Exception e) {
-        	e.printStackTrace();
+        	stackTrace(output, e);
         	return new Counts(0,0,0,0);
         } finally  {
             output.close();

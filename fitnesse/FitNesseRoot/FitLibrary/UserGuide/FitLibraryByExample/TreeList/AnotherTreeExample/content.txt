@@ -1,7 +1,5 @@
 |!-fitlibrary.specify.calculate.WithLists-!|
 
-|''actions''|
-
 |''calculate''|
 |1|2||+|
 |a|b||!-<ul><li>a</li><li>b</li></ul>-!|

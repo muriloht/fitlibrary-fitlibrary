@@ -60,6 +60,6 @@ public class TestFolderRunner extends TestCase {
         assertFalse(FolderRunner.isHtmlFileName(name));
     }
     private void assertSpecial(String name) {
-        assertTrue(FolderRunner.specialFileName(name));
+        assertTrue(CollectSetUpTearDown.specialFileName(name));
     }
 }

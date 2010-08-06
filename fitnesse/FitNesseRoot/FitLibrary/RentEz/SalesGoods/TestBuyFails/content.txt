@@ -2,6 +2,6 @@
 |'''reject'''|''buy''| 15 || chips |
 |''complete transaction''|
 
-|!-rent.SalesGoodsSubset-!|
+|sales goods subset|
 | name             | count |
 | chips | 10    |

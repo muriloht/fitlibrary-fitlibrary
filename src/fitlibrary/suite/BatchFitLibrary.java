@@ -54,6 +54,9 @@ public class BatchFitLibrary implements StorytestRunner {
 		runtime.SetTableEvaluator(doFlow2);
 		return doFlow2;
 	}
+	public void setCurrentPageName(String name) {
+		doFlow.getRuntimeContext().setCurrentPageName(name);
+	}
 	public TestResults doTables(Tables theTables) {
 		tableListener.clearTestResults();
 		doFlow.runStorytest(theTables,tableListener);

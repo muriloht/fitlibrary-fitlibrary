@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import fit.Fixture;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.Pair;
@@ -40,7 +41,7 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 				Object substitute = get(result.substring(pos+2,end));
 				if (substitute != null) {
 					boolean isTables = substitute instanceof Tables;
-					String replace = isTables ? "" : substitute.toString();
+					String replace = isTables ? "" : Fixture.escape(substitute.toString());
 					result = result.substring(0,pos) + replace + result.substring(end+1);
 					if (isTables)
 						tables.addTables((Tables) substitute);

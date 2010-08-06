@@ -39,7 +39,12 @@ public class TestFitLibraryTestEngine {
 		final FitLibraryBatching batching = new FitLibraryBatching() {
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().pass();
-			}};
+			}
+			@Override
+			public void setCurrentPageName(String name) {
+				//
+			}
+		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(1,0,0,0),testName,html)));
@@ -52,7 +57,12 @@ public class TestFitLibraryTestEngine {
 				listener.getTestResults().fail();
 				System.out.print("Mess");
 				System.out.println("age");
-			}};
+			}
+			@Override
+			public void setCurrentPageName(String name) {
+				//
+			}
+		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result.getContent(),equalTo(html+"\n<hr/><h1>out</h1>\n<pre>\nMessage\r\n\n</pre>\n"));
@@ -66,7 +76,12 @@ public class TestFitLibraryTestEngine {
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().exception();
 				System.err.println("Message");
-			}};
+			}
+			@Override
+			public void setCurrentPageName(String name) {
+				//
+			}
+		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,0,1),testName,
@@ -81,7 +96,12 @@ public class TestFitLibraryTestEngine {
 				// The following are a part of the test, as System.out/err should be redirected at this point
 				System.out.println("Out Message");
 				System.err.println("Err Message");
-			}};
+			}
+			@Override
+			public void setCurrentPageName(String name) {
+				//
+			}
+		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
@@ -97,7 +117,12 @@ public class TestFitLibraryTestEngine {
 				// The following are a part of the test, as System.out/err should be redirected at this point
 				System.out.println("Out Message");
 				System.err.println("Err Message");
-			}};
+			}
+			@Override
+			public void setCurrentPageName(String name) {
+				//
+			}
+		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html+"</body>"));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,

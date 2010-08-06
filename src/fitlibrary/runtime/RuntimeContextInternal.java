@@ -43,5 +43,8 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	void popTestResults();
 	CellProxy cellAt(int i);
 	RowProxy currentRow();
+	Table currentTable();
 	void reset();
+	void setCurrentPageName(String pageName);
+	String getCurrentPageName();
 }

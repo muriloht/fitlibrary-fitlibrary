@@ -1,6 +1,5 @@
 !2 Cross-reference of the use of  fixtures and ${doFixture} actions in storytests in a suite
  * This can be included in any page. The argument to ''xref'' is the full name of a suite.
-
  * ''xref'' runs through all storytests in the suite and determines which actions are used in which storytest.
 
  * It also walks over ''defined actions'' that are referenced in the suite and builds a cross-reference for those.
