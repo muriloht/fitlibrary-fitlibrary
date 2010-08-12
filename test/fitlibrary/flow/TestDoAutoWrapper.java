@@ -5,7 +5,7 @@
 
 package fitlibrary.flow;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
@@ -109,7 +109,7 @@ public class TestDoAutoWrapper {
 	}
 	private void verifyClass(Object value, Class<?> expectedType) {
 		TypedObject actual = autoWrapper.wrap(new GenericTypedObject(value));
-		assertThat(actual.getSubject(),is(expectedType));
+		assertThat(actual.getSubject(),instanceOf(expectedType));
 	}
 	static class WithParse {
 		public static Object parse(String s) {

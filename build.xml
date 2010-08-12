@@ -36,7 +36,6 @@
 
 	<target name="compile">
 		<mkdir dir="${bin}" />
-		<echo message="lib is ${lib}"/>
 		<javac srcdir="${src}" destdir="${bin}">
 			<classpath>
 				<fileset dir="${fitnesse.dir}">

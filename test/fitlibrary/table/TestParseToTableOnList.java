@@ -5,7 +5,7 @@
 
 package fitlibrary.table;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Cell cell = TableFactory.cell("ab");
 		TableFactory.pop();
-		assertThat(cell,is(CellOnParse.class));
+		assertThat(cell,instanceOf(CellOnParse.class));
 		assertThat(cell.toString(),is("\n<td>ab</td>"));
 		assertThat(cell.getLeader(),is("\n"));
 		assertThat(cell.getTrailer(),is(""));
@@ -33,7 +33,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(true);
 		Cell cell = TableFactory.cell("ab");
 		TableFactory.pop();
-		assertThat(cell,is(CellOnList.class));
+		assertThat(cell,instanceOf(CellOnList.class));
 		assertThat(cell.toString(),is("<td>ab</td>"));
 		assertThat(cell.getLeader(),is(""));
 		assertThat(cell.getTrailer(),is(""));
@@ -46,7 +46,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Cell cell = TableFactory.cell("ab");
 		TableFactory.pop();
-		assertThat(cell,is(CellOnParse.class));
+		assertThat(cell,instanceOf(CellOnParse.class));
 		cell.addToTag("extra");
 		cell.addToTag("cost");
 		assertThat(cell.getTagLine(),is("extra cost"));
@@ -57,7 +57,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(true);
 		Cell resultingCell = TableConversion.convert(cell);
 		TableFactory.pop();
-		assertThat(resultingCell,is(CellOnList.class));
+		assertThat(resultingCell,instanceOf(CellOnList.class));
 		assertThat(resultingCell.getTagLine(),is("extra cost"));
 		assertThat(resultingCell.toString(),is("\n<td extra cost>ab</td>"));
 		assertThat(cell.getLeader(),is("\n"));
@@ -67,7 +67,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(true);
 		Cell cell = TableFactory.cell("ab");
 		TableFactory.pop();
-		assertThat(cell,is(CellOnList.class));
+		assertThat(cell,instanceOf(CellOnList.class));
 		cell.addToTag("extra");
 		cell.addToTag("cost");
 		assertThat(cell.getTagLine(),is("extra cost"));
@@ -76,7 +76,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Cell resultingCell = TableConversion.convert(cell);
 		TableFactory.pop();
-		assertThat(resultingCell,is(CellOnParse.class));
+		assertThat(resultingCell,instanceOf(CellOnParse.class));
 		assertThat(resultingCell.getTagLine(),is("extra cost"));
 		assertThat(resultingCell.toString(),is("<td extra cost>ab</td>"));
 	}
@@ -84,7 +84,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Table table = TableFactory.table();
 		TableFactory.pop();
-		assertThat(table,is(TableOnParse.class));
+		assertThat(table,instanceOf(TableOnParse.class));
 		table.addToTag("extra");
 		table.addToTag("cost");
 		assertThat(table.getTagLine(),is("border=\"1\" cellspacing=\"0\" extra cost"));
@@ -93,7 +93,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(true);
 		Table resultingTable = TableConversion.convert(table);
 		TableFactory.pop();
-		assertThat(resultingTable,is(TableOnList.class));
+		assertThat(resultingTable,instanceOf(TableOnList.class));
 		assertThat(resultingTable.getTagLine(),is("border=\"1\" cellspacing=\"0\" extra cost"));
 		assertThat(resultingTable.toString(),is("\n<table border=\"1\" cellspacing=\"0\" extra cost></table>"));
 	}
@@ -101,7 +101,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(true);
 		Table table = TableFactory.table();
 		TableFactory.pop();
-		assertThat(table,is(TableOnList.class));
+		assertThat(table,instanceOf(TableOnList.class));
 		table.addToTag("extra");
 		table.addToTag("cost");
 		assertThat(table.getTagLine(),is("border=\"1\" cellspacing=\"0\" extra cost"));
@@ -110,7 +110,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Table resultingTable = TableConversion.convert(table);
 		TableFactory.pop();
-		assertThat(resultingTable,is(TableOnParse.class));
+		assertThat(resultingTable,instanceOf(TableOnParse.class));
 		assertThat(resultingTable.getTagLine(),is("border=\"1\" cellspacing=\"0\" extra cost"));
 		assertThat(resultingTable.toString(),is("<table border=\"1\" cellspacing=\"0\" extra cost></table>"));
 	}
@@ -118,7 +118,7 @@ public class TestParseToTableOnList {
 		TableFactory.useOnLists(false);
 		Tables tables = TableFactory.tables(TableFactory.table(TableFactory.row("a","b")));
 		TableFactory.pop();
-		assertThat(tables,is(TablesOnParse.class));
+		assertThat(tables,instanceOf(TablesOnParse.class));
 		tables.at(0).setLeader("LL");
 		tables.at(0).setTrailer("TT");
 		tables.at(0).addToTag("RR");
@@ -130,21 +130,21 @@ public class TestParseToTableOnList {
 		Tables resultingTables = TableConversion.convert(tables);
 		TableFactory.pop();
 		
-		assertThat(resultingTables,is(TablesOnList.class));
+		assertThat(resultingTables,instanceOf(TablesOnList.class));
 		Table resultingTable = resultingTables.at(0);
-		assertThat(resultingTable,is(TableOnList.class));
+		assertThat(resultingTable,instanceOf(TableOnList.class));
 		assertThat(resultingTable.getLeader(),is("LL"));
 		assertThat(resultingTable.getTrailer(),is("TT"));
 		assertThat(resultingTable.getTagLine(),is("border=\"1\" cellspacing=\"0\" RR"));
 		assertThat(resultingTables.size(),is(1));
 		assertThat(resultingTable.size(),is(1));
 		Row resultingRow = resultingTable.at(0);
-		assertThat(resultingRow,is(RowOnList.class));
+		assertThat(resultingRow,instanceOf(RowOnList.class));
 		assertThat(resultingRow.getLeader(),is("00LL"));
 		assertThat(resultingRow.getTrailer(),is("00TT"));
 		assertThat(resultingRow.size(),is(2));
 		Cell resultingFirstCell = resultingRow.at(0);
-		assertThat(resultingFirstCell,is(CellOnList.class));
+		assertThat(resultingFirstCell,instanceOf(CellOnList.class));
 		assertThat(resultingFirstCell.getTagLine(),is("00RR"));
 		assertThat(resultingFirstCell.text(),is("a"));
 		assertThat(resultingRow.at(1).text(),is("b"));
@@ -152,7 +152,7 @@ public class TestParseToTableOnList {
 	@Test public void convertToParseForm() {
 		TableFactory.useOnLists(true);
 		Tables tables = TableFactory.tables(TableFactory.table(TableFactory.row("a","b")));
-		assertThat(tables,is(TablesOnList.class));
+		assertThat(tables,instanceOf(TablesOnList.class));
 		TableFactory.pop();
 		tables.at(0).setLeader("LL");
 		tables.at(0).setTrailer("TT");
@@ -165,21 +165,21 @@ public class TestParseToTableOnList {
 		Tables resultingTables = TableConversion.convert(tables);
 		TableFactory.pop();
 	
-		assertThat(resultingTables,is(TablesOnParse.class));
+		assertThat(resultingTables,instanceOf(TablesOnParse.class));
 		Table resultingTable = resultingTables.at(0);
-		assertThat(resultingTable,is(TableOnParse.class));
+		assertThat(resultingTable,instanceOf(TableOnParse.class));
 		assertThat(resultingTable.getLeader(),is("LL"));
 		assertThat(resultingTable.getTrailer(),is("TT"));
 		assertThat(resultingTable.getTagLine(),is("border=\"1\" cellspacing=\"0\" RR"));
 		assertThat(resultingTables.size(),is(1));
 		assertThat(resultingTable.size(),is(1));
 		Row resultingRow = resultingTable.at(0);
-		assertThat(resultingRow,is(RowOnParse.class));
+		assertThat(resultingRow,instanceOf(RowOnParse.class));
 		assertThat(resultingRow.getLeader(),is("00LL"));
 		assertThat(resultingRow.getTrailer(),is("00TT"));
 		assertThat(resultingRow.size(),is(2));
 		Cell resultingFirstCell = resultingRow.at(0);
-		assertThat(resultingFirstCell,is(CellOnParse.class));
+		assertThat(resultingFirstCell,instanceOf(CellOnParse.class));
 		assertThat(resultingFirstCell.getTagLine(),is("00RR"));
 		assertThat(resultingFirstCell.text(),is("a"));
 		assertThat(resultingRow.at(1).text(),is("b"));
