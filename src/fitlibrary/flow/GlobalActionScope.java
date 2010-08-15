@@ -169,7 +169,6 @@ public class GlobalActionScope implements RuntimeContextual {
 		return new RandomSelectTraverse(var);
 	}
 	public String to(String s) {
-		System.out.println("GlobalActionScope to: "+s);
 		return s;
 	}
 	public String get(String s) {

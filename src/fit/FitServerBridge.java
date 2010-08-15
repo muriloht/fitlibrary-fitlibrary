@@ -204,7 +204,7 @@ public abstract class FitServerBridge {
 	class TableReportListener implements ReportListener {
 		@Override
 		public void tableFinished(Table table) {
-			print("FitServerBridge table is of type "+table.getClass());
+			print("FitServerBridge table is finished");
 			try {
 				byte[] bytes = readTable(table);
 				if (bytes.length > 0)
