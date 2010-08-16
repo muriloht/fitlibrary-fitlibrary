@@ -8,7 +8,7 @@
 
 |''clear defined actions''|
 
-|''define actions at''|.FitLibrary.SpecifiCations.DoWorkflow.SpecialActions.TestShowAfter.DefinedActions|
+|''define actions at''|.FitLibrary.SpecifiCations.SpecialActions.TestShowAfter.DefinedActions|
 
 |'''show after'''|''with''|//input[@id="userName"]|''enter text''|chad|
 
@@ -41,7 +41,7 @@
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td><i>define actions at</i></td>
-<td><a href="FitLibrary.SpecifiCations.DoWorkflow.SpecialActions.TestShowAfter.DefinedActions">.FitLibrary.SpecifiCations.DoWorkflow.SpecialActions.TestShowAfter.DefinedActions</a></td>
+<td><a href="FitLibrary.SpecifiCations.SpecialActions.TestShowAfter.DefinedActions">.FitLibrary.SpecifiCations.SpecialActions.TestShowAfter.DefinedActions</a></td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

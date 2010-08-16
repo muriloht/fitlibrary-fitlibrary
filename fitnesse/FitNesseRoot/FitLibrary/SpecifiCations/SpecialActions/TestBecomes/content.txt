@@ -1,4 +1,4 @@
-!2 'is' checks an action against a value
+!2 'becomes' checks an action against a value; it's prepared to wait for awhile for it to change, with a timeout specified by ''becomes timeout''
 !**< def
 !define test1 {!|fitlibrary.specify.DoFixtureFlowUnderTest|
 
