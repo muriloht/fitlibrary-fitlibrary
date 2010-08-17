@@ -22,3 +22,4 @@
 
 |^SequenceCallSecond|''If an action, with keywords, doesn't have a corresponding method, we try a sequence call instead (no keywords after the first)''|
 
+|^PassedText|''Special characters, such as \n and tags can be passed through actions''|
