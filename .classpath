@@ -10,6 +10,5 @@
 	<classpathentry kind="lib" path="fitnesse/lib/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="fitnesse/lib/hamcrest-all-1.2.jar"/>
 	<classpathentry kind="lib" path="fitnesse/fitnesse.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/RentEz"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
