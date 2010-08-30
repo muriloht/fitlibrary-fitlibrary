@@ -21,3 +21,8 @@ abc
 def
 
 -!|
+
+!define msg {abc
+def}
+
+|''is several lines without newline''|${msg}|

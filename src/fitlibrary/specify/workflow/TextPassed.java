@@ -10,8 +10,10 @@ public class TextPassed {
 		return s.equals("abc\ndef");
 	}
 	public boolean isSeveralLinesWithNewlines(String s) {
-		System.out.println("String is '"+s+"'");
 		return s.equals("\nabc\ndef\n");
+	}
+	public boolean isSeveralLinesWithoutNewline(String s) {
+		return s.equals("abcdef");
 	}
 	public boolean hasTags(String s) {
 		return s.equals("<a>A<b/></a>");

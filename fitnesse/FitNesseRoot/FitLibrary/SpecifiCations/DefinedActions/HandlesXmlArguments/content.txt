@@ -3,16 +3,21 @@
 
 |''xml2''|@{data}|
 
+|check|data|as|@{data}|
+
 )
 !define body2 (|''xml2''|data|
 
 |''xml3''|@{data}|
+
+|check|data|as|@{data}|
 
 )
 !define body3 (|''xml3''|data|
 
 |'''show'''|''get''|@{data}|
 
+|check|data|as|@{data}|
 )
 **!
 |!-fitlibrary.DefineAction-!|
@@ -24,9 +29,17 @@
 |!-fitlibrary.DefineAction-!|
 |${body3}|
 
-|set|x|to|<a><user password="kiwi">rick</user><a>|
+!|fitlibrary.specify.dynamicVariable.CheckDynamicVariable|
+
+|set|name|to|rick|
+
+|set|x|to|<a><user password="kiwi">@{name}</user><a>|
+
+|check|x|as|@{x}|
 
 |show|get|@{x}|
+
+|show escaped|get|@{x}|
 
 |''xml2''|<a><user password="kiwi">rick</user><a>|
 
