@@ -7,8 +7,6 @@ package fitlibrary.definedAction;
 import java.util.HashSet;
 import java.util.List;
 
-import fit.Fixture;
-import fit.Parse;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;

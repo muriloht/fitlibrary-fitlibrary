@@ -5,23 +5,17 @@
 
 package fitlibrary.batch;
 
-import java.security.InvalidParameterException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
-import org.apache.commons.lang.time.DurationFormatUtils;
-import org.junit.Test;
-
-import quicktime.app.actions.PeriodicAction;
-
-import fitlibrary.batch.FitLibraryRunner.RunParameters;
+import static fitlibrary.batch.FitLibraryRunner.RunParameters.ValidParameters.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
-import static org.hamcrest.MatcherAssert.*;
-import static fitlibrary.batch.FitLibraryRunner.RunParameters.ValidParameters.*;
+
+import java.security.InvalidParameterException;
+
+import org.junit.Test;
+
+import fitlibrary.batch.FitLibraryRunner.RunParameters;
 
 public class TestFitLibraryRunner {
 	@Test

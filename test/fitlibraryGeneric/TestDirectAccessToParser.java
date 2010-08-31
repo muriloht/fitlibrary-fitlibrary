@@ -19,7 +19,6 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.parse.BadNumberException;
 import fitlibrary.parser.ParserTestCase;
 import fitlibrary.parser.lookup.ParserSelectorForType;
-import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibraryGeneric.generic.LocalParameterizedType;
 
