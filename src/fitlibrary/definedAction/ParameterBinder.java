@@ -56,13 +56,9 @@ public class ParameterBinder {
 		}
 	}
 	public void bindUni(List<Object> actualArgs, DynamicVariables dynamicVariables) {
-		if (actualArgs.size() != formalParameters.size())
-			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+actualArgs.size());
-		for (int c = 0; c < formalParameters.size(); c++) {
-			Object object = actualArgs.get(c);
-			if (object instanceof String)
-				object = Fixture.escape(Parse.unescape(object.toString()));
-			dynamicVariables.putParameter(formalParameters.get(c),object);
-		}
-	}
+        if (actualArgs.size() != formalParameters.size())
+              throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+actualArgs.size());
+        for (int c = 0; c < formalParameters.size(); c++) 
+              dynamicVariables.putParameter(formalParameters.get(c),actualArgs.get(c));
+  }
 }
