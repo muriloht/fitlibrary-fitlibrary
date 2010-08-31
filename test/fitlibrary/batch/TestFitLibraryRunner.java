@@ -6,8 +6,15 @@
 package fitlibrary.batch;
 
 import java.security.InvalidParameterException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.junit.Test;
+
+import quicktime.app.actions.PeriodicAction;
 
 import fitlibrary.batch.FitLibraryRunner.RunParameters;
 import static org.hamcrest.CoreMatchers.is;
@@ -144,5 +151,21 @@ public class TestFitLibraryRunner {
 		} catch (InvalidParameterException ipe) {
 			assertThat(ipe.getMessage(), containsString("port"));
 		}
+	}
+	@Test
+	public void formatTimeWhenLessThanOneSecond() {
+		assertThat(FitLibraryRunner.formatTime(678), is("678 milliseconds."));
+	}
+	@Test
+	public void formatTimeWhenLessThanMinute() {
+		assertThat(FitLibraryRunner.formatTime(11678), is("11 seconds (11678 milliseconds)."));
+	}
+	@Test
+	public void formatTimeWhenLessThanHour() {
+		assertThat(FitLibraryRunner.formatTime(101678), is("1 minutes 41 seconds (101678 milliseconds)."));
+	}
+	@Test
+	public void formatTimeWhenGreaterThanHour() {
+		assertThat(FitLibraryRunner.formatTime(3*60*60*1000+2345), is("3 hours 0 minutes 2 seconds (10802345 milliseconds)."));
 	}
 }

@@ -14,10 +14,14 @@ import static fitlibrary.batch.FitLibraryRunner.RunParameters.ValidParameters.SU
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.TimeZone;
 
 import fit.Counts;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
@@ -101,9 +105,25 @@ public class FitLibraryRunner {
 		if (!Arrays.asList(fitNesseDiry.list()).contains("FitNesseRoot"))
 			throw new FitLibraryException("Does not contain FitNesseRoot: "+fitNesseDirectoryPath);
 	}
+	static String formatTime(long elapsedTimeMillis) {
+		if (elapsedTimeMillis < 1000)
+			return elapsedTimeMillis+" milliseconds.";
+		
+		String format = "s' seconds'";
+		
+		if (elapsedTimeMillis >= 60 * 1000) 
+			format = "m 'minutes' "+format;
+		
+		if (elapsedTimeMillis >= 60 * 60 * 1000) 
+			format = "h 'hours' "+format;
+		
+		DateFormat df = new SimpleDateFormat(format);
+		df.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+		return df.format(new Date(elapsedTimeMillis))+" ("+elapsedTimeMillis+" milliseconds).";
+	}
 	private static void report(long start, Counts counts) {
 		System.out.println("Total right="+counts.right+", wrong="+counts.wrong+", ignores="+counts.ignores+", exceptions="+counts.exceptions);
-		System.out.println("Time since start = "+(System.currentTimeMillis()-start)+" milliseconds.");
+		System.out.println("Time since start = "+formatTime(System.currentTimeMillis()-start));
 	}
 	public static RunParameters getRunParameters(String[] args) {
 		return RunParameters.getRunParameters(args);
