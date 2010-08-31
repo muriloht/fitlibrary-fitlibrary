@@ -26,7 +26,7 @@ public class ParallelTestRunner {
 	
 	public ParallelTestRunner(ParallelTestRepository repository, TestEngine testEngine,
 			String outputPath, boolean showPasses, String suiteName) throws IOException{
-		this(repository,testEngine,new ParallelFolderTestResultRepository(new FolderTestResultRepository(outputPath,suiteName,System.err,showPasses),
+		this(repository,testEngine,new ParallelFolderTestResultRepository(new FolderTestResultRepository(outputPath,suiteName,System.out,showPasses),
 				Executors.newSingleThreadExecutor()));
 	}
 	public ParallelTestRunner(ParallelTestRepository repository, TestEngine testRunner,

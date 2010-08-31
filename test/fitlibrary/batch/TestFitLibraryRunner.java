@@ -11,18 +11,23 @@ import org.junit.Test;
 
 import fitlibrary.batch.FitLibraryRunner.RunParameters;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.hamcrest.MatcherAssert.*;
+import static fitlibrary.batch.FitLibraryRunner.RunParameters.ValidParameters.*;
 
 public class TestFitLibraryRunner {
 	@Test
 	public void validRunParametersWithDefaults() {
 		String[] args = {"-suiteName", "Suite.Name"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("."));
-		assertThat(runParameters.get("resultsDiry"),is("runnerResults"));
-		assertThat(runParameters.get("showPasses"),is("false"));
-		assertThat(runParameters.get("port"),is("80"));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("runnerResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("false"));
+		assertThat(runParameters.get(PORT),is("80"));
+		assertThat(runParameters.get(RETRIES),is("0"));
+		
 	}
 	@Test(expected=InvalidParameterException.class)
 	public void missingSuiteName() {
@@ -35,11 +40,11 @@ public class TestFitLibraryRunner {
 				"-suiteName", "Suite.Name",
 				"-fitNesseDiry", "../.."};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("../.."));
-		assertThat(runParameters.get("resultsDiry"),is("runnerResults"));
-		assertThat(runParameters.get("showPasses"),is("false"));
-		assertThat(runParameters.get("port"),is("80"));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("../.."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("runnerResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("false"));
+		assertThat(runParameters.get(PORT),is("80"));
 	}
 	@Test
 	public void resultsDiryIsAlsoGiven() {
@@ -47,11 +52,11 @@ public class TestFitLibraryRunner {
 				"-suiteName", "Suite.Name",
 				"-resultsDiry", "TheResults"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("."));
-		assertThat(runParameters.get("resultsDiry"),is("TheResults"));
-		assertThat(runParameters.get("showPasses"),is("false"));
-		assertThat(runParameters.get("port"),is("80"));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("TheResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("false"));
+		assertThat(runParameters.get(PORT),is("80"));
 	}
 	@Test
 	public void showPassesIsAlsoGiven() {
@@ -59,11 +64,25 @@ public class TestFitLibraryRunner {
 				"-suiteName", "Suite.Name",
 				"-showPasses", "true"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("."));
-		assertThat(runParameters.get("resultsDiry"),is("runnerResults"));
-		assertThat(runParameters.get("showPasses"),is("true"));
-		assertThat(runParameters.getInt("port"),is(80));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("runnerResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("true"));
+		assertThat(runParameters.getInt(PORT),is(80));
+		assertThat(runParameters.getInt(RETRIES),is(0));
+	}
+	@Test
+	public void retriesIsAlsoGiven() {
+		String[] args = {
+				"-suiteName", "Suite.Name",
+				"-retries", "2"};
+		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("runnerResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("false"));
+		assertThat(runParameters.getInt(PORT),is(80));
+		assertThat(runParameters.getInt(RETRIES),is(2));
 	}
 	@Test
 	public void portIsAlsoGiven() {
@@ -71,11 +90,11 @@ public class TestFitLibraryRunner {
 				"-suiteName", "Suite.Name",
 				"-port", "8990"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("."));
-		assertThat(runParameters.get("resultsDiry"),is("runnerResults"));
-		assertThat(runParameters.get("showPasses"),is("false"));
-		assertThat(runParameters.get("port"),is("8990"));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("runnerResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("false"));
+		assertThat(runParameters.get(PORT),is("8990"));
 	}
 	@Test(expected=NumberFormatException.class)
 	public void portIsGivenIncorrectly() {
@@ -83,7 +102,7 @@ public class TestFitLibraryRunner {
 				"-suiteName", "Suite.Name",
 				"-port", "abc"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		runParameters.getInt("port");
+		runParameters.getInt(PORT);
 	}
 	@Test
 	public void allAreGiven() {
@@ -92,12 +111,38 @@ public class TestFitLibraryRunner {
 				"-fitNesseDiry", "../..",
 				"-resultsDiry", "TheResults",
 				"-showPasses", "true",
-				"-port", "8990"};
+				"-port", "8990",
+				"-retries", "11"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
-		assertThat(runParameters.get("suiteName"),is("Suite.Name"));
-		assertThat(runParameters.get("fitNesseDiry"),is("../.."));
-		assertThat(runParameters.get("resultsDiry"),is("TheResults"));
-		assertThat(runParameters.get("showPasses"),is("true"));
-		assertThat(runParameters.get("port"),is("8990"));
+		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
+		assertThat(runParameters.get(FIT_NESSE_DIRY),is("../.."));
+		assertThat(runParameters.get(RESULTS_DIRY),is("TheResults"));
+		assertThat(runParameters.get(SHOW_PASSES),is("true"));
+		assertThat(runParameters.get(PORT),is("8990"));
+		assertThat(runParameters.get(RETRIES),is("11"));
+	}
+	@Test
+	public void unknownParameter() {
+		String[] args = {
+				"-suiteName", "Suite.Name",
+				"-portly", "8990"};
+		try {
+			FitLibraryRunner.getRunParameters(args);
+			fail();
+		} catch (InvalidParameterException ipe) {
+			assertThat(ipe.getMessage(), containsString("portly"));
+		}
+	}
+	@Test
+	public void missingValue() {
+		String[] args = {
+				"-suiteName", "Suite.Name",
+				"-port" };
+		try {
+			FitLibraryRunner.getRunParameters(args);
+			fail();
+		} catch (InvalidParameterException ipe) {
+			assertThat(ipe.getMessage(), containsString("port"));
+		}
 	}
 }
