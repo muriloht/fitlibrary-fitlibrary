@@ -13,21 +13,27 @@ import fitlibrary.table.Table;
 public class FoldingTexts {
 	private static int NEXT_ID = 12345;
 	private static int nextId = NEXT_ID++;
-	private Map<String,String> folds = new HashMap<String, String>();
+	private Map<String,StringBuilder> folds = new HashMap<String, StringBuilder>();
 	
 	public void logAsAfterTable(String title, String message) {
-		String messages = folds.get(title);
-		if (messages == null)
-			folds.put(title,message);
-		else
-			folds.put(title,messages+message);
-	}
+		synchronized(folds) {
+			StringBuilder messages = folds.get(title);
+			if (messages == null)
+				folds.put(title,new StringBuilder(message));
+			else
+				messages.append(message);
+		}
+}
 	public void addAccumulatedFoldingText(Table table) {
-		for (String key: folds.keySet())
-			addAccumulatedFoldingText(key,table);
+		synchronized(folds) {
+			for (String key: folds.keySet())
+				addAccumulatedFoldingText(key,table);
+		}
 	}
 	private void addAccumulatedFoldingText(String title, Table table) {
-		String text = folds.get(title);
+		StringBuilder sb = folds.get(title);
+		String text = sb.toString();
+		folds.put(title, new StringBuilder());
 		if (text == null || text.trim().isEmpty())
 			return;
 		final int id = nextId;
@@ -37,10 +43,14 @@ public class FoldingTexts {
 			"<a href=\"javascript:expandAll();\">Expand All</a> |\n <a href=\"javascript:collapseAll();\">Collapse All</a></div>\n"+
 			"<a href=\"javascript:toggleCollapsable('"+id+"');\">\n"+
 			"<img src=\"/files/images/collapsableClosed.gif\" class=\"left\" id=\"img"+id+"\"/></a>\n"+
-			"&nbsp;<span class=\"meta\">"+title+"</span><div class=\"hidden\" id=\""+id+"\">\n<pre>"+
-			text+
-			"</pre>\n</div></div>\n";
+			"&nbsp;<span class=\"meta\">"+title+"</span><div class=\"hidden\" id=\""+id+"\">\n"+
+			tabled(text,title)+
+			"\n</div></div>\n";
 		table.addFoldingText(foldText);
-		folds.put(title,"");
+	}
+	private String tabled(String text, String title) {
+		if (title.equals("Logging"))
+			return "<table border='1' cellspacing='0'>"+text+"</table>";
+		return "<pre>"+text+"</pre>";
 	}
 }

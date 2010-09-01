@@ -198,6 +198,8 @@ public class GlobalActionScope implements RuntimeContextual {
 			return "is only 1";
 		return "are only "+groups;
 	}
+	//--- LOGGING
+	
 	//--- FILE LOGGING
 	public void recordToFile(String fileName) {
 		runtimeContext.recordToFile(fileName);
