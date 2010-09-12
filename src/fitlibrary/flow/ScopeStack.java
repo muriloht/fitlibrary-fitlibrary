@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.suite.SuiteEvaluator;
@@ -27,6 +30,7 @@ import fitlibrary.utility.option.Some;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class ScopeStack implements IScopeStack {
+	private static Logger logger = FitLibraryLogger.getLogger(ScopeStack.class);
 	private final TypedObject flowEvaluator;
 	protected final Stack<TypedObject> stack = new Stack<TypedObject>();
 	protected Option<TypedObject> suiteOption = None.none();
@@ -47,6 +51,7 @@ public class ScopeStack implements IScopeStack {
 	}
 	// Tracks the first SuiteEvaluator, which is not popped during a storytest
 	public void push(TypedObject typedObject) {
+		logger.trace("Pushed "+typedObject.getSubject());
 		if (typedObject.getSubject() instanceof SuiteEvaluator && suiteOption.isNone())
 			suiteOption = new Some<TypedObject>(typedObject);
 		else if (stack.isEmpty() && selectObjects.isEmpty())
@@ -56,8 +61,11 @@ public class ScopeStack implements IScopeStack {
 	}
 	public List<TypedObject> poppedAtEndOfTable() {
 		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
-		while (!stack.isEmpty())
-			results.add(stack.pop());
+		while (!stack.isEmpty()) {
+			TypedObject top = stack.pop();
+			results.add(top);
+			logger.trace("Popped "+top.getSubject());
+		}
 		return results;
 	}
 	public List<TypedObject> poppedAtEndOfStorytest() {
@@ -67,6 +75,8 @@ public class ScopeStack implements IScopeStack {
 		for (TypedObject typedObject : selectObjects)
 			results.add(typedObject);
 		selectObjects.clear();
+		for (TypedObject to: results)
+			logger.trace("Popped "+to.getSubject());
 		return results;
 	}
 	public TypedObject pop() {
@@ -128,10 +138,12 @@ public class ScopeStack implements IScopeStack {
 	}
 	@Override
 	public void temporarilyAdd(Evaluator evaluator) {
+		logger.trace("Pushed "+evaluator);
 		stack.push(new GenericTypedObject(evaluator));
 	}
 	@Override
 	public void removeTemporary(Evaluator evaluator) {
+		logger.trace("Pop from scope stack: "+evaluator);
 		TypedObject top = stack.pop();
 		if (top.getSubject() != evaluator)
 			throw new RuntimeException("Whoops, temporary was not on the top of the stack!");
@@ -151,6 +163,7 @@ public class ScopeStack implements IScopeStack {
 	}
 	@Override
 	public void addNamedObject(String name, TypedObject typedObject, Row row, TestResults testResults) {
+		logger.trace("Pushed "+typedObject.getSubject());
 		selectObjects.add(typedObject);
 		selectNames.put(name,typedObject);
 	}
@@ -159,6 +172,7 @@ public class ScopeStack implements IScopeStack {
 		TypedObject typedObject = selectNames.get(name);
 		if (typedObject == null)
 			throw new FitLibraryException("Unknown name");
+		logger.trace("Selected "+typedObject.getSubject());
 		selectObjects.remove(typedObject);
 		selectObjects.add(0,typedObject);
 	}

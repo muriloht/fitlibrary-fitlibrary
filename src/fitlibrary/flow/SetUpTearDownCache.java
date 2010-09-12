@@ -7,13 +7,17 @@ package fitlibrary.flow;
 
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.flow.SetUpTearDownReferenceCounter.MethodCaller;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
 import fitlibrary.typed.TypedObject;
 
 public class SetUpTearDownCache implements SetUpTearDown {
+	private static Logger logger = FitLibraryLogger.getLogger(SetUpTearDownCache.class);
 	private final SetUpTearDownReferenceCounter referenceCounter = new SetUpTearDownReferenceCounter();
 
 	public void callSetUpOnSutChain(Object sutInitially, final Row row, final TestResults testResults) {
@@ -49,6 +53,7 @@ public class SetUpTearDownCache implements SetUpTearDown {
 	protected Object callMethod(Object object, String methodName, Row row, TestResults testResults) {
 		try {
 			Method method = object.getClass().getMethod(methodName, new Class[]{});
+			logger.trace("Calling "+methodName+"() on "+object);
 			return method.invoke(object, new Object[]{});
 		} catch (NoSuchMethodException e) {
 			//

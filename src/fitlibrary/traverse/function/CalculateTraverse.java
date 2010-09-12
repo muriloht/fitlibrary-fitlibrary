@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.global.PlugBoard;
@@ -38,7 +39,7 @@ import fitlibrary.utility.ExtendedCamelCase;
  * See the FitLibrary specifications for examples
  */
 public class CalculateTraverse extends FunctionTraverse {
-	private CalledMethodTarget[] targets;
+	private ICalledMethodTarget[] targets;
     private int methods = 0;
     private boolean notesPermitted = false;
     private boolean hasNotes = false;
@@ -107,7 +108,7 @@ public class CalculateTraverse extends FunctionTraverse {
                         String methodName = camelCase(name+argNames);
                         if (arguments.size() > argCount) // Blank separating column is not an arg
                             arguments.remove(arguments.size()-1);
-                        CalledMethodTarget target = PlugBoard.lookupTarget.findMethodOrGetter(methodName, arguments, "TypeOfResult", this);
+                        ICalledMethodTarget target = PlugBoard.lookupTarget.findMethodOrGetter(methodName, arguments, "TypeOfResult", this);
                         if (target.returnsVoid())
                             throw new VoidMethodException(methodName,
                                     "CalculateTraverse");

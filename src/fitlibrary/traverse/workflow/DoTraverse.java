@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+
+import org.apache.log4j.Logger;
 
 import fitlibrary.DefineAction;
 import fitlibrary.closure.ICalledMethodTarget;
@@ -18,6 +18,7 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.graphic.ObjectDotGraphic;
@@ -30,14 +31,13 @@ import fitlibrary.traverse.function.ConstraintTraverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.traverse.workflow.special.PrefixSpecialAction;
-import fitlibrary.traverse.workflow.special.SpecialActionContext;
-import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.xref.CrossReferenceFixture;
 
-public class DoTraverse extends DoTraverseInterpreter implements SpecialActionContext, FlowEvaluator{
+public class DoTraverse extends DoTraverseInterpreter {
+	private static Logger logger = FitLibraryLogger.getLogger(DoTraverse.class);
 	private final PrefixSpecialAction prefixSpecialAction = new PrefixSpecialAction(this);
 	public static final String BECOMES_TIMEOUT = "becomes";
 	// Methods that can be called within DoTraverse.
@@ -60,6 +60,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		super(typedObject);
 	}
 
+	public DoTraverse(Object sut, boolean sequencing) {
+		super(sut,sequencing);
+	}
 	//--- FIXTURE WRAPPERS FOR THIS (and so not available in GlobalScope):
 	/** To allow for a CalculateTraverse to be used for the rest of the table.
      */
@@ -197,7 +200,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		global().logMessage(s);
 	}
 	//--- SHOW
-	@Override
 	public void show(Row row, String text) {
 		global().show(row, text);
 	}
@@ -207,11 +209,13 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	 *  the expected value in the last cell of the row.
 	 */
 	public void is(TestResults testResults, Row row) throws Exception {
+		logger.trace("Calling is()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
+		logger.trace("Calling "+target);
 		target.invokeAndCheckForSpecial(row.fromTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
 	public void equals(TestResults testResults, Row row) throws Exception {
@@ -221,6 +225,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	 *  the expected value in the last cell of the row.
 	 */
 	public void isNot(TestResults testResults, Row row) throws Exception {
+		logger.trace("Calling isNot()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -228,6 +233,7 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
+			logger.trace("Calling "+target);
 			Object result = target.invoke(row.fromTo(1,row.size()-2),testResults,true);
 			target.notResult(expectedCell, result, testResults);
         } catch (IgnoredException e) {
@@ -243,222 +249,19 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
         	expectedCell.exceptionExpected(false, e, testResults);
         }
 	}
-	/** Check that the result of the action in the first part of the row is less than
-	 *  the expected value in the last cell of the row.
-	 */
-	public void lessThan(TestResults testResults, Row row) throws Exception {
-		Comparison compare = new Comparison() {
-			@SuppressWarnings("unchecked")
-			public boolean compares(Comparable actual, Comparable expected) {
-				return actual.compareTo(expected) < 0;
-			}
-		};
-		comparison(testResults, row, compare);
-	}
-	/** Check that the result of the action in the first part of the row is less than
-	 *  or equal to the expected value in the last cell of the row.
-	 */
-	public void lessThanEquals(TestResults testResults, Row row) throws Exception {
-		Comparison compare = new Comparison() {
-			@SuppressWarnings("unchecked")
-			public boolean compares(Comparable actual, Comparable expected) {
-				return actual.compareTo(expected) <= 0;
-			}
-		};
-		comparison(testResults, row, compare);
-	}
-	/** Check that the result of the action in the first part of the row is greater than
-	 *  the expected value in the last cell of the row.
-	 */
-	public void greaterThan(TestResults testResults, Row row) throws Exception {
-		Comparison compare = new Comparison() {
-			@SuppressWarnings("unchecked")
-			public boolean compares(Comparable actual, Comparable expected) {
-				return actual.compareTo(expected) > 0;
-			}
-		};
-		comparison(testResults, row, compare);
-	}
-	/** Check that the result of the action in the first part of the row is greater than
-	 *  or equal to the expected value in the last cell of the row.
-	 */
-	public void greaterThanEquals(TestResults testResults, Row row) throws Exception {
-		Comparison compare = new Comparison() {
-			@SuppressWarnings("unchecked")
-			public boolean compares(Comparable actual, Comparable expected) {
-				return actual.compareTo(expected) >= 0;
-			}
-		};
-		comparison(testResults, row, compare);
-	}
-	@SuppressWarnings("unchecked")
-	private void comparison(TestResults testResults, Row row, Comparison compare) {
-		int less = 3;
-		if (row.size() < less)
-			throw new MissingCellsException("DoTraverseIs");
-		Cell specialCell = operatorCell(row);
-		Cell expectedCell = row.last();
-		try {
-			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Object result = target.invoke(row.fromTo(1,row.size()-2),testResults,true);
-			if (result instanceof Comparable) {
-				target.compare(expectedCell, (Comparable)result, testResults, compare);
-			} else
-				throw new FitLibraryException("Unable to compare, as not Comparable");
-        } catch (IgnoredException e) {
-            //
-        } catch (InvocationTargetException e) {
-        	Throwable embedded = e.getTargetException();
-        	if (embedded instanceof FitLibraryShowException) {
-        		specialCell.error(testResults);
-        		row.error(testResults, e);
-        	} else
-        		expectedCell.exceptionExpected(false, e, testResults);
-        } catch (Exception e) {
-        	expectedCell.exceptionExpected(false, e, testResults);
-        }
-	}
-	public interface Comparison {
-		@SuppressWarnings("unchecked")
-		boolean compares(Comparable actual, Comparable expected);
-	}
 	private Cell operatorCell(Row row) {
 		return row.at(row.size()-2);
-	}
-	/** Check that the result of the action in the first part of the row, as a string, matches
-	 *  the regular expression in the last cell of the row.
-	 */
-	public void matches(TestResults testResults, Row row) throws Exception {
-		try
-		{
-			int less = 3;
-			if (row.size() < less)
-				throw new MissingCellsException("DoTraverseMatches");
-			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-			boolean matches = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches();
-			if (matches)
-				expectedCell.pass(testResults);
-			else
-				expectedCell.fail(testResults, result,this);
-		} catch (PatternSyntaxException e) {
-			throw new FitLibraryException(e.getMessage());
-		}
-	}
-	/** Check that the result of the action in the first part of the row, as a string, eventually matches
-	 *  the regular expression in the last cell of the row.
-	 */
-	public void eventuallyMatches(TestResults testResults, Row row) throws Exception {
-		int less = 3;
-		if (row.size() < less)
-			throw new MissingCellsException("eventuallyMatches");
-		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-		Cell expectedCell = row.last();
-		Pattern compile = Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL);
-		
-		String result = "";
-		long start = System.currentTimeMillis();
-		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
-		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-			boolean matches = compile.matcher(result).matches();
-			if (matches) {
-				expectedCell.pass(testResults);
-				return;
-			}
-			try {
-				Thread.sleep(Math.max(500, Math.min(100,becomesTimeout/10)));
-			} catch (Exception e) {
-				//
-			}
-		}
-		expectedCell.fail(testResults, result,this);
-	}
-	/** Check that the result of the action in the first part of the row, as a string, does not match
-	 *  the regular expression in the last cell of the row.
-	 */
-	public void doesNotMatch(TestResults testResults, Row row) throws Exception {
-		try
-		{
-			int less = 3;
-			if (row.size() < less)
-				throw new MissingCellsException("DoTraverseMatches");
-			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			Cell expectedCell = row.last();
-			String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-			if (!Pattern.compile(".*"+expectedCell.text(this)+".*",Pattern.DOTALL).matcher(result).matches())
-				expectedCell.pass(testResults);
-			else if (expectedCell.text(this).equals(result))
-				expectedCell.fail(testResults);
-			else
-				expectedCell.fail(testResults,result,this);
-		} catch (PatternSyntaxException e) {
-			throw new FitLibraryException(e.getMessage());
-		}
-	}
-	/** Check that the result of the action in the first part of the row, as a string, contains
-	 *  the string in the last cell of the row.
-	 */
-	public void contains(TestResults testResults, Row row) throws Exception {
-		int less = 3;
-		if (row.size() < less)
-			throw new MissingCellsException("contains");
-		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-		boolean matches = result.contains(expectedCell.text(this));
-		if (matches)
-			expectedCell.pass(testResults);
-		else
-			expectedCell.failWithStringEquals(testResults, result,this);
-	}
-	/** Check that the result of the action in the first part of the row, as a string, contains
-	 *  the string in the last cell of the row.
-	 */
-	public void eventuallyContains(TestResults testResults, Row row) throws Exception {
-		int less = 3;
-		if (row.size() < less)
-			throw new MissingCellsException("contains");
-		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-		Cell expectedCell = row.last();
-		String result = "";
-		long start = System.currentTimeMillis();
-		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
-		while (System.currentTimeMillis() - start < becomesTimeout ) {
-			result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-			boolean matches = result.contains(expectedCell.text(this));
-			if (matches) {
-				expectedCell.pass(testResults);
-				return;
-			}
-		}
-		expectedCell.failWithStringEquals(testResults,result,this);
-	}
-	/** Check that the result of the action in the first part of the row, as a string, contains
-	 *  the string in the last cell of the row.
-	 */
-	public void doesNotContain(TestResults testResults, Row row) throws Exception {
-		int less = 3;
-		if (row.size() < less)
-			throw new MissingCellsException("doesNoContain");
-		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-		Cell expectedCell = row.last();
-		String result = target.invokeForSpecial(row.fromTo(1,row.size()-2),testResults,false,operatorCell(row)).toString();
-		boolean matches = result.contains(expectedCell.text(this));
-		if (!matches)
-			expectedCell.pass(testResults);
-		else
-			expectedCell.fail(testResults, result,this);
 	}
 	/** Check that the result of the action in the first part of the row, as a string becomes equals
 	 *  to the given value within the timeout period.
 	 */
 	public void becomes(TestResults testResults, Row row) throws Exception {
+		logger.trace("Calling becomes()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
+		logger.trace("Calling "+target);
 		Cell expectedCell = row.last();
 		Row actionPartOfRow = row.fromTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
@@ -473,6 +276,9 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 				//
 			}
 		}
+		long delay = System.currentTimeMillis() - start;
+		if (delay > 0)
+			logger.trace("becomes delay of "+delay);
 		target.invokeAndCheckForSpecial(actionPartOfRow,expectedCell,testResults,row,operatorCell(row));
 	}
 
@@ -482,45 +288,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 	 */
 	public TwoStageSpecial check(Row row) throws Exception {
 		return prefixSpecialAction.check(row);
-	}
-	public TwoStageSpecial reject(Row row) throws Exception {
-		return not(row);
-	}
-    /** Same as reject()
-     * @param suiteTestResults 
-     */
-	public TwoStageSpecial not(Row row) throws Exception {
-		return prefixSpecialAction.not(row,NotSyle.PASSES_ON_EXCEPION);
-	}
-	public TwoStageSpecial notTrue(Row row) throws Exception {
-		return prefixSpecialAction.not(row,NotSyle.ERROR_ON_EXCEPION);
-	}
-	/** Add a cell containing the result of the action in the rest of the row.
-     *  HTML is not altered, so it can be viewed directly.
-     */
-	public TwoStageSpecial show(Row row) throws Exception {
-		return prefixSpecialAction.show(row);
-	}
-	/** Adds the result of the action in the rest of the row to a folding area after the table.
-     */
-	public TwoStageSpecial showAfter(Row row) throws Exception {
-		return prefixSpecialAction.showAfter(row);
-	}
-	/** Adds the result of the action in the rest of the row to a folding area after the table.
-     */
-	public TwoStageSpecial showAfterAs(Row row) throws Exception {
-		return prefixSpecialAction.showAfterAs(row);
-	}
-	/** Add a cell containing the result of the action in the rest of the row.
-     *  HTML is escaped so that the underlying layout text can be viewed.
-     */
-	public TwoStageSpecial showEscaped(Row row) throws Exception {
-		return prefixSpecialAction.showEscaped(row);
-	}
-	/** Log result to a file
-	 */
-	public TwoStageSpecial log(Row row) throws Exception {
-		return prefixSpecialAction.log(row);
 	}
 	/** Set the dynamic variable name to the result of the action, or to the string if there's no action.
 	 */
@@ -543,15 +310,6 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		    row.addCell(adapter.show(new ObjectDotGraphic(result)));
 		} catch (IgnoredException e) { // No result, so ignore
 		}
-	}
-	/** Checks that the action in the rest of the row succeeds.
-     *  o If a boolean is returned, it must be true.
-     *  o For other result types, no exception should be thrown.
-     *  It's no longer needed, because the same result can now be achieved with a boolean method.
-	 * @param suiteTestResults 
-     */
-	public TwoStageSpecial ensure(Row row) throws Exception {
-		return prefixSpecialAction.ensure(row);
 	}
 
 	/** The rest of the row is ignored. 
@@ -617,6 +375,8 @@ public class DoTraverse extends DoTraverseInterpreter implements SpecialActionCo
 		if (row.size() < less)
 			throw new MissingCellsException("addGlobal");
 		TypedObject typedObject = interpretRow(row.fromAt(1), testResults);
+		if (typedObject == null || typedObject.getSubject() == null)
+			return;
 		if (typedObject.classType() == DoTraverse.class)
 			typedObject = typedObject.getTypedSystemUnderTest();
 		typedObject.injectRuntime(getRuntimeContext());

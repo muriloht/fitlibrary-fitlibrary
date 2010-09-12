@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import fit.Fixture;
+import fitlibrary.suite.BatchFitLibrary;
 import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.HtmlUtils;
 
@@ -19,11 +20,11 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
 	}
 	public String exceptionMessage(Throwable throwable) {
 		Throwable exception = unwrapThrowable(throwable);
-        if (exception instanceof IgnoredException)
+        if (!BatchFitLibrary.SHOW_EXCEPTION_STACKS && exception instanceof IgnoredException)
             return "";
-        if (exception instanceof FitLibraryExceptionInHtml)
+        if (!BatchFitLibrary.SHOW_EXCEPTION_STACKS && exception instanceof FitLibraryExceptionInHtml)
         	return "<hr/>" + Fixture.label(exception.getMessage());
-        if (exception instanceof FitLibraryException)
+        if (!BatchFitLibrary.SHOW_EXCEPTION_STACKS && exception instanceof FitLibraryException)
             return "<hr/>" + Fixture.label(HtmlUtils.escapeHtml(exception.getMessage()));
         final StringWriter buf = new StringWriter();
         exception.printStackTrace(new PrintWriter(buf));
@@ -32,5 +33,9 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
     }
 	public Throwable unwrapThrowable(Throwable throwable) {
 		return ExceptionHandler.unwrap(throwable);
+	}
+	@Override
+	public boolean unwrappedIsShow(Exception e) {
+		return unwrapThrowable(e) instanceof FitLibraryShowException;
 	}
 }

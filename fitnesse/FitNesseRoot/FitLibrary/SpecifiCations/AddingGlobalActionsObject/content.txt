@@ -11,10 +11,10 @@ Such ''global objects'' are best added within the ''!-SuiteSetUp-!'' page so tha
 
 For example:
 
-|''add global''|!-fitlibrary.tutorial.Global-!|
+|''add global''|!-fitlibrary.specify.global.ExtraGlobal-!|
 
 An object of the class !-fitlibrary.tutorial.Global-! is added as a global object. This includes a method ''withACalculator()'', which returns an object, so that a storytest can begin with:
 
-|''with a calculator''|
+|''new global action''|
 
-For an example, see .FitLibrary.BeginningTutorial.CalculatorBusinessProcessExample
+For an example of using this with a suite, see .FitLibrary.BeginningTutorial.CalculatorBusinessProcessExample. You will need to runt the test to see it all.

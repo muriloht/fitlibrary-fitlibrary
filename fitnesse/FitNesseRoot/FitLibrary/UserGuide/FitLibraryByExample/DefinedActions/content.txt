@@ -71,8 +71,14 @@ By including the following table in a storytest, the subsequent uses of ''define
 #
 !2 3. Class-Based Defined Actions
 #
+These are an experimental feature that will probably be dropped. An alternative and more powerful approach is to use dynamic variables within the keywords of actions.
+
 See ^ClassBasedDefinedActions
 #
 !2 4. Inline
 #
 It's not recommended, but it's possible to specify ''defined actions'' [[inline, within a storytest][^InLine]].
+#
+!2 5. Specifications
+#
+See .FitLibrary.SpecifiCations.DefinedActions

@@ -12,6 +12,7 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Row;
 import fitlibrary.table.Tables;
+import fitlibrary.utility.CollectionUtility;
 
 public class ParameterBinder {
 	private final List<String> formalParameters;
@@ -58,5 +59,8 @@ public class ParameterBinder {
 			throw new FitLibraryException("Expected "+formalParameters.size()+" parameters but there were "+actualArgs.size());
 		for (int c = 0; c < formalParameters.size(); c++)
 			dynamicVariables.putParameter(formalParameters.get(c),actualArgs.get(c));
+	}
+	public String getParameterList() {
+		return "("+CollectionUtility.mkString(",",formalParameters)+")";
 	}
 }

@@ -8,10 +8,13 @@ package fitlibrary.traverse.function;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.closure.CalledMethodTarget;
+import org.apache.log4j.Logger;
+
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -23,10 +26,11 @@ import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
 public class RuleTable extends Traverse {
+	static Logger logger = FitLibraryLogger.getLogger(RuleTable.class);
 	private List<ColumnTarget> columnTargets = new ArrayList<ColumnTarget>();
 	private boolean hasErrors = false;
-	private Option<CalledMethodTarget> executeMethod = None.none();
-	private Option<CalledMethodTarget> resetMethod =  None.none();
+	private Option<ICalledMethodTarget> executeMethod = None.none();
+	private Option<ICalledMethodTarget> resetMethod =  None.none();
 
 	public RuleTable(Object sut) {
 		super(sut);
@@ -34,6 +38,7 @@ public class RuleTable extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		try {
+			logger.trace("Interpreting table");
 			basicCheck(table, testResults);
 			header(table, testResults);
 			optionalfunctions();
@@ -60,7 +65,7 @@ public class RuleTable extends Traverse {
 				if (input)
 					columnTargets.add(new InputColumnTarget(PlugBoard.lookupTarget.findSetterOnSut(fn, this)));
 				else {
-					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(fn,this,"Rule");
+					ICalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(fn,this,"Rule");
 					if (target.returnsVoid())
 						throw new VoidMethodException(fn,"RuleTable");
 					columnTargets.add(new OutputColumnTarget(target));
@@ -75,8 +80,10 @@ public class RuleTable extends Traverse {
 		for (int r = 2; r < table.size(); r++) {
 			Row row = table.at(r);
 			try {
-				if (resetMethod.isSome())
+				if (resetMethod.isSome()) {
+					logger.trace("reset()");
 					resetMethod.get().invoke();
+				}
 				row(testResults, row);
 			} catch (Exception e) {
 				row.error(testResults, e);
@@ -90,6 +97,7 @@ public class RuleTable extends Traverse {
 			try {
 				ColumnTarget columnTarget = columnTargets.get(i);
 				if (!haveCalledExecuteForThisRow && columnTarget.isOutput()) {
+					logger.trace("execute()");
 					executeMethod.get().invoke();
 					haveCalledExecuteForThisRow = true;
 				}
@@ -112,27 +120,27 @@ public class RuleTable extends Traverse {
 	}
 	private void optionalfunctions() {
 		try {
-			resetMethod = new Some<CalledMethodTarget>(PlugBoard.lookupTarget.findTheMethodMapped("reset", 0, this));
+			resetMethod = new Some<ICalledMethodTarget>(PlugBoard.lookupTarget.findTheMethodMapped("reset", 0, this));
 		} catch (Exception e) {
 			// Do nothing, it's optional
 		}
 		try {
-			executeMethod = new Some<CalledMethodTarget>(PlugBoard.lookupTarget.findTheMethodMapped("execute", 0, this));
+			executeMethod = new Some<ICalledMethodTarget>(PlugBoard.lookupTarget.findTheMethodMapped("execute", 0, this));
 		} catch (Exception e) {
 			// Do nothing, it's optional
 		}
 	}
 	static abstract class ColumnTarget {
-		protected CalledMethodTarget target;
+		protected ICalledMethodTarget target;
 
-		public ColumnTarget(CalledMethodTarget target) {
+		public ColumnTarget(ICalledMethodTarget target) {
 			this.target = target;
 		}
 		public abstract boolean isOutput();
 		public abstract void act(Cell cell, TestResults testResults) throws Exception;
 	}
 	static class InputColumnTarget extends ColumnTarget {
-		public InputColumnTarget(CalledMethodTarget target) {
+		public InputColumnTarget(ICalledMethodTarget target) {
 			super(target);
 		}
 		@Override
@@ -145,7 +153,7 @@ public class RuleTable extends Traverse {
 		}
 	}
 	static class OutputColumnTarget extends ColumnTarget{
-		public OutputColumnTarget(CalledMethodTarget target) {
+		public OutputColumnTarget(ICalledMethodTarget target) {
 			super(target);
 		}
 		@Override

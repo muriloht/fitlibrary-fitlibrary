@@ -4,7 +4,7 @@
 */
 package fitlibrary.object;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
@@ -47,7 +47,7 @@ public class DomainObjectCheckTraverse extends Traverse {
 				checkClass(testResults, cell, row.at(i+1));
 			} else {
 				try {
-					CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
+					ICalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
 					target.invokeAndCheck(TableFactory.row(),row.at(i+1),testResults,false);
 				} catch (Exception e) {
 					cell.error(testResults,e);

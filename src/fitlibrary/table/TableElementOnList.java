@@ -83,7 +83,7 @@ public abstract class TableElementOnList<From extends TableElement, To extends T
 		return trailer;
 	}
 	protected void addToTrailer(String s) {
-		trailer += s;
+		trailer = s+trailer;
 	}
 	protected void addToStartOfLeader(String s) {
 		leader = s + leader;

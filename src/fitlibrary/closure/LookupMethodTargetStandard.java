@@ -5,14 +5,23 @@
 package fitlibrary.closure;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.flow.IScope;
+import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.special.PositionedTarget;
+import fitlibrary.special.PositionedTargetFactory;
+import fitlibrary.special.PositionedTargetWasFound;
+import fitlibrary.special.UnfoundPositionedTarget;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -24,6 +33,8 @@ import fitlibrary.utility.option.Option;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class LookupMethodTargetStandard implements LookupMethodTarget {
+	@SuppressWarnings("unused")
+	private static Logger logger = FitLibraryLogger.getLogger(LookupMethodTargetStandard.class);
 	public void mustBeThreadSafe() {
 		//
 	}
@@ -46,7 +57,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		return new CalledMethodTarget(findEntityMethod,evaluator);
 	}
 	public Closure findFixturingMethod(Evaluator evaluator, String name, Class<?>[] argTypes) {
-		IScope scope = scopeOf(evaluator);
+		IScope scope = evaluator.getScope();
 		for (TypedObject typedObject : scope.objectsForLookup()) {
 			Closure target = typedObject.findPublicMethodClosureForTypedObject(name,argTypes);
 			if (target != null)
@@ -54,17 +65,15 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		}
 		return null;
 	}
-	public CalledMethodTarget findMethodInEverySecondCell(Evaluator evaluator, Row row, int allArgs) throws Exception {
-		int parms = allArgs / 2 + 1;
-		int argCount = (allArgs + 1) / 2;
-		String name = row.text(0,evaluator);
-		for (int i = 1; i < parms; i++)
-			name += " "+row.text(i*2,evaluator);
-		CalledMethodTarget target = findTheMethodMapped(name,argCount,evaluator);
-		target.setEverySecond(true);
+	@Override
+	public ICalledMethodTarget findMethodByArity(Row row, int from, int upTo,
+			boolean doStyle, Evaluator evaluator) throws Exception {
+		ActionSignature actionSignature = ActionSignature.create(row, from, upTo, doStyle, evaluator);
+		ICalledMethodTarget target = findTheMethodMapped(actionSignature.name,actionSignature.arity,evaluator);
+		target.setEverySecond(doStyle);
 		return target;
 	}
-	public CalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
+	public ICalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
 		return findMethodOrGetter(camel(name), unknownParameterNames(argCount),"Type",evaluator);
 	}
 	private static List<String> unknownParameterNames(int argCount) {
@@ -73,11 +82,11 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			methodArgs.add("arg"+(i+1));
 		return methodArgs;
 	}
-	public CalledMethodTarget findMethodOrGetter(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
+	public ICalledMethodTarget findMethodOrGetter(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
 		int argCount = methodArgs.size();
-		IScope scope = scopeOf(evaluator);
+		IScope scope = evaluator.getScope();
 		for (TypedObject typedObject : scope.objectsForLookup()) {
-			Option<CalledMethodTarget> target =
+			Option<ICalledMethodTarget> target =
 				typedObject.new_findSpecificMethod(name,argCount,evaluator);
 			if (target.isSome())
 				return target.get();
@@ -95,34 +104,29 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
 		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
-	private IScope scopeOf(Evaluator evaluator) {
-		if (evaluator.getRuntimeContext().hasScope())
-			return evaluator.getRuntimeContext().getScope();
-		throw new RuntimeException("No scope in runtime");
-	}
-	public CalledMethodTarget findMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) {
+	public ICalledMethodTarget findMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) {
 		int argCount = methodArgs.size();
-		IScope scope = scopeOf(evaluator);
+		IScope scope = evaluator.getScope();
 		for (TypedObject typedObject : scope.objectsForLookup()) {
-			Option<CalledMethodTarget> target = typedObject.new_findSpecificMethod(name,argCount,evaluator);
+			Option<ICalledMethodTarget> target = typedObject.new_findSpecificMethod(name,argCount,evaluator);
 			if (target.isSome())
 				return target.get();
 		}
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
 		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
-	public CalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
+	public ICalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
 		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName),"void");
 	}
-	public CalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType) {
+	public ICalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType) {
 		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"",returnType);
 	}
-	private CalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg, String returnType) {
+	private ICalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg, String returnType) {
 		TypedObject typedObject = evaluator.getTypedSystemUnderTest();
 		while (true) {
 			if (typedObject.isNull())
 				throw new NoSystemUnderTestException();
-			Option<CalledMethodTarget> targetOption = typedObject.new_findSpecificMethod(methodName,argCount,evaluator);
+			Option<ICalledMethodTarget> targetOption = typedObject.new_findSpecificMethod(methodName,argCount,evaluator);
 			if (targetOption.isSome())
 				return targetOption.get();
 			if (typedObject instanceof Evaluator) {
@@ -133,10 +137,10 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			}
 			else break;
 		}
-		throw new MissingMethodException(signatures("public "+returnType+" "+methodName+"("+arg+") { }"),scopeOf(evaluator).possibleClasses());
+		throw new MissingMethodException(signatures("public "+returnType+" "+methodName+"("+arg+") { }"),evaluator.getScope().possibleClasses());
 	}
-	public CalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, String propertyName, boolean considerContext) {
-		CalledMethodTarget target;
+	public ICalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, String propertyName, boolean considerContext) {
+		ICalledMethodTarget target;
 		if (considerContext)
 			target = searchForMethodTargetUpOuterContext(propertyName,evaluator);
 		else
@@ -145,7 +149,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			return target;
 		List<Class<?>> possibleClasses = new ArrayList<Class<?>>();
 		if (considerContext)
-			possibleClasses = scopeOf(evaluator).possibleClasses();
+			possibleClasses = evaluator.getScope().possibleClasses();
 		else
 			possibleClasses.add(typedObject.classType());
 		throw new MissingMethodException(signatures("public ResultType "+ camel("get "+propertyName)+"() { }"),possibleClasses);
@@ -153,24 +157,24 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	private List<String> signatures(String... signature) {
 		return Arrays.asList(signature);
 	}
-    private CalledMethodTarget searchForMethodTargetUpOuterContext(String name, Evaluator evaluator) {
-		IScope scope = scopeOf(evaluator);
+    private ICalledMethodTarget searchForMethodTargetUpOuterContext(String name, Evaluator evaluator) {
+		IScope scope = evaluator.getScope();
 		for (TypedObject typedObject : scope.objectsForLookup()) {
-			CalledMethodTarget target = typedObject.new_optionallyFindGetterOnTypedObject(name,evaluator);
+			ICalledMethodTarget target = typedObject.new_optionallyFindGetterOnTypedObject(name,evaluator);
 			if (target != null)
 				return target;
 		}
 		return null;
     }
-	public List<Class<?>> possibleClasses(Evaluator evaluator) {
-		return scopeOf(evaluator).possibleClasses();
+	public List<Class<?>> possibleClasses(IScope scope) {
+		return scope.possibleClasses();
 	}
 	public Class<?> findClassFromFactoryMethod(Evaluator evaluator, Class<?> type, String typeName) throws IllegalAccessException, InvocationTargetException {
 		String methodName = "concreteClassOf"+ClassUtility.simpleClassName(type);
 		Closure method = findFixturingMethod(evaluator, methodName, new Class[] { String.class});
 		if (method == null) {
 			throw new MissingMethodException(signatures("public Class "+methodName+"(String typeName) { }"),
-					scopeOf(evaluator).possibleClasses());
+					evaluator.getScope().possibleClasses());
 		}
 		return (Class<?>)method.invoke(new Object[]{ typeName });
 	}
@@ -187,5 +191,19 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			if (results.size() > size)
 				return;
 		}
+	}
+	@Override
+	public PositionedTarget findActionSpecialMethod(final Evaluator evaluator, final String[] cells, final boolean sequencing) {
+		for (final TypedObject typedObject : evaluator.getScope().objectsForLookup()) {
+			PositionedTarget positioned = typedObject.findActionSpecialMethod(cells,new PositionedTargetFactory(){
+				@Override
+				public PositionedTarget create(Method method, int from, int upTo) {
+					return new PositionedTargetWasFound(evaluator,cells,typedObject,method,from,upTo,sequencing,PlugBoard.lookupTarget);
+				}
+			});
+			if (positioned.partiallyValid())
+				return positioned;
+		}
+		return new UnfoundPositionedTarget();
 	}
 }

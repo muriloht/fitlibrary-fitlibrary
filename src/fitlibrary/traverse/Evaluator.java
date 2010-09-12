@@ -5,6 +5,7 @@
 package fitlibrary.traverse;
 
 import fitlibrary.dynamicVariable.VariableResolver;
+import fitlibrary.flow.IScope;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
@@ -15,4 +16,5 @@ public interface Evaluator extends RuntimeContextual, VariableResolver {
 	TypedObject getTypedSystemUnderTest();
     RuntimeContextInternal getRuntimeContext();
 	void setDynamicVariable(String key, Object value);
+	IScope getScope();
 }

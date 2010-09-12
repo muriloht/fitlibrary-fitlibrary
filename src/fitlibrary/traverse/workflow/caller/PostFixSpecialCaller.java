@@ -4,36 +4,36 @@
 */
 package fitlibrary.traverse.workflow.caller;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
+import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
-import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PostFixSpecialCaller extends DoCaller {
 	private String methodName;
-	private CalledMethodTarget specialMethod;
+	private ICalledMethodTarget specialMethod;
 
-	public PostFixSpecialCaller(Row row, DoTraverseInterpreter interpreter) {
+	public PostFixSpecialCaller(Row row, Evaluator evaluator, boolean sequencing) {
 		// Warning: Hack to fix conflict between "set" and "=", by giving "set" precedence.
-		String firstCell = row.text(0,interpreter);
-		if (row.size() == 4 && "=".equals(row.text(2,interpreter)) && 
+		String firstCell = row.text(0,evaluator);
+		if (row.size() == 4 && "=".equals(row.text(2,evaluator)) && 
 		    ("set".equals(firstCell) || "setSymbolNamed".equals(ExtendedCamelCase.camel(firstCell))))
 				return;
 		if (row.size() >= 2) {
-			methodName = row.text(row.size()-2,interpreter);
-			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(interpreter, methodName);
+			methodName = row.text(row.size()-2,evaluator);
+			specialMethod = PlugBoard.lookupTarget.findPostfixSpecialMethod(evaluator, methodName);
 			if (specialMethod != null)
-				findMethodForInnerAction(row, interpreter);
+				findMethodForInnerAction(row, evaluator,sequencing);
 		}
 	}
-	private void findMethodForInnerAction(Row row, DoTraverseInterpreter interpreter) {
+	private void findMethodForInnerAction(Row row, Evaluator evaluator, boolean sequencing) {
 		try {
-			interpreter.findMethodFromRow222(row,0,3);
+			PlugBoard.lookupTarget.findMethodByArity(row, 0, row.size() - 2, !sequencing, evaluator);
 		} catch (Exception e) {
 			setProblem(e);
 		}

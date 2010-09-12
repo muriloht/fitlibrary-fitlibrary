@@ -6,42 +6,52 @@
 package fitlibrary.traverse.workflow.special;
 
 import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
+import fitlibrary.exception.IgnoredException;
+import fitlibrary.flow.GlobalActionScope;
+import fitlibrary.special.DoAction;
+import fitlibrary.specify.Point;
 
 @RunWith(JMock.class)
-public class TestShow extends SpecialActionTest {
+public class TestShow {
+	Mockery context = new Mockery();
+	DoAction action = context.mock(DoAction.class);
+	GlobalActionScope globalActionScope = new GlobalActionScope();
+	
 	@Test
 	public void textIsShown() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
-			allowing(initialRow).fromAt(2);will(returnValue(subRow));
-			allowing(initialRow).at(0);will(returnValue(firstCell));
-			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
-			one(target).getResultString("result");will(returnValue("Result"));
-			one(actionContext).show(initialRow,"Result");
+			one(action).run(); will(returnValue("nz"));
+			one(action).showResult("nz");
 		}});
-		TwoStageSpecial lazySpecial = special.show(initialRow);
-		lazySpecial.run(testResults);
+		globalActionScope.show(action);
 	}
-	@Test(expected=RuntimeException.class)
-	public void hasMissingMethod() throws Exception {
+	@Test
+	public void objectIsShown() throws Exception {
+		final Point point = new Point();
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(throwException(new RuntimeException()));
+			one(action).run();
+			will(returnValue(point));
+			one(action).showResult(point);
 		}});
-		special.show(initialRow);
+		globalActionScope.show(action);
 	}
-	@Test(expected=MissingCellsException.class)
-	public void rowIsTooSmall() throws Exception {
+	@Test
+	public void nothingShownWithNullResult() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(1));
+			one(action).run(); will(returnValue(null));
 		}});
-		special.show(initialRow);
+		globalActionScope.show(action);
+	}
+	@Test(expected=Exception.class)
+	public void exceptionIsPassedOn() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).run(); will(throwException(new IgnoredException()));
+		}});
+		globalActionScope.show(action);
 	}
 }

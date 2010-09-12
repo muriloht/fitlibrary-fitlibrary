@@ -198,6 +198,9 @@ public abstract class Traverse implements Evaluator, ShowAfter {
     		throw new NullPointerException("Runtime has not been injected into "+this+". See .FitLibrary.AdvancedTutorial.RuntimeInjection.");
 		return runtimeContext;
 	}
+    public IScope getScope() {
+    	return getRuntimeContext().getScope();
+    }
     public void setRuntimeContext(RuntimeContextInternal runtimeContext) {
     	this.runtimeContext = runtimeContext;
     	setRuntimeContextDownSutChain(this,runtimeContext);
@@ -225,6 +228,9 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 		Closure startCreatingMethod = PlugBoard.lookupTarget.findFixturingMethod(this, creatingMethodName, (new Class[]{ Object.class}));
         if (startCreatingMethod != null)
         	startCreatingMethod.invoke(new Object[] { element });
+	}
+	public void show(String s) {
+		runtimeContext.show(s);
 	}
 	public void showAfterTable(String s) {
 		showAsAfterTable("Logs",s);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import fit.exception.FitFailureException;
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.exception.table.MissingCellsException;
@@ -86,7 +86,7 @@ public class ReferenceTraverse extends Traverse {
     private Object getPropertyOfObject(Cell cell, Object object, boolean last, TestResults testResults) {
         try {
             String name = cell.text(this);
-            CalledMethodTarget target = getGetterTarget(cell,name,object,last,testResults);
+            ICalledMethodTarget target = getGetterTarget(cell,name,object,last,testResults);
             return target.invoke(new Object[] {});
         } catch (IgnoredException e) {
             throw e;
@@ -115,7 +115,7 @@ public class ReferenceTraverse extends Traverse {
             throw new FitFailureException("Reference not defined: '"+cell.textLower(this)+"'");
         return list.get(index);
     }
-    private CalledMethodTarget getGetterTarget(Cell cell, String name, Object sut, boolean considerContext, TestResults testResults) {
+    private ICalledMethodTarget getGetterTarget(Cell cell, String name, Object sut, boolean considerContext, TestResults testResults) {
     	try {
     		return PlugBoard.lookupTarget.findGetterUpContextsToo(asTypedObject(sut), this, name, considerContext);
     	} catch (MissingMethodException ex) {

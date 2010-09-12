@@ -10,14 +10,26 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import fit.Fixture;
 import fitlibrary.DefineAction;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.FitLibraryShowException;
+import fitlibrary.exception.IgnoredException;
+import fitlibrary.exception.NotRejectedException;
+import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.log.ConfigureLogger;
+import fitlibrary.log.FitLibraryLogger;
+import fitlibrary.polling.Eventually;
+import fitlibrary.polling.PassFail;
+import fitlibrary.polling.PollForPass;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.special.DoAction;
 import fitlibrary.suite.SuiteFixture;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.CommentTraverse;
@@ -30,10 +42,16 @@ import fitlibrary.utility.FileHandler;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class GlobalActionScope implements RuntimeContextual {
+	@SuppressWarnings("unused")
+	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
 	public static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
 	private RuntimeContextInternal runtimeContext;
 
+	@Override
+	public void setRuntimeContext(RuntimeContextInternal runtime) {
+		this.runtimeContext = runtime;
+	}
 	//--- BECOMES, ETC TIMEOUTS:
 	public void becomesTimeout(int timeout) {
 		putTimeout(BECOMES_TIMEOUT,timeout);
@@ -199,7 +217,15 @@ public class GlobalActionScope implements RuntimeContextual {
 		return "are only "+groups;
 	}
 	//--- LOGGING
-	
+	public ConfigureLogger withLog4j() {
+		return runtimeContext.getConfigureLog4j().withNormalLog4j();
+	}
+	public ConfigureLogger withFitLibraryLogger() {
+		return runtimeContext.getConfigureLog4j().withFitLibraryLogger();
+	}
+	public ConfigureLogger withFixturingLogger() {
+		return runtimeContext.getConfigureLog4j().withFixturingLogger();
+	}	
 	//--- FILE LOGGING
 	public void recordToFile(String fileName) {
 		runtimeContext.recordToFile(fileName);
@@ -228,10 +254,6 @@ public class GlobalActionScope implements RuntimeContextual {
 		runtimeContext.showAsAfterTable(title,s);
 	}
 	@Override
-	public void setRuntimeContext(RuntimeContextInternal runtime) {
-		this.runtimeContext = runtime;
-	}
-	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}
@@ -239,4 +261,285 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void select(String name) {
 		runtimeContext.getTableEvaluator().select(name);
 	}
+	
+	//-------------------------------------- SPECIALS -----------------------------------------
+	/** Check that the result of the action in the first part of the row is less than
+	 *  the expected value in the last cell of the row.
+	 */
+	public void lessThan(DoAction action, Object expect) throws Exception {
+		comparison(action,expect,new Comparison(){
+			@Override @SuppressWarnings("unchecked")
+			public boolean compares(Comparable actual, Comparable expected) {
+				return actual.compareTo(expected) < 0;
+			}
+		});
+	}
+	/** Check that the result of the action in the first part of the row is less than
+	 *  or equal to the expected value in the last cell of the row.
+	 */
+	public void lessThanEquals(DoAction action, Object expect) throws Exception {
+		comparison(action,expect,new Comparison(){
+			@Override @SuppressWarnings("unchecked")
+			public boolean compares(Comparable actual, Comparable expected) {
+				return actual.compareTo(expected) <= 0;
+			}
+		});
+	}
+	/** Check that the result of the action in the first part of the row is greater than
+	 *  the expected value in the last cell of the row.
+	 */
+	public void greaterThan(DoAction action, Object expect) throws Exception {
+		comparison(action,expect,new Comparison(){
+			@Override @SuppressWarnings("unchecked")
+			public boolean compares(Comparable actual, Comparable expected) {
+				return actual.compareTo(expected) > 0;
+			}
+		});
+	}
+	/** Check that the result of the action in the first part of the row is greater than
+	 *  or equal to the expected value in the last cell of the row.
+	 */
+	public void greaterThanEquals(DoAction action, Object expect) throws Exception {
+		comparison(action,expect,new Comparison(){
+			@Override @SuppressWarnings("unchecked")
+			public boolean compares(Comparable actual, Comparable expected) {
+				return actual.compareTo(expected) >= 0;
+			}
+		});
+	}
+	@SuppressWarnings("unchecked")
+	private void comparison(DoAction action, Object expected, Comparison compare) throws Exception {
+		if (!(expected instanceof Comparable<?>))
+			throw new FitLibraryException("Expected value is not a Comparable");
+		Object actual = action.run();
+		if (actual instanceof Comparable<?>) {
+			if (compare.compares((Comparable)actual,(Comparable)expected))
+				action.cellAt(1).pass();
+			else
+				action.cellAt(1).fail(actual.toString());
+		} else if (actual == null)
+			throw new FitLibraryException("Actual value is null");
+		else
+			throw new FitLibraryException("Actual value is not a Comparable: "+actual.getClass().getName());
+	}
+	public interface Comparison {
+		@SuppressWarnings("unchecked")
+		boolean compares(Comparable actual, Comparable expected);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, contains
+	 *  the string in the last cell of the row.
+	 */
+	public void contains(DoAction action, String s) throws Exception {
+		if (s == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		Object run = action.run();
+		if (run == null) {
+			action.cellAt(1).fail("result is null");
+			return;
+		}
+		String result = run.toString();
+		if (result.contains(s))
+			action.cellAt(1).pass();
+		else
+			action.cellAt(1).fail(result);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, contains
+	 *  the string in the last cell of the row.
+	 */
+	public void doesNotContain(DoAction action, String s) throws Exception {
+		if (s == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		Object run = action.run();
+		if (run == null) {
+			action.cellAt(1).fail("result is null");
+			return;
+		}
+		String result = run.toString();
+		if (!result.contains(s))
+			action.cellAt(1).pass();
+		else if (result.equals(s))
+			action.cellAt(1).fail();
+		else
+			action.cellAt(1).fail(result);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, contains
+	 *  the string in the last cell of the row.
+	 */
+	public void eventuallyContains(final DoAction action, final String s) throws Exception {
+		if (s == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		Eventually eventually = new Eventually(getTimeout(BECOMES_TIMEOUT));
+		PassFail answer = eventually.poll(new PollForPass() {
+			@Override
+			public PassFail result() throws Exception {
+				Object run = action.run();
+				if (run == null)
+					return new PassFail(false, null);
+				String result = run.toString();
+				return new PassFail(result.contains(s), result);
+			}
+		});
+		if (answer != null && answer.result != null) {
+			if (answer.hasPassed)
+				action.cellAt(1).pass();
+			else
+				action.cellAt(1).fail(answer.result.toString());
+		} else
+			action.cellAt(1).fail("result is null");
+	}
+	public void show(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.showResult(result);
+	}
+	public void showEscaped(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.show(Fixture.escape(result.toString()));
+	}
+	public void showAfter(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.showAfter(result);
+	}
+	public void showAfterAs(String title, DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.showAfterAs(title,result);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, matches
+	 *  the regular expression in the last cell of the row.
+	 */
+	public void matches(DoAction action, String pattern) throws Exception {
+		if (pattern == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		Object run = action.run();
+		if (run == null) {
+			action.cellAt(1).fail("result is null");
+			return;
+		}
+		String result = run.toString();
+		boolean matches = Pattern.compile(".*"+pattern+".*",Pattern.DOTALL).matcher(result).matches();
+		if (matches)
+			action.cellAt(1).pass();
+		else
+			action.cellAt(1).fail(result);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, does not match
+	 *  the regular expression in the last cell of the row.
+	 */
+	public void doesNotMatch(DoAction action, String pattern) throws Exception {
+		if (pattern == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		Object run = action.run();
+		if (run == null) {
+			action.cellAt(1).fail("result is null");
+			return;
+		}
+		String result = run.toString();
+		boolean matches = Pattern.compile(".*"+pattern+".*",Pattern.DOTALL).matcher(result).matches();
+		if (!matches)
+			action.cellAt(1).pass();
+		else if (result.equals(pattern))
+			action.cellAt(1).fail();
+		else
+			action.cellAt(1).fail(result);
+	}
+	/** Check that the result of the action in the first part of the row, as a string, eventually matches
+	 *  the regular expression in the last cell of the row.
+	 */
+	public void eventuallyMatches(final DoAction action, final String s) throws Exception {
+		if (s == null) {
+			action.cellAt(1).fail("expected is null");
+			return;
+		}
+		final Pattern pattern = Pattern.compile(".*"+s+".*",Pattern.DOTALL);
+		Eventually eventually = new Eventually(getTimeout(BECOMES_TIMEOUT));
+		PassFail answer = eventually.poll(new PollForPass() {
+			@Override
+			public PassFail result() throws Exception {
+				Object run = action.run();
+				if (run == null)
+					return new PassFail(false, null);
+				String result = run.toString();
+				return new PassFail(pattern.matcher(result).matches(), result);
+			}
+		});
+		if (answer != null && answer.result != null) {
+			if (answer.hasPassed)
+				action.cellAt(1).pass();
+			else if (answer.result != null)
+				action.cellAt(1).fail(answer.result.toString());
+			else
+				action.cellAt(1).fail();
+		} else
+			action.cellAt(1).fail("result is null");
+	}
+	/** Check that the action in the rest of the row succeeds.
+     *  o If a boolean is returned, it must be true.
+     *  o For other result types, no exception should be thrown.
+     *  It's no longer needed, because the same result can now be achieved with a boolean method.
+     */
+	public Boolean ensure(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result instanceof Boolean)
+			return ((Boolean)result).booleanValue();
+		if (result == null)
+			return true;
+		return null;
+	}
+	public Boolean not(DoAction action) throws Exception {
+		Object result = null;
+		try {
+			result = action.runWithNoColouring();
+			if (result instanceof Boolean)
+				return !((Boolean)result).booleanValue();
+		} catch (IgnoredException e) {
+			if (e.getIgnoredException() != null)
+				action.show(e.getIgnoredException().getMessage());
+			return true;
+		} catch (Exception e) {
+			Throwable embedded = PlugBoard.exceptionHandling.unwrapThrowable(e);
+			if (embedded instanceof FitLibraryShowException)
+				action.show(((FitLibraryShowException)embedded).getResult().getHtmlString());
+			return true;
+		}
+		if (result == null)
+			throw new NotRejectedException();
+		return null;
+	}
+	public boolean notTrue(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result instanceof Boolean)
+			return !((Boolean)result).booleanValue();
+		throw new NotRejectedException();
+	}
+	public boolean reject(DoAction action) throws Exception {
+		return not(action);
+	}
+	/** Log result to a file
+	 */
+	public void log(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			logMessage(result.toString());
+	}
+	
+//	public void is(DoAction action, Object expected) throws Exception {
+//		Object result = action.run();
+//		if (action.equals(result,expected))
+//			action.cellAt(1).pass();
+//		else
+//			action.cellAt(1).fail(result.toString());
+//	}
 }

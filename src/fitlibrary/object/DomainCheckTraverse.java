@@ -4,7 +4,7 @@
 */
 package fitlibrary.object;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
@@ -64,7 +64,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 //				target.invokeAndCheckCell(cell2,true,testResults);
 			} else {
 				try {
-			    	CalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
+			    	ICalledMethodTarget target = PlugBoard.lookupTarget.findGetterOnSut(cell.text(this),this,"Type");
 			    	target.invokeAndCheck(TableFactory.row(),cell2,testResults,false);
 				} catch (MissingMethodException ex) {
 					cell.error(testResults,ex);

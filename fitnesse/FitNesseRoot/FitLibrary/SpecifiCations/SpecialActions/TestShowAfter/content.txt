@@ -183,3 +183,36 @@
 <pre>22</pre>
 </div></div>-!|
 
+!**< def
+!define test (!|fitlibrary.specify.specialAction.SpecialActions|
+
+|'''show after'''|a true action|
+|'''show after'''|a false action|
+|'''show after'''|an error action|
+)
+**!
+
+|!-fitlibrary.spec.SpecifyFixture-!|
+|${test}|!-<table border="1" cellspacing="0">
+<tr><td>fitlibrary.specify.specialAction.SpecialActions</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><b>show after</b></td>
+<td class="pass">a true action</td>
+</tr>
+<tr><td><b>show after</b></td>
+<td class="fail">a false action</td>
+</tr>
+<tr><td class="error"><b>show after</b><hr/> <span class="fit_label">whoops</span></td>
+<td>an error action</td>
+</tr>
+</table><div class="included">
+<div style="float: right;" class="meta">
+<a href="javascript:expandAll();">Expand All</a> |
+ <a href="javascript:collapseAll();">Collapse All</a></div>
+<a href="javascript:toggleCollapsable('12355');">
+<img src="/files/images/collapsableClosed.gif" class="left" id="img12355"/></a>
+&nbsp;<span class="meta">Logs</span><div class="hidden" id="12355">
+<pre>true<br/>false<br/></pre>
+</div></div>-!|

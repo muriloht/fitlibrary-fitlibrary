@@ -7,7 +7,7 @@ package fitlibraryGeneric.list;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.NotSubclassFromClassFactoryMethod;
@@ -24,7 +24,7 @@ import fitlibrary.utility.ClassUtility;
 
 public class ListSetUpTraverse2 extends DoTraverse {
     private final Class<?> componentType;
-    private CalledMethodTarget[] targets;
+    private ICalledMethodTarget[] targets;
     private List<Object> list = new ArrayList<Object>();
 
     public ListSetUpTraverse2(Class<?> componentType) {
@@ -60,7 +60,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
     }
     private void bindFirstRowToTargetsForObject(Object element, Row firstRow, Row row, TestResults testResults) {
         setSystemUnderTest(element);
-        targets = new CalledMethodTarget[firstRow.size()];
+        targets = new ICalledMethodTarget[firstRow.size()];
         for (int i = 0; i < firstRow.size(); i++) {
             Cell cell = firstRow.at(i);
             if (!DomainObjectSetUpTraverse.givesClass(cell,this)) {

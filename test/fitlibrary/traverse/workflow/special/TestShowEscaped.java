@@ -5,43 +5,62 @@
 
 package fitlibrary.traverse.workflow.special;
 
+import java.math.BigDecimal;
+
 import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
+import fitlibrary.exception.IgnoredException;
+import fitlibrary.flow.GlobalActionScope;
+import fitlibrary.special.DoAction;
 
 @RunWith(JMock.class)
-public class TestShowEscaped extends SpecialActionTest {
+public class TestShowEscaped {
+	Mockery context = new Mockery();
+	DoAction action = context.mock(DoAction.class);
+	GlobalActionScope globalActionScope = new GlobalActionScope();
+	
 	@Test
-	public void textIsShownEscaped() throws Exception {
+	public void textIsShown() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
-			allowing(initialRow).fromAt(2);will(returnValue(subRow));
-			allowing(initialRow).at(0);will(returnValue(firstCell));
-			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
-			one(target).getResultString("result");will(returnValue("<Result"));
-			one(actionContext).show(initialRow,"&lt;Result");
+			one(action).run(); will(returnValue("nz"));
+			one(action).show("nz");
 		}});
-		TwoStageSpecial lazySpecial = special.showEscaped(initialRow);
-		lazySpecial.run(testResults);
+		globalActionScope.showEscaped(action);
 	}
-	@Test(expected=RuntimeException.class)
-	public void hasMissingMethod() throws Exception {
+	@Test
+	public void textWithTagIsShownEscaped() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(throwException(new RuntimeException()));
+			one(action).run(); will(returnValue("<nz>"));
+			one(action).show("&lt;nz>");
 		}});
-		special.showEscaped(initialRow);
+		globalActionScope.showEscaped(action);
 	}
-	@Test(expected=MissingCellsException.class)
-	public void rowIsTooSmall() throws Exception {
+	@Test
+	public void objectIsShown() throws Exception {
+		final BigDecimal number = new BigDecimal(4444444);
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(1));
+			one(action).run();
+			will(returnValue(number));
+			one(action).show("4444444");
 		}});
-		special.showEscaped(initialRow);
+		globalActionScope.showEscaped(action);
+	}
+	@Test
+	public void nothingShownWithNullResult() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).run(); will(returnValue(null));
+		}});
+		globalActionScope.showEscaped(action);
+	}
+	@Test(expected=Exception.class)
+	public void exceptionIsPassedOn() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).run(); will(throwException(new IgnoredException()));
+		}});
+		globalActionScope.showEscaped(action);
 	}
 }

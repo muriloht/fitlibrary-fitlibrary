@@ -57,9 +57,9 @@
 <td>&gt;</td>
 <td class="fail">11 <span class="fit_label">expected</span><hr>2 <span class="fit_label">actual</span></td>
 </tr>
-<tr><td>int property</td>
+<tr><td class="error">int property<hr/> <span class="fit_label">Invalid Number</span></td>
 <td>&gt;</td>
-<td class="error">a<hr/> <span class="fit_label">Invalid Number</span></td>
+<td>a</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

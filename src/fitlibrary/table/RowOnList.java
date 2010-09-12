@@ -21,7 +21,7 @@ public class RowOnList extends TableElementOnList<Row,Cell> implements Row {
     @Override
 	public Cell at(int i) {
     	if (i < 0 || i >= size())
-    		throw new MissingCellsException("");
+    		throw new MissingCellsException("at "+i);
 		return super.at(i);
 	}
     public String text(int i, VariableResolver resolver) {

@@ -96,7 +96,7 @@ public abstract class TableElementOnParse<To> {
 	protected void addToTrailer(String s) {
 		if (parse.trailer == null)
 			parse.trailer = "";
-		parse.trailer += s;
+		parse.trailer = s + parse.trailer;
 	}
 	protected void addToStartOfLeader(String s) {
 		parse.leader = s + parse.leader;

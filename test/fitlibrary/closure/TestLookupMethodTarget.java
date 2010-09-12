@@ -38,9 +38,7 @@ public class TestLookupMethodTarget {
 	@Test(expected=MissingMethodException.class)
 	public void methodOrGetterMissingWithEmptyStack() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(new ArrayList<TypedObject>()));
 			oneOf(scope).possibleClasses(); will(returnValue(new ArrayList<Class<?>>()));
 		}});
@@ -51,9 +49,7 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "unknown", 0); will(returnValue(null));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "getUnknown", 0); will(returnValue(null));
@@ -67,9 +63,7 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(closure));
 			oneOf(methodTargetFactory).createCalledMethodTarget(closure, evaluator);
@@ -82,9 +76,7 @@ public class TestLookupMethodTarget {
 		list.add(typedObjectS);
 		list.add(typedObjectT);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(null));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "getM", 0); will(returnValue(null));
@@ -97,9 +89,7 @@ public class TestLookupMethodTarget {
 	@Test(expected=MissingMethodException.class)
 	public void methodMissingWithEmptyStack() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(new ArrayList<TypedObject>()));
 			oneOf(scope).possibleClasses(); will(returnValue(new ArrayList<Class<?>>()));
 		}});
@@ -110,9 +100,7 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "unknown", 0); will(returnValue(null));
 			oneOf(scope).possibleClasses(); will(returnValue(new ArrayList<Class<?>>()));
@@ -125,9 +113,7 @@ public class TestLookupMethodTarget {
 		list.add(typedObjectS);
 		list.add(typedObjectT);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(null));
 			oneOf(lookupClosure).findMethodClosure(typedObjectT, "m", 0); will(returnValue(closure));
@@ -149,11 +135,9 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext(); will(returnValue(runtimeContext));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(typedObjectS));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "setUnknown", 1); will(returnValue(null));
-			allowing(runtimeContext).hasScope(); will(returnValue(true));
-			allowing(runtimeContext).getScope(); will(returnValue(scope));
+			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).possibleClasses(); will(returnValue(new ArrayList<Class<?>>()));
 		}});
 		lookup.findSetterOnSut("unknown", evaluator);

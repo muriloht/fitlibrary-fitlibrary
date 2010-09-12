@@ -21,9 +21,9 @@ public abstract class SpecialActionTest {
 	Row subRow = context.mock(Row.class,"subRow");
 	Cell expectedCell = context.mock(Cell.class,"expected cell");
 	Cell firstCell = context.mock(Cell.class,"first cell");
+	Cell secondCell = context.mock(Cell.class,"second cell");
 	Tables tables = context.mock(Tables.class);
 	TestResults testResults = TestResultsFactory.testResults();
 	PrefixSpecialAction special = new PrefixSpecialAction(actionContext);
 	ICalledMethodTarget target = context.mock(ICalledMethodTarget.class);
-	
 }

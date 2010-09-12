@@ -7,11 +7,15 @@ package fitlibrary.traverse.workflow.caller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fit.Fixture;
+import fitlibrary.DefineAction;
 import fitlibrary.definedAction.DefinedActionsRepository;
 import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
@@ -26,6 +30,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class DefinedActionCaller extends DoCaller {
+	private static Logger logger = FitLibraryLogger.getLogger(DefinedActionCaller.class);
 	private ParameterBinder binder;
 	private String methodName;
 	private RuntimeContextInternal runtime;
@@ -68,6 +73,7 @@ public class DefinedActionCaller extends DoCaller {
 	}
 	@Override
 	public TypedObject run(Row row, TestResults testResults) {
+		logger.trace("Calling "+methodName+binder.getParameterList()+" from "+binder.getPageName());
 		DefinedActionCallManager definedActionCallManager = runtime.getDefinedActionCallManager();
 		definedActionCallManager.startCall(binder);
 		runtime.pushLocalDynamicVariables();
@@ -134,12 +140,12 @@ public class DefinedActionCaller extends DoCaller {
 			row.passKeywords(testResults);
 	}
 	public static String link(String pageName) {
-		if (pageName.startsWith("from storytest"))
+		if (pageName.equals(DefineAction.STORYTEST_BASED))
 			return "Defined action call:";
 		return "Defined action call <a href='"+pageName+"'>."+pageName+"</a>:";
 	}
 	public static String link2(String pageName) {
-		if (pageName.startsWith("from storytest"))
+		if (pageName.equals(DefineAction.STORYTEST_BASED))
 			return "storytest";
 		return "<a href='"+pageName+"'>."+pageName+"</a>:";
 	}

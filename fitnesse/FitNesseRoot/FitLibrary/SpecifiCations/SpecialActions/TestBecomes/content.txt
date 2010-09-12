@@ -2,6 +2,8 @@
 !**< def
 !define test1 {!|fitlibrary.specify.DoFixtureFlowUnderTest|
 
+|''becomes timeout''|10|
+
 |int property|'''becomes'''|2|
 
 |boolean property|'''becomes'''|true|
@@ -21,6 +23,11 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test1}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoFixtureFlowUnderTest</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><i>becomes timeout</i></td>
+<td>10</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
@@ -48,7 +55,7 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td class="error">missing property<hr/> <span class="fit_label">Missing class or Missing method. Possibly:<ul><li>public Type getMissingProperty() { }</li><li>public Type missingProperty() { }</li><li>public Type missingPropertyPi(Type1 arg1) { }</li><li>public Type missingProperty(Type p1, Type p2) {}</li></ul></span></td>
+<tr><td class="error">missing property<hr/> <span class="fit_label">Missing class or Missing method.</span></td>
 <td><b>becomes</b></td>
 <td>pi</td>
 </tr>

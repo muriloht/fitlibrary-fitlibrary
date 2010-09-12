@@ -53,6 +53,6 @@ public class SpecialCaller extends DoCaller {
 	}
 	@Override
 	public String ambiguityErrorMessage() {
-		return 	methodName+"(Row,TestResults)";
+		return 	"Special "+methodName+"(Row,TestResults) in "+specialMethod.getOwningClass().getName();
 	}
 }

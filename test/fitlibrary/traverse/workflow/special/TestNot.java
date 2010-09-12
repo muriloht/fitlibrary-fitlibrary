@@ -5,234 +5,87 @@
 
 package fitlibrary.traverse.workflow.special;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.NotRejectedException;
 import fitlibrary.exception.FitLibraryShowException.Show;
 import fitlibrary.exception.parse.BadNumberException;
-import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
-import fitlibrary.traverse.workflow.special.PrefixSpecialAction.NotSyle;
+import fitlibrary.flow.GlobalActionScope;
+import fitlibrary.special.DoAction;
 
 @RunWith(JMock.class)
-public class TestNot extends SpecialActionTest {
-	class NotExpectations extends Expectations {
-		public NotExpectations() throws Exception {
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
-
-			allowing(initialRow).fromAt(2);will(returnValue(subRow));
-			allowing(initialRow).at(0);will(returnValue(firstCell));
-		}
-	}
+public class TestNot {
+	Mockery context = new Mockery();
+	DoAction action = context.mock(DoAction.class);
+	GlobalActionScope globalActionScope = new GlobalActionScope();
+	
 	@Test
-	public void reportsPassWithFalseResult() throws Exception {
-		context.checking(new NotExpectations() {{			
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);will(returnValue(false));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithParseExceptionThrown() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(new BadNumberException()));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithParseExceptionThrown() throws Exception {
-		final BadNumberException exception = new BadNumberException();
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(exception));
-			one(initialRow).error(testResults,exception);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsFailWithTrueResult() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);will(returnValue(true));
-			one(firstCell).fail(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithNonBooleanResult() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);will(returnValue("not a bool"));
-			one(firstCell).error(with(testResults),with(any(NotRejectedException.class)));
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsNothingWithIgnoredException() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			   will(throwException(new IgnoredException()));
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithShowExceptionInIgnoredExceptionWhenPassesOnException() throws Exception {
-		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(new IgnoredException(show)));
-			one(initialRow).error(testResults,show);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithShowExceptionInIgnoredExceptionWhenErrorOnException() throws Exception {
-		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(new IgnoredException(show)));
-			one(initialRow).error(testResults,show);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithShowExceptionWhenPassesOnException() throws Exception {
-		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(show));
-			one(initialRow).error(testResults,show);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithShowExceptionWhenErrorOnException() throws Exception {
-		final FitLibraryShowException show = new FitLibraryShowException(new Show(""));
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(show));
-			one(initialRow).error(testResults,show);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithOtherFitLibraryExceptionThrown() throws Exception {
-		final FitLibraryException exception = new FitLibraryException("");
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			    will(throwException(exception));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithBadNumberExceptionThrown() throws Exception {
-		final BadNumberException exception = new BadNumberException();
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			    will(throwException(exception));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithBadNumberInInvocationTargetExceptionThrown() throws Exception {
-		final BadNumberException exception = new BadNumberException();
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			    will(throwException(new InvocationTargetException(exception)));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithInvocationTargetExceptionThrown() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			    will(throwException(new InvocationTargetException(new RuntimeException())));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithInvocationTargetExceptionThrown() throws Exception {
-		final RuntimeException embeddedException = new RuntimeException();
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-				will(throwException(new InvocationTargetException(embeddedException)));
-			one(initialRow).error(testResults,embeddedException);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithFitLibraryInsideInvocationTargetExceptionThrown() throws Exception {
-		final FitLibraryShowException embeddedException = new FitLibraryShowException(new Show(""));
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-				will(throwException(new InvocationTargetException(embeddedException)));
-			one(initialRow).error(testResults,embeddedException);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsPassWithOtherExceptionThrown() throws Exception {
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell); 
-			  will(throwException(new RuntimeException("")));
-			one(firstCell).pass(testResults);
-		}});
-		TwoStageSpecial lazySpecial = special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void reportsErrorWithOtherExceptionThrown() throws Exception {
-		final RuntimeException exception = new RuntimeException("");
-		context.checking(new NotExpectations() {{
-			one(target).invokeForSpecial(subRow,testResults,false,firstCell);
-			  will(throwException(exception));
-			one(initialRow).error(testResults,exception);
-		}});
-		TwoStageSpecial twoStageSpecial = special.not(initialRow,NotSyle.ERROR_ON_EXCEPION);
-		twoStageSpecial.run(testResults);
-	}
-	@Test(expected=RuntimeException.class)
-	public void hasMissingMethod() throws Exception {
+	public void trueWithFalseResult() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(3));
-			one(actionContext).findMethodFromRow(initialRow,1,0);will(throwException(new RuntimeException()));
+			one(action).runWithNoColouring(); will(returnValue(false));
 		}});
-		special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
+		assertThat(globalActionScope.not(action),is(true));
 	}
-	@Test(expected=MissingCellsException.class)
-	public void rowIsTooSmall() throws Exception {
+	@Test
+	public void trueWithException() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(initialRow).size();will(returnValue(1));
+			one(action).runWithNoColouring(); will(throwException(new BadNumberException()));
 		}});
-		special.not(initialRow,NotSyle.PASSES_ON_EXCEPION);
+		assertThat(globalActionScope.not(action),is(true));
+	}
+	@Test
+	public void falseWithTrueResult() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(returnValue(true));
+		}});
+		assertThat(globalActionScope.not(action),is(false));
+	}
+	@Test(expected=NotRejectedException.class)
+	public void exceptionWithNullResult() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(returnValue(null));
+		}});
+		globalActionScope.not(action);
+	}
+	@Test
+	public void trueWithShowException() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(throwException(new InvocationTargetException(new FitLibraryShowException(new Show("abc")))));
+			one(action).show("abc");
+		}});
+		assertThat(globalActionScope.not(action),is(true));
+	}
+	@Test
+	public void trueWithIgnoredException() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(throwException(new IgnoredException()));
+		}});
+		assertThat(globalActionScope.not(action),is(true));
+	}
+	@Test
+	public void trueAndShownWithIgnoredExceptionWithEmbedded() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(throwException(new IgnoredException(new BadNumberException())));
+			one(action).show("Invalid Number");
+		}});
+		assertThat(globalActionScope.not(action),is(true));
+	}
+	@Test
+	public void trueWithOtherException() throws Exception {
+		context.checking(new Expectations() {{
+			one(action).runWithNoColouring(); will(throwException(new RuntimeException()));
+		}});
+		assertThat(globalActionScope.not(action),is(true));
 	}
 }

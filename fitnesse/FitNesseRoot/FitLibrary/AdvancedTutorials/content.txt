@@ -20,4 +20,8 @@ Migrating from Slim to ''!-FitLibrary-!''
 
 |[[Migrating Decision Tables][^MigratingSlimDecisionTables]]|''How Slim storytests that only use decision tables can be very easily moved to ''!-FitLibrary-!'' ''|
 
+Logging Techniques
+
+|[[Logging Techniques][^LoggingTechniques]]|''How to log information to help understand what is happening''|
+
 This will be expanded further.

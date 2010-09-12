@@ -4,7 +4,7 @@
 */
 package fitlibrary.traverse.function;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.BooleanMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;
@@ -14,7 +14,7 @@ import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 
 public class ConstraintTraverse extends FunctionTraverse {
-	private CalledMethodTarget target;
+	private ICalledMethodTarget target;
 	private boolean expected = true;
 	protected boolean methodOK = false;
     protected int argCount = -1;

@@ -7,9 +7,12 @@ package fitlibrary.flow;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.DomainFixture;
 import fitlibrary.flow.DoFlowOnTable.DoFlower;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.object.DomainCheckTraverse;
 import fitlibrary.object.DomainInjectionTraverse;
 import fitlibrary.object.DomainTraverser;
@@ -38,6 +41,7 @@ import fitlibrary.utility.option.Some;
  * o SuiteFixture
  */
 public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
+	private static Logger logger = FitLibraryLogger.getLogger(DoFlow.class);
 	private final IScopeStack scopeStack;
 	private RuntimeContextInternal runtime;
 	private final SetUpTearDown setUpTearDown;
@@ -60,6 +64,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		this.doFlowOnTable = doFlowOnTable;
 	}
 	public void runStorytest(Tables tables, ITableListener tableListener) {
+		logger.trace("Running storytest");
 		TestResults testResults = tableListener.getTestResults();
 		resetToStartStorytest();
 		for (int t = 0; t < tables.size(); t++) {
@@ -76,10 +81,13 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 				handleDomainPhases(table);
 			if (!plainTextFailed)
 				current.runTable(table,tableListener);
-			if (t < tables.size() - 1)
+			if (t < tables.size() - 1) {
 				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
-			else
+//				logger.trace("Finished table");
+			} else {
 				tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
+//				logger.trace("Finished table and storytest");
+			}
 			runtime.addAccumulatedFoldingText(table);
 			tableListener.tableFinished(table);
 		}
@@ -97,6 +105,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		domainInject = null;
 		domainCheck = null;
 		if (suiteFixtureOption.isSome()) {
+			logger.trace("Use suite fixture runtime");
 			runtime = suiteFixtureOption.get().getCopyOfRuntimeContext();
 			scopeStack.switchRuntime(runtime);
 		} else

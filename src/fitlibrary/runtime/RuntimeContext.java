@@ -12,9 +12,12 @@ import fitlibrary.dynamicVariable.VariableResolver;
 
 public interface RuntimeContext {
 	Object getDynamicVariable(String key);
-	void setDynamicVariable(String key, Object value);
 	DynamicVariables getDynamicVariables();
-	void startLogging(String fileName);
-	void printToLog(String s) throws IOException;
 	VariableResolver getResolver();
+	void printToLog(String s) throws IOException;
+	void setAbandon(boolean b);
+	void setDynamicVariable(String key, Object value);
+	void setStopOnError(boolean stop);
+	void show(String s);
+	void showAsAfterTable(String title, String s);
 }

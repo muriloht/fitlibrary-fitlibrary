@@ -4,7 +4,7 @@
 */
 package fitlibrary.object;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.classes.ConstructorNotVisible;
@@ -86,7 +86,7 @@ public class DomainObjectSetUpTraverse extends Traverse {
 					cell.ignore(testResults);
 				} else {
 					try {
-						CalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
+						ICalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
 						callSetter(target, row.at(i+1), testResults);
 					} catch (Exception e) {
 						cell.error(testResults,e);
@@ -98,7 +98,7 @@ public class DomainObjectSetUpTraverse extends Traverse {
     public static boolean givesClass(Cell cell, VariableResolver resolver) {
         return cell.isBlank(resolver) && !cell.hasEmbeddedTables(resolver);
     }
-	private static void callSetter(CalledMethodTarget target, Cell nextCell, TestResults testResults) {
+	private static void callSetter(ICalledMethodTarget target, Cell nextCell, TestResults testResults) {
 		try {
 			target.invoke(nextCell,testResults);
 		} catch (IgnoredException e) {

@@ -45,14 +45,6 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 	public boolean Action(Row row, TestResults testResults) {
 		throw new RuntimeException("Ambiguity of special action with fit.ActionFixture");
 	}
-//	@SuppressWarnings("unused")
-//	public int aCheckMinusAwareAction(int i) {
-//		return ((Integer)getExpectedResult()).intValue();
-//	}
-//	@SuppressWarnings("unused")
-//	public String[] anotherCheckMinusAwareAction(String[] s) {
-//		return (String[])getExpectedResult();
-//	}
 	public void hiddenMethod() {
 		//
 	}

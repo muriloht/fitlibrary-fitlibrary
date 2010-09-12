@@ -8,6 +8,6 @@ import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class MissingCellsException extends FitLibraryExceptionWithHelp {
   public MissingCellsException(String details) {
-    super("Missing table cells","MissingCells."+details);
+    super("Missing table cells "+details,"MissingCells."+details);
   }
 }

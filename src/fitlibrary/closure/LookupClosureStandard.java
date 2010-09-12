@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import fitlibrary.exception.method.AmbiguousNameException;
+import fitlibrary.special.DoAction;
 import fitlibrary.traverse.workflow.DoEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
@@ -89,14 +90,23 @@ public class LookupClosureStandard implements LookupClosure{
 		Method chosenMethod = null;
 		for (int i = 0; i < methods.length; i++) {
 			Method method = methods[i];
-			if (name.equals(method.getName()) && method.getParameterTypes().length == argCount && 
-		            !fitLibrarySystemMethod(method,argCount,subject))
+			if     (name.equals(method.getName()) &&
+					method.getParameterTypes().length == argCount && 
+					!doActionMethod(method.getParameterTypes()) &&
+		            !fitLibrarySystemMethod(method,argCount,subject)) {
 				if (chosenMethod == null)
 					chosenMethod = method;
 				else
 					throw new AmbiguousNameException(name);
+			}
 		}
 		return chosenMethod;
+	}
+	private boolean doActionMethod(Class<?>[] parameterTypes) {
+		for (Class<?> t : parameterTypes)
+			if (t == DoAction.class)
+				return true;
+		return false;
 	}
 	protected String extractFieldName(String methodName) {
 		String fieldName = "";
@@ -133,7 +143,8 @@ public class LookupClosureStandard implements LookupClosure{
 		for (int i = 0; i < methods.length; i++) {
 			Method method = methods[i];
 			if (name.equals(method.getName()) &&
-		            method.getParameterTypes().length == args && 
+		            method.getParameterTypes().length == args &&
+		            !doActionMethod(method.getParameterTypes()) &&
 		            !fitLibrarySystemMethod(method,args,subject))
 				if (chosenMethod == null)
 					chosenMethod = method;

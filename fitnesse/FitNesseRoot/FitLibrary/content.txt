@@ -1,6 +1,6 @@
 !**< defines
-!path fitlibrary.jar
-#!path ../bin
+#!path fitlibrary.jar
+!path ../bin
 !path fitnesse.jar
 !path lib/*.jar
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
@@ -22,6 +22,7 @@
   * specialised handling of table cell text
 
  * Migrating from Slim to FitLibrary
+ * Logging techniques
 }
 
 **!

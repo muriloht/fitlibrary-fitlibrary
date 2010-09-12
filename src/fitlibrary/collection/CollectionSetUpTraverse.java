@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.exception.table.RowWrongWidthException;
 import fitlibrary.global.PlugBoard;
@@ -27,7 +27,7 @@ import fitlibrary.utility.ExtendedCamelCase;
  * and thus no expected columns.
  */
 public class CollectionSetUpTraverse extends DoTraverse {
-	protected CalledMethodTarget target;
+	protected ICalledMethodTarget target;
     protected int argCount = -1;
     protected boolean boundOK = false;
 	protected Collection<Object> collection = new ArrayList<Object>();
@@ -75,11 +75,11 @@ public class CollectionSetUpTraverse extends DoTraverse {
 			row.error(testResults, e);
 		}
 	}
-	private static CalledMethodTarget findMethodTarget(Row row, Evaluator evaluator, boolean embedded) {
+	private static ICalledMethodTarget findMethodTarget(Row row, Evaluator evaluator, boolean embedded) {
 		List<String> arguments = new ArrayList<String>();
 		String argNames = buildArguments(row, arguments,evaluator);
 		String methodName = ExtendedCamelCase.camel(argNames);
-		CalledMethodTarget findMethod = PlugBoard.lookupTarget.findMethod(methodName, arguments, "Type", evaluator);
+		ICalledMethodTarget findMethod = PlugBoard.lookupTarget.findMethod(methodName, arguments, "Type", evaluator);
 		if (findMethod.returnsVoid() && embedded)
 			throw new VoidMethodException(methodName,"SetUpTraverse");
 		return findMethod;
@@ -113,7 +113,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
         collection.add(result);
         return result;
     }
-	public CalledMethodTarget target() {
+	public ICalledMethodTarget target() {
 		return target;
 	}
 	public Collection<Object> getCollection() {

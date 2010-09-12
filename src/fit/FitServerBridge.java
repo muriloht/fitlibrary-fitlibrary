@@ -16,8 +16,11 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.apache.log4j.Logger;
+
 import util.StreamReader;
 import fit.exception.FitParseException;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsOnCounts;
 import fitlibrary.suite.ReportListener;
@@ -27,6 +30,7 @@ import fitlibrary.table.TableFactory;
 /* This is a variation of FitServer that's needed to run FitLibrary
  */
 public abstract class FitServerBridge {
+	static Logger logger = FitLibraryLogger.getLogger(FitServerBridge.class);
 	protected ReportListener reportListener = new TableReportListener();
 	protected TestResults suiteTestResults = new TestResultsOnCounts();
 	protected OutputStream socketOutput;
@@ -56,10 +60,12 @@ public abstract class FitServerBridge {
 		exit();
 	}
 	public void process() {
+		logger.trace("Ready to received messages");
 		try {
 			while (true) {
 				print("FitServerBridge: Reading size...");
 				int size = FitProtocol.readSize(socketReader);
+				logger.trace("Received message of size "+size);
 				print("FitServerBridge: Size is " + size);
 				if (size == 0)
 					break;
@@ -68,6 +74,7 @@ public abstract class FitServerBridge {
 					String document = FitProtocol.readDocument(socketReader,size);
 					TestResults storyTestResults = doTables(document);
 					print("\tresults: " + storyTestResults + "\n");
+					logger.trace("Finished storytest");
 					suiteTestResults.add(storyTestResults);
 				} catch (FitParseException e) {
 					exception(e);
@@ -205,6 +212,7 @@ public abstract class FitServerBridge {
 		@Override
 		public void tableFinished(Table table) {
 			print("FitServerBridge table is finished");
+			logger.trace("Sending table report");
 			try {
 				byte[] bytes = readTable(table);
 				if (bytes.length > 0)
@@ -215,6 +223,7 @@ public abstract class FitServerBridge {
 		}
 		@Override
 		public void tablesFinished(TestResults testResults) {
+			logger.trace("Sending results");
 			try {
 				FitProtocol.writeCounts(testResults.getCounts(), socketOutput);
 			} catch (IOException e) {

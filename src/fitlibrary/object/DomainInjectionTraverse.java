@@ -4,7 +4,7 @@
 */
 package fitlibrary.object;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.ITableListener;
@@ -61,7 +61,7 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
     	for (int i = 0; i < row.size(); i += 2) {
     		Cell cell = row.at(i);
     		try {
-    			CalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
+    			ICalledMethodTarget target = PlugBoard.lookupTarget.findSetterOnSut(cell.text(this), this);
     			Cell nextCell = row.at(i+1);
     			try {
     				target.invoke(nextCell,testResults);

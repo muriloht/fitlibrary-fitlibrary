@@ -26,4 +26,16 @@ public class CollectionUtility {
 			list.add(s);
 		return list;
 	}
+	public static <T> String mkString(String separator, List<T> ss) {
+		return mkString(separator,ss.toArray());
+	}
+	public static <T> String mkString(String separator, T... ss) {
+		if (ss.length == 0)
+			return "";
+		StringBuilder sb = new StringBuilder();
+		sb.append(ss[0]);
+		for (int i = 1; i < ss.length; i++) 
+			sb.append(separator).append(ss[i]);
+		return sb.toString();
+	}
 }

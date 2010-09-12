@@ -51,6 +51,10 @@ public class FieldClosure implements Closure {
 	}
 	@Override
 	public String toString() {
-		return "FieldClosure["+typedObject+","+field+"]";
+		return field.getName()+" on "+typedObject.getSubject();
+	}
+	@Override
+	public Class<?> getOwningClass() {
+		return typedObject.getSubject().getClass();
 	}
 }

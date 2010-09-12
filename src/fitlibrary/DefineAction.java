@@ -19,14 +19,15 @@ import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 
 public class DefineAction extends Traverse {
 	public static final String AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS = "auto-translate defined action parameters";
+	public static final String STORYTEST_BASED = "storytest table";
 	private String wikiClassName = "";
 	private String pageName;
 	
 	public DefineAction() {
-		this.pageName = "from storytest table";
+		this.pageName = STORYTEST_BASED;
 	}
     public DefineAction(String className) {
-		this(className,"from storytest table");
+		this(className,STORYTEST_BASED);
 	}
     public DefineAction(String className, String pathName) {
 		this.wikiClassName = className;

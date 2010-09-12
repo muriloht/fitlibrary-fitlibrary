@@ -30,7 +30,7 @@ public class NonGenericFinder implements Finder {
 		final Class<?>[] showArg = { typed.asClass() };
 		final String findName = ExtendedCamelCase.camel(FIND+" "+shortClassName);
 		final String showMethodName = ExtendedCamelCase.camel(SHOW+" "+shortClassName);
-		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.possibleClasses(evaluator);
+		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.possibleClasses(evaluator.getScope());
 		
 		findExceptionMessage = "Either "+shortClassName+
 			" is<ul><li> A <b>Value Object</b>. So missing parse method: "+

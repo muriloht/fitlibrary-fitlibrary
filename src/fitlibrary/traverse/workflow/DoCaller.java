@@ -24,4 +24,10 @@ public abstract class DoCaller {
 	protected void setProblem(Exception exception) {
 		problem = exception;
 	}
+	public boolean partiallyValid() {
+		return false;
+	}
+	public String getPartialErrorMessage() {
+		return "NOT AN ERROR";
+	}
 }

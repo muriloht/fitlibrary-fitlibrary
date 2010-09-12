@@ -7,7 +7,7 @@ package fitlibrary.traverse.function;
 import java.util.ArrayList;
 import java.util.List;
 
-import fitlibrary.closure.CalledMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
@@ -20,7 +20,7 @@ import fitlibrary.table.Table;
 public class CombinationTraverse extends FunctionTraverse {
 	private List<Object> topValues = new ArrayList<Object>();
     private boolean methodOK = false;
-    private CalledMethodTarget methodTarget = null;
+    private ICalledMethodTarget methodTarget = null;
     private Parser firstParser;
 
     public CombinationTraverse() {

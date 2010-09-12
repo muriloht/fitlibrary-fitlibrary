@@ -2,6 +2,8 @@
 !**< def
 !define test {!|fitlibrary.specify.DoFixtureFlowUnderTest|
 
+|''becomes timeout''|10|
+
 |int property|'''eventually contains'''|2|
 
 |boolean property|'''eventually contains'''|tru|
@@ -21,6 +23,11 @@
 |!-fitlibrary.spec.SpecifyFixture-!|
 |${test}|!-<table border="1" cellspacing="0">
 <tr><td>fitlibrary.specify.DoFixtureFlowUnderTest</td>
+</tr>
+</table>
+<br/><table border="1" cellspacing="0">
+<tr><td><i>becomes timeout</i></td>
+<td>10</td>
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">

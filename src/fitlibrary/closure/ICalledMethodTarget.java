@@ -9,19 +9,32 @@ import fitlibrary.parser.Parser;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.traverse.workflow.DoTraverse.Comparison;
+import fitlibrary.typed.TypedObject;
 
 public interface ICalledMethodTarget extends MethodTarget {
-	Object invoke(Object[] arguments) throws Exception;
-	Class<?> getReturnType();
-	void invokeAndCheckForSpecial(Row rowFrom, Cell expectedCell,
-			TestResults testResults, Row row, Cell cell);
+	boolean checkResult(Cell at, Object result, boolean b, boolean c,
+			TestResults testResults);
+	void color(Row row, boolean booleanValue, TestResults testResults) throws Exception;
+	Class<?> getOwningClass();
+	Parser[] getParameterParsers();
+	Class<?>[] getParameterTypes();
 	Object getResult(Cell expectedCell, TestResults testResults);
-	public Object invokeForSpecial(Row row, TestResults testResults, 
-			boolean catchParseError, Cell operatorCell) throws Exception;
-	void notResult(Cell expectedCell, Object result, TestResults testResults);
-	Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception;
-	public void compare(Cell expectedCell, Comparable actual, TestResults testResults, Comparison compare);
 	Parser getResultParser();
 	String getResultString(Object result) throws Exception;
+	Class<?> getReturnType();
+	Object invoke() throws Exception;
+	Object invoke(Cell cell, TestResults testResults) throws Exception;
+	Object invoke(Object[] arguments) throws Exception;
+	Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception;
+	void invokeAndCheckForSpecial(Row rowFrom, Cell expectedCell,
+			TestResults testResults, Row row, Cell cell);
+	void invokeAndCheck(Row row, Cell at, TestResults testResults, boolean b);
+	Object invokeForSpecial(Row row, TestResults testResults, 
+			boolean catchParseError, Cell operatorCell) throws Exception;
+	TypedObject invokeTyped(Row fromAt, TestResults testResults) throws Exception;
+	void notResult(Cell expectedCell, Object result, TestResults testResults);
+	boolean returnsBoolean();
+	boolean returnsVoid();
+	void setEverySecond(boolean b);
+	void setRepeatAndExceptionString(String repeatString, String exceptionString);
 }

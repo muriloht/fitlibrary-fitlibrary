@@ -11,4 +11,5 @@ import fitlibrary.utility.MustBeThreadSafe;
 public interface ExceptionHandling extends MustBeThreadSafe {
 	String exceptionMessage(Throwable throwable);
 	Throwable unwrapThrowable(Throwable throwable);
+	boolean unwrappedIsShow(Exception e);
 }

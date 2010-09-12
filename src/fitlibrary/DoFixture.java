@@ -53,6 +53,9 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	public void abandon() {
 		doTraverse.abandonStorytest();
 	}
+	public void show(String s) {
+		doTraverse.show(s);
+	}
 	public void showAfterTable(String s) {
 		doTraverse.showAfterTable(s);
 	}

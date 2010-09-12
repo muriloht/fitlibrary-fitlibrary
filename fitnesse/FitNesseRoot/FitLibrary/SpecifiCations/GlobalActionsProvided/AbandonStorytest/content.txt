@@ -2,7 +2,7 @@
 When a storytest is abandoned with ''abandon storytest'', the rest of the storytest is not run and that table is coloured as ignored. This allows for test selection to be managed both in the storytest and programmatically.
 |!-fitlibrary.spec.SpecifyFixture-!|
 |!-<table border>
-<tr><td>fitlibrary.specify.DoFixtureFlowUnderTest</td></tr>
+<tr><td>fitlibrary.specify.global.ExtraGlobal</td></tr>
 </table>
 <table border>
 <tr><td>abandon storytest</td></tr>
@@ -19,7 +19,7 @@ When a storytest is abandoned with ''abandon storytest'', the rest of the storyt
 <table border>
 <tr><td>check</td><td>sum</td><td>4</td></tr>
 </table>-!|!-<table border>
-<tr><td>fitlibrary.specify.DoFixtureFlowUnderTest</td></tr>
+<tr><td>fitlibrary.specify.global.ExtraGlobal</td></tr>
 </table>
 <table border>
 <tr><td class="ignore">abandon storytest</td></tr>

@@ -6,7 +6,6 @@ package fitlibrary.traverse.workflow;
 
 public class SequenceTraverse extends DoTraverse {
 	public SequenceTraverse(Object sut) {
-		super(sut);
-		sequencing = true;
+		super(sut,true);
 	}
 }

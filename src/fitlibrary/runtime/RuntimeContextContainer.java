@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.dynamicVariable.DynamicVariablesRecordingThatFails;
@@ -19,8 +21,11 @@ import fitlibrary.dynamicVariable.LocalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
+import fitlibrary.log.ConfigureLog4j;
 import fitlibrary.log.FileLogger;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.tableProxy.CellProxy;
@@ -29,6 +34,7 @@ import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
+	private static Logger logger = FitLibraryLogger.getLogger(RuntimeContextContainer.class);
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";
 	protected DynamicVariables dynamicVariables = new GlobalDynamicVariables();
 	private Map<String,Integer> timeouts = new HashMap<String, Integer>();
@@ -46,36 +52,42 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	protected Row currentRow;
 	protected Table currentTable;
 	private String currentPageName = "";
+	private ConfigureLog4j configureLog4j;
 
 	public RuntimeContextContainer() {
-		this(null,new GlobalActionScope()); // For those cases where a fixture is being sued independently of table execution
+		this(null,new GlobalActionScope()); // For those cases where a fixture is being used independently of table execution
 	}
 	public RuntimeContextContainer(IScope scope, GlobalActionScope global) {
 		this.scope = scope;
 		this.global = global;
 		global.setRuntimeContext(this);
+		configureLog4j = new ConfigureLog4j(this);
 	}
 	public RuntimeContextContainer(String[] s) {
 		for (int i = 0; i < s.length-1; i += 2)
 			dynamicVariables.put(s[i],s[i+1]);
 	}
-	public RuntimeContextContainer(DynamicVariables dynamicVariables, Map<String,Integer> timeouts, 
-			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalActionScope global) {
+	protected RuntimeContextContainer(DynamicVariables dynamicVariables, Map<String,Integer> timeouts, 
+			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalActionScope global,
+			ConfigureLog4j configureLog4j) {
 		this.dynamicVariables = dynamicVariables;
 		this.timeouts = timeouts;
 		this.fileLogger = fileLogger;
 		this.scope = scope;
 		this.tableEvaluator = tableEvaluator;
 		this.global = global;
+		this.configureLog4j = configureLog4j;
 	}
 	public RuntimeContextInternal copyFromSuite() {
+		logger.trace("Use Suite dynamic variables "+dynamicVariables.top());
 		return new RuntimeContextContainer(
 				new GlobalDynamicVariables(dynamicVariables.top()),
 				timeouts,
 				fileLogger,
 				scope,
 				tableEvaluator,
-				global);
+				global,
+				configureLog4j);
 	}
 	@Override
 	public void reset() {
@@ -124,11 +136,9 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	@Override
 	public IScope getScope() {
+		if (scope == null)
+			throw new RuntimeException("No scope in runtime");
 		return scope;
-	}
-	@Override
-	public boolean hasScope() {
-		return scope != null;
 	}
 	public void SetTableEvaluator(TableEvaluator evaluator) {
 		this.tableEvaluator = evaluator;
@@ -143,6 +153,10 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	public void showAsAfterTable(String title, String s) {
 		foldingTexts.logAsAfterTable(title, s);
+	}
+	public void show(String s) {
+		currentRow.addCell(s).shown();
+		getDefinedActionCallManager().addShow(currentRow);
 	}
 	@Override
 	public void addAccumulatedFoldingText(Table table) {
@@ -204,24 +218,45 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	@Override
 	public CellProxy cellAt(final int i) {
+		final Cell cell = currentRow.at(i);
 		return new CellProxy() {
 			@Override
 			public void pass() {
-				currentRow.at(i).pass(testResults);
+				cell.pass(testResults);
+			}
+			@Override
+			public void pass(String msg) {
+				cell.pass(testResults,msg);
 			}
 			@Override
 			public void fail(String msg) {
 				if (msg.isEmpty())
-					currentRow.at(i).fail(testResults);
+					cell.fail(testResults);
 				else
-					currentRow.at(i).fail(testResults,msg,dynamicVariables);
+					cell.fail(testResults,msg,dynamicVariables);
+			}
+			@Override
+			public void failHtml(String msg) {
+				cell.failHtml(testResults,msg);
+			}
+			@Override
+			public void fail() {
+				cell.fail(testResults);
 			}
 			@Override
 			public void error(String msg) {
 				if (msg.isEmpty())
-					currentRow.at(i).error(testResults);
+					cell.error(testResults);
 				else
-					currentRow.at(i).error(testResults,msg);
+					cell.error(testResults,msg);
+			}
+			@Override
+			public void error(Throwable e) {
+				cell.error(testResults,e);
+			}
+			@Override
+			public void error() {
+				cell.error(testResults);
 			}
 		};
 	}
@@ -244,5 +279,9 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	@Override
 	public String getCurrentPageName() {
 		return currentPageName;
+	}
+	@Override
+	public ConfigureLog4j getConfigureLog4j() {
+		return configureLog4j;
 	}
 }

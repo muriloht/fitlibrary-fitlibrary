@@ -7,6 +7,7 @@ package fitlibrary;
 import fit.Fixture;
 import fit.Parse;
 import fitlibrary.dynamicVariable.DynamicVariables;
+import fitlibrary.flow.IScope;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
@@ -84,6 +85,9 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     public RuntimeContextInternal getRuntimeContext() {
 		return traverse().getRuntimeContext();
 	}
+    public IScope getScope() {
+    	return getRuntimeContext().getScope();
+    }
     public DynamicVariables getDynamicVariables() {
     	return getRuntimeContext().getDynamicVariables();
     }

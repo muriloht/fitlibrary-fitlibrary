@@ -41,10 +41,11 @@ public class CustomHtmlLayout extends Layout {
 
 		String escapedThread = Transform.escapeTags(event.getThreadName());
 		sbuf.append("<td title=\"" + escapedThread + " thread\">");
-		sbuf.append(escapedThread);
+		if (!escapedThread.equals("main"))
+			sbuf.append(escapedThread);
 		sbuf.append("</td>" + Layout.LINE_SEP);
 
-		sbuf.append("<td title=\"Level\">");
+		sbuf.append("<td style=\"font-size : x-small;\" title=\"Level\">");
 		if (event.getLevel().equals(Level.DEBUG)) {
 			sbuf.append("<font color=\"#339933\">");
 			sbuf.append(Transform.escapeTags(String.valueOf(event.getLevel())));
@@ -62,16 +63,18 @@ public class CustomHtmlLayout extends Layout {
 		sbuf.append("<td title=\"" + escapedLogger + " category\">");
 		sbuf.append(escapedLogger);
 		sbuf.append("</td>" + Layout.LINE_SEP);
+		
+			sbuf.append("<td style=\"font-size : xx-small;\" colspan=\"6\" title=\"Nested Diagnostic Context\">");
+			if (event.getNDC() != null) {
+				sbuf.append(Transform.escapeTags(event.getNDC()));
+			}
+			sbuf.append("</td>" + Layout.LINE_SEP);
+		
 
 		sbuf.append("<td title=\"Message\">");
 		sbuf.append(Transform.escapeTags(event.getRenderedMessage()));
 		sbuf.append("</td>" + Layout.LINE_SEP);
 		
-		if (event.getNDC() != null) {
-			sbuf.append("<td bgcolor=\"#EEEEEE\" style=\"font-size : xx-small;\" colspan=\"6\" title=\"Nested Diagnostic Context\">");
-			sbuf.append("NDC: " + Transform.escapeTags(event.getNDC()));
-			sbuf.append("</td>" + Layout.LINE_SEP);
-		}
 		
 		sbuf.append("</tr>" + Layout.LINE_SEP);
 

@@ -7,6 +7,11 @@ package fitlibrary.tableProxy;
 
 public interface CellProxy {
 	void pass();
+	void pass(String msg);
 	void fail(String msg);
+	void failHtml(String html);
 	void error(String msg);
+	void error(Throwable e);
+	void fail();
+	void error();
 }

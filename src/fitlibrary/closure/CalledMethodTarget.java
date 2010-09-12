@@ -11,11 +11,11 @@ import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.exception.AbandonException;
-import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.parse.NoValueProvidedException;
 import fitlibrary.exception.parse.ParseException;
+import fitlibrary.global.PlugBoard;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
@@ -23,7 +23,6 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.DoTraverse.Comparison;
 import fitlibrary.typed.TypedObject;
 
 /**
@@ -56,6 +55,9 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
 	public boolean isValid() {
 		return closure != null;
+	}
+	public Class<?> getOwningClass() {
+		return closure.getOwningClass();
 	}
 	public Class<?> getReturnType() {
 		return closure.getReturnType();
@@ -115,7 +117,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		try {
 			return invoke(args);
 		} catch (InvocationTargetException e) {
-			Throwable embedded = e.getTargetException();
+			Throwable embedded = PlugBoard.exceptionHandling.unwrapThrowable(e);
 			if (embedded instanceof FitLibraryShowException)
 				operatorCell.error(testResults);
 			throw e;
@@ -272,23 +274,6 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			expectedCell.error(testResults,e);
 		}
 	}
-	@SuppressWarnings("unchecked")
-	public void compare(Cell expectedCell, Comparable actual, TestResults testResults, Comparison compare) {
-		try {
-			if (resultParser == null)
-				throw new NoValueProvidedException();
-			Object expected = resultParser.parseTyped(expectedCell, testResults).getSubject();
-			if (expected instanceof Comparable) {
-				if (compare.compares(actual,(Comparable)expected))
-					expectedCell.passIfNotEmbedded(testResults,evaluator);
-				else if (!expectedCell.hasEmbeddedTables(evaluator))
-					expectedCell.fail(testResults,""+actual,evaluator);
-			} else
-				throw new FitLibraryException("Unable to compare, as expected value is not Comparable");
-		} catch (Exception e) {
-			expectedCell.error(testResults,e);
-		}
-	}
 	public Object getResult(Cell expectedCell, TestResults testResults) {
 		try {
 			return resultParser.parseTyped(expectedCell,testResults).getSubject();
@@ -320,7 +305,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
 	@Override
 	public String toString() {
-		return "MethodTarget["+closure+"]";
+		return closure.toString();
 	}
     public Parser getResultParser() { // TEMP while adding FitLibrary2
         return resultParser;

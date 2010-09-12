@@ -22,6 +22,7 @@ public class TestLog extends SpecialActionTest {
 			one(actionContext).findMethodFromRow(initialRow,1,0);will(returnValue(target));
 			allowing(initialRow).fromAt(2);will(returnValue(subRow));
 			allowing(initialRow).at(0);will(returnValue(firstCell));
+			allowing(initialRow).at(1);will(returnValue(secondCell));
 			one(target).invokeForSpecial(subRow,testResults,true,firstCell);will(returnValue("result"));
 			one(target).getResultString("result");will(returnValue("Result"));
 			one(actionContext).logMessage("Result");

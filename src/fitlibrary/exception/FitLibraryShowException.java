@@ -23,5 +23,9 @@ public class FitLibraryShowException extends FitLibraryException {
 		public String getHtmlString() {
 			return htmlString;
 		}
+		@Override
+		public String toString() {
+			return htmlString;
+		}
 	}
 }

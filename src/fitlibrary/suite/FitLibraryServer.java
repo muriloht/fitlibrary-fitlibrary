@@ -6,8 +6,11 @@ package fitlibrary.suite;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsOnCounts;
@@ -15,8 +18,12 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class FitLibraryServer extends FitServerBridge {
+	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
 	private BatchFitLibrary batching = new BatchFitLibrary();
 
+	public FitLibraryServer() {
+		logger.trace("Started");
+	}
 	@Override
 	public TestResults doTables(String html) {
 		try {

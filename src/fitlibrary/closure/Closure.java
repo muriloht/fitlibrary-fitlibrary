@@ -22,4 +22,5 @@ public interface Closure {
 	Object invoke() throws IllegalAccessException, InvocationTargetException;
 	Object invoke(Object[] arguments) throws IllegalAccessException, InvocationTargetException;
 	TypedObject invokeTyped(Object[] arguments) throws IllegalAccessException, InvocationTargetException;
+	Class<?> getOwningClass();
 }

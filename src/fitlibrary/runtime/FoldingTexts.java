@@ -5,35 +5,40 @@
 
 package fitlibrary.runtime;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import fitlibrary.table.Table;
 
 public class FoldingTexts {
 	private static int NEXT_ID = 12345;
 	private static int nextId = NEXT_ID++;
-	private Map<String,StringBuilder> folds = new HashMap<String, StringBuilder>();
+	private Map<String,StringBuilder> folds = new ConcurrentHashMap<String, StringBuilder>();
 	
 	public void logAsAfterTable(String title, String message) {
-		synchronized(folds) {
-			StringBuilder messages = folds.get(title);
-			if (messages == null)
-				folds.put(title,new StringBuilder(message));
-			else
-				messages.append(message);
-		}
-}
+		String br = "<br/>";
+		if (title.equals("Logging"))
+			br = "";
+		StringBuilder sb = folds.get(title);
+		if (sb == null)
+			folds.put(title,new StringBuilder(message+br));
+		else
+			synchronized(sb) {
+				sb.append(message);
+				sb.append(br);
+			}
+	}
 	public void addAccumulatedFoldingText(Table table) {
-		synchronized(folds) {
-			for (String key: folds.keySet())
-				addAccumulatedFoldingText(key,table);
-		}
+		for (String key: folds.keySet())
+			addAccumulatedFoldingText(key,table);
 	}
 	private void addAccumulatedFoldingText(String title, Table table) {
 		StringBuilder sb = folds.get(title);
-		String text = sb.toString();
-		folds.put(title, new StringBuilder());
+		String text;
+		synchronized(sb) {
+			text = sb.toString();
+			sb.setLength(0);
+		}
 		if (text == null || text.trim().isEmpty())
 			return;
 		final int id = nextId;

@@ -61,7 +61,16 @@ public class MethodClosure implements Closure {
     }
 	@Override
 	public String toString() {
-		return "MethodClosure["+typedObject+","+method+"]";
+		return method.getName()+"("+args()+") on "+typedObject.getSubject();
+	}
+	private String args() {
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		if (parameterTypes.length == 0)
+			return "";
+		String s = "";
+		for (Class<?> t : parameterTypes)
+			s += ","+t.getSimpleName();
+		return s.substring(1);
 	}
 	public ResultParser resultParser(Evaluator evaluator) {
 		return typedObject.resultParser(evaluator,method);
@@ -80,5 +89,8 @@ public class MethodClosure implements Closure {
 	public Class<?>[] getParameterTypes() {
 		return method.getParameterTypes();
 	}
-
+	@Override
+	public Class<?> getOwningClass() {
+		return typedObject.getSubject().getClass();
+	}
 }

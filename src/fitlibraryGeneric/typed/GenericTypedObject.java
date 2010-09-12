@@ -12,15 +12,23 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupClosure;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.FieldParser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.special.DoAction;
+import fitlibrary.special.PositionedTarget;
+import fitlibrary.special.PositionedTargetFactory;
+import fitlibrary.special.UnfoundPositionedTarget;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.RuntimeContextual;
@@ -33,6 +41,7 @@ import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
 public class GenericTypedObject implements TypedObject {
+	private static Logger logger = FitLibraryLogger.getLogger(GenericTypedObject.class);
 	public final static GenericTypedObject NULL = new GenericTypedObject(null);
 	private final GenericTyped typed;
 	private final Object subject;
@@ -59,7 +68,7 @@ public class GenericTypedObject implements TypedObject {
 		this.typed = typed;
 	}
 	public interface MethodTargetFactory {
-		CalledMethodTarget createCalledMethodTarget(Closure closure, Evaluator evaluator);
+		ICalledMethodTarget createCalledMethodTarget(Closure closure, Evaluator evaluator);
 	}
 	private static GenericTyped typeOf(Object subject) {
 		if (subject == null)
@@ -146,21 +155,21 @@ public class GenericTypedObject implements TypedObject {
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] argTypes) {
 		return PlugBoard.lookupClosure.findPublicMethodClosure(this, name, argTypes);
 	}
-	public Option<CalledMethodTarget> new_findSpecificMethod(String name, int argCount, Evaluator evaluator) {
+	public Option<ICalledMethodTarget> new_findSpecificMethod(String name, int argCount, Evaluator evaluator) {
 		Option<Closure> methodClosureOption = new_findMethodClosure(name, argCount);
 		if (methodClosureOption.isSome())
-			return new Some<CalledMethodTarget>(methodTargetFactory.createCalledMethodTarget(methodClosureOption.get(), evaluator));
+			return new Some<ICalledMethodTarget>(methodTargetFactory.createCalledMethodTarget(methodClosureOption.get(), evaluator));
 		return None.none();
 	}
 	private Option<Closure> new_findMethodClosure(String name, int argCount) {
-		Closure methodClosure = lookupClosure.findMethodClosure(this,name, argCount);
+		Closure methodClosure = lookupClosure.findMethodClosure(this,name,argCount);
 		if (methodClosure == null)
 			return None.none();
 		return new Some<Closure>(methodClosure);
 	}
-	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
+	public ICalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
 		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
-		Option<CalledMethodTarget> target = new_findSpecificMethod(getMethodName, 0, evaluator);
+		Option<ICalledMethodTarget> target = new_findSpecificMethod(getMethodName, 0, evaluator);
 		if (target.isSome())
 			return target.get();
 		String isMethodName = ExtendedCamelCase.camel("is " + propertyName);
@@ -219,5 +228,57 @@ public class GenericTypedObject implements TypedObject {
 			((RuntimeContextual)subject).setRuntimeContext(runtime);
 		if (hasTypedSystemUnderTest())
 			getTypedSystemUnderTest().injectRuntime(runtime);
+	}
+	@Override
+	public PositionedTarget findActionSpecialMethod(String[] cells, PositionedTargetFactory factory) {
+		logger.debug("Trying to find "+ExtendedCamelCase.camel(cells[0]));
+		int cellCount = cells.length;
+		Method[] methods = subject.getClass().getMethods();
+		for (Method method : methods) {
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			int paramCount = parameterTypes.length;
+			if (paramCount > 0 && cellCount > paramCount)
+				if (paramCount == 1 && parameterTypes[0] == DoAction.class) { // Nullary
+					logger.debug("Trying against "+method);
+					if (ExtendedCamelCase.camel(cells[0]).equals(method.getName())) {
+						logger.debug("Found "+method);
+						return factory.create(method,1,cellCount);
+					} else if (cells[cellCount-1].equals(method.getName())) {
+						logger.debug("Found "+method);
+						return factory.create(method,0,cellCount-1);
+					}
+				} else if (paramCount > 1 && parameterTypes[0] == DoAction.class) { // postfix
+					int start = cellCount-2*paramCount+2;
+					String postfixName = cells[start];
+					for (int i = 1; i < paramCount-1; i++)
+						postfixName += " "+cells[start+i*2];
+					postfixName = ExtendedCamelCase.camel(postfixName);
+					if (postfixName.equals(method.getName())) {
+						logger.debug("Found "+method);
+						return factory.create(method,0,start);
+					}
+					//					start = cellCount-2*paramCount+2-1;
+					//					postfixName = cells[start];
+					//					for (int i = 1; i < paramCount-1; i++)
+					//						postfixName += " "+cells[start+i*2];
+					//					postfixName = ExtendedCamelCase.camel(postfixName);
+					//					if (postfixName.equals(method.getName()))
+					//						return factory.create(method,0,start);
+				} else if (paramCount > 1 && parameterTypes[paramCount-1] == DoAction.class) { // prefix
+					String prefixName = cells[0];
+					for (int i = 1; i < paramCount-1; i++)
+						prefixName += " "+cells[i*2];
+					prefixName = ExtendedCamelCase.camel(prefixName);
+					if (prefixName.equals(method.getName())) {
+						logger.debug("Found "+method);
+						return factory.create(method,paramCount*2-2,cellCount);
+					}
+					//					prefixName += " "+cells[paramCount*2-2];
+					//					prefixName = ExtendedCamelCase.camel(prefixName);
+					//					if (prefixName.equals(method.getName()))
+					//						return factory.create(method,paramCount*2-1,cellCount);
+				}
+		}
+		return new UnfoundPositionedTarget();
 	}
 }

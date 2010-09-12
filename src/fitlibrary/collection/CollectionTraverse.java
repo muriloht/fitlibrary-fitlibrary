@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.ClassMethodTarget;
 import fitlibrary.closure.ConstantMethodTarget;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.MethodTarget;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.IgnoredException;
@@ -161,7 +161,7 @@ public abstract class CollectionTraverse extends Traverse {
         return columnBindings;
 	}
     @SuppressWarnings("unchecked")
-	protected CalledMethodTarget bindPropertyGetterForTypedObject(String name, TypedObject typedObject) {
+	protected ICalledMethodTarget bindPropertyGetterForTypedObject(String name, TypedObject typedObject) {
 		String mappedName = camelCase(name);
     	if (typedObject.getSubject() instanceof Map) {
     		Object value = ((Map<?,?>)typedObject.getSubject()).get(mappedName);

@@ -9,9 +9,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import fit.Fixture;
 import fitlibrary.exception.classes.ConstructorNotVisible;
 import fitlibrary.exception.classes.NoNullaryConstructor;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
@@ -22,6 +25,7 @@ import fitlibrary.utility.ClassUtility;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class CreateFromClassNameCaller extends DoCaller {
+	private static Logger logger = FitLibraryLogger.getLogger(CreateFromClassNameCaller.class);
 	private static final ThreadLocal<Set<String>> packages = // Put into Runtime
 		new ThreadLocal<Set<String>> () {
 		@Override
@@ -106,6 +110,7 @@ public class CreateFromClassNameCaller extends DoCaller {
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		if (exceptionToThrow != null)
 			throw exceptionToThrow;
+		logger.trace("Created "+object);
 		return new GenericTypedObject(object);
 	}
 	public static void addDefaultPackage(String name) {

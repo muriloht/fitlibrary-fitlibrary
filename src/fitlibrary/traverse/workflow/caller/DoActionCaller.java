@@ -6,25 +6,30 @@ package fitlibrary.traverse.workflow.caller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import fitlibrary.closure.CalledMethodTarget;
+import org.apache.log4j.Logger;
+
+import fitlibrary.closure.ICalledMethodTarget;
+import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
+import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoCaller;
-import fitlibrary.traverse.workflow.DoTraverseInterpreter;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class DoActionCaller extends DoCaller {
-	private CalledMethodTarget target;
+	private static Logger logger = FitLibraryLogger.getLogger(DoActionCaller.class);
+	private ICalledMethodTarget target;
 	private String methodName;
 
-	public DoActionCaller(Row row, DoTraverseInterpreter doEvaluator) {
-		methodName = row.methodNameForCamel(doEvaluator);
+	public DoActionCaller(Row row, Evaluator evaluator, boolean sequencing, LookupMethodTarget lookupTarget) {
+		methodName = row.methodNameForCamel(evaluator);
 		try {
-			target = doEvaluator.findMethodByActionName(row,row.size()-1);
+			target = lookupTarget.findMethodByArity(row, 0, row.size(), !sequencing, evaluator);
 		} catch (Exception e) {
 			setProblem(e);
 		}
@@ -35,6 +40,7 @@ public class DoActionCaller extends DoCaller {
 	}
 	@Override
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
+		logger.trace("Calling "+target.toString());
 		try {
 			TypedObject typedResult = target.invokeTyped(row.fromAt(1),testResults);
 			Object result = null;
@@ -54,6 +60,6 @@ public class DoActionCaller extends DoCaller {
 	}
 	@Override
 	public String ambiguityErrorMessage() {
-		return methodName+"()";
+		return methodName+"() in "+target.getOwningClass().getName();
 	}
 }

@@ -10,11 +10,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.Closure;
+import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.special.PositionedTarget;
+import fitlibrary.special.PositionedTargetFactory;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.utility.option.Option;
@@ -22,7 +24,7 @@ import fitlibrary.utility.option.Option;
 public interface TypedObject {
 	public Object getSubject();
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] args);
-	public CalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
+	public ICalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator);
 	public Class<?> classType();
 	public Parser[] parameterParsers(Evaluator evaluator, Method method);
 	public ResultParser resultParser(Evaluator evaluator, Method method);
@@ -35,10 +37,11 @@ public interface TypedObject {
 	public Typed getTyped();
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results);
 	
-	Option<CalledMethodTarget> new_findSpecificMethod(String methodName,
+	Option<ICalledMethodTarget> new_findSpecificMethod(String methodName,
 			int argCount, Evaluator evaluator);
 	public boolean isNull();
 	boolean hasTypedSystemUnderTest();
 	TypedObject getTypedSystemUnderTest();
 	void injectRuntime(RuntimeContextInternal runtime);
+	public PositionedTarget findActionSpecialMethod(String[] cells, PositionedTargetFactory factory);
 }

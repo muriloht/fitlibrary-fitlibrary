@@ -5,6 +5,8 @@
 
 package fitlibrary.flow;
 
+import org.apache.log4j.Logger;
+
 import fit.Fixture;
 import fitlibrary.DefineAction;
 import fitlibrary.DoFixture;
@@ -13,6 +15,7 @@ import fitlibrary.SelectFixture;
 import fitlibrary.SetUpFixture;
 import fitlibrary.collection.CollectionSetUpTraverse;
 import fitlibrary.dynamicVariable.VariableResolver;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
@@ -29,6 +32,7 @@ import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 
 public class DoFlowOnTable implements DoFlowerOnTable {
+	private static Logger logger = FitLibraryLogger.getLogger(DoFlowOnTable.class);
 	private final FlowEvaluator flowEvaluator;
 	private final IScopeStack scopeStack;
 	private final SetUpTearDown setUpTearDown;
@@ -72,7 +76,8 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 //			    		System.out.println("DoFlow runtime = "+runtime.hashCode());
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
 			    		Object subject = typedResult.getSubject();
-//			    		System.out.println("DoFlow got "+subject);
+			    		if (subject != null && !(subject instanceof Boolean))
+			    			logger.trace("Interpreted  row #"+rowNo+" -> "+subject);
 			    		typedResult.injectRuntime(runtime);
 			    		if (subject == null) {
 			    			// Can't do anything useful with a null
