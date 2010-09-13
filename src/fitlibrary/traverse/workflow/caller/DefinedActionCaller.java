@@ -25,11 +25,11 @@ import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.TableEvaluator;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class DefinedActionCaller extends DoCaller {
+public class DefinedActionCaller extends AbstractDoCaller {
 	private static Logger logger = FitLibraryLogger.getLogger(DefinedActionCaller.class);
 	private ParameterBinder binder;
 	private String methodName;

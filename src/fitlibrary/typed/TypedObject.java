@@ -43,5 +43,5 @@ public interface TypedObject {
 	boolean hasTypedSystemUnderTest();
 	TypedObject getTypedSystemUnderTest();
 	void injectRuntime(RuntimeContextInternal runtime);
-	public PositionedTarget findActionSpecialMethod(String[] cells, PositionedTargetFactory factory);
+	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory);
 }

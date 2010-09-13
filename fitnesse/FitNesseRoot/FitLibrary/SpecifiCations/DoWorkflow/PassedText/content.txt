@@ -10,9 +10,9 @@ def-!|
 
 |''is several lines''|@{x}|
 
-|''has tags''|!<<a>A<b/></a>>!|
+|''has tags''|!-&lt;a&gt;A&lt;b/&gt;&lt;/a&gt;-!|
 
-|'''set'''|t|''to''|!<<a>A<b/></a>>!|
+|'''set'''|t|''to''|!-&lt;a&gt;A&lt;b/&gt;&lt;/a&gt;-!|
 
 |''has tags''|@{t}|
 

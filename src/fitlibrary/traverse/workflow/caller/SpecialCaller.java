@@ -12,11 +12,11 @@ import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class SpecialCaller extends DoCaller {
+public class SpecialCaller extends AbstractDoCaller {
 	private String methodName;
 	private ICalledMethodTarget specialMethod;
 	private TwoStageSpecial twoStageSpecial = null;

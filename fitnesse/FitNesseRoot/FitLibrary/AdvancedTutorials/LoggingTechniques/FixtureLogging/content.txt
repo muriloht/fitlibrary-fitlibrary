@@ -79,6 +79,18 @@ The underlying method is:{{{	public void actionThatShows(String s) {
 		throw new FitLibraryShowException(new Show(s));
 	}
 }}}The class concerned can be any class at all. It does not need to be a subclass of ''!-DoFixture-!'', for example.
+#
+----!2 2.5 Logging
+#
+Fixturing code can call the ''logText()'' method to have information shown after the table:
+
+|''action that logs''|AFTER <u>all</u>|
+
+The underlying method is in a subclass of ''!-DoFixture-!'':{{{	public void actionThatLogs(String s) {
+		logText("My Log", s);
+	}
+}}}
+#
 ----!2 Next
 #
 On the [[next page of this tutorial][Log4jLogging]] we show how to handle logging with ''log4j'' from within code, and how to configure logging through storytest actions.

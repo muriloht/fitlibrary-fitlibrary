@@ -8,13 +8,10 @@ package fitlibrary.traverse.function;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.method.VoidMethodException;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -26,7 +23,6 @@ import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
 public class RuleTable extends Traverse {
-	static Logger logger = FitLibraryLogger.getLogger(RuleTable.class);
 	private List<ColumnTarget> columnTargets = new ArrayList<ColumnTarget>();
 	private boolean hasErrors = false;
 	private Option<ICalledMethodTarget> executeMethod = None.none();
@@ -38,7 +34,6 @@ public class RuleTable extends Traverse {
 	@Override
 	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
 		try {
-			logger.trace("Interpreting table");
 			basicCheck(table, testResults);
 			header(table, testResults);
 			optionalfunctions();
@@ -80,10 +75,8 @@ public class RuleTable extends Traverse {
 		for (int r = 2; r < table.size(); r++) {
 			Row row = table.at(r);
 			try {
-				if (resetMethod.isSome()) {
-					logger.trace("reset()");
+				if (resetMethod.isSome())
 					resetMethod.get().invoke();
-				}
 				row(testResults, row);
 			} catch (Exception e) {
 				row.error(testResults, e);
@@ -97,7 +90,6 @@ public class RuleTable extends Traverse {
 			try {
 				ColumnTarget columnTarget = columnTargets.get(i);
 				if (!haveCalledExecuteForThisRow && columnTarget.isOutput()) {
-					logger.trace("execute()");
 					executeMethod.get().invoke();
 					haveCalledExecuteForThisRow = true;
 				}

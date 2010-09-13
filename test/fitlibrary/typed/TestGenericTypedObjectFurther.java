@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -78,18 +79,15 @@ public class TestGenericTypedObjectFurther {
 	@Test
 	public void doNotFindActionSpecialMethod() throws Exception {
 		String[] cells = {"unknown"};
-		PositionedTarget positionedTarget2 = typedObject.findActionSpecialMethod(cells,positionedTargetFactory);
-		assertThat(positionedTarget2.isFound(),is(false));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,positionedTargetFactory);
+		assertThat(targets.isEmpty(),is(true));
 	}
 	@Test
 	public void findNullaryActionSpecialMethod() throws Exception {
-//		context.checking(new Expectations() {{ -- This fails with a NullPointerException
+//		context.checking(new Expectations() {{ // -- This fails with a NullPointerException
 //			oneOf(positionedTargetFactory).create(with(any(Method.class)),(String)with(equalTo("m")),(Integer)with(equalTo(0)));
 //			  will(returnValue(positionedTarget));
 //		}});
-		context.checking(new Expectations() {{
-			oneOf(positionedTarget).isFound(); will(returnValue(true));
-		}});
 		PositionedTargetFactory factory = new PositionedTargetFactory(){
 			@Override
 			public PositionedTarget create(Method method, int from, int upTo) {
@@ -100,13 +98,11 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"nullarySpecial","m"};
-		assertThat(typedObject.findActionSpecialMethod(cells,factory).isFound(),is(true));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		assertThat(targets.size(),is(1));
 	}
 	@Test
 	public void findNullaryReversedActionSpecialMethod() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(positionedTarget).isFound(); will(returnValue(true));
-		}});
 		PositionedTargetFactory factory = new PositionedTargetFactory(){
 			@Override
 			public PositionedTarget create(Method method, int from, int upTo) {
@@ -117,13 +113,11 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","nullarySpecial"};
-		assertThat(typedObject.findActionSpecialMethod(cells,factory).isFound(),is(true));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		assertThat(targets.size(),is(1));
 	}
 	@Test
 	public void findUnaryPostFixActionSpecialMethod() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(positionedTarget).isFound(); will(returnValue(true));
-		}});
 		PositionedTargetFactory factory = new PositionedTargetFactory(){
 			@Override
 			public PositionedTarget create(Method method, int from, int upTo) {
@@ -134,13 +128,11 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","2","unaryPostSpecial", "1"};
-		assertThat(typedObject.findActionSpecialMethod(cells,factory).isFound(),is(true));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		assertThat(targets.size(),is(1));
 	}
 	@Test
 	public void findBinaryPreFixActionSpecialMethod() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(positionedTarget).isFound(); will(returnValue(true));
-		}});
 		PositionedTargetFactory factory = new PositionedTargetFactory(){
 			@Override
 			public PositionedTarget create(Method method, int from, int upTo) {
@@ -151,13 +143,11 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"binary", "1", "pre special", "2", "m","a"};
-		assertThat(typedObject.findActionSpecialMethod(cells,factory).isFound(),is(true));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		assertThat(targets.size(),is(1));
 	}
 //	@Test
 //	public void findBinaryPreFixActionSpecialMethodWithTrailingKeyword() throws Exception {
-//		context.checking(new Expectations() {{
-//			oneOf(positionedTarget).isFound(); will(returnValue(true));
-//		}});
 //		PositionedTargetFactory factory = new PositionedTargetFactory(){
 //			@Override
 //			public PositionedTarget create(Method method, int from, int upTo) {
@@ -172,9 +162,6 @@ public class TestGenericTypedObjectFurther {
 //	}
 	@Test
 	public void findBinaryPostFixActionSpecialMethod() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(positionedTarget).isFound(); will(returnValue(true));
-		}});
 		PositionedTargetFactory factory = new PositionedTargetFactory(){
 			@Override
 			public PositionedTarget create(Method method, int from, int upTo) {
@@ -185,13 +172,11 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","a", "binary", "1", "post special", "2"};
-		assertThat(typedObject.findActionSpecialMethod(cells,factory).isFound(),is(true));
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		assertThat(targets.size(),is(1));
 	}
 //	@Test
 //	public void findBinaryPostFixActionSpecialMethodWithTrailingKeyword() throws Exception {
-//		context.checking(new Expectations() {{
-//			oneOf(positionedTarget).isFound(); will(returnValue(true));
-//		}});
 //		PositionedTargetFactory factory = new PositionedTargetFactory(){
 //			@Override
 //			public PositionedTarget create(Method method, int from, int upTo) {

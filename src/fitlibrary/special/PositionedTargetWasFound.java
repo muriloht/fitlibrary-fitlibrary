@@ -7,23 +7,20 @@ package fitlibrary.special;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
-
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.closure.MethodClosure;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ExtendedCamelCase;
 
 public class PositionedTargetWasFound implements PositionedTarget {
-	private static Logger logger = FitLibraryLogger.getLogger(PositionedTargetWasFound.class);
 	private final int innerFrom;
 	private final int innerUpTo;
 	private final boolean sequencing;
@@ -55,7 +52,7 @@ public class PositionedTargetWasFound implements PositionedTarget {
 		}
 		for (int i = innerFrom; i < innerUpTo; i += 2)
 			innerName += " "+cells[i];
-		innerName = innerName.trim();
+		innerName = ExtendedCamelCase.camel(innerName);
 		return (innerUpTo - innerFrom) / 2;
 	}
 	@Override
@@ -78,7 +75,6 @@ public class PositionedTargetWasFound implements PositionedTarget {
 	}
 	@Override
 	public TypedObject run(Row row, TestResults testResults, RuntimeContextInternal runtime) {
-		logger.trace("Calling "+specialTarget);
 		try {
 			Object[] args = createArguments(new DoActionInContext(innerTarget,row,innerFrom,innerUpTo,sequencing,runtime),testResults,row);
 			Object result = specialTarget.invoke(args);

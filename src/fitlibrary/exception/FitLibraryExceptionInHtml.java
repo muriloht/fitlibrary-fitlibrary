@@ -6,6 +6,8 @@
 package fitlibrary.exception;
 
 public class FitLibraryExceptionInHtml extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+	
 	public FitLibraryExceptionInHtml(String s) {
 		super(s);
 	}

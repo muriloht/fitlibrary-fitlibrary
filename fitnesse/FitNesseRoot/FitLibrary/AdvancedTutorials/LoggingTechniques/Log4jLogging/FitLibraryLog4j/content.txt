@@ -9,7 +9,7 @@ We need to add the following table afer our main fixture, otherwise the ''!-conf
 The above fixture is as follows:
 {{{   public class AppWithLog4j {
 	private static Logger logger = Logger.getLogger(AppWithLog4j.class);
-	
+
 	public boolean call() {
 		logger.trace("App called");
 		return true;

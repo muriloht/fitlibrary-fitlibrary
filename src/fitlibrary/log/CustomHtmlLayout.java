@@ -11,6 +11,7 @@ import org.apache.log4j.helpers.Transform;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class CustomHtmlLayout extends Layout {
+	public static int MAX_LOGGED_SIZE = 120;
 	protected final int BUF_SIZE = 256;
 	protected final int MAX_CAPACITY = 1024;
 	static String TRACE_PREFIX = "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -72,7 +73,7 @@ public class CustomHtmlLayout extends Layout {
 		
 
 		sbuf.append("<td title=\"Message\">");
-		sbuf.append(Transform.escapeTags(event.getRenderedMessage()));
+		sbuf.append(limitSize(Transform.escapeTags(event.getRenderedMessage())));
 		sbuf.append("</td>" + Layout.LINE_SEP);
 		
 		
@@ -86,6 +87,12 @@ public class CustomHtmlLayout extends Layout {
 		}
 
 		return sbuf.toString();
+	}
+    private static String limitSize(String s) {
+		int size = s.length();
+		if (size <= MAX_LOGGED_SIZE)
+			return s;
+		return s.substring(0,MAX_LOGGED_SIZE-20)+"..."+s.substring(size-17);
 	}
 	void appendThrowableAsHTML(String[] s, StringBuffer sbuffer) {
 		if (s != null) {

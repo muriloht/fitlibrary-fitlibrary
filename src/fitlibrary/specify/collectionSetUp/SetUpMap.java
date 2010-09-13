@@ -16,12 +16,12 @@ import fitlibrary.specify.eg.User;
 
 @SuppressWarnings("unchecked")
 public class SetUpMap implements DomainFixtured {
-	private Map iOUMap = new HashMap();
+	private Map<String,User> iOUMap = new HashMap<String,User>();
 	
 	public User nameOwe(String name, double owe) {
 		return new User(name,owe);
 	}
-	public Map getIOUMap() {
+	public Map<String,User> getIOUMap() {
 		return iOUMap;
 	}
 	public void iOUMap(List users) {

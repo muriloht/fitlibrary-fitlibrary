@@ -19,12 +19,12 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class CreateFromClassNameCaller extends DoCaller {
+public class CreateFromClassNameCaller extends AbstractDoCaller {
 	private static Logger logger = FitLibraryLogger.getLogger(CreateFromClassNameCaller.class);
 	private static final ThreadLocal<Set<String>> packages = // Put into Runtime
 		new ThreadLocal<Set<String>> () {

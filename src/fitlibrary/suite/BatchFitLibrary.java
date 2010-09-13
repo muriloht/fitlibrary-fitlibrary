@@ -54,10 +54,10 @@ public class BatchFitLibrary implements StorytestRunner {
 		flowEvaluator.setRuntimeContext(runtime);
 		DoFlow doFlow2 = new DoFlow(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		runtime.SetTableEvaluator(doFlow2);
-		if (SHOW_LOGS) {
-			global.withFitLibraryLogger().showAfter(true);
+		global.withFitLibraryLogger().showAfter(true);
+		global.withFixturingLogger().showAfter(true);
+		if (SHOW_LOGS)
 			global.withFitLibraryLogger().level("ALL");
-		}
 		return doFlow2;
 	}
 	public void setCurrentPageName(String name) {

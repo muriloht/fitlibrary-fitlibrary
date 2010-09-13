@@ -6,14 +6,10 @@
 package fitlibrary.traverse.workflow.special;
 
 import ognl.Ognl;
-
-import org.apache.log4j.Logger;
-
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.ExtraCellsException;
 import fitlibrary.exception.table.MissingCellsException;
-import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -23,7 +19,7 @@ import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
 public class PrefixSpecialAction {
-	static Logger logger = FitLibraryLogger.getLogger(PrefixSpecialAction.class);
+//	static Logger logger = FitLibraryLogger.getLogger(PrefixSpecialAction.class);
 	public enum ShowSyle { ORDINARY, ESCAPED, LOGGED }
 	public enum NotSyle { PASSES_ON_EXCEPION, ERROR_ON_EXCEPION }
 	protected final SpecialActionContext actionContext;
@@ -35,12 +31,10 @@ public class PrefixSpecialAction {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,1);
-		logger.trace("Calling check()");
 		final Cell expectedCell = row.last();
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
-				logger.trace("Calling "+target);
 				target.invokeAndCheckForSpecial(row.fromAt(2),expectedCell,testResults,row,row.at(0));
 			}
 		};
@@ -49,12 +43,10 @@ public class PrefixSpecialAction {
 		if (row.size() <= 1)
 			throw new MissingCellsException("Do");
 		final ICalledMethodTarget target = actionContext.findMethodFromRow(row,1,0);
-		logger.trace("Calling log()");
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
 				try {
-					logger.trace("Calling "+target);
 					Object result = target.invokeForSpecial(row.fromAt(2),testResults,true,row.at(0));
 					reportBoolean(result, row.at(1), testResults);
 					report(target.getResultString(result));
@@ -88,14 +80,12 @@ public class PrefixSpecialAction {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final Option<ICalledMethodTarget> optionalTarget = target(row);
-		logger.trace("Calling set()");
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {
-						logger.trace("Calling "+optionalTarget.get());
 						Object result = optionalTarget.get().invokeForSpecial(row.fromAt(3),testResults,true,row.at(0));
 						actionContext.setDynamicVariable(variableName,result);
 					} else if (row.at(3).hasEmbeddedTables(actionContext))
@@ -119,14 +109,12 @@ public class PrefixSpecialAction {
 		if (row.size() <= 2)
 			throw new MissingCellsException("Do");
 		final Option<ICalledMethodTarget> optionalTarget = getTarget(row);
-		logger.trace("Calling setSymbolNamed()");
 		return new TwoStageSpecial() {
 			@Override
 			public void run(TestResults testResults) {
 				try {
 					String variableName = row.text(1,actionContext);
 					if (optionalTarget.isSome()) {
-						logger.trace("Calling "+optionalTarget.get());
 						Object result = optionalTarget.get().invokeForSpecial(row.fromAt(3),testResults,true,row.at(0));
 						actionContext.setFitVariable(variableName,result);
 					} else

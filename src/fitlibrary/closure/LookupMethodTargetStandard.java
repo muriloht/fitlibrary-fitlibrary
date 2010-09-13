@@ -21,7 +21,6 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.special.PositionedTarget;
 import fitlibrary.special.PositionedTargetFactory;
 import fitlibrary.special.PositionedTargetWasFound;
-import fitlibrary.special.UnfoundPositionedTarget;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
@@ -193,17 +192,17 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		}
 	}
 	@Override
-	public PositionedTarget findActionSpecialMethod(final Evaluator evaluator, final String[] cells, final boolean sequencing) {
+	public List<PositionedTarget> findActionSpecialMethod(final Evaluator evaluator, final String[] cells, final boolean sequencing) {
 		for (final TypedObject typedObject : evaluator.getScope().objectsForLookup()) {
-			PositionedTarget positioned = typedObject.findActionSpecialMethod(cells,new PositionedTargetFactory(){
+			List<PositionedTarget> positioned = typedObject.findActionSpecialMethods(cells,new PositionedTargetFactory(){
 				@Override
 				public PositionedTarget create(Method method, int from, int upTo) {
 					return new PositionedTargetWasFound(evaluator,cells,typedObject,method,from,upTo,sequencing,PlugBoard.lookupTarget);
 				}
 			});
-			if (positioned.partiallyValid())
+			if (!positioned.isEmpty())
 				return positioned;
 		}
-		return new UnfoundPositionedTarget();
+		return new ArrayList<PositionedTarget>();
 	}
 }

@@ -5,7 +5,7 @@ There are three aspects to logging with log4j when using ''!-FitLibrary-!''.
  * The first section is only relevant to you if you're currently using log4j for logging in your application.
  * The following sections apply whether you're currently using log4j or not.
 
-We assume familiarity with log4j. See ... for a good introduction.
+We assume familiarity with log4j. See the manual that's part of the log4j download for a good introduction.
 
 If you use another logging system, and would like to be able to hook it into ''show after'' as in 3.1 below:
 
@@ -17,7 +17,7 @@ If you're having trouble working out what's going on (or wrong) in a storytest a
 
 To start this, add the following action to the top of your storytest (''false'' stops it):
 
-|''configure log4j''|
+|''with log4j''|
 |''show after''|true|
 
 This adds a special log4j ''Appender'' that will display log information in the report. (See the log4j docs for details of ''Appender''s if you're interested.)
@@ -33,12 +33,12 @@ When ''!-FitLibrary-!'' runs a storytest with ''show after'' turned on for log4j
 
 Log4j levels can also be controller with the following actions, for example:
 
-|''configure log4j''|
+|''with log4j''|
 |''level''|DEBUG|''for''|''com.corp.us.app.pck''|
 
 or, for all:
 
-|''configure log4j''|
+|''with log4j''|
 |''level''|TRACE|
 
 Note that this is a global setting; it's not specific to a storytest and so will affect subsequent storytests in a suite. It's assumed that it will normally be used with a single storytest while investigating its behaviour.
@@ -47,35 +47,34 @@ With careful use of packages (or other log4j ''names''), you can easily tailor t
 
 See [[this page for an example][^ExampleLog4j]]
 #
-----!2 3.2 Using log4j in your fixture
+----!2 3.2 Using !-FixturingLogger-! in your fixture
 #
-If you don't use log4j in your application code, you can still use it in your fixture code.
+Here's how to use it in your fixture code if:
 
-The actions above apply.
+ * You don't use log4j in your application code, or
+ * You prefer to keep your fixture and application logging completely separate
 
-See [[this page for an example][^FixtureExampleLog4j]]
+Similar actions to those above apply. However, it uses a separate "name space" so that its logging does not affect normal uses of log4j.
+
+See [[this page for an example][>FixtureExampleFixturingLogger]]
 #
 ----!2 3.3 Logging of ''!-FitLibrary-!'' itself
 #
-''!-FitLibrary-!'' uses log4j for logging as well. However, it uses a separate "name space" so that its logging does not affect normal uses of log4j.
+''!-FitLibrary-!'' uses log4j for logging as well. However, it uses another, separate "name space" so that its logging does not affect normal uses of log4j.
 
 You may like to turn on the logging in ''!-FitLibrary-!'' so you can see what it's doing. For example:
 
-|''!-configure FitLibraryLogging-!''|
-|''show after''|true|
-
-You can also request that the logging from ''!-FitLibrary-!'' is also routed to the standard log4j, so that you can include the ''!-FitLibrary-!'' logs in your usual log files, etc.
-
-|''!-configure FitLibraryLogging-!''|
-|''append to log4j''|true|
+|''!-with FitLibrary logger-!''|
+|''level''|TRACE|
 
 See [[this page for an example][^FitLibraryLog4j]]
 
 There is also specialised logging for some of the fixtures in ''!-FitLibraryWeb-!'', such as for ''web services''. Again, this logging, using ''!-FixturingLogging-!'', is kept separate from standard log4j logging. This is configured as follows:
 
-|''!-configure FixturingLogging-!''|
-|''show after''|true|
-|''append to log4j''|true|
+|''!-with fixturing logger-!''|
+|''level''|TRACE|
+
+You can also request that the logging from ''!-FitLibraryLogger-!''  and/or ''!-FixturingLogger-!'' is also routed to the standard log4j, so that you can include them in your usual log files, etc. This is done at the code level. See [[this page for an example][>FixtureExampleFixturingLogger]].
 #
 !1 The End
 #

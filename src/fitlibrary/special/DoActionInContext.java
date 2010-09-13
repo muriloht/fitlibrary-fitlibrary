@@ -5,12 +5,9 @@
 
 package fitlibrary.special;
 
-import org.apache.log4j.Logger;
-
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.IgnoredException;
-import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContext;
@@ -20,7 +17,6 @@ import fitlibrary.table.Row;
 import fitlibrary.tableProxy.CellProxy;
 
 public class DoActionInContext implements DoAction {
-	private static Logger logger = FitLibraryLogger.getLogger(DoActionInContext.class);
 	private final ICalledMethodTarget target;
 	protected final Row row;
 	private final int innerFrom;
@@ -28,7 +24,6 @@ public class DoActionInContext implements DoAction {
 	private final int to;
 	private final boolean sequencing;
 	protected final RuntimeContextInternal runtime;
-	private boolean runAlready = false;
 
 	public DoActionInContext(ICalledMethodTarget target, Row row, int innerFrom, int innerUpTo, boolean sequencing, RuntimeContextInternal runtime) {
 		this.target = target;
@@ -48,9 +43,6 @@ public class DoActionInContext implements DoAction {
 		return run(true);
 	}
 	private Object run(boolean markErrors) throws Exception {
-		if (!runAlready )
-			logger.trace("Calling "+target); // Avoid blowing the heap with lots of logs
-		runAlready = true;
 		Parser[] parameterParsers = target.getParameterParsers();
 		Object[] args = new Object[parameterParsers.length];
 		TestResults testResults = runtime.getTestResults();

@@ -4,16 +4,13 @@
  * Many examples of the development of ${storytest}s using ${fit} and an earlier version of ${fitLibrary} are covered in:
    * !3 ''Fit for Developing Software'', Rick Mugridge and Ward Cunningham, Prentice-Hall, 2005.
  * Much of this book is still relevant to storytesting with the latest ${fitLibrary}.
-----!1 [[''!-FitLibrary by Example-!''][^FitLibraryByExample]]
- * We show the use of ${fitLibrary} for ${storytest}s with lots of little examples:
-  * ^FitLibraryByExample
+
+|!1 [[''!-FitLibrary by Example-!''][^FitLibraryByExample]]|
+
+ * We show the use of ${fitLibrary} for ${storytest}s with lots of little examples
  * If you want to get started with ${fitLibrary}, start with these examples.
  * If you're familiar with ${fitLibrary}, you'll see in these examples that new capability has been added.
 ----
-!3 Changes in latest version
- * ^LatestChangesForStorytestWriters
- * ^LatestChangesToImplementation
-This UserGuide is a work in progress.
 !3 Running storytests with ${fitNesse} and ''^FolderRunner''
  * To use ${fitLibrary} in Java with ${fitNesse}, you need to include the following at the top level page of your project:
 {{{

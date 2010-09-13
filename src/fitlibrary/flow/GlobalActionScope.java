@@ -42,7 +42,6 @@ import fitlibrary.utility.FileHandler;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class GlobalActionScope implements RuntimeContextual {
-	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
 	public static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
@@ -244,6 +243,9 @@ public class GlobalActionScope implements RuntimeContextual {
 		} catch (IOException e) {
 			throw new FitLibraryException(e.getMessage());
 		}
+	}
+	public void logText(String s) {
+		runtimeContext.getConfigureLog4j().log(s);
 	}
 	//--- SHOW
 	public void show(Row row, String text) {
@@ -533,6 +535,14 @@ public class GlobalActionScope implements RuntimeContextual {
 		Object result = action.run();
 		if (result != null)
 			logMessage(result.toString());
+	}
+	/** Log result to log4j
+	 */
+	public void logged(DoAction action) throws Exception {
+		logger.trace("called logged");
+		Object result = action.run();
+		if (result != null)
+			runtimeContext.getConfigureLog4j().log(result.toString());
 	}
 	
 //	public void is(DoAction action, Object expected) throws Exception {

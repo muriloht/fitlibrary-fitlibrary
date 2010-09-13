@@ -33,6 +33,6 @@ public interface LookupMethodTarget extends MustBeThreadSafe {
 			InvocationTargetException;
 	Closure findNewInstancePluginMethod(Evaluator evaluator);
 	void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope);
-	PositionedTarget findActionSpecialMethod(Evaluator evaluator, String[] cells, boolean sequencing);
+	List<PositionedTarget> findActionSpecialMethod(Evaluator evaluator, String[] cells, boolean sequencing);
 	ICalledMethodTarget findMethodByArity(Row row, int from, int upTo, boolean doStyle, Evaluator evaluator) throws Exception;
 }

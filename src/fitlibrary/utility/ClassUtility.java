@@ -12,17 +12,21 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.CompareFilesFixture;
 import fitlibrary.closure.Closure;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.CompareFilesTraverse;
 import fitlibrary.traverse.Evaluator;
 
 public class ClassUtility {
+	private static Logger logger = FitLibraryLogger.getLogger(ClassUtility.class);
 	public static String classList(Class<?> firstClass, List<Class<?>> classes) {
 		if (classes.isEmpty()) {
 			return ""+firstClass;
@@ -117,7 +121,9 @@ public class ClassUtility {
 	public static Object newInstance(Class<?> sutClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		Constructor<?> declaredConstructor = sutClass.getDeclaredConstructor(new Class[]{});
 		declaredConstructor.setAccessible(true);
-		return declaredConstructor.newInstance(new Object[]{});
+		Object object = declaredConstructor.newInstance(new Object[]{});
+		logger.trace("Created "+object);
+		return object;
 	}
 	public static Object newInstance(String className) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
 		Class<?> theClass = Class.forName(className);

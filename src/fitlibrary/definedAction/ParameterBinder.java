@@ -18,8 +18,10 @@ public class ParameterBinder {
 	private final List<String> formalParameters;
 	private final Tables tables;
 	private final String pageName;
+	private String name;
 
-	public ParameterBinder(List<String> formalParameters, Tables tables, String pageName) {
+	public ParameterBinder(String name, List<String> formalParameters, Tables tables, String pageName) {
+		this.name = name;
 		this.formalParameters = formalParameters;
 		this.tables = tables;
 		this.pageName = pageName;
@@ -62,5 +64,8 @@ public class ParameterBinder {
 	}
 	public String getParameterList() {
 		return "("+CollectionUtility.mkString(",",formalParameters)+")";
+	}
+	public String getName() {
+		return name+getParameterList();
 	}
 }

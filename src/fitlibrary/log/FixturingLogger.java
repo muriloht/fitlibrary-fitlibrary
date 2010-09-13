@@ -38,7 +38,6 @@ public class FixturingLogger extends Logger {
 		return ROOT;
 	}
 	public static Logger getLogger(String name) {
-		System.out.println("FixturingLogger.getLogger("+name+")");
 		return hierarchy.getLogger(name,factory );
 	}
 	public static Logger getLogger(Class<?> type) {

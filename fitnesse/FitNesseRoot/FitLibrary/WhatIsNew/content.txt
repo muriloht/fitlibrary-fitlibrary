@@ -1,12 +1,10 @@
 !1 This Release:
-|!2 ''Details of changes in this release''|12 August 2010|
 
- * Fixed a bug with passing XML strings as parameters to ''defined actions''
+|!2 ''Details of changes in this release''|13 September 2010|
+
+ * Added log4j logging capability. See .FitLibrary.AdvancedTutorials.LoggingTechniques
+ * Add retry capability to batch running.
+ * Revised the internal implementation of many of the ''special actions'' (.FitLibrary.SpecifiCations.SpecialActions).
 
 ----!1 Earlier Releases:
- * !2 ^FifthAugust2010Release
- * !2 >June2010Release
- * !2 >May2010Release
- * !2 ^October2009Release
- * !2 ^July2009Release
- * !2 >November2008Release
+|!contents|

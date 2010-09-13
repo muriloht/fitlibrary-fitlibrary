@@ -6,23 +6,19 @@ package fitlibrary.traverse.workflow.caller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.log4j.Logger;
-
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.exception.AbandonException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class DoActionCaller extends DoCaller {
-	private static Logger logger = FitLibraryLogger.getLogger(DoActionCaller.class);
+public class DoActionCaller extends AbstractDoCaller {
 	private ICalledMethodTarget target;
 	private String methodName;
 
@@ -40,7 +36,6 @@ public class DoActionCaller extends DoCaller {
 	}
 	@Override
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
-		logger.trace("Calling "+target.toString());
 		try {
 			TypedObject typedResult = target.invokeTyped(row.fromAt(1),testResults);
 			Object result = null;

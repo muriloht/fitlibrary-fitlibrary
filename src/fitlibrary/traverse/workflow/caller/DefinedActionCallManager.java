@@ -5,25 +5,27 @@
 
 package fitlibrary.traverse.workflow.caller;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Stack;
 
+import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 
 public class DefinedActionCallManager {
-	protected final Set<Object> callsInProgress = new HashSet<Object>();
+	protected final Stack<ParameterBinder> callsInProgress = new Stack<ParameterBinder>();
 	protected Table shows = TableFactory.table();
 
-	public void startCall(Object call) {
+	public void startCall(ParameterBinder call) {
 		clearShowsIfNoCallsInProgress();
 		ensureNotInfinite(call);
-		callsInProgress.add(call);
+		callsInProgress.push(call);
 	}
-	public void endCall(Object call) {
-		callsInProgress.remove(call);
+	public void endCall(ParameterBinder call) {
+		ParameterBinder top = callsInProgress.pop();
+		if (top != call)
+			throw new RuntimeException("Unstack-like behaviour");
 	}
 	public Table getShowsTable() {
 		return shows;
@@ -36,6 +38,11 @@ public class DefinedActionCallManager {
 	}
 	public boolean readyToShow() {
 		return hasNoOutstandingCalls() && hasShows();
+	}
+	public String topName() {
+		if (callsInProgress.isEmpty())
+			return "storytest";
+		return callsInProgress.peek().getName();
 	}
 	
 	private void ensureNotInfinite(Object call) {

@@ -17,6 +17,8 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.MissingCellsException;
+import fitlibrary.flow.DoAutoWrapper;
+import fitlibrary.flow.IDoAutoWrapper;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
@@ -25,20 +27,26 @@ import fitlibrary.parser.graphic.ObjectDotGraphic;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
+import fitlibrary.table.Table;
 import fitlibrary.traverse.FitHandler;
+import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.function.CalculateTraverse;
 import fitlibrary.traverse.function.ConstraintTraverse;
 import fitlibrary.traverse.workflow.caller.DefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.traverse.workflow.special.PrefixSpecialAction;
+import fitlibrary.traverse.workflow.special.SpecialActionContext;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.xref.CrossReferenceFixture;
 
-public class DoTraverse extends DoTraverseInterpreter {
+public class DoTraverse extends Traverse implements FlowEvaluator, SpecialActionContext {
 	private static Logger logger = FitLibraryLogger.getLogger(DoTraverse.class);
 	private final PrefixSpecialAction prefixSpecialAction = new PrefixSpecialAction(this);
+	protected IDoAutoWrapper doAutoWrapper = new DoAutoWrapper(this);
+	protected final DispatchRowInFlow dispatchRowInFlow;
+	protected final boolean sequencing;
 	public static final String BECOMES_TIMEOUT = "becomes";
 	// Methods that can be called within DoTraverse.
 	// Each element is of the form "methodName/argCount"
@@ -51,19 +59,54 @@ public class DoTraverse extends DoTraverseInterpreter {
 		return Arrays.asList(methodsThatAreVisibleAsActions);
 	}
 	public DoTraverse() {
-		super();
+		this.sequencing = false;
+		this.dispatchRowInFlow = new DispatchRowInFlow(this, sequencing);
 	}
 	public DoTraverse(Object sut) {
 		super(sut);
+		this.sequencing = false;
+		this.dispatchRowInFlow = new DispatchRowInFlow(this, sequencing);
 	}
 	public DoTraverse(TypedObject typedObject) {
 		super(typedObject);
+		this.sequencing = false;
+		this.dispatchRowInFlow = new DispatchRowInFlow(this, sequencing);
+	}
+	public DoTraverse(Object sut, boolean sequencing) {
+		super(sut);
+		this.sequencing = sequencing;
+		this.dispatchRowInFlow = new DispatchRowInFlow(this, sequencing);
 	}
 
-	public DoTraverse(Object sut, boolean sequencing) {
-		super(sut,sequencing);
+	@Override
+	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+		// Now handled by DoFlow
+		return null;
 	}
-	//--- FIXTURE WRAPPERS FOR THIS (and so not available in GlobalScope):
+    public TypedObject interpretRow(Row row, TestResults testResults) {
+    	return doAutoWrapper.wrap(interpretRowBeforeWrapping(row,testResults));
+    }
+    final public TypedObject interpretRowBeforeWrapping(Row row, TestResults testResults) {
+    	return dispatchRowInFlow.interpretRow(row, testResults);
+    }
+    // @Overridden in CollectionSetUpTraverse
+    public Object interpretInFlow(Table table, TestResults testResults) {
+    	return null; // Leave it here, as override it.
+    }
+	// The following is needed for its obligation to the interface SpecialActionContext, which is called by specials
+	public ICalledMethodTarget findMethodFromRow(Row row, int from, int extrasCellsOnEnd) throws Exception {
+		int upTo = row.size() - extrasCellsOnEnd;
+		return PlugBoard.lookupTarget.findMethodByArity(row, from, upTo, !dispatchRowInFlow.isDynamicSequencing(), this);
+	}
+	public ICalledMethodTarget findMethodFromRow222(Row row, int from, int less) throws Exception {
+		int extrasCellsOnEnd = less-from-1;
+		int upTo = row.size() - extrasCellsOnEnd;
+		return PlugBoard.lookupTarget.findMethodByArity(row, from, upTo, !dispatchRowInFlow.isDynamicSequencing(), this);
+	}
+	protected Object callMethodInRow(Row row, TestResults testResults, boolean catchError, Cell operatorCell) throws Exception {
+		return findMethodFromRow222(row,1, 2).invokeForSpecial(row.fromAt(2),testResults,catchError,operatorCell);
+	}
+//	--- FIXTURE WRAPPERS FOR THIS (and so not available in GlobalScope):
 	/** To allow for a CalculateTraverse to be used for the rest of the table.
      */
 	public CalculateTraverse calculate() {
@@ -203,19 +246,20 @@ public class DoTraverse extends DoTraverseInterpreter {
 	public void show(Row row, String text) {
 		global().show(row, text);
 	}
+	public void logText(String s) {
+		global().logText(s);
+	}
 
 	//------------------- Postfix Special Actions:
 	/** Check that the result of the action in the first part of the row is the same as
 	 *  the expected value in the last cell of the row.
 	 */
 	public void is(TestResults testResults, Row row) throws Exception {
-		logger.trace("Calling is()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
 		Cell expectedCell = row.last();
-		logger.trace("Calling "+target);
 		target.invokeAndCheckForSpecial(row.fromTo(1,row.size()-2),expectedCell,testResults,row,operatorCell(row));
 	}
 	public void equals(TestResults testResults, Row row) throws Exception {
@@ -225,7 +269,6 @@ public class DoTraverse extends DoTraverseInterpreter {
 	 *  the expected value in the last cell of the row.
 	 */
 	public void isNot(TestResults testResults, Row row) throws Exception {
-		logger.trace("Calling isNot()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseIs");
@@ -233,7 +276,6 @@ public class DoTraverse extends DoTraverseInterpreter {
 		Cell expectedCell = row.last();
 		try {
 			ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-			logger.trace("Calling "+target);
 			Object result = target.invoke(row.fromTo(1,row.size()-2),testResults,true);
 			target.notResult(expectedCell, result, testResults);
         } catch (IgnoredException e) {
@@ -256,20 +298,21 @@ public class DoTraverse extends DoTraverseInterpreter {
 	 *  to the given value within the timeout period.
 	 */
 	public void becomes(TestResults testResults, Row row) throws Exception {
-		logger.trace("Calling becomes()");
 		int less = 3;
 		if (row.size() < less)
 			throw new MissingCellsException("DoTraverseMatches");
 		ICalledMethodTarget target = findMethodFromRow222(row,0,less);
-		logger.trace("Calling "+target);
 		Cell expectedCell = row.last();
 		Row actionPartOfRow = row.fromTo(1,row.size()-2);
 		long start = System.currentTimeMillis();
 		int becomesTimeout = getTimeout(BECOMES_TIMEOUT);
+		boolean matched = false;
 		while (System.currentTimeMillis() - start < becomesTimeout ) {
 			Object result = target.invokeForSpecial(actionPartOfRow, testResults, false,operatorCell(row));
-			if (target.getResultParser().matches(expectedCell, result, testResults))
+			if (target.getResultParser().matches(expectedCell, result, testResults)) {
+				matched = true;
 				break;
+			}
 			try {
 				Thread.sleep(Math.min(100,becomesTimeout/10));
 			} catch (Exception e) {
@@ -277,8 +320,8 @@ public class DoTraverse extends DoTraverseInterpreter {
 			}
 		}
 		long delay = System.currentTimeMillis() - start;
-		if (delay > 0)
-			logger.trace("becomes delay of "+delay);
+		if (!matched && delay > 0)
+			logger.trace("becomes failed after "+delay+" milliseconds");
 		target.invokeAndCheckForSpecial(actionPartOfRow,expectedCell,testResults,row,operatorCell(row));
 	}
 

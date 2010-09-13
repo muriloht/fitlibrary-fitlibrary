@@ -8,6 +8,9 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
+
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.DelegateParser;
 import fitlibrary.parser.DelegatingParser;
 import fitlibrary.parser.Parser;
@@ -17,6 +20,7 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 
 public class ParseDelegation {
+	static Logger logger = FitLibraryLogger.getLogger(ParseDelegation.class);
 	// This map is cleared at the end of each storytest, allowing for different Parse Delegates
 	// in different storytests.
 	private static Map<Class<?>,DelegateParser> PARSE_DELEGATES = new ConcurrentHashMap<Class<?>,DelegateParser>();
@@ -116,6 +120,7 @@ public class ParseDelegation {
 	    }
 		@Override
 		public Object parse(String s, Typed typed) throws Exception {
+			logger.trace("Parsing with "+parseMethod.getName()+"() of "+delegate);
 		    return parseMethod.invoke(delegate, new Object[] { s, typed.asClass() });
 		}
 	}
@@ -126,7 +131,8 @@ public class ParseDelegation {
 	                new Class[] { String.class });
 	    }
 		@Override
-		public Object parse(String s, @SuppressWarnings("unused") Typed typed) throws Exception {
+		public Object parse(String s, Typed typed) throws Exception {
+			logger.trace("Parsing with "+parseMethod.getName()+"() of "+delegate);
 		    return parseMethod.invoke(delegate, new Object[] { s });
 		}
 	}

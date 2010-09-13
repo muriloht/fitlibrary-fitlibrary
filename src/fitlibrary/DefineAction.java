@@ -62,7 +62,8 @@ public class DefineAction extends Traverse {
 				DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy)) {
 			formalParameters = DefinedActionParameterTranslation.translateParameters(formalParameters, bodyCopy);
 		}
-		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
+		String name = parametersRow.methodNameForCamel(this);
+		ParameterBinder binder = new ParameterBinder(name,formalParameters,bodyCopy,pageName);
 		repository().define(parametersRow, wikiClassName, binder, this, pageName);
 	}
     private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
@@ -70,7 +71,7 @@ public class DefineAction extends Traverse {
 			error("Unexpected rows in first table of defined action",headerTable.at(0));
 		String definedActionName = headerTable.at(0).at(0).text();
 		List<String> formalParameters = getFormalParameters(headerTable.at(1),0,1);
-		ParameterBinder binder = new ParameterBinder(formalParameters,bodyCopy,pageName);
+		ParameterBinder binder = new ParameterBinder(definedActionName,formalParameters,bodyCopy,pageName);
 		repository().defineMultiDefinedAction(definedActionName, binder);
 	}
     private static Tables copyBody(Tables tables) {

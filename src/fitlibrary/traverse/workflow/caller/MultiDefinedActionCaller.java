@@ -9,11 +9,11 @@ import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class MultiDefinedActionCaller extends DoCaller {
+public class MultiDefinedActionCaller extends AbstractDoCaller {
 	private final RuntimeContextInternal runtime;
 	private final String methodName;
 	private final ParameterBinder multiParameterSubstitution;

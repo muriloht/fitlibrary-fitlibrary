@@ -7,10 +7,14 @@ package fitlibrary.parser.self;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
+import org.apache.log4j.Logger;
+
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.DelegateParser;
 import fitlibrary.typed.Typed;
 
 public class SelfConstructorParser extends DelegateParser implements Cloneable {
+	static Logger logger = FitLibraryLogger.getLogger(SelfConstructorParser.class);
     private Constructor<?> constructor;
     
     public static SelfConstructorParser findSelfConstructorParser(Class<?> type) {
@@ -32,8 +36,8 @@ public class SelfConstructorParser extends DelegateParser implements Cloneable {
     	return null;
 	}
 	@Override
-	@SuppressWarnings("unused")
 	public Object parse(String s, Typed typed) throws Exception {
+		logger.trace("Parsing with "+constructor.getName()+"()");
 		constructor.setAccessible(true);
 	    return constructor.newInstance(s);
 	}

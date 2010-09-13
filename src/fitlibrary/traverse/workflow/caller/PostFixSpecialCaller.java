@@ -9,12 +9,12 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.traverse.workflow.DoCaller;
+import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class PostFixSpecialCaller extends DoCaller {
+public class PostFixSpecialCaller extends AbstractDoCaller {
 	private String methodName;
 	private ICalledMethodTarget specialMethod;
 

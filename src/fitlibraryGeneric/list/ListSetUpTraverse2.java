@@ -7,12 +7,15 @@ package fitlibraryGeneric.list;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.classes.NoNullaryConstructor;
 import fitlibrary.exception.classes.NotSubclassFromClassFactoryMethod;
 import fitlibrary.exception.classes.NullFromClassFactoryMethod;
 import fitlibrary.global.PlugBoard;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.object.DomainObjectSetUpTraverse;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
@@ -23,6 +26,7 @@ import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.ClassUtility;
 
 public class ListSetUpTraverse2 extends DoTraverse {
+	private static Logger logger = FitLibraryLogger.getLogger(ListSetUpTraverse2.class);
     private final Class<?> componentType;
     private ICalledMethodTarget[] targets;
     private List<Object> list = new ArrayList<Object>();
@@ -76,6 +80,7 @@ public class ListSetUpTraverse2 extends DoTraverse {
         Object element = createElement(firstRow,classColumn,row,testResults);
         setSystemUnderTest(element);
 		callStartCreatingObjectMethod(element);
+		logger.trace("Adding to list: "+element);
         list.add(element);
         for (int i = 0; i < row.size(); i++) {
             if (i != classColumn && targets[i] != null) {

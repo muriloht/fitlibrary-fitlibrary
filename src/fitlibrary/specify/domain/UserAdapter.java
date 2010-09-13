@@ -6,7 +6,6 @@ package fitlibrary.specify.domain;
 
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Account;
-import fitlibrary.specify.eg.Phone;
 import fitlibrary.specify.eg.User;
 
 public class UserAdapter implements DomainFixtured {
@@ -24,9 +23,5 @@ public class UserAdapter implements DomainFixtured {
 	}
 	public void setUser(User user) {
 		this.user = user;
-	}
-	// Factory method to create a phone from the embedded setup table
-	public Phone countryRegionNumber(int country, int region, int number) {
-		return new Phone(country,region,number);
 	}
 }

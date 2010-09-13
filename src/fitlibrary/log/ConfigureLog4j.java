@@ -5,17 +5,21 @@
 
 package fitlibrary.log;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import fitlibrary.runtime.RuntimeContextInternal;
 
 public class ConfigureLog4j {
+	private final RuntimeContextInternal runtime;
 	private final ShowAfterTableAppender appender;
 	private final ConfigureLogger configureNormalLog4j;
 	private final ConfigureLogger configureFitLibraryLogger;
 	private final ConfigureLogger configureFixturingLogger;
+	private ConfigureLogger currentLogger;
 	
 	public ConfigureLog4j(RuntimeContextInternal runtime) {
+		this.runtime = runtime;
 		this.appender = new ShowAfterTableAppender(runtime,new CustomHtmlLayout());
 		this.configureNormalLog4j = new ConfigureLogger(appender) {
 			@Override
@@ -47,6 +51,8 @@ public class ConfigureLog4j {
 				return FixturingLogger.getLogger(name);
 			}
 		};
+		this.currentLogger = configureFixturingLogger;
+		FixturingLogger.getRootLogger().setLevel(Level.DEBUG);
 	}
 	public ConfigureLogger withNormalLog4j() {
 		return configureNormalLog4j;
@@ -56,5 +62,8 @@ public class ConfigureLog4j {
 	}
 	public ConfigureLogger withFixturingLogger() {
 		return configureFixturingLogger;
+	}
+	public void log(String s) {
+		currentLogger.getLogger(runtime.getDefinedActionCallManager().topName()).debug(s);
 	}
 }

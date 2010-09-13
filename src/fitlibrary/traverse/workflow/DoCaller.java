@@ -8,26 +8,13 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.typed.TypedObject;
 
-public abstract class DoCaller {
-	private Exception problem = null;
-	
-	public abstract boolean isValid();
-	public abstract TypedObject run(Row row, TestResults testResults) throws Exception;
-	public abstract String ambiguityErrorMessage();
-
-	public Exception problem() {
-		return problem;
-	}
-	public boolean isProblem() {
-		return problem != null;
-	}
-	protected void setProblem(Exception exception) {
-		problem = exception;
-	}
-	public boolean partiallyValid() {
-		return false;
-	}
-	public String getPartialErrorMessage() {
-		return "NOT AN ERROR";
-	}
+public interface DoCaller {
+	boolean isValid();
+	TypedObject run(Row row, TestResults testResults) throws Exception;
+	String ambiguityErrorMessage();
+	String getPartialErrorMessage();
+	boolean isAmbiguous();
+	boolean isProblem();
+	boolean partiallyValid();
+	Exception problem();
 }

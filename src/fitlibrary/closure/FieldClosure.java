@@ -7,14 +7,19 @@ package fitlibrary.closure;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
+
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
 
 public class FieldClosure implements Closure {
+	private static Logger logger = FitLibraryLogger.getLogger(MethodClosure.class);
 	private Field field;
 	private TypedObject typedObject;
+	private int runAlready = 0;
 
 	public FieldClosure(TypedObject typedObject, Field field) {
 		this.typedObject = typedObject;
@@ -27,7 +32,12 @@ public class FieldClosure implements Closure {
 		return field.getType();
 	}
 	public Object invoke() throws IllegalAccessException, InvocationTargetException {
-		return field.get(typedObject.getSubject());
+		if (runAlready < MethodClosure.MAX_RUNS_SHOWN)
+			logger.trace("Calling "+this); // Avoid blowing the heap with lots of logs
+		else if (runAlready == MethodClosure.MAX_RUNS_SHOWN)
+			logger.trace("Calling "+this+"(etc)");
+		runAlready++;
+    	return field.get(typedObject.getSubject());
 	}
 	public Object invoke(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
 		return invoke();

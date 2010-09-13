@@ -9,6 +9,7 @@ package fitlibraryGeneric.typed;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +29,6 @@ import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.special.DoAction;
 import fitlibrary.special.PositionedTarget;
 import fitlibrary.special.PositionedTargetFactory;
-import fitlibrary.special.UnfoundPositionedTarget;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.RuntimeContextual;
@@ -41,6 +41,7 @@ import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
 
 public class GenericTypedObject implements TypedObject {
+	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(GenericTypedObject.class);
 	public final static GenericTypedObject NULL = new GenericTypedObject(null);
 	private final GenericTyped typed;
@@ -230,55 +231,85 @@ public class GenericTypedObject implements TypedObject {
 			getTypedSystemUnderTest().injectRuntime(runtime);
 	}
 	@Override
-	public PositionedTarget findActionSpecialMethod(String[] cells, PositionedTargetFactory factory) {
-		logger.debug("Trying to find "+ExtendedCamelCase.camel(cells[0]));
+	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory) {
+//		logger.debug("Trying to find "+ExtendedCamelCase.camel(cells[0]));
+		ArrayList<PositionedTarget> list = new ArrayList<PositionedTarget>();
 		int cellCount = cells.length;
 		Method[] methods = subject.getClass().getMethods();
 		for (Method method : methods) {
 			Class<?>[] parameterTypes = method.getParameterTypes();
 			int paramCount = parameterTypes.length;
 			if (paramCount > 0 && cellCount > paramCount)
-				if (paramCount == 1 && parameterTypes[0] == DoAction.class) { // Nullary
-					logger.debug("Trying against "+method);
-					if (ExtendedCamelCase.camel(cells[0]).equals(method.getName())) {
-						logger.debug("Found "+method);
-						return factory.create(method,1,cellCount);
-					} else if (cells[cellCount-1].equals(method.getName())) {
-						logger.debug("Found "+method);
-						return factory.create(method,0,cellCount-1);
-					}
-				} else if (paramCount > 1 && parameterTypes[0] == DoAction.class) { // postfix
-					int start = cellCount-2*paramCount+2;
-					String postfixName = cells[start];
-					for (int i = 1; i < paramCount-1; i++)
-						postfixName += " "+cells[start+i*2];
-					postfixName = ExtendedCamelCase.camel(postfixName);
-					if (postfixName.equals(method.getName())) {
-						logger.debug("Found "+method);
-						return factory.create(method,0,start);
-					}
-					//					start = cellCount-2*paramCount+2-1;
-					//					postfixName = cells[start];
-					//					for (int i = 1; i < paramCount-1; i++)
-					//						postfixName += " "+cells[start+i*2];
-					//					postfixName = ExtendedCamelCase.camel(postfixName);
-					//					if (postfixName.equals(method.getName()))
-					//						return factory.create(method,0,start);
-				} else if (paramCount > 1 && parameterTypes[paramCount-1] == DoAction.class) { // prefix
-					String prefixName = cells[0];
-					for (int i = 1; i < paramCount-1; i++)
-						prefixName += " "+cells[i*2];
-					prefixName = ExtendedCamelCase.camel(prefixName);
-					if (prefixName.equals(method.getName())) {
-						logger.debug("Found "+method);
-						return factory.create(method,paramCount*2-2,cellCount);
-					}
-					//					prefixName += " "+cells[paramCount*2-2];
-					//					prefixName = ExtendedCamelCase.camel(prefixName);
-					//					if (prefixName.equals(method.getName()))
-					//						return factory.create(method,paramCount*2-1,cellCount);
+				if (isNullary(parameterTypes, paramCount)) {
+					nullary(cells, factory, list, method);
+				} else if (isPostfix(parameterTypes, paramCount)) {
+					postFix(cells, factory, list, method, paramCount);
+				} else if (isPrefix(parameterTypes, paramCount)) {
+					prefix(cells, factory, list, method, paramCount);
 				}
 		}
-		return new UnfoundPositionedTarget();
+		return list;
+	}
+	private boolean isPrefix(Class<?>[] parameterTypes, int paramCount) {
+		return paramCount > 1 && parameterTypes[paramCount-1] == DoAction.class;
+	}
+	private void prefix(String[] cells, PositionedTargetFactory factory,
+			List<PositionedTarget> list, Method method, int paramCount) {
+		String prefixName = prefixName(cells, paramCount);
+		if (prefixName.equals(method.getName())) {
+//			logger.debug("Found "+method);
+			list.add(factory.create(method,paramCount*2-2,cells.length));
+		}
+		//					prefixName += " "+cells[paramCount*2-2];
+		//					prefixName = ExtendedCamelCase.camel(prefixName);
+		//					if (prefixName.equals(method.getName()))
+		//						return factory.create(method,paramCount*2-1,cellCount);
+	}
+	private String prefixName(String[] cells, int paramCount) {
+		String prefixName = cells[0];
+		for (int i = 1; i < paramCount-1; i++)
+			prefixName += " "+cells[i*2];
+		return ExtendedCamelCase.camel(prefixName);
+	}
+	private boolean isPostfix(Class<?>[] parameterTypes, int paramCount) {
+		return paramCount > 1 && parameterTypes[0] == DoAction.class;
+	}
+	private void postFix(String[] cells, PositionedTargetFactory factory,
+			List<PositionedTarget> list, Method method, int paramCount) {
+		int cellCount = cells.length;
+		int start = cellCount-2*paramCount+2;
+		String postfixName = postfixName(cells, paramCount, start);
+		if (postfixName.equals(method.getName())) {
+//			logger.debug("Found "+method);
+			list.add(factory.create(method,0,start));
+		}
+		//					start = cellCount-2*paramCount+2-1;
+		//					postfixName = cells[start];
+		//					for (int i = 1; i < paramCount-1; i++)
+		//						postfixName += " "+cells[start+i*2];
+		//					postfixName = ExtendedCamelCase.camel(postfixName);
+		//					if (postfixName.equals(method.getName()))
+		//						return factory.create(method,0,start);
+	}
+	private String postfixName(String[] cells, int paramCount, int start) {
+		String postfixName = cells[start];
+		for (int i = 1; i < paramCount-1; i++)
+			postfixName += " "+cells[start+i*2];
+		return ExtendedCamelCase.camel(postfixName);
+	}
+	private boolean isNullary(Class<?>[] parameterTypes, int paramCount) {
+		return paramCount == 1 && parameterTypes[0] == DoAction.class;
+	}
+	private void nullary(String[] cells, PositionedTargetFactory factory,
+			List<PositionedTarget> list, Method method) {
+//		logger.debug("Trying against "+method);
+		int cellCount = cells.length;
+		if (ExtendedCamelCase.camel(cells[0]).equals(method.getName())) {
+//			logger.debug("Found "+method);
+			list.add(factory.create(method,1,cellCount));
+		} else if (cells[cellCount-1].equals(method.getName())) {
+//			logger.debug("Found "+method);
+			list.add(factory.create(method,0,cellCount-1));
+		}
 	}
 }

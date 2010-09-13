@@ -33,7 +33,7 @@ public class TestParameterBinder {
 	protected DynamicVariables resolver = context.mock(DynamicVariables.class);
 	List<String> formals = new ArrayList<String>();
 	Tables tables = tables();
-	ParameterBinder binder = new ParameterBinder(formals, tables, "fileName");
+	ParameterBinder binder = new ParameterBinder("name",formals, tables, "fileName");
 
 	@Test
 	public void fileName() {

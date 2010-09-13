@@ -7,11 +7,15 @@ package fitlibrary.parser.self;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.apache.log4j.Logger;
+
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.DelegateParser;
 import fitlibrary.typed.Typed;
 
 public class SelfParser extends DelegateParser implements Cloneable {
-    private Method parseMethod;
+	static Logger logger = FitLibraryLogger.getLogger(SelfParser.class);
+   private Method parseMethod;
     
     public static SelfParser findSelfParser(Class<?> type) {
         Method parseMethod = findParseMethod(type);
@@ -24,6 +28,7 @@ public class SelfParser extends DelegateParser implements Cloneable {
 	}
 	@Override
 	public Object parse(String s, Typed typed) throws Exception {
+		logger.trace("Parsing with "+parseMethod.getName()+"() of "+parseMethod.getDeclaringClass().getName());
 	    return parseMethod.invoke(null, new Object[] { s });
 	}
 	public static Method findParseMethod(Class<?> type)  {

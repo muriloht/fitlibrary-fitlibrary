@@ -7,7 +7,10 @@ package fitlibrary.closure;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.exception.method.WrongTypeForMethodException;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.traverse.Evaluator;
@@ -15,8 +18,11 @@ import fitlibrary.traverse.Traverse;
 import fitlibrary.typed.TypedObject;
 
 public class MethodClosure implements Closure {
+	private static Logger logger = FitLibraryLogger.getLogger(MethodClosure.class);
+	public static int MAX_RUNS_SHOWN = 20;
 	private TypedObject typedObject;
 	private Method method;
+	private int runAlready = 0;
 
 	public MethodClosure(TypedObject typedObject, Method method) {
 		if (typedObject == null || typedObject.isNull() || method == null)
@@ -31,6 +37,11 @@ public class MethodClosure implements Closure {
 		return invoke(new Object[]{});
 	}
     public Object invoke(Object[] args) throws IllegalAccessException, InvocationTargetException {
+		if (runAlready < MAX_RUNS_SHOWN)
+			logger.trace("Calling "+this); // Avoid blowing the heap with lots of logs
+		else if (runAlready == MethodClosure.MAX_RUNS_SHOWN)
+			logger.trace("Calling "+this+"(etc)");
+		runAlready++;
         try {
             return method.invoke(typedObject.getSubject(),args);
         } catch(IllegalArgumentException e) {
@@ -53,7 +64,7 @@ public class MethodClosure implements Closure {
             throw new WrongTypeForMethodException(method,expectedType,actualType);
         }
     }
-    public void setSubject(Object subject) {
+	public void setSubject(Object subject) {
     	this.typedObject = Traverse.asTypedObject(subject);
     }
     public void setTypedSubject(TypedObject typedObject) {

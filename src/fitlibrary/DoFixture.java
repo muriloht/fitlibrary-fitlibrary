@@ -62,6 +62,9 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	public void showAsAfterTable(String title,String s) {
 		doTraverse.showAsAfterTable(title,s);
 	}
+	public void logText(String s) {
+		doTraverse.logText(s);
+	}
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
 	}

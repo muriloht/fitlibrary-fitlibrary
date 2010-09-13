@@ -47,25 +47,29 @@ public class DispatchRowInFlow {
 		this.sequencing = sequencing;
 		this.dynamicSequencing = sequencing;
 	}
-    public TypedObject interpretRowBeforeWrapping(Row row, TestResults testResults) {
+    public TypedObject interpretRow(Row row, TestResults testResults) {
+    	DoCaller[] doCallers = createDoCallers(row,sequencing);
     	try {
-    		Option<TypedObject> result = pickCaller(createDoCallers(row,sequencing), row, testResults);
+    		checkForAmbiguity(doCallers);
+			Option<TypedObject> result = pickAndRunValidCaller(doCallers, row, testResults);
     		if (result.isSome())
     			return result.get();
     		if (row.size() > 2 && !sequencing) {
         		dynamicSequencing = true;
         		try {
-        			Option<TypedObject> seqResult = pickCaller(createDoCallers(row,true), row, testResults);
+        			DoCaller[] seqDoCallers = createDoCallers(row,true);
+        			checkForAmbiguity(seqDoCallers);
+					Option<TypedObject> seqResult = pickAndRunValidCaller(seqDoCallers, row, testResults);
         			if (seqResult.isSome())
         				return seqResult.get();
         		} finally {
         			dynamicSequencing = false;
         		}
     		}
-    		Option<String> partialError = pickPartial(createDoCallers(row,sequencing));
+    		Option<String> partialError = pickPartialError(doCallers);
     		if (partialError.isSome())
     			throw new FitLibraryExceptionInHtml(partialError.get());
-    		methodsAreMissing(createDoCallers(row,sequencing),possibleSeq(row));
+    		methodsAreMissing(doCallers,possibleSeq(row));
     	} catch (IgnoredException ex) {
     		//
     	} catch (AbandonException e) {
@@ -78,13 +82,18 @@ public class DispatchRowInFlow {
 	public boolean isDynamicSequencing() {
 		return dynamicSequencing;
 	}
-    private Option<String> pickPartial(DoCaller[] actions) {
-		for (int i = 0; i < actions.length; i++)
-			if (actions[i].partiallyValid())
-				return new Some<String>(actions[i].getPartialErrorMessage());
-		return None.none();
+	protected DoCaller[] createDoCallers(Row row, boolean sequenced) {
+		return new DoCaller[] { 
+				new DefinedActionCaller(row, evaluator.getRuntimeContext()),
+				new MultiDefinedActionCaller(row, evaluator.getRuntimeContext()),
+				new SpecialCaller(row,evaluator,PlugBoard.lookupTarget),
+				new PostFixSpecialCaller(row,evaluator,sequenced),
+				new CreateFromClassNameCaller(row,evaluator),
+				new DoActionCaller(row,evaluator,sequenced,PlugBoard.lookupTarget),
+				new ActionSpecial(row,evaluator,sequenced,PlugBoard.lookupTarget)
+		};
 	}
-	private Option<TypedObject> pickCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
+	private Option<TypedObject> pickAndRunValidCaller(DoCaller[] actions, Row row, TestResults testResults) throws Exception {
 		for (int i = 0; i < actions.length; i++)
 			if (actions[i].isValid()) {
 				TypedObject result = actions[i].run(row, testResults);
@@ -93,19 +102,12 @@ public class DispatchRowInFlow {
 				return new Some<TypedObject>(result);
 			}
 		return None.none();
-    }
-	private DoCaller[] createDoCallers(Row row, boolean sequenced) {
-		DoCaller[] actions = { 
-				new DefinedActionCaller(row, evaluator.getRuntimeContext()),
-				new MultiDefinedActionCaller(row, evaluator.getRuntimeContext()),
-				new SpecialCaller(row,evaluator,PlugBoard.lookupTarget),
-				new PostFixSpecialCaller(row,evaluator,sequenced),
-				new CreateFromClassNameCaller(row,evaluator),
-				new ActionSpecial(row,evaluator,sequenced,PlugBoard.lookupTarget),
-				new DoActionCaller(row,evaluator,sequenced,PlugBoard.lookupTarget)
-		};
-		checkForAmbiguity(actions);
-		return actions;
+	}
+    private Option<String> pickPartialError(DoCaller[] actions) {
+		for (int i = 0; i < actions.length; i++)
+			if (actions[i].partiallyValid())
+				return new Some<String>(actions[i].getPartialErrorMessage());
+		return None.none();
 	}
 	private String possibleSeq(Row row) {
 		if (row.size() < 3)
@@ -117,18 +119,22 @@ public class DispatchRowInFlow {
 			result += ", Type p"+i;
 		return result+") {}";
 	}
-	private static void checkForAmbiguity(DoCaller[] actions) {
+	private static void checkForAmbiguity(DoCaller[] callers) {
 		final String AND = " AND ";
 		String message = "";
-		List<String> valid = new ArrayList<String>();
-		for (int i = 0; i < actions.length; i++) {
-			if (actions[i].isValid()) {
-				String ambiguityErrorMessage = actions[i].ambiguityErrorMessage();
-				valid.add(ambiguityErrorMessage);
-				message += AND+ambiguityErrorMessage;
+		int valids = 0;
+		boolean locallyAmbiguous = false;
+		for (int i = 0; i < callers.length; i++) {
+			DoCaller caller = callers[i];
+			if (caller.isValid()) {
+				valids++;
+				message += AND+caller.ambiguityErrorMessage();
+			} else if (caller.isAmbiguous()) {
+				locallyAmbiguous = true;
+				message += AND+caller.ambiguityErrorMessage();
 			}
 		}
-		if (valid.size() > 1)
+		if (locallyAmbiguous || valids > 1)
 			throw new AmbiguousActionException(message.substring(AND.length()));
 	}
 	private void methodsAreMissing(DoCaller[] actions, String possibleSequenceCall) {
