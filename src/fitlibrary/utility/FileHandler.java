@@ -22,12 +22,12 @@ public class FileHandler {
 		this.fileName = fileNameGiven;
 	}
 	public void write(String content) throws IOException {
-		FileWriter fileWriter = new FileWriter(fileName);
+		FileWriter fileWriter = new FileWriter(fileName,true);
 		fileWriter.write(content.replace("\\n","\n"));
 		fileWriter.close();
 	}
 	public void writeUnicode(String content) throws IOException {
-		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fileName),"UTF8");
+		OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fileName, true),"UTF8");
 		out.write(content.replace("\\n","\n"));
 		out.close();
 	}
