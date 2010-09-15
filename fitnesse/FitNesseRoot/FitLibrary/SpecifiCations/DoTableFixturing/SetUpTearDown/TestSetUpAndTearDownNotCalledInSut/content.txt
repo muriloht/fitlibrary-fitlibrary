@@ -2,7 +2,6 @@
 !define test (
 !|fitlibrary.specify.workflow.SetUpTearDownNotCalledOnSut|
 ----
-
 |check|setUps|0|
 |check|tearDowns|0|
 

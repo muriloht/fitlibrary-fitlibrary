@@ -2,7 +2,7 @@
 
 We need to add the following table afer our main fixture, otherwise the ''!-configure FitLibrary logger-!'' will take control of the storytest.
 
-|''!-configure FitLibrary logger-!''|
+|''!-with FitLibrary logger-!''|
 |''show after''|true|
 |''level''|TRACE|
 
@@ -17,7 +17,7 @@ The above fixture is as follows:
    }
 }}}The action ''call into application'' calls the method ''call()'' above.
 
-|''configure log4j''|
+|''with log4j''|
 |''show after''|true|
 |''level''|TRACE|
 
@@ -25,7 +25,7 @@ The above fixture is as follows:
 
 |''call''|
 
-|''configure log4j''|
+|''with log4j''|
 |''level''|DEBUG|
 
  * The following only adds logging from ''!-FitLibrary-!'' because the level of log4j is DEBUG, so trace() calls are not shown:
@@ -34,10 +34,10 @@ The above fixture is as follows:
 
  * Note that the following only turns off the logging into ''show after'' (by removing the appender); it does not have any other impact on logging with log4j.
 
-|''configure log4j''|
+|''with log4j''|
 |''show after''|false|
 
-|''!-configure FitLibrary logger-!''|
+|''!-with FitLibrary logger-!''|
 |''show after''|false|
 
  * The following does not add text because we've disabled ''show after'' for both loggers:

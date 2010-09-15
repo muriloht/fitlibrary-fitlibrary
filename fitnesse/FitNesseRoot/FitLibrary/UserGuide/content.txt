@@ -10,14 +10,13 @@
  * We show the use of ${fitLibrary} for ${storytest}s with lots of little examples
  * If you want to get started with ${fitLibrary}, start with these examples.
  * If you're familiar with ${fitLibrary}, you'll see in these examples that new capability has been added.
-----
-!3 Running storytests with ${fitNesse} and ''^FolderRunner''
+----!3 Running storytests in batch with FitLibraryRunner and ''^FolderRunner''
  * To use ${fitLibrary} in Java with ${fitNesse}, you need to include the following at the top level page of your project:
 {{{
     !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
-}}} * Batch testing of ''!-FitNesse-!'' storytests is supported. See ^BatchWithFitNesse.
- * This user guide does not cover the details of using ${fitNesse}.
- * ''^FolderRunner'' runs Fit tests in batch, as an alternative to ''!-FitNesse-!''.
+}}} * Batch testing of ''!-FitNesse-!'' storytests (wiki format) is supported. See FitLibraryRunner
+
+ * ''^FolderRunner'' runs Fit tests in batch, as an alternative to ''!-FitNesse-!'' (using HTML and XLS formats instead of wiki format).
 !3 How to achieve various tasks with ${fitLibrary}
 This is just a beginning...
  * ^HowTo for storytest writers

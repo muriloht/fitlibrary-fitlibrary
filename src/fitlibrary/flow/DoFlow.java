@@ -83,10 +83,10 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 				current.runTable(table,tableListener);
 			if (t < tables.size() - 1) {
 				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
-//				logger.trace("Finished table");
+				logger.trace("Finished table");
 			} else {
 				tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
-//				logger.trace("Finished table and storytest");
+				logger.trace("Finished table and storytest");
 			}
 			runtime.addAccumulatedFoldingText(table);
 			tableListener.tableFinished(table);

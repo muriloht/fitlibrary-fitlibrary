@@ -12,17 +12,17 @@
  * Specific sorts of collections:
   * ordered, unordered, subsets, maps, arrays
 
- * ''Defined actions''
- * ''Dynamic variables''
- * Multiple flow objects
+ * [[''Defined actions''][.FitLibrary.UserGuide.FitLibraryByExample.DefinedActions]]
+ * [[''Dynamic variables''][.FitLibrary.AdvancedTutorials.DynamicVariables]]
+ * [[Multiple flow objects][.FitLibrary.AdvancedTutorials.MultipleFlowObjects]]
 
  * Implementation details:
-  * setUp, tearDown, onFailure methods
+  * [[setUp, tearDown, onFailure methods][.FitLibrary.AdvancedTutorials.SetUpTearDownOnFailure]]
   * runtime information access in fixture code
   * specialised handling of table cell text
 
- * Migrating from Slim to FitLibrary
- * Logging techniques
+ * [[Migrating from Slim to FitLibrary][.FitLibrary.AdvancedTutorials.MigratingSlimDecisionTables]]
+ * [[Logging techniques][.FitLibrary.AdvancedTutorials.LoggingTechniques]] using '''show''', '''show after''' and ''log4j'' logging
 }
 
 **!

@@ -1,5 +1,4 @@
 !2 How to, in storytests
- * Use several do fixtures in flow in the same storytest. See SelectFixture
  * Edit nested tables:
   * EditingNestedTablesInFitNesse
  * Ignore some tables in a page/file:
