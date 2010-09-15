@@ -20,13 +20,13 @@ import fitlibrary.batch.trinidad.TestResultRepository;
 
 public class FolderTestResultRepository implements TestResultRepository {
 	private final String outputPath;
-	private final PrintStream err;
+	private final PrintStream out;
 	private final boolean showPasses;
 	
-	public FolderTestResultRepository(String outputPath, String suiteName, PrintStream err, boolean showPasses) {
+	public FolderTestResultRepository(String outputPath, String suiteName, PrintStream out, boolean showPasses) {
 		this.outputPath = selectFolderName(outputPath + "/" + suiteName+ "/" + formattedDateTime());
 		new File(this.outputPath).mkdirs();
-		this.err = err;
+		this.out = out;
 		this.showPasses = showPasses;
 		new File(outputPath).mkdirs();
 	}
@@ -46,7 +46,7 @@ public class FolderTestResultRepository implements TestResultRepository {
 	}
 	public void recordTestResult(TestResult tr) throws IOException {
 		Counts counts = tr.getCounts();
-		err.println(tr.getName()+  " right="+counts.right +", wrong="+counts.wrong+ ", ignores="+counts.ignores+", exceptions= "+counts.exceptions);
+		out.println(tr.getName()+  " right="+counts.right +", wrong="+counts.wrong+ ", ignores="+counts.ignores+", exceptions= "+counts.exceptions);
 		if (showPasses || tr instanceof SuiteResult || (counts.wrong + counts.exceptions) > 0) {
 			String finalPath=new File(outputPath,tr.getName()+".html").getAbsolutePath();
 			FileWriter fw=new FileWriter(finalPath);

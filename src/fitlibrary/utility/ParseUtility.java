@@ -13,11 +13,6 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import fit.Parse;
-import fitlibrary.table.Cell;
-import fitlibrary.table.Row;
-import fitlibrary.table.Table;
-import fitlibrary.table.TableFactory;
-import fitlibrary.table.Tables;
 
 public class ParseUtility {
     public static final String ASCII_ENCODING = "ASCII";

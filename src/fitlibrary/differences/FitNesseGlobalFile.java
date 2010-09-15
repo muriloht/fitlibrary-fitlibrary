@@ -23,10 +23,7 @@ public class FitNesseGlobalFile implements LocalFile {
 			fileName = file.getAbsolutePath();
 			absolute = true;
 		}
-//			throw new RuntimeException("FitNesseGlobalFile: Path doesn't start with "+
-//					FITNESSE_ROOT+": "+path);
 	}
-	@SuppressWarnings("unused")
 	public LocalFile withSuffix(String s) {
 		throw new RuntimeException("Not implemented");
 	}
