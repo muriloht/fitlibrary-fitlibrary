@@ -8,5 +8,7 @@
 
  * Revised the internal implementation of many of the ''special actions'' (.FitLibrary.SpecifiCations.SpecialActions).
 
+ * Extended the file handling capability. See .FitLibrary.SpecifiCations.GlobalActionsProvided.FileProcessing
+
 ----!1 Earlier Releases:
 |!contents|

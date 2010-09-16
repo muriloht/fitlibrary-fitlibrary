@@ -270,7 +270,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	 */
 	public void lessThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
-			@Override @SuppressWarnings("unchecked")
+			@Override @SuppressWarnings({ "rawtypes", "unchecked" })
 			public boolean compares(Comparable actual, Comparable expected) {
 				return actual.compareTo(expected) < 0;
 			}
@@ -281,7 +281,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	 */
 	public void lessThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
-			@Override @SuppressWarnings("unchecked")
+			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
 			public boolean compares(Comparable actual, Comparable expected) {
 				return actual.compareTo(expected) <= 0;
 			}
@@ -292,7 +292,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	 */
 	public void greaterThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
-			@Override @SuppressWarnings("unchecked")
+			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
 			public boolean compares(Comparable actual, Comparable expected) {
 				return actual.compareTo(expected) > 0;
 			}
@@ -303,13 +303,13 @@ public class GlobalActionScope implements RuntimeContextual {
 	 */
 	public void greaterThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
-			@Override @SuppressWarnings("unchecked")
+			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
 			public boolean compares(Comparable actual, Comparable expected) {
 				return actual.compareTo(expected) >= 0;
 			}
 		});
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void comparison(DoAction action, Object expected, Comparison compare) throws Exception {
 		if (!(expected instanceof Comparable<?>))
 			throw new FitLibraryException("Expected value is not a Comparable");
@@ -325,7 +325,7 @@ public class GlobalActionScope implements RuntimeContextual {
 			throw new FitLibraryException("Actual value is not a Comparable: "+actual.getClass().getName());
 	}
 	public interface Comparison {
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		boolean compares(Comparable actual, Comparable expected);
 	}
 	/** Check that the result of the action in the first part of the row, as a string, contains

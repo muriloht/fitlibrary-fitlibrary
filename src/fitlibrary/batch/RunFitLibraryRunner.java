@@ -8,11 +8,10 @@ public class RunFitLibraryRunner {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		String[] arguments = { 
-				"-suiteName", "FitLibrary.RentEz",
+				"-suiteName", "FitLibrary.SpecifiCations",
 				"-fitNesseDiry", "fitnesse",
 				"-resultsDiry", "runnerResults",
-				"-showPasses", "true"};
+				"-showPasses", "false"};
 		FitLibraryRunner.main(arguments );
 	}
-
 }

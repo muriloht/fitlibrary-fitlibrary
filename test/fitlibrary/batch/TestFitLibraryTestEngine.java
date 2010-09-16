@@ -37,6 +37,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Two";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
+			@Override
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().pass();
 			}
@@ -53,6 +54,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
+			@Override
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().fail();
 				System.out.print("Mess");
@@ -73,6 +75,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
+			@Override
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().exception();
 				System.err.println("Message");
@@ -91,6 +94,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
+			@Override
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().ignore();
 				// The following are a part of the test, as System.out/err should be redirected at this point
@@ -112,6 +116,7 @@ public class TestFitLibraryTestEngine {
 		String testName = "Test Three";
 		String html = "<body><table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
+			@Override
 			public void doTables(Tables tables, TableListener listener) {
 				listener.getTestResults().ignore();
 				// The following are a part of the test, as System.out/err should be redirected at this point
@@ -154,6 +159,7 @@ public class TestFitLibraryTestEngine {
 				System.out.println("Counts don't match: '"+other.getCounts()+"' not as expected: '"+expected.getCounts());
 			return 	namesMatch && contentsMatch && countsMatch;
 		}
+		@Override
 		public void describeTo(Description description) {
 			description.appendText(expected.getName());
 		}
