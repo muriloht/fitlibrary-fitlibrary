@@ -57,9 +57,11 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	public void setSystemUnderTest(Object sut) {
 		typedObjectUnderTest = Traverse.asTypedObject(sut);
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return typedObjectUnderTest.getSubject();
 	}
+	@Override
 	public TypedObject getTypedSystemUnderTest() {
 		return typedObjectUnderTest;
 	}
@@ -79,25 +81,31 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	public TestResults createTestResults() {
 		return TestResultsFactory.testResults(counts);
 	}
-    public Object interpretAfterFirstRow(Table table, TestResults testResults) {
+    @Override
+	public Object interpretAfterFirstRow(Table table, TestResults testResults) {
     	return traverse().interpretAfterFirstRow(table,testResults);
     }
-    public RuntimeContextInternal getRuntimeContext() {
+    @Override
+	public RuntimeContextInternal getRuntimeContext() {
 		return traverse().getRuntimeContext();
 	}
-    public IScope getScope() {
+    @Override
+	public IScope getScope() {
     	return getRuntimeContext().getScope();
     }
     public DynamicVariables getDynamicVariables() {
     	return getRuntimeContext().getDynamicVariables();
     }
+	@Override
 	public void setRuntimeContext(RuntimeContextInternal propertyValues) {
 		traverse().setRuntimeContext(propertyValues);
 	}
+	@Override
 	public void setDynamicVariable(String key, Object value) {
 		traverse().setDynamicVariable(key, value);
 	}
-    public Pair<String,Tables> resolve(String key) {
+    @Override
+	public Pair<String,Tables> resolve(String key) {
     	return traverse().resolve(key);
     }
 }

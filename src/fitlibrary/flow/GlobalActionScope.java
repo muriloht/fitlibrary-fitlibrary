@@ -16,6 +16,8 @@ import fit.Fixture;
 import fitlibrary.DefineAction;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
+import fitlibrary.domainAdapter.FileHandler;
+import fitlibrary.domainAdapter.StringAdapter;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
@@ -38,10 +40,10 @@ import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.RandomSelectTraverse;
 import fitlibrary.traverse.workflow.SetVariableTraverse;
 import fitlibrary.traverse.workflow.StopWatch;
-import fitlibrary.utility.FileHandler;
 import fitlibrary.xref.CrossReferenceFixture;
 
 public class GlobalActionScope implements RuntimeContextual {
+	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
 	public static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
@@ -539,10 +541,17 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Log result to log4j
 	 */
 	public void logged(DoAction action) throws Exception {
-		logger.trace("called logged");
 		Object result = action.run();
 		if (result != null)
 			runtimeContext.getConfigureLog4j().log(result.toString());
+	}
+	/** Allow access to String methods
+	 */
+	public StringAdapter asString(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			return new StringAdapter(result.toString());
+		return null;
 	}
 	
 //	public void is(DoAction action, Object expected) throws Exception {

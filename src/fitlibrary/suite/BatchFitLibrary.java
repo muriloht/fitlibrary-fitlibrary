@@ -39,6 +39,7 @@ public class BatchFitLibrary implements StorytestRunner {
 	public BatchFitLibrary(TableListener tableListener) {
 		this.tableListener = tableListener;
 	}
+	@Override
 	public TestResults doStorytest(Tables theTables) {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		return doTables(theTables);
@@ -86,6 +87,7 @@ public class BatchFitLibrary implements StorytestRunner {
 		doFlow.exit();
 	}
 	public static class DefaultReportage implements Reportage {
+		@Override
 		public void showAllReports() {
 			//
 		}

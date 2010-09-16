@@ -19,6 +19,7 @@ import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ExtendedCamelCase;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PositionedTargetWasFound implements PositionedTarget {
 	private final int innerFrom;
@@ -83,6 +84,7 @@ public class PositionedTargetWasFound implements PositionedTarget {
 					row.at(0).pass(testResults);
 				else
 					row.at(0).fail(testResults);
+			return new GenericTypedObject(result);
 		} catch (Exception e) {
 			if (PlugBoard.exceptionHandling.unwrappedIsShow(e))
 				row.at(operatorCell()).error(testResults);

@@ -55,6 +55,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 		"addAs/2"
 	}; // The rest of the methods that used to be here are now in GlobalScope
 	//------------------- Methods that are visible as actions (the rest are hidden):
+	@Override
 	public List<String> methodsThatAreVisible() {
 		return Arrays.asList(methodsThatAreVisibleAsActions);
 	}
@@ -83,17 +84,20 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 		// Now handled by DoFlow
 		return null;
 	}
-    public TypedObject interpretRow(Row row, TestResults testResults) {
+    @Override
+	public TypedObject interpretRow(Row row, TestResults testResults) {
     	return doAutoWrapper.wrap(interpretRowBeforeWrapping(row,testResults));
     }
     final public TypedObject interpretRowBeforeWrapping(Row row, TestResults testResults) {
     	return dispatchRowInFlow.interpretRow(row, testResults);
     }
     // @Overridden in CollectionSetUpTraverse
-    public Object interpretInFlow(Table table, TestResults testResults) {
+    @Override
+	public Object interpretInFlow(Table table, TestResults testResults) {
     	return null; // Leave it here, as override it.
     }
 	// The following is needed for its obligation to the interface SpecialActionContext, which is called by specials
+	@Override
 	public ICalledMethodTarget findMethodFromRow(Row row, int from, int extrasCellsOnEnd) throws Exception {
 		int upTo = row.size() - extrasCellsOnEnd;
 		return PlugBoard.lookupTarget.findMethodByArity(row, from, upTo, !dispatchRowInFlow.isDynamicSequencing(), this);
@@ -174,6 +178,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	public boolean setSystemPropertyTo(String property, String value) {
 		return global().setSystemPropertyTo(property, value);
 	}
+	@Override
 	public void setFitVariable(String variableName, Object result) {
 		global().setFitVariable(variableName, result);
 	}
@@ -239,10 +244,12 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	public void startLogging(String fileName) {
 		global().startLogging(fileName);
 	}
+	@Override
 	public void logMessage(String s) {
 		global().logMessage(s);
 	}
 	//--- SHOW
+	@Override
 	public void show(Row row, String text) {
 		global().show(row, text);
 	}

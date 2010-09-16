@@ -75,7 +75,7 @@ See [[this page for an example][^FitLibraryLog4j]]
 #
 The logging from ''!-FitLibraryLogger-!''  and/or ''!-FixturingLogger-!'' can be routed to the standard log4j:
 
- * So that you can include it in your usual log files, etc. 
+ * So that you can include it in your usual log files, etc.
  * This is done at the code level. See [[this page for an example][>RoutingLogger]].
 #
 !1 The End

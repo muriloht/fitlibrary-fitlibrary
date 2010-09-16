@@ -23,7 +23,7 @@
 
 |^DomainWorkflow|''As with ^DoWorkflow, but with support for three phases of ${workflow}'': ${setup}, ${actions} and ${checks}|
 |^SpecialisedTables|''Grids of values, images, HTML lists, file comparisons, etc''|
-|>FileHandler|''Provides a way to read and write files in a storytest''|
+|[[File Handler][.FitLibrary.SpecifiCations.GlobalActionsProvided.FileProcessing]]|''Provides a way to read and write files in a storytest''|
 
 |^SuiteFixture|''How the same suite of storytests can be used to test a system in very different ways''|
 

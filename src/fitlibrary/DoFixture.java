@@ -71,10 +71,12 @@ public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		doTraverse.setExpandDefinedActions(expandDefinedActions);
 	}
+	@Override
 	public Object interpretInFlow(Table firstTable, TestResults testResults) {
 		return doTraverse.interpretInFlow(firstTable,testResults);
 	}
 	// --------- Interpretation ---------------------------------------
+	@Override
 	public List<String> methodsThatAreVisible() {
 		return doTraverse.methodsThatAreVisible();
 	}

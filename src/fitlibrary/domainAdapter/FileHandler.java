@@ -2,7 +2,7 @@
  * Copyright (c) 2009 Rick Mugridge, www.RimuResearch.com
  * Released under the terms of the GNU General Public License version 2 or later.
 */
-package fitlibrary.utility;
+package fitlibrary.domainAdapter;
 
 import java.io.BufferedReader;
 import java.io.File;

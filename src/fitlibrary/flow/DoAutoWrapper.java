@@ -26,6 +26,7 @@ public class DoAutoWrapper implements IDoAutoWrapper {
 	public DoAutoWrapper(Evaluator evaluator) {
 		this.evaluator = evaluator;
 	}
+	@Override
 	public TypedObject wrap(TypedObject typedResult) {
 		if (typedResult == null)
 			return GenericTypedObject.NULL;
@@ -51,6 +52,7 @@ public class DoAutoWrapper implements IDoAutoWrapper {
 			return typedResult;
 		return new GenericTypedObject(new DoTraverse(typedResult));
 	}
+	@Override
 	public boolean canAutoWrap(Object result) {
 		return !notToBeAutoWrapped(result);
 	}
