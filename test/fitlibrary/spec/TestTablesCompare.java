@@ -62,4 +62,16 @@ public class TestTablesCompare {
 				"ab <span class=\"fit_label\">XYZ</span>cd<span class=\"fit_label\">XYZ</span>ef", 
 				"ab <span class=\"fit_label\">X</span>cd<span class=\"fit_label\">XY</span>ef"),is(true));
 	}
+	@Test
+	public void imagePathPartiallyIgnored() {
+		assertThat(tablesCompare.equals(
+				"<span class=\"fit_grey\"><img src=\"gameImages/wall.jpg\"></span>", 
+				"<span class=\"fit_grey\"><img src=\"/files/gameImages/wall.jpg\"></span>"),is(true));
+	}
+	@Test
+	public void imagePathPartiallyIgnored2() {
+		assertThat(tablesCompare.equals(
+				"<img src=\"file:///fitnesse/FitNesseRoot/files/gameImages/wall.jpg\">", 
+				"<img src=\"/files/gameImages/wall.jpg\">"),is(true));
+	}
 }

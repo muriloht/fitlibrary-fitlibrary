@@ -27,21 +27,27 @@ public class FitNesseDifference implements DifferenceInterface {
 	public String url(String fileName) {
 		return LOCAL_FILES+"/"+fileName;
 	}
+	@Override
 	public LocalFile getLocalFile(String fileName) {
 		return new FitNesseLocalFile(fileName);
 	}
+	@Override
 	public LocalFile getLocalFile(File file) {
 		return new FitNesseLocalFile(file);
 	}
+	@Override
 	public LocalFile getGlobalFile(File file) {
 		return getLocalFile(file);
 	}
+	@Override
 	public LocalFile getGlobalFile(String fileName) {
 		return getLocalFile(fileName);
 	}
-    public void setContext(File file) {
+    @Override
+	public void setContext(File file) {
         throw new RuntimeException("This should never be called, as the FolderRunner calls it.");
     }
+	@Override
 	public boolean inFitNesse() {
 		return true;
 	}

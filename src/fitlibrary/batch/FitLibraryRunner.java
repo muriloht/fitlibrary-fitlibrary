@@ -189,7 +189,7 @@ public class FitLibraryRunner {
 				}
 				throw new InvalidParameterException(parameterName);
 			}
-		};
+		}
 		private Map<ValidParameters,String> parameterMap = new HashMap<ValidParameters, String>();
 		
 		public RunParameters() {

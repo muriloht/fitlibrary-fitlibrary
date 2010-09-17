@@ -4,14 +4,17 @@
 */
 package fitlibrary.parser.graphic;
 
+import org.apache.log4j.Logger;
+
 import fitlibrary.differences.LocalFile;
-import fitlibrary.log.Logging;
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.traverse.Traverse;
 
 /**
  * Used to check whether the name of the image is as expected.
  */
 public class ImageNameGraphic implements GraphicInterface {
+	private static Logger logger = FitLibraryLogger.getLogger(ImageNameGraphic.class);
     private LocalFile expectedFile;
 
     public ImageNameGraphic(String expectedFileName) {
@@ -20,7 +23,8 @@ public class ImageNameGraphic implements GraphicInterface {
     public ImageNameGraphic(LocalFile expectedFile) {
         this.expectedFile = expectedFile;
     }
-    public LocalFile toGraphic() {
+    @Override
+	public LocalFile toGraphic() {
         return expectedFile;
     }
     @Override
@@ -31,7 +35,7 @@ public class ImageNameGraphic implements GraphicInterface {
                 ((ImageNameGraphic)object).expectedFile);
     }
     public static GraphicInterface parseGraphic(LocalFile expectedFile) {
-        Logging.log(GraphicInterface.class,"parseGraphic(): "+expectedFile);
+    	logger.trace("parseGraphic(): "+expectedFile);
         return new ImageNameGraphic(expectedFile);
     }
     @Override

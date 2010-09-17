@@ -10,6 +10,11 @@ import java.util.Iterator;
 import fit.Parse;
 import fit.exception.FitParseException;
 import fitlibrary.dynamicVariable.VariableResolver;
+import fitlibrary.spec.filter.FoldFilter;
+import fitlibrary.spec.filter.StackTraceFilter;
+import fitlibrary.spec.matcher.FitLabelMatcher;
+import fitlibrary.spec.matcher.ImageSrcMatcher;
+import fitlibrary.spec.matcher.StringMatcher;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableElement;
 import fitlibrary.table.TableFactory;
@@ -18,12 +23,17 @@ import fitlibrary.table.Tables;
 public class TablesCompare {
 	private final SpecifyErrorReport errorReport;
 	private final VariableResolver resolver;
-
+	private final PipeLine matcherPipeline = 
+		new FoldFilter(new StackTraceFilter(new FitLabelMatcher(new ImageSrcMatcher(new StringMatcher()))));
+	
 	public TablesCompare(SpecifyErrorReport errorReport, VariableResolver resolver) {
 		this.errorReport = errorReport;
 		this.resolver = resolver;
 	}
-	public boolean tablesEqual(String path, TableElement actual, TableElement expected) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public boolean tablesEqual(String path, TableElement actualInitial, TableElement expectedInitial) {
+		TableElement actual = actualInitial;
+		TableElement expected = expectedInitial;
 		boolean actualContainsHtmlDueToShow = false;
 		if (actual instanceof Cell) {
 			Cell actualCell = (Cell) actual;
@@ -54,21 +64,21 @@ public class TablesCompare {
 			expected = expectedCell.getEmbeddedTables();
 		}
 		if (!actualContainsHtmlDueToShow) {
-			if (expected.getLeader().isEmpty() && actual.getLeader().equals("<html>"))
-				;
-			else if (!equals(actual.getLeader(),expected.getLeader())) {
+			if (expected.getLeader().isEmpty() && actual.getLeader().equals("<html>")) {
+				//
+			} else if (!equals(actual.getLeader(),expected.getLeader())) {
 				errorReport.leaderWrong(path, actual.getLeader(), expected.getLeader());
 				return false;
 			}
-			if (expected.getTrailer().isEmpty() && actual.getTrailer().equals("</html>"))
-				;
-			else if (!equals(actual.getTrailer(),expected.getTrailer())) {
+			if (expected.getTrailer().isEmpty() && actual.getTrailer().equals("</html>")) {
+				//
+			} else if (!equals(actual.getTrailer(),expected.getTrailer())) {
 				errorReport.trailerWrong(path, actual.getTrailer(), expected.getTrailer());
 				return false;
 			}
-			if (expected.getTagLine().isEmpty() && actual.getTagLine().equals("border=\"1\" cellspacing=\"0\""))
-				;
-			else if (!actual.getTagLine().equals(expected.getTagLine())) {
+			if (expected.getTagLine().isEmpty() && actual.getTagLine().equals("border=\"1\" cellspacing=\"0\"")) {
+				//
+			} else if (!actual.getTagLine().equals(expected.getTagLine())) {
 				errorReport.tagLineWrong(path, actual.getTagLine(), expected.getTagLine());
 				return false;
 			}
@@ -93,58 +103,15 @@ public class TablesCompare {
 	public boolean equals(String actualString, String expectedString) {
 		String actual = canonical(actualString);
 		String expected = canonical(expectedString);
-		
 		if ("IGNORE".equals(expected))
 			return true;
-		if (actual.isEmpty() && expected.equals("&nbsp;") ||
-				expected.isEmpty() && actual.equals("&nbsp;"))
-			return true;
-		String stackTrace = "class=\"fit_stacktrace\">";
-		int startExpected = expected.indexOf(stackTrace);
-		int startActual = actual.indexOf(stackTrace);
-		if (startExpected != startActual)
-			return false;
-		if (startExpected >= 0)
-			return actual.startsWith(expected.substring(0,startExpected));
-		String fitLabel = "<span class=\"fit_label\">";
-		String endFitLabel = "</span>";
-		while (true) {
-			startExpected = expected.indexOf(fitLabel);
-			startActual = actual.indexOf(fitLabel);
-			if (startExpected != startActual)
-				return false;
-			if (startExpected < 0)
-				return actual.equals(expected);
-			
-			String expectedPrefix = expected.substring(0,startExpected);
-			if (!actual.substring(0,startActual).equals(expectedPrefix))
-				return false;
-			int endExpected = expected.indexOf(endFitLabel,startExpected);
-			int endActual = actual.indexOf(endFitLabel,startActual);
-			if (endExpected < 0 || endActual < 0)
-				return false;
-			String actualLabel = actual.substring(startActual+fitLabel.length(),endActual);
-			String expectedLabel = expected.substring(startExpected+fitLabel.length(),endExpected);
-			if (!actualLabel.startsWith(expectedLabel))
-				return false;
-			actual = actual.substring(endActual+endFitLabel.length());
-			expected = expected.substring(endExpected+endFitLabel.length());
-		}
+		return matcherPipeline.match(actual, expected);
 	}
 	private String canonical(String s) {
-		return ignoreFold(s).replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").
+		return s.replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").
 			replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").replaceAll("\n","").trim();
 	}
-	private String ignoreFold(String text) {
-		String s = text;
-		while (true) {
-			int include = s.indexOf("<div class=\"included\">");
-			if (include < 0)
-				return s;
-			int endDiv = s.indexOf("</div></div>");
-			if (endDiv < 0)
-				return s;
-			s = s.substring(0,include)+s.substring(endDiv+"</div></div>".length());
-		}
+	static class MismatchException extends Exception {
+		private static final long serialVersionUID = 1L;
 	}
 }

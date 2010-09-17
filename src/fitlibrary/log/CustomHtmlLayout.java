@@ -11,7 +11,7 @@ import org.apache.log4j.helpers.Transform;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class CustomHtmlLayout extends Layout {
-	public static int MAX_LOGGED_SIZE = 120;
+	public static int MAX_LOGGED_SIZE = 140; // Must be > 30
 	protected final int BUF_SIZE = 256;
 	protected final int MAX_CAPACITY = 1024;
 	static String TRACE_PREFIX = "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -21,11 +21,10 @@ public class CustomHtmlLayout extends Layout {
 	public String getContentType() {
 		return "text/html";
 	}
-
+	@Override
 	public void activateOptions() {
 		// None to activate
 	}
-
 	@Override
 	public String format(LoggingEvent event) {
 		if (sbuf.capacity() > MAX_CAPACITY) {
@@ -92,7 +91,7 @@ public class CustomHtmlLayout extends Layout {
 		int size = s.length();
 		if (size <= MAX_LOGGED_SIZE)
 			return s;
-		return s.substring(0,MAX_LOGGED_SIZE-20)+"..."+s.substring(size-17);
+		return s.substring(0,MAX_LOGGED_SIZE-30)+"..."+s.substring(size-27);
 	}
 	void appendThrowableAsHTML(String[] s, StringBuffer sbuffer) {
 		if (s != null) {

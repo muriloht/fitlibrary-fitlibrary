@@ -228,7 +228,7 @@ public class TestScopeStack {
 			results.add(type);
 		return results;
 	}
-	public interface FlowEvaluatorThatIsRuntimeContextual extends FlowEvaluator, RuntimeContextual {
+	public interface FlowEvaluatorThatIsRuntimeContextual extends FlowEvaluator {
 		//
 	}
 }

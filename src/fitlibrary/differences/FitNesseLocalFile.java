@@ -28,6 +28,7 @@ public class FitNesseLocalFile implements LocalFile {
 		else
 			this.fileName = fileName;
 	}
+	@Override
 	public LocalFile withSuffix(String suffix) {
 		String name = fileName;
 		int last = fileName.lastIndexOf(".");
@@ -35,19 +36,23 @@ public class FitNesseLocalFile implements LocalFile {
 			name = name.substring(0,last+1)+suffix;
 		return new FitNesseLocalFile(name);
 	}
+	@Override
 	public File getFile() {
 		if (fileName.startsWith("/") || fileName.charAt(1) == ':')
 			return new File(fileName);
 		return new File(FITNESSE_FILES_LOCATION+"/"+fileName);
 	}
+	@Override
 	public void mkdirs() {
 		File file = getFile().getParentFile();
 		if (!file.exists())
 			file.mkdirs();
 	}
+	@Override
 	public String htmlImageLink() {
 		return "<img src=\""+LOCAL_FILES+"/"+fileName+"\">";
 	}
+	@Override
 	public String htmlLink() {
 		String name = fileName;
 		int last = fileName.lastIndexOf("/");

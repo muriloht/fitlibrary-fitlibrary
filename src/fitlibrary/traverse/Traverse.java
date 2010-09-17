@@ -85,11 +85,13 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 			return cycleSUT(domainAdapter,((DomainAdapter)sut).getSystemUnderTest());
 		return false;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		if (typedObjectUnderTest == null)
 			return null;
 		return typedObjectUnderTest.getSubject();
 	}
+	@Override
 	public TypedObject getTypedSystemUnderTest() {
 		return typedObjectUnderTest;
 	}
@@ -193,15 +195,18 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 	public void callEndCreatingObjectMethod(Object element) throws IllegalAccessException, InvocationTargetException {
 		callCreatingMethod("endCreatingObject", element);
 	}
-    public RuntimeContextInternal getRuntimeContext() {
+    @Override
+	public RuntimeContextInternal getRuntimeContext() {
     	if (runtimeContext == null)
     		throw new NullPointerException("Runtime has not been injected into "+this+". See .FitLibrary.AdvancedTutorial.RuntimeInjection.");
 		return runtimeContext;
 	}
-    public IScope getScope() {
+    @Override
+	public IScope getScope() {
     	return getRuntimeContext().getScope();
     }
-    public void setRuntimeContext(RuntimeContextInternal runtimeContext) {
+    @Override
+	public void setRuntimeContext(RuntimeContextInternal runtimeContext) {
     	this.runtimeContext = runtimeContext;
     	setRuntimeContextDownSutChain(this,runtimeContext);
     }
@@ -215,9 +220,11 @@ public abstract class Traverse implements Evaluator, ShowAfter {
     public VariableResolver getResolver() {
     	return getDynamicVariables();
     }
-    public Pair<String,Tables> resolve(String key) {
+    @Override
+	public Pair<String,Tables> resolve(String key) {
     	return getResolver().resolve(key);
     }
+	@Override
 	public void setDynamicVariable(String key, Object value) {
 		getDynamicVariables().put(key, value);
 	}
@@ -235,11 +242,13 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 	public void showAfterTable(String s) {
 		showAsAfterTable("Logs",s);
 	}
+	@Override
 	public void showAsAfterTable(String title,String s) {
 		global().showAsAfterTable(title,s);
 	}
 	protected GlobalActionScope global() {
 		return getRuntimeContext().getGlobal();
 	}
+	@Override
 	public abstract Object interpretAfterFirstRow(Table table, TestResults testResults);
 }

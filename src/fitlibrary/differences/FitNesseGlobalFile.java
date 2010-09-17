@@ -24,18 +24,23 @@ public class FitNesseGlobalFile implements LocalFile {
 			absolute = true;
 		}
 	}
+	@Override
 	public LocalFile withSuffix(String s) {
 		throw new RuntimeException("Not implemented");
 	}
+	@Override
 	public File getFile() {
 		throw new RuntimeException("Not implemented");
 	}
+	@Override
 	public void mkdirs() {
 		throw new RuntimeException("Not implemented");
 	}
+	@Override
 	public String htmlImageLink() {
 		throw new RuntimeException("Not implemented");
 	}
+	@Override
 	public String htmlLink() {
 		if (absolute)
 			return "<a href=\"file://"+fileName+"\">"+fileName+"</a>";

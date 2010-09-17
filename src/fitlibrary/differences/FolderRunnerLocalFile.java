@@ -6,10 +6,13 @@ package fitlibrary.differences;
 
 import java.io.File;
 
-import fitlibrary.log.Logging;
+import org.apache.log4j.Logger;
+
+import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.utility.StringUtility;
 
 public class FolderRunnerLocalFile implements LocalFile {
+	private static Logger logger = FitLibraryLogger.getLogger(FolderRunnerLocalFile.class);
     protected File file;
     private static File CONTEXT = new File(".");
 
@@ -18,33 +21,41 @@ public class FolderRunnerLocalFile implements LocalFile {
     }
     public FolderRunnerLocalFile(String localFileNameInitial) {
     	String localFileName = localFileNameInitial;
+    	if (localFileName.startsWith("/"))
+    		localFileName = localFileName.substring(1);
         if (!localFileName.startsWith("files/") && !localFileName.startsWith("files\\"))
             localFileName = "files/"+localFileName;
-        Logging.log(this,"FolderRunnerLocalFile(): "+localFileName);
         this.file = new File(CONTEXT,localFileName);
+        logger.trace("FolderRunnerLocalFile("+localFileNameInitial+")");
+        logger.trace("FolderRunnerLocalFile("+file.getAbsolutePath()+") exists = "+file.exists());
     }
-    public LocalFile withSuffix(String suffix) {
+    @Override
+	public LocalFile withSuffix(String suffix) {
         String name = file.getPath();
         int last = name.lastIndexOf(".");
         if (last >= 0)
             name = name.substring(0,last+1)+suffix;
-        Logging.log(this,"withSuffix(): "+name);
+        logger.trace("withSuffix(): "+name);
         return new FolderRunnerLocalFile(name);
     }
-    public File getFile() {
-        Logging.log(this,"getFile(): "+file.getAbsolutePath());
+    @Override
+	public File getFile() {
+    	logger.trace("getFile(): "+file.getAbsolutePath());
         return file;
     }
-    public void mkdirs() {
+    @Override
+	public void mkdirs() {
         File diry = file.getParentFile();
-        Logging.log(this,"mkdirs(): "+diry.getAbsolutePath());
+        logger.trace("mkdirs(): "+diry.getAbsolutePath());
         if (!diry.exists())
             diry.mkdirs();
     }
-    public String htmlImageLink() {  
+    @Override
+	public String htmlImageLink() {  
         return "<img src=\"file:///"+escape(file.getPath())+"\">";
     }
-    public String htmlLink() { 
+    @Override
+	public String htmlLink() { 
         return "<a href=\"file:///"+escape(file.getPath())+"\">"+file.getName()+"</a>";
     }
     protected String escape(String path) {
@@ -57,7 +68,7 @@ public class FolderRunnerLocalFile implements LocalFile {
         String absolutePath = ((FolderRunnerLocalFile)object).file.getPath();
         String otherAbsolutePath = file.getPath();
         boolean equals = absolutePath.equals(otherAbsolutePath);
-        Logging.log(this,"equals(): "+equals+" with: '"+absolutePath+"' and '"+otherAbsolutePath);
+        logger.trace(absolutePath+".equals("+otherAbsolutePath+") = "+equals);
         return equals;
     }
     @Override
