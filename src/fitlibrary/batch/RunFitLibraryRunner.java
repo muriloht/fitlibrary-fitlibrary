@@ -8,7 +8,7 @@ public class RunFitLibraryRunner {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		String[] arguments = { 
-				"-suiteName", "FitLibrary.SpecifiCations.SpecialisedTables",
+				"-suiteName", "FitLibrary.SpecifiCations.GlobalActionsProvided",
 				"-fitNesseDiry", "fitnesse",
 				"-resultsDiry", "runnerResults",
 				"-showPasses", "false"};

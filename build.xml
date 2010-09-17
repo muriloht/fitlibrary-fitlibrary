@@ -9,7 +9,6 @@
 	<property name="fitlibraryweb.dir" value="../fitlibraryweb" />
 	
 	<!-- batch runner properties -->
-	<property name="showpassesinreport" value="true" />   <!-- true or false -->
 	<property name="results-dir" value="${home}/runnerResults" />  
 	<property name="timeout" value="600000" />  <!-- 10 mins default timeout -->  
 
@@ -117,11 +116,16 @@
 	</target>
 	
 	<target name="batch-run-specifications">
-		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000"/>
+		<batch-run suite="FitLibrary.SpecifiCations" showpassesinreport="false" timeout="600000"/>
+	</target>
+	
+	<target name="batch-run-specific">
+		<batch-run suite="FitLibrary.SpecifiCations.SpecialisedTables" showpassesinreport="false" timeout="600000"/>
 	</target>
 	
 	<macrodef name="batch-run">
 		<attribute name="suite"/>
+		<attribute name="showpassesinreport" default="true"/>
 		<attribute name="timeout" default="600000"/> <!-- 10 mins default timeout --> 
 		<sequential>
 	                <echo message="Batch run of @{suite} with fitnesse at ${fitnesse.dir} and results at ${results-dir}" />
@@ -129,7 +133,7 @@
 				<arg value="-suiteName"/>    <arg value="@{suite}"/>
 				<arg value="-fitNesseDiry"/> <arg value="."/>
 				<arg value="-resultsDiry"/>  <arg value="${results-dir}"/>
-				<arg value="-showPasses"/>   <arg value="${showpassesinreport}"/>
+				<arg value="-showPasses"/>   <arg value="@{showpassesinreport}"/>
 				
 				<classpath>
 				    <fileset dir="${lib}">
