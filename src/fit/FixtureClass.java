@@ -25,9 +25,8 @@ public class FixtureClass {
 
       if (fixtureAsObject instanceof Fixture) {
         return (Fixture) fixtureAsObject;
-      } else {
-        throw new ClassIsNotFixtureException(fixtureClassName);
-      }
+      } 
+      throw new ClassIsNotFixtureException(fixtureClassName);
     }
     catch (IllegalAccessException unhandled) {
       // TODO: Handle constructor not public?

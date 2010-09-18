@@ -12,12 +12,15 @@ public class SingleTestResult implements TestResult {
 		this.name = name;
 		this.content = content;
 	}
+	@Override
 	public Counts getCounts() {
 		return this.counts;
 	}
+	@Override
 	public String getName() {
 		return this.name;
 	}
+	@Override
 	public String getContent() {
 		return this.content;
 	}

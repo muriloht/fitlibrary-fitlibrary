@@ -10,6 +10,7 @@ import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 
 public interface Table extends TableElement<Table,Row> {
+	@Override
 	void error(TestResults testResults, Throwable e);
 	void error(ITableListener tableListener, Throwable e);
 	int phaseBoundaryCount();

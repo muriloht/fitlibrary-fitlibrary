@@ -7,7 +7,7 @@ package fitlibrary.specify;
 import java.util.ArrayList;
 
 public class SetFixtureUnderTest3 extends fitlibrary.SetFixture {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	public SetFixtureUnderTest3() throws Exception {
 		super(new ArrayList());
 	}

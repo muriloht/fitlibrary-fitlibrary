@@ -9,7 +9,7 @@ import java.util.Set;
 
 import fitlibrary.DoFixture;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public abstract class AbstractNestedSets extends DoFixture {
 	public static class Fruit {
 		private String name;

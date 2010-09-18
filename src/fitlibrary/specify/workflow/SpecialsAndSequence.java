@@ -10,6 +10,7 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.FitLibraryShowException.Show;
 import fitlibrary.exception.parse.BadNumberException;
 
+@SuppressWarnings("unused")
 public class SpecialsAndSequence {
 	public int plus(int a, int b) {
 		return a + b;

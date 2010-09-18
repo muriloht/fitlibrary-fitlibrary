@@ -7,7 +7,9 @@ package fitlibrary.exception.method;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class BooleanMethodException extends FitLibraryExceptionWithHelp {
-    public BooleanMethodException(String name) {
+	private static final long serialVersionUID = 1L;
+
+	public BooleanMethodException(String name) {
         super("Method "+name+" does not return a boolean.","BooleanConstraintMethod");
     }
 }

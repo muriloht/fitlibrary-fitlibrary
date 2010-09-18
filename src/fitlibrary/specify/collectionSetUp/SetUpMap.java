@@ -14,7 +14,7 @@ import java.util.Map;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class SetUpMap implements DomainFixtured {
 	private Map<String,User> iOUMap = new HashMap<String,User>();
 	

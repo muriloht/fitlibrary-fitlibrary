@@ -7,6 +7,8 @@ package fitlibrary.exception.table;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class MissingRowException extends FitLibraryExceptionWithHelp {
+	private static final long serialVersionUID = 1L;
+
 	public MissingRowException(String link) {
 		super("Missing row","MissingRow."+link);
 	}

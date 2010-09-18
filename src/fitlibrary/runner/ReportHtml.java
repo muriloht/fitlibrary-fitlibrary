@@ -126,7 +126,7 @@ public class ReportHtml {
         return reportName(file.getName());
     }
     private static String reportName(String name) {
-        if (FolderRunner.isHtmlFileName(name))
+        if (FileParseUtilities.isHtmlFileName(name))
             return name;
         int pos = name.indexOf(".");
         if (pos < 0)

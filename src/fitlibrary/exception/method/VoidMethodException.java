@@ -7,7 +7,9 @@ package fitlibrary.exception.method;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class VoidMethodException extends FitLibraryExceptionWithHelp {
-    public VoidMethodException(String name, String link) {
+	private static final long serialVersionUID = 1L;
+
+	public VoidMethodException(String name, String link) {
         super("Method "+name+" is void.","VoidMethod."+link);
     }
 }

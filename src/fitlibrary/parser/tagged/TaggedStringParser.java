@@ -18,11 +18,13 @@ public class TaggedStringParser implements HtmlParser {
 	public static boolean applicableType(Class<?> type) {
         return TaggedString.class.isAssignableFrom(type);
 	}
-    public String show(Object object) {
+    @Override
+	public String show(Object object) {
 	    if (object == null)
 	    	return "null";
         return object.toString();
     }
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return Traverse.asTyped(String.class).typedObject(parse(cell,testResults));
 	}
@@ -30,18 +32,21 @@ public class TaggedStringParser implements HtmlParser {
     public Object parse(Cell cell, @SuppressWarnings("unused") TestResults testResults) throws Exception {
         return new TaggedString(cell.fullText());
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
         return parse(cell,testResults).equals(result);
     }
 	public static ParserFactory parserFactory() {
 		return new ParserFactory() {
 			private TaggedStringParser taggedStringParser = new TaggedStringParser();
 			
+			@Override
 			public Parser parser(Evaluator evaluator, Typed typed) {
 				return taggedStringParser;
 			}
 		};
 	}
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}

@@ -9,6 +9,7 @@ import fitlibrary.traverse.DomainAdapter;
 public class DiscountAdapter implements DomainAdapter {
 	private Discount discount = new Discount();
 	
+	@Override
 	public Object getSystemUnderTest() {
 		return discount;
 	}

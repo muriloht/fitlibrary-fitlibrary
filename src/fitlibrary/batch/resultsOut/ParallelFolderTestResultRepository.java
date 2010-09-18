@@ -23,6 +23,7 @@ public class ParallelFolderTestResultRepository implements ParallelTestResultRep
 	public ParallelFolderTestResultRepository(final TestResultRepository testResultRepository, Executor executor) {
 		this.testResultRepository = testResultRepository;
 		executor.execute(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					while (true) {
@@ -39,9 +40,11 @@ public class ParallelFolderTestResultRepository implements ParallelTestResultRep
 			}
 		});
 	}
+	@Override
 	public void addFile(File f, String relativeFilePath) throws IOException {
 		testResultRepository.addFile(f, relativeFilePath);
 	}
+	@Override
 	public void recordTestResult(TestResult result) throws IOException {
 		try {
 			queue.put(result);
@@ -49,6 +52,7 @@ public class ParallelFolderTestResultRepository implements ParallelTestResultRep
 			throw new IOException(e.getMessage());
 		}
 	}
+	@Override
 	public void closeAndWaitForCompletion() throws InterruptedException {
 		queue.add(SENTINEL);
 		endGate.await();

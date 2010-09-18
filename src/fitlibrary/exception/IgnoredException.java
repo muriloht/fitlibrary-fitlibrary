@@ -9,6 +9,7 @@ package fitlibrary.exception;
  * locally in the table.
  */
 public class IgnoredException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 	private Exception ignoredException = null;
 
 	public Exception getIgnoredException() {

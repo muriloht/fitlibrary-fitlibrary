@@ -9,6 +9,7 @@ package fitlibrary.specify.missingMethod;
 import fitlibrary.traverse.DomainAdapter;
 
 public class FinderInDomainAdapter implements DomainAdapter  {
+	@Override
 	public Object getSystemUnderTest() {
 		return new FinderInJustSut();
 	}

@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ArrayFixtureUnderTestWithMap extends fitlibrary.ArrayFixture {
 	public ArrayFixtureUnderTestWithMap() throws Exception {
 	    setActualCollection(query());
 	}
-    @SuppressWarnings("unchecked")
 	public List query() throws Exception {
         List result = new ArrayList();
         result.add(makeMap(new Integer(1), "one"));
@@ -21,7 +21,6 @@ public class ArrayFixtureUnderTestWithMap extends fitlibrary.ArrayFixture {
         result.add(makeMap(new Integer(2), "two"));
         return result;
    }
-    @SuppressWarnings("unchecked")
 	private Map makeMap(Integer plus, String ampersand) {
         Map map = new HashMap();
         map.put("plus",plus);

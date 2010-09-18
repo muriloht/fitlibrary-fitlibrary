@@ -7,10 +7,12 @@ package fitlibraryGeneric.specify;
 public class ConcreteClassTwo implements InterfaceType {
     private int count;
     
-    public int getCount() {
+    @Override
+	public int getCount() {
         return count*2;
     }
-    public void setCount(int count) {
+    @Override
+	public void setCount(int count) {
         this.count = count;
     }   
 }

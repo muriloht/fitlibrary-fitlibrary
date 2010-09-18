@@ -12,6 +12,7 @@ import fitlibrary.traverse.DomainAdapter;
 public class ChatSystem implements DomainAdapter, DomainFixtured {
 	private Chat chat = new Chat();
 	
+	@Override
 	public Object getSystemUnderTest() {
 		return chat;
 	}

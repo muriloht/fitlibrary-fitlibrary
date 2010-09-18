@@ -10,6 +10,7 @@ import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
 public class InDomainAdapter implements DomainAdapter, DomainFixtured {
+	@Override
 	public Object getSystemUnderTest() {
 		return new InJustSut();
 	}

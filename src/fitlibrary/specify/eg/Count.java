@@ -4,7 +4,7 @@
 */
 package fitlibrary.specify.eg;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Count implements Comparable {
 	private int count;
 
@@ -31,6 +31,7 @@ public class Count implements Comparable {
 	public int hashCode() {
 		return count;
 	}
+	@Override
 	public int compareTo(Object object) {
 		if (!(object instanceof Count))
 			return +1;

@@ -12,7 +12,7 @@ import java.util.Set;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class SetUpSet implements DomainFixtured {
 	private Set iOUSet = new HashSet();
 	

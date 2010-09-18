@@ -73,6 +73,7 @@ public class GenericFinder implements Finder {
         	return null;
         throw new FitLibraryExceptionInHtml(findExceptionMessage);
     }
+	@Override
 	public Object find(final String text) throws Exception, IllegalAccessException, InvocationTargetException {
 		if (findIntMethod != null) {
             int index = 0;
@@ -85,6 +86,7 @@ public class GenericFinder implements Finder {
         }
         return callFindStringMethod(text);
 	}
+	@Override
 	public String show(Object result) throws Exception {
 		if (genericShowMethod != null) {
 			Object[] args = new Object[]{ result, typed.asType() };
@@ -98,6 +100,7 @@ public class GenericFinder implements Finder {
 			return "";
 		return result.toString();
 	}
+	@Override
 	public boolean hasFinderMethod() {
 		return findIntMethod != null || findStringMethod != null;
 	}

@@ -41,9 +41,11 @@ public class CellOnList extends TablesOnList implements Cell {
 		this(tables);
 		addToStartOfLeader(Fixture.label(preamble));
 	}
+	@Override
 	public void setText(String text) {
 		this.fullText = text;
 	}
+	@Override
 	public String text(VariableResolver resolver) {
 		Pair<String,Tables> resolve = resolver.resolve(fullText);
 		addTables(resolve.second);
@@ -51,23 +53,29 @@ public class CellOnList extends TablesOnList implements Cell {
 			fullText = resolve.first;
 		return text();
 	}
+	@Override
 	public String text() {
         return Parse.unescape(Parse.unformat(fullText)).trim();
     }
+	@Override
 	public boolean unresolved(VariableResolver resolver) {
 		return text().startsWith("@{") && text().indexOf("}") == text().length()-1 &&
 				text().equals(text(resolver));
 	}
+	@Override
 	public String camelledText(VariableResolver resolver) {
 		return ExtendedCamelCase.camel(text(resolver));
 	}
+   @Override
    public String textLower(VariableResolver resolver) {
         return text(resolver).toLowerCase();
     }
-    public boolean matchesTextInLowerCase(String s, VariableResolver resolver) {
+    @Override
+	public boolean matchesTextInLowerCase(String s, VariableResolver resolver) {
         return text(resolver).toLowerCase().equals(s.toLowerCase());
     }
-    public boolean isBlank(VariableResolver resolver) {
+    @Override
+	public boolean isBlank(VariableResolver resolver) {
         return text(resolver).equals("");
     }
 	@Override
@@ -80,19 +88,23 @@ public class CellOnList extends TablesOnList implements Cell {
 		copy.setTagLine(getTagLine());
 		return copy;
 	}
-    public void expectedElementMissing(TestResults testResults) {
+    @Override
+	public void expectedElementMissing(TestResults testResults) {
         fail(testResults);
         addToBody(label("missing"));
     }
-    public void actualElementMissing(TestResults testResults) {
+    @Override
+	public void actualElementMissing(TestResults testResults) {
         fail(testResults);
         addToBody(label("surplus"));
     }
+	@Override
 	public void unexpected(TestResults testResults, String s) {
         fail(testResults);
         addToBody(label("unexpected "+s));
 	}
-    public void actualElementMissing(TestResults testResults, String value) {
+    @Override
+	public void actualElementMissing(TestResults testResults, String value) {
         fail(testResults);
         fullText = Fixture.gray(Fixture.escape(value.toString()));
         addToBody(label("surplus"));
@@ -103,6 +115,7 @@ public class CellOnList extends TablesOnList implements Cell {
     		System.out.println("Bug: colouring a cell in a hidden table");
     	super.pass(testResults);
     }
+	@Override
 	public void pass(TestResults testResults, String msg) {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
@@ -115,7 +128,8 @@ public class CellOnList extends TablesOnList implements Cell {
     		System.out.println("Bug: colouring a cell in a hidden table");
     	super.fail(testResults);
     }
-    public void fail(TestResults testResults, String msg, VariableResolver resolver) {
+    @Override
+	public void fail(TestResults testResults, String msg, VariableResolver resolver) {
     	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,msg);
     		return;
@@ -127,7 +141,8 @@ public class CellOnList extends TablesOnList implements Cell {
         addToBody(resolved+label("expected") + "<hr>" + Fixture.escape(msg)
                 + label("actual"));
     }
-    public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
+    @Override
+	public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
     	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,actual);
     		return;
@@ -142,7 +157,8 @@ public class CellOnList extends TablesOnList implements Cell {
 	public static String differences(String actual, String expected) {
 		return PlugBoard.stringDifferencing.differences(actual, expected);
 	}
-    public void failHtml(TestResults testResults, String msg) {
+    @Override
+	public void failHtml(TestResults testResults, String msg) {
         fail(testResults);
         addToBody(msg);
     }
@@ -154,6 +170,7 @@ public class CellOnList extends TablesOnList implements Cell {
         addToTag(ERROR);
         testResults.exception();
     }
+   @Override
    public void error(TestResults testResults, String msg) {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
@@ -161,12 +178,14 @@ public class CellOnList extends TablesOnList implements Cell {
         addToTag(ERROR);
         testResults.exception();
     }
+   @Override
    public void error(TestResults testResults) {
 	   if (cellIsInHiddenRow)
 		   System.out.println("Bug: colouring a cell in a hidden table");
 	   addToTag(ERROR);
 	   testResults.exception();
    }
+	@Override
 	public void ignore(TestResults testResults) {
     	if (tagAnnotation.contains(CALLS))
     		return;
@@ -178,19 +197,22 @@ public class CellOnList extends TablesOnList implements Cell {
         addToTag(IGNORE);
         testResults.ignore();
     }
-    public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
+    @Override
+	public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
     	if (exceptionExpected)
     		pass(testResults);
     	else
     		error(testResults,e);
     }
-    public Table getEmbeddedTable() {
+    @Override
+	public Table getEmbeddedTable() {
         Tables tables = getEmbeddedTables();
         if (tables.size() != 1)
         	throw new SingleNestedTableExpected();
 		return tables.at(0);
     }
-    public void wrongHtml(TestResults counts, String actual) {
+    @Override
+	public void wrongHtml(TestResults counts, String actual) {
         fail(counts);
         addToBody(label("expected") + "<hr>" + actual
                 + label("actual"));
@@ -204,34 +226,42 @@ public class CellOnList extends TablesOnList implements Cell {
 	public void setMultilineEscapedText(String text) {
 		setText(HtmlUtils.escape(text));
 	}
+	@Override
 	public String fullText() {
 		return fullText;
 	}
+	@Override
 	public void setUnvisitedEscapedText(String s) {
 		setUnvisitedText(Fixture.escape(s));
 	}
 	public void setUnvisitedMultilineEscapedText(String s) {
 		setUnvisitedText(HtmlUtils.escape(s));
 	}
+	@Override
 	public void setUnvisitedText(String s) {
 		setText(Fixture.gray(s));
 	}
+	@Override
 	public void passOrFailIfBlank(TestResults counts, VariableResolver resolver) {
 		if (isBlank(resolver))
 			pass(counts);
 		else
 			fail(counts,"",resolver);
 	}
+	@Override
 	public void passIfNotEmbedded(TestResults counts, VariableResolver resolver) {
 		if (!hasEmbeddedTables(resolver)) // already coloured
 			pass(counts);
 	}
+	@Override
 	public void setIsHidden() {
 		this.cellIsInHiddenRow = true;
 	}
+	@Override
 	public void setInnerTables(Tables tables) {
 		addTables(tables);
 	}
+	@Override
 	public int getColumnSpan() {
 		Matcher matcher = COLSPAN_PATTERN.matcher(tagAnnotation);
 		int colspan = 1;
@@ -239,6 +269,7 @@ public class CellOnList extends TablesOnList implements Cell {
 			colspan = Integer.parseInt(matcher.group(2));
 		return colspan;
 	}
+	@Override
 	public void setColumnSpan(int colspan) {
 		if (colspan < 1)
 			return;
@@ -251,10 +282,12 @@ public class CellOnList extends TablesOnList implements Cell {
 	private static String getColspanHtml(int colspan) {
 		return " colspan=\""+colspan+"\"";
 	}
-    public Tables getEmbeddedTables() {
+    @Override
+	public Tables getEmbeddedTables() {
 		return fromAt(0);
     }
-    public boolean hasEmbeddedTables(VariableResolver resolver) {
+	@Override
+	public boolean hasEmbeddedTables(VariableResolver resolver) {
     	text(resolver);
         return !isEmpty();
     }

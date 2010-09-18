@@ -68,7 +68,7 @@ public class TestDirectAccessToParser {
 		public X findX(String s) {
 			return new X(s);
 		}
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public Gen findGen(String key, Type type) throws Exception {
 			Type innerType = ((ParameterizedType)type).getActualTypeArguments()[0];
 			if (innerType == Integer.class)
@@ -91,6 +91,10 @@ public class TestDirectAccessToParser {
 		public boolean equals(Object obj) {
 			return s.equals(((X)obj).s);
 		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
 	public static class Y {
 		//
@@ -104,6 +108,10 @@ public class TestDirectAccessToParser {
 		@Override
 		public boolean equals(Object obj) {
 			return t.equals(((Gen<?>)obj).t);
+		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
 		}
 	}
 	public static enum En {

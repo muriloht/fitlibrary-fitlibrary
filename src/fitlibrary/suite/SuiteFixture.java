@@ -27,6 +27,7 @@ public class SuiteFixture extends DoFixture implements SuiteEvaluator {
         if (!selected)
         	abandon();
     }
+	@Override
 	public RuntimeContextInternal getCopyOfRuntimeContext() {
 		return getRuntimeContext().copyFromSuite();
 	}

@@ -43,17 +43,20 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	public void pass(TestResults testResults) {
         at(firstErrorRow).pass(testResults);
     }
-    public void ignore(TestResults testResults) {
+    @Override
+	public void ignore(TestResults testResults) {
         at(firstErrorRow).ignore(testResults);
     }
     @Override
 	public void error(TestResults testResults, Throwable e) {
         at(firstErrorRow).error(testResults,e);
     }
+	@Override
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
-    public TableOnParse add(Row row) {
+    @Override
+	public TableOnParse add(Row row) {
         if (parse.parts == null)
             parse.parts = row.parse();
         else
@@ -68,17 +71,20 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	public void removeElementAt(int i) {
 		throw new RuntimeException("Not implemented");
 	}
-    public Row newRow() {
+    @Override
+	public Row newRow() {
         Row row = TableFactory.row();
         add(row);
         return row;
     }
+	@Override
 	public int phaseBoundaryCount() {
 		int count = (parse.leader).split("<hr>").length-1;
 		if (count == 0)
 			count = (parse.leader).split("<hr/>").length-1;
 		return count;
 	}
+	@Override
 	public void addFoldingText(String fold) {
 		if (parse.more != null)
 			new TableOnParse(parse.more).addToStartOfLeader(fold);
@@ -104,6 +110,7 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 	 * NOTE: if there is a better way like getting somehow the handle on the true table (as opposed to creating one on the
 	 * fly), please make it shrink the last cells column span..
 	 */
+	@Override
 	public void evenUpRows() {
 		int maxRowLength = getMaxRowColumnSpan();
 		for (Row row : this) {
@@ -128,6 +135,7 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 		else
 			parse().parts.at(t-1).more = row.parse();
 	}
+	@Override
 	public Table deepCopy() {
 		Table copy = TableFactory.table();
 		for (Row row : this)
@@ -157,6 +165,7 @@ public class TableOnParse extends TableElementOnParse<Row> implements Table {
 			return this;
 		return TableFactory.table(at(rowNo));
 	}
+	@Override
 	public Table fromTo(int from, int upto) {
 		Table result = TableFactory.table();
 		for (int i = from; i < upto; i++)

@@ -45,7 +45,7 @@ public class GenericMaps implements DomainFixtured {
 	public void setAMap(Map<Colour, Colour> map) {
 		aMap = map;
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SubsetMapTraverse aSubsetMap() {
 		return new SubsetMapTraverse(new HashMap(aMap));
 	}

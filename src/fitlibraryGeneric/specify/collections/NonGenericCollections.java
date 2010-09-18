@@ -13,7 +13,7 @@ import java.util.Set;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class NonGenericCollections implements DomainFixtured {
 	private List aList;
 	private Set aSet;

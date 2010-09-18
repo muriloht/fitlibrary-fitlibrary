@@ -22,6 +22,7 @@ public class ParserDelegateMethod implements DomainAdapter {
 	public String showDate(Date d) {
 		return d.toString();
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}
@@ -41,6 +42,10 @@ public class ParserDelegateMethod implements DomainAdapter {
 		@Override
 		public String toString() {
 			return s;
+		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
 		}
 	}
 

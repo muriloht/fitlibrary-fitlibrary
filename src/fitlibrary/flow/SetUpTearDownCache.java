@@ -20,26 +20,32 @@ public class SetUpTearDownCache implements SetUpTearDown {
 	private static Logger logger = FitLibraryLogger.getLogger(SetUpTearDownCache.class);
 	private final SetUpTearDownReferenceCounter referenceCounter = new SetUpTearDownReferenceCounter();
 
+	@Override
 	public void callSetUpOnSutChain(Object sutInitially, final Row row, final TestResults testResults) {
 		Object sut = sutInitially;
 		if (sut instanceof TypedObject)
 			sut = ((TypedObject)sut).getSubject();
 		referenceCounter.callSetUpOnNewReferences(sut, methodCaller(row, testResults));
 	}
+	@Override
 	public void callTearDownOnSutChain(Object sut, Row row, TestResults testResults) {
 		referenceCounter.callTearDownOnReferencesThatAreCountedDown(sut, methodCaller(row, testResults));
 	}
+	@Override
 	public void callSuiteSetUp(Object suiteFixture, Row row, TestResults testResults) {
 		callMethod(suiteFixture, "suiteSetUp", row,testResults);
 	}
+	@Override
 	public void callSuiteTearDown(Object suiteFixture, TestResults testResults) {
 		callMethod(suiteFixture,"suiteTearDown",TableFactory.row("a"),testResults);
 	}
 	private MethodCaller methodCaller(final Row row, final TestResults testResults) {
 		return new MethodCaller(){
+			@Override
 			public void setUp(Object object) {
 				callMethod(object,"setUp",row,testResults);
 			}
+			@Override
 			public void tearDown(Object object) {
 				if (testResults.problems()) {
 					Object result = callMethod(object,"onFailure",row,testResults);

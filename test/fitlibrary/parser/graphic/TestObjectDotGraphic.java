@@ -26,7 +26,7 @@ public class TestObjectDotGraphic extends TestCase {
 	}
 	
 	static class MyPoint extends Point {
-		//
+		private static final long serialVersionUID = 1L;
 	}
 	static class MyRectangle {
 		MyPoint pt1 = new MyPoint();

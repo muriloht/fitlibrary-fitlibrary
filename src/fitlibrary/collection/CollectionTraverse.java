@@ -160,7 +160,6 @@ public abstract class CollectionTraverse extends Traverse {
         }
         return columnBindings;
 	}
-    @SuppressWarnings("unchecked")
 	protected ICalledMethodTarget bindPropertyGetterForTypedObject(String name, TypedObject typedObject) {
 		String mappedName = camelCase(name);
     	if (typedObject.getSubject() instanceof Map) {

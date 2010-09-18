@@ -10,8 +10,9 @@ import java.util.Set;
 
 import fitlibrary.specify.eg.Count;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Match {
+	@SuppressWarnings("unchecked")
 	public Set getSetOfStringAbc() {
 		return new HashSet(Arrays.asList(new String[]{"a","b","c"}));
 	}
@@ -19,6 +20,7 @@ public class Match {
 		return set(new Integer[]{
 						new Integer(1), new Integer(2), new Integer(3)});
 	}
+	@SuppressWarnings("unchecked")
 	private HashSet set(Object[] array) {
 		return new HashSet(Arrays.asList(array));
 	}

@@ -10,10 +10,10 @@ import java.util.List;
 import fitlibrary.SetUpFixture;
 import fitlibrary.traverse.DomainAdapter;
 
-@SuppressWarnings("unchecked")
 public class DomainAdapterUnderTest implements DomainAdapter {
 	Object sut = new Sut();
 
+	@Override
 	public Object getSystemUnderTest() {
 		return sut;
 	}
@@ -26,15 +26,18 @@ public class DomainAdapterUnderTest implements DomainAdapter {
 	public SetUpFixture create() { 
 		return new SetUpFixture(this);
 	}
+	@SuppressWarnings("rawtypes")
 	public static class Sut implements DomainAdapter {
 		List ab = new ArrayList();
 		
 		public boolean callInSut(@SuppressWarnings("unused") int i) {
 			return true;
 		}
+		@Override
 		public Object getSystemUnderTest() {
 			return new ChainedSut();
 		}
+		@SuppressWarnings("unchecked")
 		public void aB(int a, int b) {
 			ab.add(new AB(a,b));
 		}

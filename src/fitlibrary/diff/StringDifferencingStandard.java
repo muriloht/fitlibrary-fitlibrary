@@ -12,9 +12,11 @@ import fitlibrary.diff.Diff_match_patch.Diff;
 import fitlibrary.tableOnParse.TableElementOnParse;
 
 public class StringDifferencingStandard implements StringDifferencing {
+	@Override
 	public void mustBeThreadSafe() {
 		//
 	}
+	@Override
 	public String differences(String actual, String expected) {
 		if (actual.length() < 6 || expected.length() < 6)
 			return "";

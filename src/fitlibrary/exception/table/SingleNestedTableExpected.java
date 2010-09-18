@@ -7,6 +7,8 @@ package fitlibrary.exception.table;
 import fitlibrary.exception.FitLibraryException;
 
 public class SingleNestedTableExpected extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
     public SingleNestedTableExpected() {
         super("Single nested table expected");
     }

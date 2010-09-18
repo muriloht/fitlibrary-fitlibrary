@@ -7,7 +7,7 @@ package fitlibrary.specify;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class NestedSets extends AbstractNestedSets {
 	public Fruit[] nested() {
 		return new Fruit[]{ apple(), orange(), pear() };

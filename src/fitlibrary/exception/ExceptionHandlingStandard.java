@@ -15,9 +15,11 @@ import fitlibrary.utility.ExceptionHandler;
 import fitlibrary.utility.HtmlUtils;
 
 public class ExceptionHandlingStandard implements ExceptionHandling {
+	@Override
 	public void mustBeThreadSafe() {
 		//
 	}
+	@Override
 	public String exceptionMessage(Throwable throwable) {
 		Throwable exception = unwrapThrowable(throwable);
         if (!BatchFitLibrary.SHOW_EXCEPTION_STACKS && exception instanceof IgnoredException)
@@ -31,6 +33,7 @@ public class ExceptionHandlingStandard implements ExceptionHandling {
         return "<hr><pre><div class=\"fit_stacktrace\">"
             + (buf.toString()) + "</div></pre>";
     }
+	@Override
 	public Throwable unwrapThrowable(Throwable throwable) {
 		return ExceptionHandler.unwrap(throwable);
 	}

@@ -7,7 +7,7 @@ package fitlibrary.specify.listParser;
 import java.util.Iterator;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Parse {
 	public List givenList(List list) {
 		return list;

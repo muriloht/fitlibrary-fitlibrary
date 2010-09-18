@@ -166,7 +166,7 @@ public class CompareFilesTraverse extends DoTraverse {
         public ListTreeError(String message, Tree[] trees) {
             super(message,trees);
         }
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
 		public ListTreeError(String name, List children) {
             super(name,children);
         }

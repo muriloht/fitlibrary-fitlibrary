@@ -5,6 +5,7 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class NullInCollection {
+	@SuppressWarnings("rawtypes")
 	public List getList() {
 		ArrayList list = new ArrayList();
 		list.add(null);

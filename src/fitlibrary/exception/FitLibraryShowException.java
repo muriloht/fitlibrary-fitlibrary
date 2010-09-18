@@ -1,6 +1,7 @@
 package fitlibrary.exception;
 
 public class FitLibraryShowException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
 	private Show show;
 	
 	public FitLibraryShowException(Show show) {

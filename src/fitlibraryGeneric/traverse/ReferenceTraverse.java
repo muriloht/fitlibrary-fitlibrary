@@ -73,7 +73,7 @@ public class ReferenceTraverse extends Traverse {
             last = true;
         return getReferencedObject(row.at(cellNo),object,last,testResults);
     }
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object getReferencedObject(Cell cell, Object object, boolean last, TestResults testResults) {
         if (object instanceof List)
             return getElementOfList(cell,(List<Object>)object);

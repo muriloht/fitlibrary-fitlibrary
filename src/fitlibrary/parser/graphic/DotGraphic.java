@@ -37,7 +37,8 @@ public class DotGraphic implements GraphicInterface {
             return false;
         return dot.equals(((DotGraphic)other).dot);
     }
-    public LocalFile toGraphic() {
+    @Override
+	public LocalFile toGraphic() {
         try {
             LocalFile actualImageFile = actualImageFile(dot);
             Logging.log(this,"toGraphic(): '"+actualImageFile+"'");

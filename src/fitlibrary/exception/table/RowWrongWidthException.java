@@ -7,6 +7,8 @@ package fitlibrary.exception.table;
 import fitlibrary.exception.FitLibraryException;
 
 public class RowWrongWidthException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
     public RowWrongWidthException(int cellCount) {
         super("Row should be "+cellCount+" cells wide");
     }

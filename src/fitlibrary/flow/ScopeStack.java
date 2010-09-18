@@ -46,10 +46,12 @@ public class ScopeStack implements IScopeStack {
 		this.global = global;
 		globals.add(global);
 	}
+	@Override
 	public void clearAllButSuite() {
 		stack.clear();
 	}
 	// Tracks the first SuiteEvaluator, which is not popped during a storytest
+	@Override
 	public void push(TypedObject typedObject) {
 		logger.trace("Pushed "+typedObject.getSubject());
 		if (typedObject.getSubject() instanceof SuiteEvaluator && suiteOption.isNone())
@@ -59,6 +61,7 @@ public class ScopeStack implements IScopeStack {
 		else
 			stack.push(typedObject);
 	}
+	@Override
 	public List<TypedObject> poppedAtEndOfTable() {
 		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
 		while (!stack.isEmpty()) {
@@ -68,6 +71,7 @@ public class ScopeStack implements IScopeStack {
 		}
 		return results;
 	}
+	@Override
 	public List<TypedObject> poppedAtEndOfStorytest() {
 		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
 		while (!stack.isEmpty())
@@ -79,9 +83,11 @@ public class ScopeStack implements IScopeStack {
 			logger.trace("Popped "+to.getSubject());
 		return results;
 	}
+	@Override
 	public TypedObject pop() {
 		return stack.pop();
 	}
+	@Override
 	public List<TypedObject> objectsForLookup() {
 		List<TypedObject> objects = new ArrayList<TypedObject>();
 		for (int i = stack.size() - 1; i >= 0; i--)
@@ -106,6 +112,7 @@ public class ScopeStack implements IScopeStack {
 		if (typedObject.hasTypedSystemUnderTest())
 			addObject(typedObject.getTypedSystemUnderTest(),accumulatingObjects);
 	}
+	@Override
 	public List<Class<?>> possibleClasses() {
 		ArrayList<Class<?>> results = new ArrayList<Class<?>>();
 		for (int i = stack.size() - 1; i >= 0; i--)

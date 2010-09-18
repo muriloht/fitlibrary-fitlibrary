@@ -83,6 +83,7 @@ public class SimpleSetUp extends SuiteFixture {
         public int localSetUpCount() { 
         	return setUps;
         }
+		@Override
 		public Object getSystemUnderTest() {
 			return null;
 		}

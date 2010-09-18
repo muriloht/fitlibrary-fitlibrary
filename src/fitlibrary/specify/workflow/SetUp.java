@@ -15,6 +15,7 @@ public class SetUp implements DomainAdapter  {
 	public boolean isSetUp() {
 		return setUp;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

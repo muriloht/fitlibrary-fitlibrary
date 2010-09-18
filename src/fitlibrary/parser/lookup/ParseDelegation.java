@@ -150,6 +150,7 @@ public class ParseDelegation {
 		final DelegateParser classParser = findSelfParser(typed);
 		if (classParser != null)
 			return new ParserFactory() {
+				@Override
 				public Parser parser(Evaluator evaluator, Typed typed2) {
 					return new DelegatingParser(classParser,evaluator,typed2);
 			}

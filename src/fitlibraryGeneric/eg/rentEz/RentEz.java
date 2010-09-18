@@ -5,6 +5,7 @@ import fitlibrary.traverse.DomainAdapter;
 public class RentEz implements DomainAdapter {
 	RentEzApplication rentEzApplication = new RentEzApplication();
 	
+	@Override
 	public Object getSystemUnderTest() {
 		return rentEzApplication;
 	}

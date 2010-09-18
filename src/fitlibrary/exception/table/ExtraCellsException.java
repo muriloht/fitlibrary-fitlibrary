@@ -7,7 +7,9 @@ package fitlibrary.exception.table;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class ExtraCellsException extends FitLibraryExceptionWithHelp {
-    public ExtraCellsException(String link) {
+	private static final long serialVersionUID = 1L;
+
+	public ExtraCellsException(String link) {
         super("Extra table cells","ExtraCells."+link);
     }
 }

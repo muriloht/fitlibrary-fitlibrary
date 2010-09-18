@@ -26,16 +26,20 @@ public class ParallelSuiteResult implements SuiteResult {
 				append("<table><tr><td>Name</td><td>Right</td><td>Wrong</td><td>Exceptions</td></tr>");
 	}
 	
+	@Override
 	public String getContent() {
 		appendRow(this,counts);
 		return content+"</table></body></html>";
 	}	
+	@Override
 	public Counts getCounts() {
 		return counts;
 	}
+	@Override
 	public String getName() {
 		return name;
 	}
+	@Override
 	public void append(TestResult result){
 			Counts resultCounts = result.getCounts();
 			counts.tally(resultCounts);

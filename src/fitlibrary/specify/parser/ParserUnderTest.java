@@ -11,7 +11,7 @@ public class ParserUnderTest extends DoFixture {
 	public ConstraintTraverse invalid() {
 		return new ConstraintTraverse(this,false);
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public boolean className(Class type) {
 		return true;
 	}

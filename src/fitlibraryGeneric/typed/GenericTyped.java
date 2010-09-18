@@ -44,24 +44,29 @@ public class GenericTyped implements Typed {
 		this(type);
 		this.hasMethodOrField = hasMethodOrField;
 	}
+	@Override
 	public Class<?> asClass() {
 		return GenericTypeUtility.getClassType(type);
 	}
+	@Override
 	public boolean hasMethodOrField() {
 		return hasMethodOrField;
 	}
+	@Override
 	public GenericTyped getComponentTyped() {
 		return new GenericTyped(getComponentType());
 	}
 	public GenericTyped getComponentTyped(int index) {
 		return new GenericTyped(getComponentType(index));
 	}
+	@Override
 	public boolean isPrimitive() {
 		return asClass().isPrimitive();
 	}
 	public boolean isEffectivelyPrimitive() {
 		return ClassUtility.isEffectivelyPrimitive(asClass());
 	}
+	@Override
 	public boolean isGeneric() {
 		return type instanceof ParameterizedType;
 	}
@@ -171,9 +176,11 @@ public class GenericTyped implements Typed {
 	private int actualCount() {
 		return asParameterizedType().getActualTypeArguments().length;
 	}
+	@Override
 	public Object newInstance() throws InstantiationException, IllegalAccessException, SecurityException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
 		return ClassUtility.newInstance(asClass());
 	}
+	@Override
 	public String getClassName() {
 		return asClass().getName();
 	}
@@ -181,15 +188,19 @@ public class GenericTyped implements Typed {
 	public String toString() {
 		return GenericTypeUtility.toString(type);
 	}
+	@Override
 	public String simpleClassName() {
 		return ClassUtility.simpleClassName(asClass());
 	}
+	@Override
 	public TypedObject typedObject(Object subject) {
 		return new GenericTypedObject(subject,this);
 	}
+	@Override
 	public boolean isArray() {
 		return asClass().isArray();
 	}
+	@Override
 	public TypedObject newTypedInstance() throws InstantiationException, IllegalAccessException, SecurityException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
 		return typedObject(newInstance());
 	}
@@ -215,18 +226,23 @@ public class GenericTyped implements Typed {
 	public GenericCases typeCases() {
 		return GenericTypeUtility.typeCases(type);
 	}
+	@Override
 	public Parser parser(Evaluator evaluator) {
 		return on(evaluator,this,false);
 	}
+	@Override
 	public Parser resultParser(Evaluator evaluator) {
 		return on(evaluator,this,true);
 	}
+	@Override
 	public Parser on(Evaluator evaluator, Typed typed, boolean isResult) {
 		return parserSelector.parserFor(evaluator, typed, isResult);
 	}
+	@Override
 	public boolean isEnum() {
 		return asClass().isEnum();
 	}
+	@Override
 	public Finder getFinder(Evaluator evaluator) {
 		return new GenericFinder(this,evaluator);
 	}

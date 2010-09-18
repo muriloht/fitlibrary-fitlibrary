@@ -44,6 +44,7 @@ public class FolderTestResultRepository implements TestResultRepository {
 		}
 		return fileName;
 	}
+	@Override
 	public void recordTestResult(TestResult tr) throws IOException {
 		Counts counts = tr.getCounts();
 		out.println(tr.getName()+  " right="+counts.right +", wrong="+counts.wrong+ ", ignores="+counts.ignores+", exceptions= "+counts.exceptions);
@@ -56,19 +57,20 @@ public class FolderTestResultRepository implements TestResultRepository {
 			fw.close();
 		}
 	}
+	@Override
 	public void addFile(File f, String relativeFilePath)throws IOException {
 		copy(f, new File(outputPath,relativeFilePath));
 	}
 	private void copy(File src, File dst) throws IOException {
 	    InputStream in = new FileInputStream(src);
-	    OutputStream out = new FileOutputStream(dst);
+	    OutputStream out2 = new FileOutputStream(dst);
 	    // Transfer bytes from in to out
 	    byte[] buf = new byte[1024];
 	    int len;
 	    while ((len = in.read(buf)) > 0) {
-	        out.write(buf, 0, len);
+	        out2.write(buf, 0, len);
 	    }
 	    in.close();
-	    out.close();
+	    out2.close();
 	}
 }

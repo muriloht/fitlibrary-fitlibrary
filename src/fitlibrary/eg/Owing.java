@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Owing {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getAmountsOwing() {
 		HashMap map = new HashMap();
 		map.put("anmol", new Double(5.00));

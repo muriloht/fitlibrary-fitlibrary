@@ -106,7 +106,8 @@ public class ListParser2 extends ListParser {
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			if (typed instanceof GenericTyped) {
     				GenericTyped genericTyped = (GenericTyped)typed;
     				if (genericTyped.isGeneric() || genericTyped.isArray())

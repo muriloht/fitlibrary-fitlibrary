@@ -29,6 +29,7 @@ public class PropertyEditorBasedParser implements Parser {
 		this.editor = editor;
 		this.nullOK = nullOK;
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
@@ -57,7 +58,8 @@ public class PropertyEditorBasedParser implements Parser {
     	setUp.callEndCreatingObjectMethod( newInstance);
 		return newInstance;
 	}
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTables(evaluator))
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return matches(parse(cell,testResults),result);
@@ -71,6 +73,7 @@ public class PropertyEditorBasedParser implements Parser {
 		DomainObjectCheckTraverse traverse = new DomainObjectCheckTraverse(result,typed);
 		return traverse.doesInnerTablePass(table,evaluator,testResults);
 	}
+	@Override
 	public String show(Object object) {
 		editor.setValue(object);
 		return editor.getAsText();
@@ -79,6 +82,7 @@ public class PropertyEditorBasedParser implements Parser {
 	public String toString() {
 		return "PropertyEditorBasedParser["+editor+"]";
 	}
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}

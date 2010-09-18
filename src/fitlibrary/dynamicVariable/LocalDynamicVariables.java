@@ -13,9 +13,11 @@ public class LocalDynamicVariables extends DynamicVariablesMap {
 	public LocalDynamicVariables(DynamicVariables outer) {
 		this.outer = outer;
 	}
+	@Override
 	public boolean addFromPropertiesFile(String fileName) {
 		return outer.addFromPropertiesFile(fileName);
 	}
+	@Override
 	public void addFromUnicodePropertyFile(String fileName) throws IOException {
 		outer.addFromUnicodePropertyFile(fileName);
 	}
@@ -37,9 +39,11 @@ public class LocalDynamicVariables extends DynamicVariablesMap {
 		else
 			outer.put(key, value);
 	}
+	@Override
 	public void putParameter(String key, Object value) {
 		super.put(key,value);
 	}
+	@Override
 	public DynamicVariables popLocal() {
 		return outer;
 	}
@@ -47,6 +51,7 @@ public class LocalDynamicVariables extends DynamicVariablesMap {
 	public Map<Object,Object> getMap() {
 		return outer.getMap();
 	}
+	@Override
 	public DynamicVariables top() {
 		return outer.top();
 	}

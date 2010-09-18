@@ -20,12 +20,15 @@ public class ClassMethodTarget implements MethodTarget {
 		this.evaluator = evaluator;
 		this.actualType = typedObject.classType();
 	}
+	@Override
 	public void setTypedSubject(TypedObject typedObject) {
 		//
 	}
+	@Override
 	public String getResult() throws Exception {
 		return actualType.getName();
 	}
+	@Override
 	public boolean matches(Cell expectedCell, TestResults testResults) {
 		try {
 			Class<?> expectedType = PlugBoard.lookupTarget.findClassFromFactoryMethod(evaluator, componentType, expectedCell.text(evaluator));
@@ -35,6 +38,7 @@ public class ClassMethodTarget implements MethodTarget {
 			return false;
 		}
 	}
+	@Override
 	public boolean invokeAndCheckCell(Cell expectedCell, boolean matchedAlready, TestResults testResults) {
 		try {
         	if (matches(expectedCell,testResults)) {

@@ -21,6 +21,7 @@ public class ConstantMethodTarget extends CalledMethodTarget {
 	public Object invoke() throws Exception {
 		return value;
 	}
+	@Override
 	public Class<?> getReturnType() {
 		return void.class;
 	}
@@ -29,7 +30,7 @@ public class ConstantMethodTarget extends CalledMethodTarget {
 		return new Class[]{};
 	}
     @Override
-	public void setTypedSubject(@SuppressWarnings("unused") TypedObject typedObject) {
+	public void setTypedSubject(TypedObject typedObject) {
     	//
     }
 	@Override

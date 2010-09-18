@@ -7,6 +7,8 @@ package fitlibrary.exception.method;
 import fitlibrary.exception.FitLibraryException;
 
 public class AmbiguousActionException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public AmbiguousActionException(String message) {
 		super("Ambiguity between: "+message);
 	}

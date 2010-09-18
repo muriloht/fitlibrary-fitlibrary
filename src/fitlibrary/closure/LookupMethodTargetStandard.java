@@ -34,9 +34,11 @@ import fitlibraryGeneric.typed.GenericTypedObject;
 public class LookupMethodTargetStandard implements LookupMethodTarget {
 	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(LookupMethodTargetStandard.class);
+	@Override
 	public void mustBeThreadSafe() {
 		//
 	}
+	@Override
 	public CalledMethodTarget findSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
@@ -47,6 +49,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
 	}
+	@Override
 	public CalledMethodTarget findPostfixSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
@@ -55,6 +58,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
 	}
+	@Override
 	public Closure findFixturingMethod(Evaluator evaluator, String name, Class<?>[] argTypes) {
 		IScope scope = evaluator.getScope();
 		for (TypedObject typedObject : scope.objectsForLookup()) {
@@ -72,6 +76,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		target.setEverySecond(doStyle);
 		return target;
 	}
+	@Override
 	public ICalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
 		return findMethodOrGetter(camel(name), unknownParameterNames(argCount),"Type",evaluator);
 	}
@@ -81,6 +86,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			methodArgs.add("arg"+(i+1));
 		return methodArgs;
 	}
+	@Override
 	public ICalledMethodTarget findMethodOrGetter(String name, List<String> methodArgs, String returnType, Evaluator evaluator) throws Exception {
 		int argCount = methodArgs.size();
 		IScope scope = evaluator.getScope();
@@ -103,6 +109,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
 		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
+	@Override
 	public ICalledMethodTarget findMethod(String name, List<String> methodArgs, String returnType, Evaluator evaluator) {
 		int argCount = methodArgs.size();
 		IScope scope = evaluator.getScope();
@@ -114,9 +121,11 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		List<String> signatures = ClassUtility.methodSignatures(name, methodArgs, returnType);
 		throw new MissingMethodException(signatures,scope.possibleClasses());
 	}
+	@Override
 	public ICalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
 		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName),"void");
 	}
+	@Override
 	public ICalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType) {
 		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"",returnType);
 	}
@@ -138,6 +147,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		}
 		throw new MissingMethodException(signatures("public "+returnType+" "+methodName+"("+arg+") { }"),evaluator.getScope().possibleClasses());
 	}
+	@Override
 	public ICalledMethodTarget findGetterUpContextsToo(TypedObject typedObject, Evaluator evaluator, String propertyName, boolean considerContext) {
 		ICalledMethodTarget target;
 		if (considerContext)
@@ -165,9 +175,11 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		}
 		return null;
     }
+	@Override
 	public List<Class<?>> possibleClasses(IScope scope) {
 		return scope.possibleClasses();
 	}
+	@Override
 	public Class<?> findClassFromFactoryMethod(Evaluator evaluator, Class<?> type, String typeName) throws IllegalAccessException, InvocationTargetException {
 		String methodName = "concreteClassOf"+ClassUtility.simpleClassName(type);
 		Closure method = findFixturingMethod(evaluator, methodName, new Class[] { String.class});
@@ -177,12 +189,14 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		}
 		return (Class<?>)method.invoke(new Object[]{ typeName });
 	}
+	@Override
 	public Closure findNewInstancePluginMethod(Evaluator evaluator) {
 		return findFixturingMethod(evaluator,"newInstancePlugin", new Class[] {Class.class});
 	}
 	private static String camel(String name) {
 		return ExtendedCamelCase.camel(name);
 	}
+	@Override
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope) {
 		int size = results.size();
 		for (TypedObject typedObject : scope.objectsForLookup()) {

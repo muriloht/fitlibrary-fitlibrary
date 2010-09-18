@@ -17,14 +17,17 @@ import java.util.List;
 */
 @SuppressWarnings("unchecked")
 public class DiscountApplication {
+	@SuppressWarnings("rawtypes")
 	private List groups = new ArrayList();
 
 	public void addDiscountGroup(String futureValue, double maxOwing, double minPurchase, double discountPercent) {
 		groups.add(new DiscountForGroup(futureValue,maxOwing,minPurchase,discountPercent));
 	}
+	@SuppressWarnings("rawtypes")
 	public List getGroups() {
 		return groups;
 	}
+	@SuppressWarnings("rawtypes")
 	public double discount(String futureValue, double owing, double purchase) {
 		for (Iterator it = groups.iterator(); it.hasNext(); ) {
 			DiscountForGroup group = (DiscountForGroup)it.next();

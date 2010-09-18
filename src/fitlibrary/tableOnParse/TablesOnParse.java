@@ -29,7 +29,8 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
 	public Table at(int i) {
         return new TableOnParse(parse.at(i));
     }
-    public TablesOnParse add(Table table) {
+    @Override
+	public TablesOnParse add(Table table) {
     	if (parse == null)
     		parse = table.parse();
     	else
@@ -42,6 +43,7 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
     		return 0;
         return parse.size();
     }
+	@Override
 	public Tables deepCopy() {
 		Tables copy = TableFactory.tables();
 		for (Table table: this)
@@ -68,6 +70,7 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
 	public Tables fromAt(int i) {
 		return TableFactory.tables(at(i));
 	}
+	@Override
 	public Tables fromTo(int from, int upto) {
 		Tables result = TableFactory.tables();
 		for (int i = from; i < upto; i++)

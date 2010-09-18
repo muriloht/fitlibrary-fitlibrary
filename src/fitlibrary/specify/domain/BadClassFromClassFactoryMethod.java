@@ -45,6 +45,7 @@ public class BadClassFromClassFactoryMethod implements DomainAdapter, DomainFixt
 			return String.class;
 		return null;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

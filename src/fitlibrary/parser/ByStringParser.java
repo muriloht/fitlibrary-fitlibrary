@@ -24,11 +24,13 @@ public class ByStringParser implements Parser {
 	public ByStringParser(VariableResolver resolver) {
 		this.resolver = resolver;
 	}
+	@Override
 	public String show(Object actual) {
     	if (actual == null)
     		return "null";
         return actual.toString();
     }
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return Traverse.asTypedObject(parse(cell,testResults));
 	}
@@ -36,7 +38,8 @@ public class ByStringParser implements Parser {
    private Object parse(Cell cell, TestResults testResults) throws Exception {
         return cell.text(resolver);
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
         return equals(parse(cell,testResults),result);
     }
     private boolean equals(Object a, Object b) { // a will be a String
@@ -48,11 +51,13 @@ public class ByStringParser implements Parser {
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
+			@Override
 			public Parser parser(Evaluator evaluator, Typed typed) {
 				return new ByStringParser(evaluator.getRuntimeContext().getResolver());
 			}
     	};
     }
+	@Override
 	public Evaluator traverse(TypedObject object) {
 		throw new RuntimeException("No Traverse available");
 	}

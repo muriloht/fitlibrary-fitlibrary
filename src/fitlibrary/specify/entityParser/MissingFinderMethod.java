@@ -12,7 +12,7 @@ import java.util.Map;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class MissingFinderMethod implements DomainFixtured {
 	User user;
 	Map users = new HashMap();
@@ -24,6 +24,7 @@ public class MissingFinderMethod implements DomainFixtured {
 	public User getUser() {
 		return user;
 	}
+	@SuppressWarnings("unchecked")
 	public void setUser(User user) {
 		this.user = user;
 		users.put(user.getName(),user);

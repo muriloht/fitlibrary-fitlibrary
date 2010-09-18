@@ -40,5 +40,9 @@ public class ClassWithParseMethod2 extends DoFixture {
                 return false;
             return ((MyClass)object).i == i;
         }
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
 }

@@ -65,18 +65,22 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
     	cell.setText(exception.getResult().getHtmlString());
     	cell.shown();
     }
-    public String text(int i, VariableResolver resolver) {
+    @Override
+	public String text(int i, VariableResolver resolver) {
         return at(i).text(resolver);
     }
-   public void missing(TestResults testResults) {
+   @Override
+public void missing(TestResults testResults) {
         at(0).expectedElementMissing(testResults);
     }
-    public Cell addCell() {
+    @Override
+	public Cell addCell() {
     	Cell cell = TableFactory.cell("");
 		add(cell);
 		return cell;
     }
-    public RowOnParse add(Cell cell) {
+    @Override
+	public RowOnParse add(Cell cell) {
     	if (rowIsHidden)
     		System.out.println("Bug: Adding a cell to a hidden row in a table");
         if (parse.parts == null)
@@ -85,12 +89,14 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
             parse.parts.last().more = cell.parse();
         return this;
     }
+	@Override
 	public Cell addCell(String text) {
         Cell cell = TableFactory.cell(text);
         add(cell);
         return cell;
 	}
-    public Cell addCell(String text, int cols) {
+    @Override
+	public Cell addCell(String text, int cols) {
         Cell cell = new CellOnParse(text);
         cell.setColumnSpan(cols);
         add(cell);
@@ -108,13 +114,16 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
                 return false;
         return true;
     }
+	@Override
 	public void ignore(TestResults testResults) {
 		for (int i = 0; i < size(); i++)
 			at(i).ignore(testResults);
 	}
+	@Override
 	public boolean isEmpty() {
 		return size() == 0;
 	}
+	@Override
 	public void setIsHidden() {
 		this.rowIsHidden  = true;
 		for (int i = 0; i < size(); i++)
@@ -135,25 +144,30 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
 	public Row fromAt(int rowNo) {
 		return TableFactory.row(at(rowNo));
 	}
+	@Override
 	public Row fromTo(int from, int upto) {
 		Row row = TableFactory.row();
 		for (int i = from; i < upto; i++)
 			row.add(TableFactory.cell(at(i)));
 		return row;
 	}
+	@Override
 	public void passKeywords(TestResults testResults) {
 		for (int i = 0; i < size(); i += 2)
 			at(i).pass(testResults);
 	}
+	@Override
 	public Row deepCopy() {
 		Row rowCopy = TableFactory.row();
 		for (int i = 0; i < size(); i++)
 			rowCopy.add(TableFactory.cell(at(i).fullText()));
 		return rowCopy;
 	}
+	@Override
 	public void clear() {
 		parse.parts = null;
 	}
+	@Override
 	public String methodNameForPlain(VariableResolver resolver) {
 		String name = "";
 		for (int i = 0; i < size(); i += 2) {
@@ -163,24 +177,28 @@ public class RowOnParse extends TableElementOnParse<Cell> implements Row {
 		}
 		return name;
 	}
+	@Override
 	public String methodNameForCamel(VariableResolver resolver) {
 		String name = "";
 		for (int i = 0; i < size(); i += 2)
 			name += text(i,resolver)+" ";
 		return ExtendedCamelCase.camel(name.trim());
 	}
+	@Override
 	public int argumentCount() {
 		return size() / 2;
 	}
 	public boolean hasFurtherRows() {
 		return parse.more != null;
 	}
+	@Override
 	public int getColumnSpan() {
 		int col = 0;
 		for (int i = 0; i < size(); i++)
 			col += at(i).getColumnSpan();
 		return col;
 	}
+	@Override
 	public void setColumnSpan(int span) {
 		if (isEmpty())
 			addCell();

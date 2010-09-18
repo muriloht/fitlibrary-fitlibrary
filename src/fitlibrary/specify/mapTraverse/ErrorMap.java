@@ -9,8 +9,9 @@ import java.util.Map;
 
 import fitlibrary.object.DomainFixtured;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ErrorMap implements DomainFixtured {
+	@SuppressWarnings("unchecked")
 	public Map getErrorMap() {
 		HashMap map = new HashMap();
 		map.put("a",new InError());

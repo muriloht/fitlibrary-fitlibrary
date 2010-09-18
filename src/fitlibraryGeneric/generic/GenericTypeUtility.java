@@ -18,7 +18,6 @@ import fitlibrary.exception.FitLibraryException;
 public class GenericTypeUtility {
 	public enum GenericCases { GENERIC_ARRAY, PARAMETERIZED_TYPE, TYPE_VARIABLE, WILDCARD_TYPE, CLASS_TYPE }
 
-	@SuppressWarnings("unchecked")
 	public static GenericCases typeCases(Type type) {
 		if (type instanceof ParameterizedType)
 			return GenericCases.PARAMETERIZED_TYPE;

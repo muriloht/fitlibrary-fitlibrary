@@ -41,6 +41,7 @@ public class ArrayParser implements Parser {
 			(ClassUtility.isEffectivelyPrimitive(type.getComponentType()) ||
 			 type.getComponentType().isArray());
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return componentType.typedObject(parse(cell,testResults));
 	}
@@ -54,7 +55,8 @@ public class ArrayParser implements Parser {
         setUp.interpretWithinScope(table,evaluator,testResults);
         return setUp.getResults();
     }
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTables(evaluator))
     		return tableMatches(cell.getEmbeddedTable(),result,testResults);
     	return equals(parse(cell,testResults),result,testResults);
@@ -72,7 +74,6 @@ public class ArrayParser implements Parser {
         Traverse traverse = selectPrimitiveArray(results);
 		return traverse.doesInnerTablePass(table,evaluator,testResults);
     }
-	@SuppressWarnings("unchecked")
 	public static Traverse selectPrimitiveArray(Object array) {
 		if (array.getClass().isArray()) {
 			if (ClassUtility.isEffectivelyPrimitive(array.getClass().getComponentType()))
@@ -101,6 +102,7 @@ public class ArrayParser implements Parser {
 					TableFactory.cell(t.nextToken()),testResults).getSubject());
 		return array;
 	}
+	@Override
 	public String show(Object o) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		if (o == null)
 			return "";
@@ -130,11 +132,13 @@ public class ArrayParser implements Parser {
 	}
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new ArrayParser(evaluator,typed);
     		}
     	};
     }
+	@Override
 	public Evaluator traverse(TypedObject object) {
 		return new ArrayTraverse(object.getSubject());
 	}

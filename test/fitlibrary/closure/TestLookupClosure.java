@@ -60,26 +60,28 @@ public class TestLookupClosure {
 		Arrays.fill(objects, 1);
 		return objects;
 	}
+	@SuppressWarnings("unused")
 	static class BaseOfBase {
 		public Class<?> classCalled;
 		public void inheritedPublicFunc(int i) { classCalled = BaseOfBase.class; }
-		@SuppressWarnings("unused")
 		private int getPrivateInt() { classCalled = BaseOfBase.class; return 1; }
-		@SuppressWarnings("unused")
 		private void setPrivateInt(int i) { classCalled = BaseOfBase.class; }
 		public int getInt() { classCalled = Derived.class; return 1; }
 		public void setInt(int i) { classCalled = Derived.class; }
 	}
+	@SuppressWarnings("unused")
 	static class Base extends BaseOfBase {
-		@SuppressWarnings("unused")
 		private void privateFunc(int i) { classCalled = Base.class; }
-		@SuppressWarnings("unused")
 		private void inheritedPrivateFunc(int i) { classCalled = Base.class; }
 		public void overridenPublicFunc(int i) { classCalled = Base.class; }
 		@Override
 		public boolean equals(Object obj) {
 			classCalled = Base.class;
 			return super.equals(obj);
+		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
 		}
 	}
 	static class Derived extends Base {

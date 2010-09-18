@@ -9,6 +9,8 @@ package fitlibrary.exception.parse;
 import fitlibrary.exception.FitLibraryException;
 
 public abstract class ParseException  extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public ParseException(String s) {
 		super(s);
 	}

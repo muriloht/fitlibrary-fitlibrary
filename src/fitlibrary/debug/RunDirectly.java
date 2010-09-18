@@ -16,9 +16,11 @@ import fitlibrary.table.Tables;
 
 public class RunDirectly {
 	protected ReportListener reportListener = new ReportListener() {
+		@Override
 		public void tableFinished(Table table) {
 			//
 		}
+		@Override
 		public void tablesFinished(TestResults testResults) {
 			//
 		}

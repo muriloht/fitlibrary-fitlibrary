@@ -30,7 +30,8 @@ public class GraphicParser extends HtmlStructureParser {
         Class<?>[] argTypes = new Class[]{ LocalFile.class };
         return callReflectively("parseGraphic",args,argTypes,null);
      }
-    public String show(Object object) {
+    @Override
+	public String show(Object object) {
 	    if (object == null)
 	    	return "null";
         LocalFile localFile = (LocalFile)callReflectively("toGraphic",
@@ -54,11 +55,13 @@ public class GraphicParser extends HtmlStructureParser {
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new GraphicParser(typed);
     		}
     	};
     }
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}

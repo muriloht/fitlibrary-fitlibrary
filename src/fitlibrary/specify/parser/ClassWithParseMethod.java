@@ -29,6 +29,10 @@ public class ClassWithParseMethod extends DoFixture {
 				return false;
 			return i == ((MyValue)other).i;
 		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 		public static MyValue parse(String s) {
 			return new MyValue(Integer.parseInt(s));
 	    }		

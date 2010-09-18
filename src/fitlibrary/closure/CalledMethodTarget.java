@@ -56,26 +56,32 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	public boolean isValid() {
 		return closure != null;
 	}
+	@Override
 	public Class<?> getOwningClass() {
 		return closure.getOwningClass();
 	}
+	@Override
 	public Class<?> getReturnType() {
 		return closure.getReturnType();
 	}
+	@Override
 	public Class<?>[] getParameterTypes() {
 		return closure.getParameterTypes();
 	}
+	@Override
 	public Object invoke(Object[] arguments) throws Exception {
 		return closure.invoke(arguments);
 	}
 	public TypedObject invokeTyped(Object[] arguments) throws Exception {
 		return closure.invokeTyped(arguments);
 	}
-    public Object invoke(Cell cell, TestResults testResults) throws Exception {
+    @Override
+	public Object invoke(Cell cell, TestResults testResults) throws Exception {
     	collectCell(cell,0,cell.text(evaluator),testResults,true);
     	return invoke(args);
     }
-    public TypedObject invokeTyped(Row row, TestResults testResults) throws Exception {
+    @Override
+	public TypedObject invokeTyped(Row row, TestResults testResults) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,true);
@@ -92,7 +98,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			throw new IgnoredException(); // no more to do
 		}
 	}
-    public Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception {
+    @Override
+	public Object invoke(Row row, TestResults testResults, boolean catchParseError) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -103,7 +110,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 		return invoke(args);
 	}
-    public Object invokeForSpecial(Row row, TestResults testResults, boolean catchParseError, Cell operatorCell) throws Exception {
+    @Override
+	public Object invokeForSpecial(Row row, TestResults testResults, boolean catchParseError, Cell operatorCell) throws Exception {
 		try {
 			if (everySecond)
 				collectCells(row,2,testResults,catchParseError);
@@ -141,7 +149,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			throw e;
 		}
 	}
-    public void invokeAndCheck(Row row, Cell expectedCell, TestResults testResults, boolean handleSubtype) {
+    @Override
+	public void invokeAndCheck(Row row, Cell expectedCell, TestResults testResults, boolean handleSubtype) {
         boolean exceptionExpected = exceptionIsExpected(expectedCell);
         try {
             Object result = invoke(row,testResults,true);
@@ -155,7 +164,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         	expectedCell.exceptionExpected(exceptionExpected, e, testResults);
         }
     }
-    public void invokeAndCheckForSpecial(Row row, Cell expectedCell, TestResults testResults, Row fullRow, Cell specialCell) {
+    @Override
+	public void invokeAndCheckForSpecial(Row row, Cell expectedCell, TestResults testResults, Row fullRow, Cell specialCell) {
         boolean exceptionExpected = exceptionIsExpected(expectedCell);
         try {
             Object result = invoke(row,testResults,true);
@@ -191,9 +201,11 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	private boolean exceptionIsExpected(Cell expectedCell) {
 		return exceptionString != null && exceptionString.equals(expectedCell.text(evaluator));
 	}
+	@Override
 	public String getResult() throws Exception {
 		return resultParser.show(invoke());
 	}
+	@Override
 	public boolean invokeAndCheckCell(Cell expectedCell, boolean matchedAlready, TestResults testResults) {
         try {
 			return checkResult(expectedCell,invoke(),matchedAlready,false,testResults);
@@ -202,9 +214,11 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			return false;
 		}
 	}
+	@Override
 	public Object invoke() throws Exception {
 		return closure.invoke();
 	}
+	@Override
 	public boolean matches(Cell expectedCell, TestResults testResults) {
 		try {
 			return resultParser.matches(expectedCell,invoke(),testResults);
@@ -212,6 +226,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			return false;
 		}
 	}
+	@Override
 	public boolean checkResult(Cell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
 		ResultParser valueParser = resultParser;
 		if (handleSubtype && closure != null)
@@ -261,6 +276,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 		return s.toString();
 	}
+	@Override
 	public void notResult(Cell expectedCell, Object result, TestResults testResults) {
 		try {
 			if (resultParser == null)
@@ -274,6 +290,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			expectedCell.error(testResults,e);
 		}
 	}
+	@Override
 	public Object getResult(Cell expectedCell, TestResults testResults) {
 		try {
 			return resultParser.parseTyped(expectedCell,testResults).getSubject();
@@ -281,6 +298,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			return null;
 		}
 	}
+	@Override
 	public void color(Row row, boolean right, TestResults testResults) throws Exception {
 		if (!everySecond && row.atExists(0))
 			row.at(0).passOrFail(testResults,right);
@@ -291,13 +309,16 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	/** Defines the Strings that signifies that the value in the row above is
 	 *  to be used again. Eg, it could be set to "" or to '"".
 	 */
+	@Override
 	public void setRepeatAndExceptionString(String repeatString, String exceptionString) {
 		this.repeatString = repeatString;
 		this.exceptionString = exceptionString;
 	}
+	@Override
 	public void setEverySecond(boolean everySecond) {
 		this.everySecond = everySecond;
 	}
+	@Override
 	public String getResultString(Object result) throws Exception {
 		if (getReturnType() == String.class)
 			return (String)result;
@@ -307,24 +328,29 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	public String toString() {
 		return closure.toString();
 	}
-    public Parser getResultParser() { // TEMP while adding FitLibrary2
+    @Override
+	public Parser getResultParser() { // TEMP while adding FitLibrary2
         return resultParser;
     }
     public void setResultParser(GetterParser resultAdapter) { // TEMP while adding FitLibrary2
         this.resultParser = resultAdapter;
     }
-    public Parser[] getParameterParsers() {
+    @Override
+	public Parser[] getParameterParsers() {
         return parameterParsers;
     }
     public void setParameterParsers(Parser[] parameterAdapters) {
         this.parameterParsers = parameterAdapters;
     }
-    public void setTypedSubject(TypedObject typedObject) {
+    @Override
+	public void setTypedSubject(TypedObject typedObject) {
     	closure.setTypedSubject(typedObject);
     }
+	@Override
 	public boolean returnsVoid() {
 		return getReturnType() == void.class;
 	}
+	@Override
 	public boolean returnsBoolean() {
 		return getReturnType() == boolean.class;
 	}

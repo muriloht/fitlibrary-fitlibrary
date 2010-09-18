@@ -7,7 +7,9 @@ package fitlibrary.exception.table;
 import fitlibrary.exception.FitLibraryExceptionWithHelp;
 
 public class MissingCellsException extends FitLibraryExceptionWithHelp {
-  public MissingCellsException(String details) {
+	private static final long serialVersionUID = 1L;
+
+	public MissingCellsException(String details) {
     super("Missing table cells "+details,"MissingCells."+details);
   }
 }

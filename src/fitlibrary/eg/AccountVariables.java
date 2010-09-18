@@ -10,6 +10,7 @@ import java.util.List;
 public class AccountVariables extends DomainAdapterWithVariables {
 	private AccountsRepository accountsRepository = new AccountsRepository();
 
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

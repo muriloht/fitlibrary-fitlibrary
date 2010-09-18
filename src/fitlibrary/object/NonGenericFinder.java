@@ -52,6 +52,7 @@ public class NonGenericFinder implements Finder {
         	return null;
         throw new FitLibraryExceptionInHtml(findExceptionMessage);
     }
+	@Override
 	public Object find(final String text) throws Exception, IllegalAccessException, InvocationTargetException {
 		if (findIntMethod != null) {
             int index = 0;
@@ -64,6 +65,7 @@ public class NonGenericFinder implements Finder {
         }
         return callFindStringMethod(text);
 	}
+	@Override
 	public String show(Object result) throws Exception {
         Object[] args = new Object[]{ result };
 		if (showMethod != null)
@@ -72,6 +74,7 @@ public class NonGenericFinder implements Finder {
 			return "";
 		return result.toString();
 	}
+	@Override
 	public boolean hasFinderMethod() {
 		return findIntMethod != null || findStringMethod != null;
 	}

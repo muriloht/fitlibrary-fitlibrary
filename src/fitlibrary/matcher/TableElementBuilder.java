@@ -14,7 +14,7 @@ import org.jmock.Mockery;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.table.TableElement;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class TableElementBuilder<From extends TableElement, Builder extends TableElementBuilder, To extends TableElement> {
 	protected final Class<From> type;
 	protected List<Builder> elementBuilders = new ArrayList<Builder>();

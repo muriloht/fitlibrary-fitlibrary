@@ -63,8 +63,8 @@ public class HasNewInstancePlugin implements DomainAdapter, DomainFixtured  {
 	public interface Crash {
 		//
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}
-
 }

@@ -10,6 +10,7 @@ import fitlibrary.specify.missingMethod.ShowInJustSut.Colour;
 import fitlibrary.traverse.DomainAdapter;
 
 public class ShowInDomainAdapter implements DomainAdapter {
+	@Override
 	public Object getSystemUnderTest() {
 		return new ShowInJustSut();
 	}

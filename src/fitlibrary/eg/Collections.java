@@ -14,6 +14,7 @@ import fitlibrary.traverse.Traverse;
 
 @SuppressWarnings("unchecked")
 public class Collections {
+	@SuppressWarnings("rawtypes")
 	private List elements = new ArrayList();
 	private int[] ints;
 	
@@ -27,9 +28,11 @@ public class Collections {
 	public int[] getInts() {
 		return ints;
 	}
+	@SuppressWarnings("rawtypes")
 	public List getOrderedList() {
 		return elements;
 	}
+	@SuppressWarnings("rawtypes")
 	public Set getUnorderedList() {
 		return new HashSet(elements);
 	}

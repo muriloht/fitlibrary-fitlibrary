@@ -17,6 +17,7 @@ public class FixedPoint implements FixedPointInterface {
 		this.x = x;
 		this.y = y;
 	}
+	@Override
 	public int getX() {
 		return x;
 	}

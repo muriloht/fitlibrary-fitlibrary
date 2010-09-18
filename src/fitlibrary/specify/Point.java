@@ -37,4 +37,8 @@ public class Point {
 		Point other = (Point) object;
 		return x == other.x && y == other.y;
 	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import fitlibrary.specify.eg.MyPoint;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class AutoWrap {
 	public int[] getAnArrayOfInt() {
 		return new int[]{1,2,3};
@@ -22,18 +23,15 @@ public class AutoWrap {
 	public Object[] getAnArrayOfPoint() {
 	    return new Object[] { new MyPoint(0,0), new MyPoint(5,5) };
 	}
-	@SuppressWarnings("unchecked")
 	public List getAListOfPoint() {
 	    List list = new ArrayList();
 	    list.add(new MyPoint(0,0));
 	    list.add(new MyPoint(5,5));
 	    return list;
 	}
-	@SuppressWarnings("unchecked")
 	public Iterator getAnIteratorOfPoint() {
 	    return getAListOfPoint().iterator();
 	}
-	@SuppressWarnings("unchecked")
 	public Set getASetOfPoint() {
 	    return new HashSet(getAListOfPoint());
 	}

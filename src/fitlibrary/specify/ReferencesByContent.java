@@ -10,7 +10,7 @@ import java.util.List;
 
 import fitlibrary.DoFixture;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ReferencesByContent extends DoFixture {
 	HashMap map = new HashMap();
 	

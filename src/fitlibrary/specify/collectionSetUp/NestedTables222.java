@@ -10,7 +10,7 @@ import java.util.List;
 import fitlibrary.SetUpFixture;
 import fitlibrary.specify.AbstractNestedLists;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class NestedTables222 extends AbstractNestedLists {
 	protected List fruits;
 

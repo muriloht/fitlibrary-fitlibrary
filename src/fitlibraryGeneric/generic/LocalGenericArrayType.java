@@ -15,6 +15,7 @@ public class LocalGenericArrayType implements GenericArrayType {
 	public LocalGenericArrayType(Type genericComponentType) {
 		this.genericComponentType = genericComponentType;
 	}
+	@Override
 	public Type getGenericComponentType() {
 		return genericComponentType;
 	}

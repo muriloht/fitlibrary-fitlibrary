@@ -8,6 +8,8 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.utility.ClassUtility;
 
 public class ConstructorNotVisible extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public ConstructorNotVisible(String className) {
 		super("Constructor for class is not visible: "+ClassUtility.camelClassName(className));
 	}

@@ -11,7 +11,7 @@ import java.util.List;
 import fit.Parse;
 import fitlibrary.runResults.TestResults;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class TableElementOnList<From extends TableElement, To extends TableElement> {
     public final static String PASS = "class=\"pass\"";
     public final static String FAIL = "class=\"fail\"";

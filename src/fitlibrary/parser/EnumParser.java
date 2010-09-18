@@ -25,7 +25,8 @@ public class EnumParser implements Parser {
 		this.typed = typed;
 		this.resolver = resolver;
 	}
-	@SuppressWarnings("unchecked")
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		String text = cell.text(resolver);
 		if (text.equals(""))
@@ -41,6 +42,7 @@ public class EnumParser implements Parser {
 			}
 		}
 	}
+	@Override
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (cell.hasEmbeddedTables(resolver)) {
 			cell.unexpected(testResults,"collection");
@@ -51,17 +53,20 @@ public class EnumParser implements Parser {
 		Object parsed = parseTyped(cell,testResults).getSubject();
 		return parsed.equals(result);
 	}
+	@Override
 	public String show(Object result) throws Exception {
 		return result.toString();
 	}
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext().getResolver());
     		}
     	};
     }
-    public Evaluator traverse(TypedObject typedObject) {
+    @Override
+	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}
 }

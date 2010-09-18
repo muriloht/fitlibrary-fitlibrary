@@ -19,9 +19,11 @@ public class PropertyOfInterfaceType implements DomainAdapter, DomainFixtured  {
 	public static class BadPayer implements AbstractUser {
 		private String name;
 
+		@Override
 		public String getName() {
 			return name;
 		}
+		@Override
 		public void setName(String name) {
 			this.name = name;
 		}
@@ -37,6 +39,7 @@ public class PropertyOfInterfaceType implements DomainAdapter, DomainFixtured  {
 			return BadPayer.class;
 		return null;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

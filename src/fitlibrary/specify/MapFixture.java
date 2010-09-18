@@ -8,7 +8,7 @@ import fitlibrary.DoFixture;
 import fitlibrary.SetFixture;
 import fitlibrary.SubsetFixture;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MapFixture extends DoFixture {
 
 	public SetFixture getMap() throws Exception {

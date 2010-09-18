@@ -12,14 +12,17 @@ public class NullIterator<T> implements Iterator<T> {
 	public NullIterator(Iterator<T> it) {
 		this.it = it;
 	}
+	@Override
 	public boolean hasNext() {
 		return it.hasNext();
 	}
+	@Override
 	public T next() {
 		if (it.hasNext())
 			return it.next();
 		return null;
 	}
+	@Override
 	public void remove() {
 		it.remove();
 	}

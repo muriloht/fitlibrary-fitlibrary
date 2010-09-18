@@ -7,6 +7,7 @@ import fitlibrary.traverse.DomainAdapter;
 
 public class NullString implements DomainAdapter {
 
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}
@@ -31,7 +32,7 @@ public class NullString implements DomainAdapter {
 		else result = new Integer(Math.abs(Integer.valueOf(s).intValue()));
 		return result;
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List list() {
 		ArrayList list = new ArrayList();
 		list.add(new Person("Lars"));

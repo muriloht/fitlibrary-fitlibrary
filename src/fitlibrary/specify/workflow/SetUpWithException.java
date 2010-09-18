@@ -10,6 +10,7 @@ public class SetUpWithException implements DomainAdapter {
 	public void setUp() {
 		throw new RuntimeException();
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

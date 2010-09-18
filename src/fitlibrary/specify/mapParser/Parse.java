@@ -7,7 +7,7 @@ package fitlibrary.specify.mapParser;
 import java.util.Map;
 
 public class Parse {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Map givenMap(Map map) {
 		return map;
 	}

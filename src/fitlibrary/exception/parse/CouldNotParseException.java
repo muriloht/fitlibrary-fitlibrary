@@ -5,6 +5,8 @@
 package fitlibrary.exception.parse;
 
 public class CouldNotParseException extends ParseException {
+	private static final long serialVersionUID = 1L;
+
 	public CouldNotParseException(Class<?> type, String s) {
 		super("Unable to parse \"" + s + "\" of type: " + type);
 	}

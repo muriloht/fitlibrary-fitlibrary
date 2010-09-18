@@ -4,7 +4,7 @@
 */
 package fitlibrary.specify.eg;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Colour implements Comparable {
 	public static Colour RED = new Colour("red");
 	public static Colour GREEN = new Colour("green");
@@ -37,6 +37,7 @@ public class Colour implements Comparable {
 	public String toString() {
 		return "Colour["+colour+"]";
 	}
+	@Override
 	public int compareTo(Object object) {
 		if (!(object instanceof Colour))
 			return -1;

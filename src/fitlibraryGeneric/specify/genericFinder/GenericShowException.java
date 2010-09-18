@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"rawtypes","unused"})
 public class GenericShowException implements DomainAdapter, DomainFixtured  {
 	private Pair<Integer,Integer> integerIntegerPair;
 	
@@ -21,6 +21,7 @@ public class GenericShowException implements DomainAdapter, DomainFixtured  {
 	public String showPair(Pair pair, Type type) {
 		throw new RuntimeException();
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

@@ -16,6 +16,7 @@ import fitlibrary.traverse.DomainAdapter;
 @SuppressWarnings("unchecked")
 public class UserAdapter implements DomainAdapter, DomainFixtured  {
 	User user;
+	@SuppressWarnings("rawtypes")
 	Map users = new HashMap();
 	
 	public boolean addDebt(User user2, double amount) {
@@ -35,6 +36,7 @@ public class UserAdapter implements DomainAdapter, DomainFixtured  {
 		this.user = user;
 		users.put(user.getName(),user);
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

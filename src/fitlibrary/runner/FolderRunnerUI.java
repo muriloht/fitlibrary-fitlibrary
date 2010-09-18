@@ -24,19 +24,23 @@ public class FolderRunnerUI extends JFrame {
     private final JButton stopButton = new JButton("Quit");
     private final JTextArea textArea = new JTextArea();
     
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
         new FolderRunnerUI(new FolderRunner(args));
     }
     public FolderRunnerUI(final FolderRunner runner) {
         super("FolderRunner");
         runner.addTestListener(new StoryTestListener() {
-            public void testComplete(boolean failing, String thePageCounts, String theAssertionCounts) {
+            @Override
+			public void testComplete(boolean failing, String thePageCounts, String theAssertionCounts) {
                 giveFeedbackToUser(failing,thePageCounts,theAssertionCounts);
             }
-            public void reportOutput(String name, String out, String output) {
+            @Override
+			public void reportOutput(String name, String out, String output) {
                 reportOut(name,out,output);
             }
-            public void suiteComplete() {
+            @Override
+			public void suiteComplete() {
                 setTitle(getTitle()+" -- finished");
             }});
         setLayout(new BorderLayout());
@@ -44,7 +48,8 @@ public class FolderRunnerUI extends JFrame {
         getContentPane().add(new JScrollPane(textArea),BorderLayout.CENTER);
         getContentPane().add(stopButton,BorderLayout.SOUTH);
         stopButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
+            @Override
+			public void actionPerformed(ActionEvent ev) {
                 runner.exit();
             }});
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

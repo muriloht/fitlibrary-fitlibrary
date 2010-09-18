@@ -8,7 +8,7 @@ import java.util.Set;
 
 import fitlibrary.specify.eg.Count;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Parse {
 	public Set givenSet(Set set) {
 		return set;

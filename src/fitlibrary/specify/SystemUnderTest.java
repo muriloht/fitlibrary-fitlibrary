@@ -20,7 +20,7 @@ import java.util.TreeSet;
 import fitlibrary.DoFixture;
 import fitlibrary.exception.FitLibraryException;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class SystemUnderTest {
 	private int sum = 0;
 	private String concat = "";
@@ -129,7 +129,8 @@ public class SystemUnderTest {
 	}
 	public SortedSet aSortedSetOfPoint() {
 	    SortedSet set = new TreeSet(new Comparator() {
-            public int compare(Object p1, Object p2) {
+            @Override
+			public int compare(Object p1, Object p2) {
                 Point pt1 = (Point)p1;
                 Point pt2 = (Point)p2;
                 if (pt1.x < pt2.x)

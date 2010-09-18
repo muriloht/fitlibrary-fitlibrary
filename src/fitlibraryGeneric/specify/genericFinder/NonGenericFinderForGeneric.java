@@ -3,7 +3,7 @@ package fitlibraryGeneric.specify.genericFinder;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"rawtypes","unused"})
 public class NonGenericFinderForGeneric implements DomainAdapter, DomainFixtured  {
 	private Pair<Integer,Integer> integerIntegerPair;
 	
@@ -16,6 +16,7 @@ public class NonGenericFinderForGeneric implements DomainAdapter, DomainFixtured
 	public Pair findPair(String key) { 
 		return new Pair<Integer,Integer>(1,2);
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

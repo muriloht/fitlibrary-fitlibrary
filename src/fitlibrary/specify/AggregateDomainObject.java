@@ -43,7 +43,7 @@ public class AggregateDomainObject {
 			return value;
 		}
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static class Book {
 		private List attributes;
 		private List<Author> authors;

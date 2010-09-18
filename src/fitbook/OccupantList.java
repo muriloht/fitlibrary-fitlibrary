@@ -19,7 +19,9 @@ import fitbook.chat.User;
 @SuppressWarnings("unchecked")
 public class OccupantList extends fit.RowFixture { //COPY:ALL
 	private ChatServer chat = new ChatServer(); //COPY:ALL
+	
 	//COPY:ALL
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object[] query() throws Exception { //COPY:ALL
 		List occupancies = new ArrayList(); //COPY:ALL
@@ -29,10 +31,13 @@ public class OccupantList extends fit.RowFixture { //COPY:ALL
 		} //COPY:ALL
 		return occupancies.toArray(); //COPY:ALL
 	} //COPY:ALL
+	
 	@Override
 	public Class<?> getTargetClass() { //COPY:ALL
 		return Occupancy.class; //COPY:ALL
 	} //COPY:ALL
+	
+	@SuppressWarnings("rawtypes")
 	private void collectOccupants(List occupancies, Room room) { //COPY:ALL
 		for (Iterator it = room.users(); it.hasNext(); ) { //COPY:ALL
 			User user = (User)it.next(); //COPY:ALL

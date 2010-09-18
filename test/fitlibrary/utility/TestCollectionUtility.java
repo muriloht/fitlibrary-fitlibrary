@@ -12,7 +12,7 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 import fitlibrary.utility.CollectionUtility;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class TestCollectionUtility extends TestCase {
 	public void testNoneAndNone() {
 		Iterator iterator = none().iterator();

@@ -5,6 +5,8 @@
 package fitlibrary.exception.parse;
 
 public class NoValueProvidedException extends ParseException {
+	private static final long serialVersionUID = 1L;
+
 	public NoValueProvidedException() {
 		super("No value provided");
 	}

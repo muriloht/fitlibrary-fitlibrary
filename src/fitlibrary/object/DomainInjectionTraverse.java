@@ -29,7 +29,8 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
 	public void setDomainTraverse(DomainTraverser domainTraverser) {
         this.domainTraverser = domainTraverser;
 	}
-    public void runTable(Table table, ITableListener tableListener) {
+    @Override
+	public void runTable(Table table, ITableListener tableListener) {
         if (switchOnActions(table)) {
             domainTraverser.setCurrentAction();
             return;

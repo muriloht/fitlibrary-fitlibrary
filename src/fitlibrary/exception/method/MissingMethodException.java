@@ -9,6 +9,8 @@ import java.util.List;
 import fitlibrary.exception.FitLibraryExceptionInHtml;
 
 public class MissingMethodException extends FitLibraryExceptionInHtml {
+	private static final long serialVersionUID = 1L;
+
 	private List<String> signatures;
 	private List<Class<?>> classes;
 

@@ -16,6 +16,7 @@ public class TearDown implements DomainAdapter  {
 	public void tearDown() {
 		throw new RuntimeException();
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

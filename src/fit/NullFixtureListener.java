@@ -4,11 +4,12 @@
 package fit;
 
 public class NullFixtureListener implements FixtureListener {
-  public void tableFinished(Parse table) {
-	  //
-  }
-
-  public void tablesFinished(Counts count) {
-	  //
-  }
+	@Override
+	public void tableFinished(Parse table) {
+		//
+	}
+	@Override
+	public void tablesFinished(Counts count) {
+		//
+	}
 }

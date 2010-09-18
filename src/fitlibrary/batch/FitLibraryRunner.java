@@ -131,49 +131,61 @@ public class FitLibraryRunner {
 	public static class RunParameters {
 		public enum ValidParameters {
 			SUITE_NAME {
+				@Override
 				public String parameterName() {
 					return "suiteName";
 				}
+				@Override
 				public String defaultValue() {
 					return null;
 				}
 			},
 			FIT_NESSE_DIRY {
+				@Override
 				public String parameterName() {
 					return "fitNesseDiry";
 				}
+				@Override
 				public String defaultValue() {
 					return ".";
 				}
 			},
 			RESULTS_DIRY {
+				@Override
 				public String parameterName() {
 					return "resultsDiry";
 				}
+				@Override
 				public String defaultValue() {
 					return "runnerResults";
 				}
 			},
 			SHOW_PASSES {
+				@Override
 				public String parameterName() {
 					return "showPasses";
 				}
+				@Override
 				public String defaultValue() {
 					return "false";
 				}
 			},
 			PORT {
+				@Override
 				public String parameterName() {
 					return "port";
 				}
+				@Override
 				public String defaultValue() {
 					return "80";
 				}
 			},
 			RETRIES {
+				@Override
 				public String parameterName() {
 					return "retries";
 				}
+				@Override
 				public String defaultValue() {
 					return "0";
 				}

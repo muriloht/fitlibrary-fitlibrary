@@ -78,6 +78,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		this.global = global;
 		this.configureLog4j = configureLog4j;
 	}
+	@Override
 	public RuntimeContextInternal copyFromSuite() {
 		logger.trace("Use Suite dynamic variables "+dynamicVariables.top());
 		return new RuntimeContextContainer(
@@ -94,6 +95,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		dynamicVariables = new GlobalDynamicVariables();
 		timeouts = new HashMap<String, Integer>();
 	}
+	@Override
 	public DynamicVariables getDynamicVariables() {
 		return dynamicVariables;
 	}
@@ -101,36 +103,46 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public String toString() {
 		return getDynamicVariables().toString();
 	}
+	@Override
 	public void putTimeout(String name, int timeout) {
 		timeouts.put(name,timeout);
 	}
+	@Override
 	public int getTimeout(String name, int defaultTimeout) {
 		Integer timeout = timeouts.get(name);
 		if (timeout == null)
 			return defaultTimeout;
 		return timeout;
 	}
+	@Override
 	public void startLogging(String fileName) {
 		fileLogger.start(fileName);
 	}
+	@Override
 	public void printToLog(String s) throws IOException {
 		fileLogger.println(s);
 	}
+	@Override
 	public void pushLocalDynamicVariables() {
 		dynamicVariables = new LocalDynamicVariables(dynamicVariables);
 	}
+	@Override
 	public void popLocalDynamicVariables() {
 		dynamicVariables = dynamicVariables.popLocal();
 	}
+	@Override
 	public void setDynamicVariable(String key, Object value) {
 		dynamicVariables.put(key, value);
 	}
+	@Override
 	public Object getDynamicVariable(String key) {
 		return dynamicVariables.get(key);
 	}
+	@Override
 	public boolean toExpandDefinedActions() {
 		return "true".equals(getDynamicVariable(EXPAND_DEFINED_ACTIONS));
 	}
+	@Override
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		setDynamicVariable(EXPAND_DEFINED_ACTIONS, ""+expandDefinedActions);
 	}
@@ -151,9 +163,11 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public GlobalActionScope getGlobal() {
 		return global;
 	}
+	@Override
 	public void showAsAfterTable(String title, String s) {
 		foldingTexts.logAsAfterTable(title, s);
 	}
+	@Override
 	public void show(String s) {
 		currentRow.addCell(s).shown();
 		getDefinedActionCallManager().addShow(currentRow);
@@ -208,6 +222,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public TestResults getTestResults() {
 		return testResults;
 	}
+	@Override
 	public void pushTestResults(TestResults results) {
 		testResultsStack.push(this.testResults);
 		this.testResults = results;
@@ -269,6 +284,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 			}
 		};
 	}
+	@Override
 	public Table currentTable() {
 		return currentTable;
 	}

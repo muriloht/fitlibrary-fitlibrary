@@ -47,6 +47,7 @@ public class MapParser implements Parser {
 		parser = Traverse.asTyped(String.class).resultParser(evaluator);
 		showParser = Traverse.asTyped(Object.class).resultParser(evaluator);
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
@@ -60,6 +61,7 @@ public class MapParser implements Parser {
 		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
 		return setUp.getResults();
 	}
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
@@ -86,6 +88,7 @@ public class MapParser implements Parser {
 		}
 		return map;
 	}
+	@Override
 	public String show(Object object) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		if (object == null)
 			return "";
@@ -104,11 +107,13 @@ public class MapParser implements Parser {
 	}
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new MapParser(evaluator,typed);
     		}
     	};
     }
+	@Override
 	@SuppressWarnings("unchecked")
 	public Evaluator traverse(TypedObject typedObject) {
 		return new MapTraverse((Map<Object,Object>) typedObject.getSubject());

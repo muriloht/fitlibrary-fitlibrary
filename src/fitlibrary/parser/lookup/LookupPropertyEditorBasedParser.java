@@ -34,7 +34,8 @@ public class LookupPropertyEditorBasedParser {
 		final PropertyEditor editor = findPropertyEditor(typed.asClass());
 		if (editor != null)
 			return new ParserFactory() {
-			  public Parser parser(Evaluator evaluator, Typed typed2) {
+			  @Override
+			public Parser parser(Evaluator evaluator, Typed typed2) {
 				return new PropertyEditorBasedParser(evaluator,typed2,editor,nullables.contains(typed.asClass()));
 			}
 		};

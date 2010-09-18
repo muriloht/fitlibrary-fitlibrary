@@ -17,10 +17,15 @@ public class ExceptionThrownByEquals implements DomainAdapter  {
 	}
 	public static class User {
 		@Override
-		public boolean equals(@SuppressWarnings("unused") Object object) {
+		public boolean equals(Object object) {
 			throw new ForcedException();
 		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

@@ -5,6 +5,8 @@
 package fitlibrary.exception;
 
 public class NotRejectedException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
     public NotRejectedException() {
         super("Was not rejected");
     }

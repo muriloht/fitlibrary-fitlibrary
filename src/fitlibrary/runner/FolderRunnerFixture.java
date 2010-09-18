@@ -34,7 +34,8 @@ public class FolderRunnerFixture extends DoFixture {
 			Traverse.setDifferenceStrategy(previousDifferenceStrategy);
 		}
 	}
-    private String urlFile(String fileName, String title) {
+    @SuppressWarnings("unused")
+	private String urlFile(String fileName, String title) {
         String url = StringUtility.replaceString("file:///"+new File(fileName).getAbsolutePath()," ","%20");
         url = StringUtility.replaceString(url,"\\","/");
         return "<a href=\"" + url+ "\">"+title+url+"</a>";

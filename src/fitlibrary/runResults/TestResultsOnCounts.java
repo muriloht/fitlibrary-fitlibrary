@@ -19,36 +19,46 @@ public class TestResultsOnCounts implements TestResults {
 	public TestResultsOnCounts() {
 		this(new Counts());
 	}
+	@Override
 	public void pass() {
 		counts.right++;
 	}
+	@Override
 	public void fail() {
 		counts.wrong++;
 	}
+	@Override
 	public void exception() {
 		counts.exceptions++;
 	}
+	@Override
 	public void ignore() {
 		counts.ignores++;
 	}
+	@Override
 	public void clear() {
 		counts.right = 0;
 		counts.wrong = 0;
 		counts.ignores = 0;
 		counts.exceptions = 0;
 	}
+	@Override
 	public void add(TestResults otherResults) {
 		counts.tally(otherResults.getCounts());
 	}
+	@Override
 	public boolean passed() {
 		return counts.right > 0 && counts.wrong == 0 & counts.exceptions == 0;
 	}
+	@Override
 	public boolean failed() {
 		return counts.wrong > 0;
 	}
+	@Override
 	public boolean errors() {
 		return counts.exceptions > 0;
 	}
+	@Override
 	public boolean problems() {
 		return counts.wrong + counts.exceptions > 0;
 	}
@@ -56,6 +66,7 @@ public class TestResultsOnCounts implements TestResults {
 	public String toString() {
 		return counts.toString();
 	}
+	@Override
 	public boolean matches(String rights, String wrongs, String ignores, String exceptions) {
 		return	cellValue(rights) == counts.right &&
 				cellValue(wrongs) == counts.wrong &&
@@ -65,6 +76,7 @@ public class TestResultsOnCounts implements TestResults {
 	private int cellValue(String s) {
 		return Integer.parseInt(s);
 	}
+	@Override
 	public Counts getCounts() {
 		return counts;
 	}

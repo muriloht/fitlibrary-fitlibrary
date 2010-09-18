@@ -27,6 +27,7 @@ public class ExceptionThrownByNestedShow implements DomainAdapter  {
 	public static class User {
 		//
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

@@ -5,6 +5,8 @@
 package fitlibrary.exception.parse;
 
 public class InvalidMapString extends ParseException {
+	private static final long serialVersionUID = 1L;
+
 	public InvalidMapString(String s) {
 		super("Invalid String for mapping: "+s);
 	}

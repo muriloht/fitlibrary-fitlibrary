@@ -10,6 +10,8 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.utility.ClassUtility;
 
 public class NoNullaryConstructor extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public NoNullaryConstructor(String className) {
 		super("Class has no default constructor: "+ClassUtility.camelClassName(className));
 	}

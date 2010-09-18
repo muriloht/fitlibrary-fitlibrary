@@ -28,48 +28,63 @@ public class NonGenericTyped implements Typed {
 		this(classType);
 		this.hasMethodOrField = hasMethodOrField;
 	}
+	@Override
 	public Class<?> asClass() {
 		return classType;
 	}
+	@Override
 	public boolean hasMethodOrField() {
 		return hasMethodOrField;
 	}
+	@Override
 	public Typed getComponentTyped() {
 		return new NonGenericTyped(classType.getComponentType());
 	}
+	@Override
 	public boolean isPrimitive() {
 		return classType.isPrimitive();
 	}
+	@Override
 	public boolean isArray() {
 		return classType.isArray();
 	}
+	@Override
 	public boolean isGeneric() {
 		return false;
 	}
+	@Override
 	public boolean isEnum() {
 		return asClass().isEnum();
 	}
+	@Override
 	public Object newInstance() throws InstantiationException, IllegalAccessException, SecurityException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
 		return ClassUtility.newInstance(asClass());
 	}
+	@Override
 	public String getClassName() {
 		return asClass().getName();
 	}
+	@Override
 	public String simpleClassName() {
 		return ClassUtility.simpleClassName(asClass());
 	}
+	@Override
 	public TypedObject typedObject(Object subject) {
 		return new GenericTypedObject(subject);
 	}
+	@Override
 	public TypedObject newTypedInstance() throws InstantiationException, IllegalAccessException, SecurityException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
 		return typedObject(newInstance());
 	}
+	@Override
 	public Parser parser(Evaluator evaluator) {
 		return parserSelector.parserFor(evaluator,this,false);
 	}
+	@Override
 	public Parser resultParser(Evaluator evaluator) {
 		return parserSelector.parserFor(evaluator,this,true);
 	}
+	@Override
 	public Parser on(Evaluator evaluator, Typed typed, boolean isResult) {
 		return parserSelector.parserFor(evaluator,typed,isResult);
 	}
@@ -77,6 +92,7 @@ public class NonGenericTyped implements Typed {
 	public String toString() {
 		return classType.toString();
 	}
+	@Override
 	public Finder getFinder(Evaluator evaluator) {
 		return new NonGenericFinder(this,evaluator);
 	}

@@ -43,9 +43,11 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public CellOnParse(Tables innerTables) {
 		this(new Parse("td","",innerTables.parse(),null));
 	}
+	@Override
 	public void setText(String text) {
 		parse.body = text;
 	}
+	@Override
 	public String text(VariableResolver resolver) {
 		if (parse.body == null)
 			return "";
@@ -55,25 +57,31 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		addTables(resolve.second);
 		return text();
 	}
+	@Override
 	public String text() {
         if (parse.body == null)
             return "";
         return parse.text();
     }
+	@Override
 	public boolean unresolved(VariableResolver resolver) {
 		return text().startsWith("@{") && text().indexOf("}") == text().length()-1 &&
 				text().equals(text(resolver));
 	}
+	@Override
 	public String camelledText(VariableResolver resolver) {
 		return ExtendedCamelCase.camel(text(resolver));
 	}
-   public String textLower(VariableResolver resolver) {
+   @Override
+public String textLower(VariableResolver resolver) {
         return text(resolver).toLowerCase();
     }
-    public boolean matchesTextInLowerCase(String s, VariableResolver resolver) {
+    @Override
+	public boolean matchesTextInLowerCase(String s, VariableResolver resolver) {
         return text(resolver).toLowerCase().equals(s.toLowerCase());
     }
-    public boolean isBlank(VariableResolver resolver) {
+    @Override
+	public boolean isBlank(VariableResolver resolver) {
         return text(resolver).equals("");
     }
     @Override
@@ -91,19 +99,23 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public int hashCode() {
 		return parse.body.hashCode();
 	}
-    public void expectedElementMissing(TestResults testResults) {
+    @Override
+	public void expectedElementMissing(TestResults testResults) {
         fail(testResults);
         addToBody(label("missing"));
     }
-    public void actualElementMissing(TestResults testResults) {
+    @Override
+	public void actualElementMissing(TestResults testResults) {
         fail(testResults);
         addToBody(label("surplus"));
     }
+	@Override
 	public void unexpected(TestResults testResults, String s) {
         fail(testResults);
         addToBody(label("unexpected "+s));
 	}
-    public void actualElementMissing(TestResults testResults, String value) {
+    @Override
+	public void actualElementMissing(TestResults testResults, String value) {
         fail(testResults);
         parse.body = Fixture.gray(Fixture.escape(value.toString()));
         addToBody(label("surplus"));
@@ -114,6 +126,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
     		System.out.println("Bug: colouring a cell in a hidden table");
     	super.pass(testResults);
     }
+	@Override
 	public void pass(TestResults testResults, String msg) {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
@@ -126,7 +139,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
     		System.out.println("Bug: colouring a cell in a hidden table");
     	super.fail(testResults);
     }
-    public void fail(TestResults testResults, String msg, VariableResolver resolver) {
+    @Override
+	public void fail(TestResults testResults, String msg, VariableResolver resolver) {
     	if ("".equals(parse.body) && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,msg);
     		return;
@@ -138,7 +152,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
         addToBody(resolved+label("expected") + "<hr>" + Fixture.escape(msg)
                 + label("actual"));
     }
-    public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
+    @Override
+	public void failWithStringEquals(TestResults testResults, String actual, VariableResolver resolver) {
     	if ("".equals(parse.body) && !hasEmbeddedTables(resolver)) {
     		failHtml(testResults,actual);
     		return;
@@ -153,7 +168,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public static String differences(String actual, String expected) {
 		return PlugBoard.stringDifferencing.differences(actual, expected);
 	}
-    public void failHtml(TestResults testResults, String msg) {
+    @Override
+	public void failHtml(TestResults testResults, String msg) {
         fail(testResults);
         addToBody(msg);
     }
@@ -165,19 +181,22 @@ public class CellOnParse extends TablesOnParse implements Cell {
         parse.addToTag(ERROR);
         testResults.exception();
     }
-   public void error(TestResults testResults, String msg) {
+   @Override
+public void error(TestResults testResults, String msg) {
     	if (cellIsInHiddenRow)
     		System.out.println("Bug: colouring a cell in a hidden table");
         addToBody("<hr/>" + Fixture.label(msg));
         parse.addToTag(ERROR);
         testResults.exception();
     }
-   public void error(TestResults testResults) {
+   @Override
+public void error(TestResults testResults) {
 	   if (cellIsInHiddenRow)
 		   System.out.println("Bug: colouring a cell in a hidden table");
 	   parse.addToTag(ERROR);
 	   testResults.exception();
    }
+	@Override
 	public void ignore(TestResults testResults) {
     	if (parse.tag.contains(CALLS))
     		return;
@@ -190,19 +209,22 @@ public class CellOnParse extends TablesOnParse implements Cell {
         parse.addToTag(IGNORE);
         testResults.ignore();
     }
-    public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
+    @Override
+	public void exceptionExpected(boolean exceptionExpected, Exception e, TestResults testResults) {
     	if (exceptionExpected)
     		pass(testResults);
     	else
     		error(testResults,e);
     }
-    public Table getEmbeddedTable() {
+    @Override
+	public Table getEmbeddedTable() {
         TablesOnParse tables = getEmbeddedTables();
         if (tables.size() != 1)
         	throw new SingleNestedTableExpected();
 		return tables.at(0);
     }
-    public void wrongHtml(TestResults counts, String actual) {
+    @Override
+	public void wrongHtml(TestResults counts, String actual) {
         fail(counts);
         addToBody(label("expected") + "<hr>" + actual
                 + label("actual"));
@@ -225,34 +247,42 @@ public class CellOnParse extends TablesOnParse implements Cell {
 	public void setMultilineEscapedText(String text) {
 		setText(HtmlUtils.escape(text));
 	}
+	@Override
 	public String fullText() {
 		return parse.body;
 	}
+	@Override
 	public void setUnvisitedEscapedText(String s) {
 		setUnvisitedText(Fixture.escape(s));
 	}
 	public void setUnvisitedMultilineEscapedText(String s) {
 		setUnvisitedText(HtmlUtils.escape(s));
 	}
+	@Override
 	public void setUnvisitedText(String s) {
 		setText(Fixture.gray(s));
 	}
+	@Override
 	public void passOrFailIfBlank(TestResults counts, VariableResolver resolver) {
 		if (isBlank(resolver))
 			pass(counts);
 		else
 			fail(counts,"",resolver);
 	}
+	@Override
 	public void passIfNotEmbedded(TestResults counts, VariableResolver resolver) {
 		if (!hasEmbeddedTables(resolver)) // already coloured
 			pass(counts);
 	}
+	@Override
 	public void setIsHidden() {
 		this.cellIsInHiddenRow = true;
 	}
+	@Override
 	public void setInnerTables(Tables tables) {
 		parse.parts = tables.parse();
 	}
+	@Override
 	public int getColumnSpan() {
 		Matcher matcher = COLSPAN_PATTERN.matcher(parse.tag);
 		int colspan = 1;
@@ -260,6 +290,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 			colspan = Integer.parseInt(matcher.group(2));
 		return colspan;
 	}
+	@Override
 	public void setColumnSpan(int colspan) {
 		if (colspan < 1)
 			return;
@@ -296,12 +327,14 @@ public class CellOnParse extends TablesOnParse implements Cell {
 			getEmbeddedTables().add(table);
 		return this;
 	}
-    public TablesOnParse getEmbeddedTables() {
+    @Override
+	public TablesOnParse getEmbeddedTables() {
 //        if (!hasEmbeddedTables())
 //            throw new NestedTableExpectedException();
 		return new TablesOnParse(parse.parts);
     }
-    public boolean hasEmbeddedTables(VariableResolver resolver) {
+    @Override
+	public boolean hasEmbeddedTables(VariableResolver resolver) {
     	text(resolver);
         return parse.parts != null;
     }

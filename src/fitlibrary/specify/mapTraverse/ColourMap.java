@@ -11,7 +11,7 @@ import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
 public class ColourMap implements DomainFixtured {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getColourMap() {
 		HashMap map = new HashMap();
 		map.put(Colour.RED,Colour.GREEN);

@@ -32,6 +32,7 @@ public class TableParser extends HtmlStructureParser {
 		Class<?>[] argTypes = new Class[]{ Parse.class };
 		return callReflectively("parseTable",args,argTypes,null);
     }
+	@Override
 	public String show(Object object) {
 		if (object == null)
 			return "null";
@@ -46,11 +47,13 @@ public class TableParser extends HtmlStructureParser {
     // Is registered in LibraryTypeAdapter.on()
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new TableParser(typed);
     		}
     	};
     }
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		throw new RuntimeException("No Traverse available");
 	}

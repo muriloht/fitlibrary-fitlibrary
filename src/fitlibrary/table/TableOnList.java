@@ -32,27 +32,32 @@ public class TableOnList extends TableElementOnList<Table,Row> implements Table 
 	public void pass(TestResults testResults) {
         at(firstErrorRow).pass(testResults);
     }
-    public void ignore(TestResults testResults) {
+    @Override
+	public void ignore(TestResults testResults) {
         at(firstErrorRow).ignore(testResults);
     }
     @Override
 	public void error(TestResults testResults, Throwable e) {
         at(firstErrorRow).error(testResults,e);
     }
+	@Override
 	public void error(ITableListener tableListener, Throwable e) {
 		error(tableListener.getTestResults(),e);
 	}
-    public Row newRow() {
+    @Override
+	public Row newRow() {
         Row row = TableFactory.row();
         add(row);
         return row;
     }
+	@Override
 	public int phaseBoundaryCount() {
 		int count = (getLeader()).split("<hr>").length-1;
 		if (count == 0)
 			count = (getLeader()).split("<hr/>").length-1;
 		return count;
 	}
+	@Override
 	public void addFoldingText(String fold) {
 		addToTrailer(fold);
 	}
@@ -77,6 +82,7 @@ public class TableOnList extends TableElementOnList<Table,Row> implements Table 
 	 * NOTE: if there is a better way like getting somehow the handle on the true table (as opposed to creating one on the
 	 * fly), please make it shrink the last cells column span..
 	 */
+	@Override
 	public void evenUpRows() {
 		int maxRowLength = getMaxRowColumnSpan();
 		for (Row row : this) {
@@ -99,6 +105,7 @@ public class TableOnList extends TableElementOnList<Table,Row> implements Table 
 			removeElementAt(t);
 		add(t,row);
 	}
+	@Override
 	public Table deepCopy() {
 		Table copy = TableFactory.table();
 		for (Row row : this)
@@ -123,6 +130,7 @@ public class TableOnList extends TableElementOnList<Table,Row> implements Table 
 				return true;
 		return false;
 	}
+	@Override
 	public Parse asParse() {
 		return asTableOnParse().asParse();
 	}

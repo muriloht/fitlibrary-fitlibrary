@@ -26,9 +26,11 @@ public class TestSimpleWikiTranslator {
 	protected List<File> files = new ArrayList<File>();
 	protected Map<File,List<String>> fileContents = new HashMap<File, List<String>>();
 	protected SimpleWikiTranslator simpleWikiTranslator = new SimpleWikiTranslator(new FileAccess( ) {
+		@Override
 		public Iterator<File> filesWithSuffix(String suffix) {
 			return files.iterator();
 		}
+		@Override
 		public NullIterator<String> linesOf(File file) {
 			return new NullIterator<String>(fileContents.get(file).iterator());
 		}
@@ -84,7 +86,7 @@ public class TestSimpleWikiTranslator {
 		}});
 		simpleWikiTranslator.translate(receiver);
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void splitWorks() {
 		assertThat(SimpleWikiTranslator.split(""),is((List)new ArrayList<String>()));

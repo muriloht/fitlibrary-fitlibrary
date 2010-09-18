@@ -12,7 +12,7 @@ import fitlibrary.specify.eg.Colour;
 import fitlibrary.specify.eg.Count;
 
 public class MixedMap implements DomainFixtured {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getMixedMap() {
 		Map map = new TreeMap();
 		// The Comparator assures that the Colour comes first

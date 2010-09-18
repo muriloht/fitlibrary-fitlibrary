@@ -39,20 +39,23 @@ public class ListTree implements Tree, TreeInterface {
     public ListTree(String name, ListTree tree) {
         this(name, new Tree[]{ tree });
     }
-    public String getTitle() {
+    @Override
+	public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
         this.title = title.trim();
         setText(this.title);
     }
-    public String getText() {
+    @Override
+	public String getText() {
         return text;
     }
     public void setText(String title) {
         text = removeTags(title).trim();
     }
-    public List<Tree> getChildren() {
+    @Override
+	public List<Tree> getChildren() {
         return children;
     }
     public void clearChildren() {
@@ -71,7 +74,8 @@ public class ListTree implements Tree, TreeInterface {
         
         return result + "</ul>";
     }
-    public String text() {
+    @Override
+	public String text() {
         if (children.isEmpty())
             return text;
         String result = text + "<ul>";
@@ -151,7 +155,8 @@ public class ListTree implements Tree, TreeInterface {
         }
         return text;
     }
-    public Tree toTree() {
+    @Override
+	public Tree toTree() {
         return this;
     }
 	public String toString(int depth) {

@@ -76,6 +76,7 @@ public class GenericTypedObject implements TypedObject {
 			return new GenericTyped(void.class);
 		return new GenericTyped(subject.getClass());
 	}
+	@Override
 	public Object getSubject() {
 		return subject;
 	}
@@ -94,11 +95,13 @@ public class GenericTypedObject implements TypedObject {
 		Type genericReturnType = typed.bind(field.getGenericType(),describe(field));
 		return new GenericTyped(genericReturnType,true);
 	}
+	@Override
 	public ResultParser resultParser(Evaluator evaluator, Method method) {
 		Typed resultTyped = resultTyped(method);
 		return new GetterParser(getTyped().on(evaluator, resultTyped, true),
 				method); // This doesn't handle String result case
 	}
+	@Override
 	public ResultParser resultParser(Evaluator evaluator, Field field) {
 		Typed resultTyped = resultTyped(field);
 		return new FieldParser(getTyped().on(evaluator, resultTyped, true),
@@ -129,6 +132,7 @@ public class GenericTypedObject implements TypedObject {
 		return new GenericTypedObject(object,
 				new GenericTyped(typed.bind(field.getGenericType(),describe(field))));
 	}
+	@Override
 	public Parser[] parameterParsers(Evaluator evaluator, Method method) {
 		Class<?>[] types = method.getParameterTypes();
 		Parser[] parameterParsers = new Parser[types.length];
@@ -139,9 +143,11 @@ public class GenericTypedObject implements TypedObject {
 		}
 		return parameterParsers;
 	}
+	@Override
 	public Evaluator traverse(Evaluator evaluator) {
 		return getTyped().parser(evaluator).traverse(this);
 	}
+	@Override
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
 		List<String> words = Arrays.asList(textCall.split(" "));
 		Method[] methods = subject.getClass().getMethods();
@@ -153,9 +159,11 @@ public class GenericTypedObject implements TypedObject {
 			}
 		}
 	}
+	@Override
 	public Closure findPublicMethodClosureForTypedObject(String name, Class<?>[] argTypes) {
 		return PlugBoard.lookupClosure.findPublicMethodClosure(this, name, argTypes);
 	}
+	@Override
 	public Option<ICalledMethodTarget> new_findSpecificMethod(String name, int argCount, Evaluator evaluator) {
 		Option<Closure> methodClosureOption = new_findMethodClosure(name, argCount);
 		if (methodClosureOption.isSome())
@@ -168,6 +176,7 @@ public class GenericTypedObject implements TypedObject {
 			return None.none();
 		return new Some<Closure>(methodClosure);
 	}
+	@Override
 	public ICalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
 		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
 		Option<ICalledMethodTarget> target = new_findSpecificMethod(getMethodName, 0, evaluator);

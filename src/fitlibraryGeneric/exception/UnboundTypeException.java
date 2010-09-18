@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
 import fitlibrary.exception.FitLibraryException;
 
 public class UnboundTypeException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public UnboundTypeException(Type unboundType, String context) {
 		super("Type variable "+unboundType+" is unbound "+context);
 	}

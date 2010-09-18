@@ -13,10 +13,10 @@ import fitbook.chat.User;
 /**
  * 
  */
-@SuppressWarnings("unchecked")
 public class UsersFixture2 extends fit.RowFixture { //COPY:ALL
 	private Object[] collection; //COPY:ALL
 	 //COPY:ALL
+	@SuppressWarnings("rawtypes")
 	public UsersFixture2(List users) { //COPY:ALL
 		collection = users.toArray(); //COPY:ALL
 	} //COPY:ALL

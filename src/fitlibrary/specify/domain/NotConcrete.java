@@ -36,6 +36,7 @@ public class NotConcrete implements DomainAdapter, DomainFixtured {
 			return BadPayer.class;
 		return null;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

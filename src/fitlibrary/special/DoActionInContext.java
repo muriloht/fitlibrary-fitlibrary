@@ -39,6 +39,7 @@ public class DoActionInContext implements DoAction {
 			to = innerFrom;
 		}
 	}
+	@Override
 	public Object run() throws Exception {
 		return run(true);
 	}
@@ -66,9 +67,11 @@ public class DoActionInContext implements DoAction {
 			return row.at(innerFrom+i+1);
 		return row.at(innerFrom+i*2+1);
 	}
+	@Override
 	public RuntimeContext getRuntime() {
 		return runtime;
 	}
+	@Override
 	public CellProxy cellAt(final int i) {
 		if (i < 0 || i >= to - from)
 			throw new FitLibraryException("No special cell at "+i);

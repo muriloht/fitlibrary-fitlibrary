@@ -9,6 +9,8 @@ package fitlibrary.exception.classes;
 import fitlibrary.exception.FitLibraryException;
 
 public class NullFromClassFactoryMethod extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
 	public NullFromClassFactoryMethod(String typeName) {
 		super("Unexpected null from method for type "+typeName);
 	}

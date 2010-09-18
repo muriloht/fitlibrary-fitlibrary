@@ -27,6 +27,7 @@ public class DelegatingParser implements Parser {
 		this.evaluator = evaluator;
 		this.typed = typed;
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
@@ -56,7 +57,8 @@ public class DelegatingParser implements Parser {
     	setUp.callEndCreatingObjectMethod(newInstance);
 		return newInstance;
 	}
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
     	if (cell.hasEmbeddedTables(evaluator))
     		return matchesTable(cell.getEmbeddedTable(),result,testResults);
         return delegateParser.matches(parse(cell,testResults),result);
@@ -65,6 +67,7 @@ public class DelegatingParser implements Parser {
 		DomainObjectCheckTraverse traverse = new DomainObjectCheckTraverse(result,typed);
 		return traverse.doesInnerTablePass(table,evaluator,testResults);
 	}
+	@Override
 	public String show(Object result) throws Exception {
 		return delegateParser.show(result);
 	}
@@ -72,6 +75,7 @@ public class DelegatingParser implements Parser {
 	public String toString() {
         return delegateParser.toString();
     }
+	@Override
 	public Evaluator traverse(TypedObject object) {
 		throw new RuntimeException("No Traverse available");
 	}

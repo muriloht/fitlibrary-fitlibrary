@@ -5,7 +5,6 @@
 package fitlibrary.runner;
 
 import junit.framework.TestCase;
-import fitlibrary.runner.FolderRunner;
 
 public class TestFolderRunner extends TestCase {
     public void testSpecialSetUp() {
@@ -51,13 +50,13 @@ public class TestFolderRunner extends TestCase {
     
     private void assertSpecialHtml(String name) {
         assertSpecial(name);
-        assertTrue(FolderRunner.isHtmlFileName(name));
-        assertFalse(FolderRunner.isXlsFileName(name));
+        assertTrue(FileParseUtilities.isHtmlFileName(name));
+        assertFalse(FileParseUtilities.isXlsFileName(name));
     }
     private void assertSpecialXls(String name) {
         assertSpecial(name);
-        assertTrue(FolderRunner.isXlsFileName(name));
-        assertFalse(FolderRunner.isHtmlFileName(name));
+        assertTrue(FileParseUtilities.isXlsFileName(name));
+        assertFalse(FileParseUtilities.isHtmlFileName(name));
     }
     private void assertSpecial(String name) {
         assertTrue(CollectSetUpTearDown.specialFileName(name));

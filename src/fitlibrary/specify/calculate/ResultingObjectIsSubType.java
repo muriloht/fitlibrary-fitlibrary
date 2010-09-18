@@ -12,7 +12,7 @@ public class ResultingObjectIsSubType {
 	public Object superclassColour(Colour colour) {
 		return colour;
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Comparable interfaceColour(Colour colour) {
 		return colour;
 	}

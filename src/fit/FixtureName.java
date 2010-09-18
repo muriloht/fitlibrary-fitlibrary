@@ -11,44 +11,49 @@ import java.util.Set;
 import util.GracefulNamer;
 
 public class FixtureName {
-  private final String nameAsString;
+	private final String nameAsString;
 
-  public FixtureName(String tableName) {
-    // REFACTOR Fold GracefulNamer into this class
-    if (GracefulNamer.isGracefulName(tableName))
-      this.nameAsString = GracefulNamer.disgrace(tableName);
-    else
-      this.nameAsString = tableName;
-  }
+	public FixtureName(String tableName) {
+		// REFACTOR Fold GracefulNamer into this class
+		if (GracefulNamer.isGracefulName(tableName))
+			this.nameAsString = GracefulNamer.disgrace(tableName);
+		else
+			this.nameAsString = tableName;
+	}
 
-  public String toString() {
-    return nameAsString;
-  }
+	@Override
+	public String toString() {
+		return nameAsString;
+	}
 
-  public boolean isFullyQualified() {
-    return nameAsString.indexOf('.') != -1;
-  }
+	public boolean isFullyQualified() {
+		return nameAsString.indexOf('.') != -1;
+	}
 
-  public static boolean fixtureNameHasPackageSpecified(final String fixtureName) {
-    return new FixtureName(fixtureName).isFullyQualified();
-  }
+	public static boolean fixtureNameHasPackageSpecified(
+			final String fixtureName) {
+		return new FixtureName(fixtureName).isFullyQualified();
+	}
 
-  public List<String> getPotentialFixtureClassNames(Set<String> fixturePathElements) {
-    List<String> candidateClassNames = new ArrayList<String>();
+	public List<String> getPotentialFixtureClassNames(
+			Set<String> fixturePathElements) {
+		List<String> candidateClassNames = new ArrayList<String>();
 
-    if (!isFullyQualified()) {
-      for (Iterator<String> i = fixturePathElements.iterator(); i.hasNext();) {
-        String packageName = i.next();
-        addBlahAndBlahFixture(packageName + ".", candidateClassNames);
-      }
-    }
-    addBlahAndBlahFixture("", candidateClassNames);
+		if (!isFullyQualified()) {
+			for (Iterator<String> i = fixturePathElements.iterator(); i
+					.hasNext();) {
+				String packageName = i.next();
+				addBlahAndBlahFixture(packageName + ".", candidateClassNames);
+			}
+		}
+		addBlahAndBlahFixture("", candidateClassNames);
 
-    return candidateClassNames;
-  }
+		return candidateClassNames;
+	}
 
-  private void addBlahAndBlahFixture(String qualifiedBy, List<String> candidateClassNames) {
-    candidateClassNames.add(qualifiedBy + nameAsString);
-    candidateClassNames.add(qualifiedBy + nameAsString + "Fixture");
-  }
+	private void addBlahAndBlahFixture(String qualifiedBy,
+			List<String> candidateClassNames) {
+		candidateClassNames.add(qualifiedBy + nameAsString);
+		candidateClassNames.add(qualifiedBy + nameAsString + "Fixture");
+	}
 }

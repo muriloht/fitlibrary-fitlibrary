@@ -22,27 +22,34 @@ public class FieldParser implements ResultParser {
 		this.parser = parser;
 		this.field = field;
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return parser.parseTyped(cell,testResults);
 	}
+	@Override
 	public boolean matches(Cell cell, Object result, TestResults testResults)
 			throws Exception {
 		return parser.matches(cell,result,testResults);
 	}
+	@Override
 	public String show(Object result) throws Exception {
 		if (result == null)
 			return "";
 		return parser.show(result);
 	}
+	@Override
 	public void setTarget(Object element) {
 		this.objectToCall = element;
 	}
+	@Override
 	public Object getResult() throws Exception {
 		return field.get(objectToCall);
 	}
+	@Override
 	public boolean isShowAsHtml() {
 		return parser instanceof HtmlParser;
 	}
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		return parser.traverse(typedObject);
 	}

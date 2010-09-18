@@ -12,7 +12,7 @@ import java.util.List;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.User;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class SetUpList implements DomainFixtured {
 	private List iOUs = new ArrayList();
 

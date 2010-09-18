@@ -5,6 +5,7 @@
 
 package fitlibrary.specify.specialAction;
 
+@SuppressWarnings("unused")
 public class AmbiguousSpecial {
 	public void check1(String s) {
 		//

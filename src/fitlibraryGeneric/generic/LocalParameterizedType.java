@@ -25,12 +25,15 @@ public class LocalParameterizedType implements ParameterizedType {
 //		this.rawType = rawType;
 //		this.actualTypeArguments = actualTypeArguments;
 //	}
+	@Override
 	public Type[] getActualTypeArguments() {
 		return actualTypeArguments;
 	}
+	@Override
 	public Type getOwnerType() {
 		return ownerType;
 	}
+	@Override
 	public Type getRawType() {
 		return rawType;
 	}

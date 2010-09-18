@@ -18,6 +18,7 @@ public interface Row extends TableElement<Row,Cell> {
 	void pass(TestResults testResults);
 	void passKeywords(TestResults testResults);
 	void fail(TestResults testResults);
+	@Override
 	void error(TestResults testResults, Throwable e);
 	void ignore(TestResults testResults);
 	void missing(TestResults testResults);

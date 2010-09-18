@@ -25,12 +25,15 @@ public class FieldClosure implements Closure {
 		this.typedObject = typedObject;
 		this.field = field;
 	}
+	@Override
 	public Class<?>[] getParameterTypes() {
 		return new Class[0];
 	}
+	@Override
 	public Class<?> getReturnType() {
 		return field.getType();
 	}
+	@Override
 	public Object invoke() throws IllegalAccessException, InvocationTargetException {
 		if (runAlready < MethodClosure.MAX_RUNS_SHOWN)
 			logger.trace("Calling "+this); // Avoid blowing the heap with lots of logs
@@ -39,23 +42,29 @@ public class FieldClosure implements Closure {
 		runAlready++;
     	return field.get(typedObject.getSubject());
 	}
+	@Override
 	public Object invoke(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
 		return invoke();
 	}
+	@Override
 	public TypedObject invokeTyped(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
 		return typedObject.asReturnTypedObject(invoke(),field);
 	}
+	@Override
 	public Parser[] parameterParsers(Evaluator evaluator) {
 		return new Parser[0];
 	}
+	@Override
 	public ResultParser resultParser(Evaluator evaluator) {
 		return typedObject.resultParser(evaluator,field);
 	}
+	@Override
 	public ResultParser specialisedResultParser(ResultParser resultParser, Object result, Evaluator evaluator) {
 		if (result == null || result.getClass() == field.getType())
 			return resultParser;
 		return typedObject.resultParser(evaluator,field,result.getClass());
 	}
+	@Override
 	public void setTypedSubject(TypedObject typedObject) {
 		this.typedObject = typedObject;
 	}

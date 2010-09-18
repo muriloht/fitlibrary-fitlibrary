@@ -19,9 +19,11 @@ public class LookupClosureStandard implements LookupClosure{
 	private Map<MethodSignature,Object> mapMethodSignatureToMethod = new ConcurrentHashMap<MethodSignature,Object>(5000);
 	private final Object NOT_FOUND = "";
 
+	@Override
 	public void mustBeThreadSafe() {
 		//
 	}
+	@Override
 	public Closure findMethodClosure(TypedObject typedObject, String methodName, int argCount) {
 		if (typedObject.isNull())
 			return null;
@@ -32,6 +34,7 @@ public class LookupClosureStandard implements LookupClosure{
 			return null;
 		return new MethodClosure(typedObject,chosenMethod);
 	}
+	@Override
 	public Closure findPublicMethodClosure(TypedObject typedObject, String name, Class<?>[] argTypes) {
 		if (typedObject.isNull())
 			return null;
@@ -41,6 +44,7 @@ public class LookupClosureStandard implements LookupClosure{
             return null;
         }
 	}
+	@Override
 	public boolean fitLibrarySystemMethod(Method method, int argCount, Object subject) {
 		if (!ClassUtility.fitLibrarySystemMethod(method))
 			return false;

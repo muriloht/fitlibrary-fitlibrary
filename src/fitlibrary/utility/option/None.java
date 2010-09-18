@@ -5,8 +5,10 @@
 
 package fitlibrary.utility.option;
 
+@SuppressWarnings("rawtypes")
 public class None<T> implements Option<T> {
 	private static None NONE = new None();
+	@SuppressWarnings("unchecked")
 	public static <S> None<S> none() {
 		return NONE;
 	}

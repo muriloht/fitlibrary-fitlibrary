@@ -44,6 +44,7 @@ public class SimpleWikiTranslator {
 	public static String translate(String wiki) {
 		final StringBuilder result = new StringBuilder();
 		HtmlReceiver accumulatingReceiver = new HtmlReceiver() {
+			@Override
 			public void take(File file, String html) {
 				result.append(html);
 			}

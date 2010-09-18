@@ -6,5 +6,5 @@
 package fitlibrary.speciallyNamedPackage;
 
 public class ClassInOddPackage {
-
+	//
 }

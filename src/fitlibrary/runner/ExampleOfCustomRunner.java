@@ -10,6 +10,7 @@ import java.io.IOException;
   * A simple example of using CustomRunner
 */
 public class ExampleOfCustomRunner  extends CustomRunner {
+	@SuppressWarnings("unused")
 	public static void main(String args[]) throws IOException {
 		new ExampleOfCustomRunner();
 	}

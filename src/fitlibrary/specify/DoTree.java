@@ -33,16 +33,20 @@ public class DoTree {
         public TeeTree(Tree tree) {
             this.tree = new ListTree("B",tree.getChildren());
         }
-        public String getTitle() {
+        @Override
+		public String getTitle() {
             return tree.getTitle();
         }
-        public String getText() {
+        @Override
+		public String getText() {
             return tree.getText();
         }
+		@Override
 		public List<Tree> getChildren() {
            return tree.getChildren();
         }
-        public String text() {
+        @Override
+		public String text() {
             return tree.text();
         }
         public static Tree parseTree(Tree tree) {
@@ -55,7 +59,8 @@ public class DoTree {
 		public String toString() {
             return tree.toString();
         }
-        public Tree toTree() {
+        @Override
+		public Tree toTree() {
             return tree;
         }
     }

@@ -19,9 +19,11 @@ public class Some<T> implements Option<T>{
 	public boolean isSome() {
 		return true;
 	}
+	@Override
 	public T get() {
 		return t;
 	}
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Some))

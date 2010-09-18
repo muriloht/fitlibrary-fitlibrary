@@ -8,7 +8,7 @@ package fit;
 
 public class ColumnFixture extends Fixture {
 
-	protected Binding columnBindings[];
+	public Binding columnBindings[];
 	protected boolean hasExecuted = false;
 
 	@Override
@@ -16,6 +16,7 @@ public class ColumnFixture extends Fixture {
 		bind(rows.parts);
 		super.doRows(rows.more);
 	}
+
 	@Override
 	public void doRow(Parse row) {
 		hasExecuted = false;
@@ -29,6 +30,7 @@ public class ColumnFixture extends Fixture {
 			exception(row.leaf(), e);
 		}
 	}
+
 	@Override
 	public void doCell(Parse cell, int column) {
 		try {
@@ -37,6 +39,7 @@ public class ColumnFixture extends Fixture {
 			exception(cell, e);
 		}
 	}
+
 	@Override
 	public void check(Parse cell, TypeAdapter a) {
 		try {
@@ -46,19 +49,24 @@ public class ColumnFixture extends Fixture {
 		}
 		super.check(cell, a);
 	}
+
 	protected void executeIfNeeded() throws Exception {
 		if (!hasExecuted) {
 			hasExecuted = true;
 			execute();
 		}
 	}
+
 	public void reset() throws Exception {
 		// about to process first cell of row
 	}
+
 	public void execute() throws Exception {
 		// about to process first method call of row
 	}
-	protected void bind(Parse heads) {
+
+	public void bind(Parse headsInitial) {
+		Parse heads = headsInitial;
 		try {
 			columnBindings = new Binding[heads.size()];
 			for (int i = 0; heads != null; i++, heads = heads.more) {
@@ -68,6 +76,8 @@ public class ColumnFixture extends Fixture {
 			exception(heads, throwable);
 		}
 	}
+
+	@SuppressWarnings("unused")
 	protected Binding createBinding(int column, Parse heads) throws Throwable {
 		return Binding.create(this, heads.text());
 	}

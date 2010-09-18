@@ -7,9 +7,11 @@ public class InMemoryTestImpl implements TestDescriptor {
 	private String name;
 	private String content;
 
+	@Override
 	public String getName() {
 		return this.name;
 	}
+	@Override
 	public String getContent() {
 		return this.content;
 	}

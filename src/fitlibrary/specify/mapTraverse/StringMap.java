@@ -10,7 +10,7 @@ import java.util.Map;
 import fitlibrary.object.DomainFixtured;
 
 public class StringMap implements DomainFixtured {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getStringMap() {
 		HashMap map = new HashMap();
 		map.put("a","b");

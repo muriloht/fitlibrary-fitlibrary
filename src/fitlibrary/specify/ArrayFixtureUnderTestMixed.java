@@ -13,7 +13,7 @@ public class ArrayFixtureUnderTestMixed extends fitlibrary.ArrayFixture {
 	public ArrayFixtureUnderTestMixed() throws Exception {
 	    setActualCollection(query());
 	}
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public List query() throws Exception {
         List result = new ArrayList();
         result.add(makeMap(new Integer(1), "one"));

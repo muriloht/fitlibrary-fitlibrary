@@ -7,5 +7,5 @@
 package fitlibrary.specify.exception;
 
 public class ForcedException extends RuntimeException {
-	//
+	private static final long serialVersionUID = 1L;
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class Sets implements DomainFixtured {
 	private Set aSetOfColours = new HashSet(Arrays.asList(new Colour[]{
 			Colour.RED, Colour.GREEN }));

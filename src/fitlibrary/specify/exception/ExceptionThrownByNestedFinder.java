@@ -30,6 +30,7 @@ public class ExceptionThrownByNestedFinder implements DomainAdapter  {
 	public static class User {
 		//
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

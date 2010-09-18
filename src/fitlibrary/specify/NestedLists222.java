@@ -7,7 +7,7 @@ package fitlibrary.specify;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class NestedLists222 extends AbstractNestedLists {
 	public Fruit[] nested() {
 		return new Fruit[]{ apple(), orange(), pear() };

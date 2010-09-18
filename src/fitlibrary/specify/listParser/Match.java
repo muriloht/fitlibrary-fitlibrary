@@ -11,7 +11,7 @@ import java.util.List;
 
 import fitlibrary.specify.eg.Count;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class Match {
 	public List stringAbc() {
 		return Arrays.asList(new String[] {"a","b","c"});

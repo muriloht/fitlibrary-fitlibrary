@@ -21,6 +21,7 @@ public class TablesOnList extends TableElementOnList<Tables,Table> implements Ta
 	public TablesOnList(String tag) {
 		super(tag);
 	}
+	@Override
 	public Tables deepCopy() {
 		Tables copy = TableFactory.tables();
 		for (Table table: this)
@@ -33,6 +34,7 @@ public class TablesOnList extends TableElementOnList<Tables,Table> implements Ta
 	public Tables followingTables() {
 		return fromAt(1);
 	}
+	@Override
 	public void addTables(Tables tables) {
 		for (Table table: tables)
 			add(table);
@@ -53,6 +55,7 @@ public class TablesOnList extends TableElementOnList<Tables,Table> implements Ta
 		System.out.println(toString());
         System.out.println("-------------------");
 	}
+	@Override
 	public Parse asParse() {
 		TableFactory.useOnLists(false);
 		try {

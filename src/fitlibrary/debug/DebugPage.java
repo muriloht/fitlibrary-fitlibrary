@@ -25,15 +25,16 @@ public class DebugPage {
 	protected int storytestsFinished = 0;
 	protected int expectedTablesFinished = 0;
 	private static String FITNESSE_URL = "http://localhost:8980/";
-	private static String FITNESSE_DIRY = "fitnesse";
 	private static String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
 	private static String DIRY = FITNESSE_FOR_WEB_DIRY;
 	private static int PORT = 8990; // This determines the value of ${FITNESSE_PORT}
 	
 	protected ReportListener reportListener = new ReportListener() {
+		@Override
 		public void tableFinished(Table table) {
 			tablesFinished++;
 		}
+		@Override
 		public void tablesFinished(TestResults testResults) {
 			storytestsFinished++;
 		}

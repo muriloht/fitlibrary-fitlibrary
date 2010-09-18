@@ -46,11 +46,13 @@ public abstract class FitServerBridge {
 	public boolean isExit() {
 		return exit;
 	}
+
 	private void setFitNesseUrl(String host, int port) {
 		this.host = host;
 		this.port = port;
 		FITNESSE_URL = "http://" + host + ":" + port + "/";
 	}
+
 	public void run(String argv[]) throws Exception {
 		args(argv);
 		establishConnection();
@@ -59,19 +61,22 @@ public abstract class FitServerBridge {
 		socket.close();
 		exit();
 	}
+
 	public void process() {
 		logger.trace("Ready to received messages");
 		try {
 			while (true) {
 				print("FitServerBridge: Reading size...");
 				int size = FitProtocol.readSize(socketReader);
-				logger.trace("Received message of size "+size);
+				logger.trace("Received message of size " + size);
 				print("FitServerBridge: Size is " + size);
 				if (size == 0)
 					break;
 				try {
-					print("FitServerBridge: Processing document of size: "+ size);
-					String document = FitProtocol.readDocument(socketReader,size);
+					print("FitServerBridge: Processing document of size: "
+							+ size);
+					String document = FitProtocol.readDocument(socketReader,
+							size);
 					TestResults storyTestResults = doTables(document);
 					print("\tresults: " + storyTestResults + "\n");
 					logger.trace("Finished storytest");
@@ -85,12 +90,14 @@ public abstract class FitServerBridge {
 			exception(e);
 		}
 	}
+
 	public abstract TestResults doTables(String html);
 
 	public String readDocument() throws Exception {
 		int size = FitProtocol.readSize(socketReader);
 		return FitProtocol.readDocument(socketReader, size);
 	}
+
 	public void args(String[] argv) {
 		printArgs(argv);
 		int i = gatherOptions(argv);
@@ -99,6 +106,7 @@ public abstract class FitServerBridge {
 		setFitNesseUrl(hostName, portNo);
 		socketToken = Integer.parseInt(argv[i++]);
 	}
+
 	private int gatherOptions(String[] argv) {
 		int i = 0;
 		while (argv[i].startsWith("-")) {
@@ -113,40 +121,52 @@ public abstract class FitServerBridge {
 		}
 		return i;
 	}
+
 	private void printArgs(String[] argv) {
 		String result = "Arguments: ";
 		for (String s : argv)
 			result += s + " ";
 		print(result);
 	}
+
 	protected void usage() {
-		System.out.println("usage: java fit.FitServer [-v] host port socketTicket");
+		System.out
+				.println("usage: java fit.FitServer [-v] host port socketTicket");
 		System.out.println("\t-v\tverbose");
 		System.exit(-1);
 	}
+
 	protected void exception(Exception e) {
 		printExceptionDetails(e);
-		Table table = TableFactory.table(TableFactory.row("Exception occurred: "));
+		Table table = TableFactory.table(TableFactory
+				.row("Exception occurred: "));
 		table.at(0).at(0).error(suiteTestResults, e);
 		reportListener.tableFinished(table);
 		reportListener.tablesFinished(suiteTestResults);
 	}
+
 	public void printExceptionDetails(Exception e) {
 		print("FitServerBridge: Exception: " + e.getMessage());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		e.printStackTrace(new PrintStream(out));
-		print(out.toString()+"\n");
+		print(out.toString() + "\n");
 	}
+
 	public void exit() throws Exception {
 		print("FitServerBridge: exiting");
-		print("FitServerBridge: end results: " + suiteTestResults.getCounts().toString());
+		print("FitServerBridge: end results: "
+				+ suiteTestResults.getCounts().toString());
 	}
+
 	public int exitCode() {
-		return suiteTestResults.getCounts().wrong + suiteTestResults.getCounts().exceptions;
+		return suiteTestResults.getCounts().wrong
+				+ suiteTestResults.getCounts().exceptions;
 	}
+
 	public void establishConnection() throws Exception {
 		establishConnection(makeHttpRequest());
 	}
+
 	public void establishConnection(String httpRequest) throws Exception {
 		print("FitServerBridge: Connecting to " + host + " : " + port);
 		socket = new Socket(host, port);
@@ -158,10 +178,12 @@ public abstract class FitServerBridge {
 		socketOutput.flush();
 		print("http request sent");
 	}
+
 	private String makeHttpRequest() {
 		return "GET /?responder=socketCatcher&ticket=" + socketToken
 				+ " HTTP/1.1\r\n\r\n";
 	}
+
 	public void validateConnection() throws Exception {
 		print("FitServerBridge: Validating connection...");
 		int statusSize = FitProtocol.readSize(socketReader);
@@ -176,6 +198,7 @@ public abstract class FitServerBridge {
 			System.exit(-1);
 		}
 	}
+
 	public void print(String message) {
 		if (verbose) {
 			System.out.println(message);
@@ -188,6 +211,7 @@ public abstract class FitServerBridge {
 			}
 		}
 	}
+
 	public static byte[] readTable(Parse table) throws Exception {
 		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
 		OutputStreamWriter streamWriter = new OutputStreamWriter(byteBuffer,
@@ -202,6 +226,7 @@ public abstract class FitServerBridge {
 		writer.close();
 		return byteBuffer.toByteArray();
 	}
+
 	public static byte[] readTable(Table table) throws Exception {
 		StringBuilder builder = new StringBuilder();
 		table.toHtml(builder);
@@ -221,6 +246,7 @@ public abstract class FitServerBridge {
 				e.printStackTrace();
 			}
 		}
+
 		@Override
 		public void tablesFinished(TestResults testResults) {
 			logger.trace("Sending results");
@@ -231,6 +257,7 @@ public abstract class FitServerBridge {
 			}
 		}
 	}
+
 	public static void setFitNesseUrl(String url) {
 		// Nasty hack but (indirectly) unavoidable while SpecifyFixture is a
 		// Fixture instead of a Traverse

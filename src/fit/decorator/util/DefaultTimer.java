@@ -1,13 +1,15 @@
 package fit.decorator.util;
 
 public class DefaultTimer implements Timer {
-  private long startTime;
+	private long startTime;
 
-  public long elapsed() {
-    return (System.currentTimeMillis() - startTime);
-  }
+	@Override
+	public long elapsed() {
+		return (System.currentTimeMillis() - startTime);
+	}
 
-  public void start() {
-    startTime = System.currentTimeMillis();
-  }
+	@Override
+	public void start() {
+		startTime = System.currentTimeMillis();
+	}
 }

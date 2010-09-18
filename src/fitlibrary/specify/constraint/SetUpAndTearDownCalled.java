@@ -20,6 +20,7 @@ public class SetUpAndTearDownCalled implements DomainAdapter {
 	public boolean aB(int a, int b) {
 		return isSetUp && a < b;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

@@ -9,7 +9,7 @@ import java.util.List;
 
 import fitlibrary.specify.eg.Count;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ParseCounts {
 	public List givenCounts(List list) {
 		return list;

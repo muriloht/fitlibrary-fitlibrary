@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class NestedCalculateFixture {
 	public Point pointXY(int x, int y) {
 		return new Point(x,y);

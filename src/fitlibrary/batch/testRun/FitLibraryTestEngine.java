@@ -30,6 +30,7 @@ public class FitLibraryTestEngine implements TestEngine {
 	public FitLibraryTestEngine(FitLibraryBatching batching) {
 		this.batching = batching;
 	}
+	@Override
 	public TestResult runTest(TestDescriptor test) {
 		PrintStream out = System.out;
 		OutputStream tempOut = new ByteArrayOutputStream();
@@ -80,6 +81,7 @@ public class FitLibraryTestEngine implements TestEngine {
 	static class FitLibraryBatchingImp implements FitLibraryBatching {
 		BatchFitLibrary batching = new BatchFitLibrary();
 
+		@Override
 		public void doTables(Tables tables, TableListener listener) {
 			batching.doTables(tables,listener);
 		}

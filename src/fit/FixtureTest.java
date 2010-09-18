@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+
 import util.RegexTestCase;
 
 public class FixtureTest extends RegexTestCase {
@@ -99,8 +100,8 @@ public class FixtureTest extends RegexTestCase {
 		assertEquals("&amp;", Fixture.escape("&"));
 		assertEquals("&lt;&amp;&lt;", Fixture.escape("<&<"));
 		assertEquals("&amp;&lt;&amp;", Fixture.escape("&<&"));
-		assertEquals("a &lt; b &amp;&amp; c &lt; d", Fixture
-				.escape("a < b && c < d"));
+		assertEquals("a &lt; b &amp;&amp; c &lt; d",
+				Fixture.escape("a < b && c < d"));
 	}
 
 	public void testFixtureArguments() throws Exception {
@@ -143,6 +144,7 @@ public class FixtureTest extends RegexTestCase {
 
 	public void testCanChangeFriendlyExceptions() throws Exception {
 		Fixture fixture = new Fixture() {
+			@Override
 			public boolean isFriendlyException(Throwable exception) {
 				return true;
 			}

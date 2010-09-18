@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.traverse.DomainAdapter;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"rawtypes","unused"})
 public class GenericFinderMismatches implements DomainAdapter, DomainFixtured  {
 	private Pair<Integer,Integer> integerIntegerPair;
 	
@@ -21,6 +21,7 @@ public class GenericFinderMismatches implements DomainAdapter, DomainFixtured  {
 			return new Pair<Integer,Integer>(1,2);
 		return null;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

@@ -11,7 +11,7 @@ import java.util.Set;
 import fitlibrary.DoFixture;
 
 public class ListToSet extends DoFixture {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Set listToSet(List list) {
 		return new HashSet(list);
 	}

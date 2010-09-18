@@ -45,6 +45,7 @@ public class BadClassFromClassFactoryMethodForInterface implements DomainAdapter
 			return String.class;
 		return null;
 	}
+	@Override
 	public Object getSystemUnderTest() {
 		return null;
 	}

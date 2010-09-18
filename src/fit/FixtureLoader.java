@@ -68,8 +68,8 @@ public class FixtureLoader {
 		} catch (ClassNotFoundException deadEnd) {
 			if (deadEnd.getMessage().equals(fixtureName))
 				throw new NoSuchFixtureException(fixtureName);
-			throw new CouldNotLoadComponentFitFailureException(deadEnd
-					.getMessage(), fixtureName);
+			throw new CouldNotLoadComponentFitFailureException(
+					deadEnd.getMessage(), fixtureName);
 		}
 	}
 

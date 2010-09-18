@@ -27,6 +27,7 @@ public class MapParser2 extends MapParser {
     }
 	public static ParserFactory parserFactory() {
 		return new ParserFactory() {
+			@Override
 			public Parser parser(Evaluator evaluator, Typed typed) {
 				if (typed instanceof GenericTyped && typed.isGeneric())
 					return new MapParser2(evaluator,(GenericTyped) typed);

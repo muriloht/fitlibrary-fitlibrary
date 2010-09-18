@@ -23,6 +23,7 @@ public class Table implements TableInterface {
 			return "null";
 		return p2.text();
 	}
+	@Override
 	public Table toTable() {
 		return this;
 	}
@@ -63,5 +64,9 @@ public class Table implements TableInterface {
 	@Override
 	public String toString() {
 		return ParseUtility.toString(parse);
+	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }

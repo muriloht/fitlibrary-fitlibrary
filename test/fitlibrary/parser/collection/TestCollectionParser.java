@@ -24,7 +24,7 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.traverse.Traverse;
 import fitlibrary.traverse.workflow.DoEvaluator;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class TestCollectionParser {
 	DoEvaluator evaluator = ParserTestCase.evaluatorWithRuntime();
 	Collection list;

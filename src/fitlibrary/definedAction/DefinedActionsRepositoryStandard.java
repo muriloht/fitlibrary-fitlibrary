@@ -27,14 +27,17 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	private Map<DefinedMultiAction, ParameterBinder> definedMultiActionMap = new ConcurrentHashMap<DefinedMultiAction, ParameterBinder>();
 	private Map<String, Map<DefinedMultiAction, ParameterBinder>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, ParameterBinder>>();
 
+	@Override
 	public void define(Row parametersRow, String wikiClassName, ParameterBinder binder, VariableResolver resolver,
 			String absoluteFileName) {
 		defineCamel(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
 		definePlain(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
 	}
+	@Override
 	public ParameterBinder lookupByCamel(String name, int argCount) {
 		return definedActionMapForCamel.get(new DefinedAction(name, argCount));
 	}
+	@Override
 	public ParameterBinder lookupByClassByCamel(String className,
 			String name, int argCount, RuntimeContextInternal variables) {
 		DefinedAction macro = new DefinedAction(name, argCount);
@@ -52,6 +55,7 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 					.lookupByClassByCamel(superClass, name, argCount, variables);
 		return definedActionMapForCamel.get(macro);
 	}
+	@Override
 	public void findPlainTextCall(String textCall, List<ValidCall> results) {
 		for (DefinedAction action : definedActionMapForPlainText.keySet())
 			action.findCall(textCall, results);
@@ -60,9 +64,11 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	public void defineMultiDefinedAction(String name, ParameterBinder binder) {
 		definedMultiActionMap.put(new DefinedMultiAction(name),binder);
 	}
+	@Override
 	public ParameterBinder lookupMulti(String name) {
 		return definedMultiActionMap.get(new DefinedMultiAction(name));
 	}
+	@Override
 	public void clear() {
 		definedActionMapForPlainText.clear();
 		classMapForPlainText.clear();

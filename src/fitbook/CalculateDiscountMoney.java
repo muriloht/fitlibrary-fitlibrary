@@ -21,9 +21,8 @@ public class CalculateDiscountMoney extends fit.ColumnFixture {
 			return amount.times(0.05);
 		return new Money(0);
     }
-	@SuppressWarnings("unchecked")
 	@Override
-	public Object parse(String s, Class type) throws Exception {
+	public Object parse(String s, Class<?> type) throws Exception {
 	    if (type == Money.class)
 	        return Money.parse(s);
 	    return super.parse(s,type);

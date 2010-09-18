@@ -32,6 +32,10 @@ public class ObjectDelegate extends DoFixture {
 				return false;
 			return i == ((MyValue)other).i;
 		}
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
 	public static class MyValueHolder {
 		private MyValue value;

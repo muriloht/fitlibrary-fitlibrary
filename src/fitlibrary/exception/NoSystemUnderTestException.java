@@ -5,6 +5,8 @@
 package fitlibrary.exception;
 
 public class NoSystemUnderTestException extends FitLibraryException {
+	private static final long serialVersionUID = 1L;
+
     public NoSystemUnderTestException() {
         super("SystemUnderTest needs to be defined.");
     }

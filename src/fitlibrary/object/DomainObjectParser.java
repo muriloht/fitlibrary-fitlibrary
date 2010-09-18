@@ -24,6 +24,7 @@ public class DomainObjectParser implements Parser {
 		this.typed = typed;
 		finder = typed.getFinder(evaluator);
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
@@ -56,7 +57,8 @@ public class DomainObjectParser implements Parser {
 		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator,testResults);
 		return setUp.getSystemUnderTest();
 	}
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
 			return !cell.hasEmbeddedTables(evaluator) && cell.isBlank(evaluator);
     	if (cell.hasEmbeddedTables(evaluator))
@@ -72,9 +74,11 @@ public class DomainObjectParser implements Parser {
 			return b == null;
 		return a.equals(b);
 	}
+	@Override
 	public String show(Object result) throws Exception {
         return finder.show(result);
 	}
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		return new DomainObjectCheckTraverse(typedObject);
 	}

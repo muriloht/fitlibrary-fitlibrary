@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class AccessFields {
+	@SuppressWarnings("unchecked")
 	private Set aSet = new HashSet(Arrays.asList(new Fields[] {
 			new Fields(3,4), new Fields(1,2)
 	}));

@@ -8,7 +8,7 @@ package fitlibrary.specify.missingMethod;
 
 import java.util.List;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"rawtypes","unused"})
 public class NestedFinderInJustSut {
 	public void addToColourMix(List colours) {
 		//

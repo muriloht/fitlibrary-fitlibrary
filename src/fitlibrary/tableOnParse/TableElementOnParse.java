@@ -147,7 +147,7 @@ public abstract class TableElementOnParse<To> {
 	public void addToTag(String annotation) {
     	parse.addToTag(" "+annotation.trim());
     }
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public void toHtml(StringBuilder builder) {
 		boolean everything = this.getClass() != TablesOnParse.class;
 		if (everything) {

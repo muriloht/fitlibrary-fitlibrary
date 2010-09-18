@@ -35,7 +35,7 @@ public class ObjectDotGraphic extends DotGraphic {
 			+ buildGraph()
 			+ "}\n";
     }
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	private String buildGraph() {
     	String result = "";
     	while (!queue.isEmpty() && --nodesToProcess > 0) {
@@ -143,7 +143,6 @@ public class ObjectDotGraphic extends DotGraphic {
             return true;
         return false;
     }
-	@SuppressWarnings("unchecked")
 	private boolean collectionSetOrMap(Object object) {
 		return object instanceof Collection || object instanceof Set || object instanceof Map;
 	}

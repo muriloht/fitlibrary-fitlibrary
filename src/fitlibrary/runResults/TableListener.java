@@ -24,19 +24,24 @@ public class TableListener implements ITableListener {
 		this.listener = listener;
 		this.testResults = testResults;
 	}
+	@Override
 	public void tableFinished(Table table) {
 		listener.tableFinished(table);
 	}
+	@Override
 	public void storytestFinished() {
 		listener.tablesFinished(testResults);
 	}
+	@Override
 	public TestResults getTestResults() {
 		return testResults;
 	}
 	public static class EmptyFixtureListener implements ReportListener	{
+		@Override
 		public void tableFinished(Table table) {
 			//
 		}
+		@Override
 		public void tablesFinished(TestResults testResults) {
 			//
 		}

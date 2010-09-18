@@ -30,6 +30,7 @@ public class SuiteLoader implements Runnable {
 		this.queue = queue;
 		this.context = context;
 	}
+	@Override
 	public void run() {
 		try {
 			WikiPagePath path = PathParser.parse(name);

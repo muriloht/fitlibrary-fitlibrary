@@ -16,7 +16,6 @@ public class TaxInvoice extends fitnesse.fixtures.TableFixture { //COPY:ALL
 	private Invoice invoice = new Invoice(); //COPY:ALL
 	 //COPY:ALL
 	@Override
-	@SuppressWarnings("unused")
 	protected void doStaticTable(int rows) { //COPY:ALL
 		check(3,3,invoice.getCustomer()); //COPY:ALL
 		checkAddress(); //COPY:ALL

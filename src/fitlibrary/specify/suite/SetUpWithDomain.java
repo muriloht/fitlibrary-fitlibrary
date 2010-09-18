@@ -27,6 +27,7 @@ public class SetUpWithDomain extends SuiteFixture {
 		public void act() {
 			//
 		}
+		@Override
 		public Object getSystemUnderTest() {
 			return null;
 		}

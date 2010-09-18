@@ -25,6 +25,7 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 	public DynamicVariablesMap(DynamicVariables dynamicVariables) {
 		map = new HashMap<Object,Object>(dynamicVariables.getMap());
 	}
+	@Override
 	public Pair<String,Tables> resolve(String locator) {
 		String result = locator;
 		Tables tables = TableFactory.tables();
@@ -53,24 +54,29 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 		}
 		return new Pair<String,Tables>(result,tables);
 	}
+	@Override
 	public void put(String key, Object value) {
 		map.put(key, value);
 	}
 	public void putAll(Properties properties) {
 		map.putAll(properties);
 	}
+	@Override
 	public void clearAll() {
 		map.clear();
 	}
+	@Override
 	public Object get(String key) {
 		return map.get(key);
 	}
+	@Override
 	public String getAsString(String key) {
 		Object result = get(key);
 		if (result == null)
 			return null;
 		return result.toString();
 	}
+	@Override
 	public Map<Object,Object> getMap() {
 		return new HashMap<Object,Object>(map);
 	}
@@ -79,6 +85,7 @@ public abstract class DynamicVariablesMap implements DynamicVariables {
 		StringBuilder s = new StringBuilder();
 		ArrayList<Object> keys = new ArrayList<Object>(map.keySet());
 		Collections.sort(keys, new Comparator<Object>() {
+			@Override
 			public int compare(Object o1, Object o2) {
 				return o1.toString().compareTo(o2.toString());
 			}

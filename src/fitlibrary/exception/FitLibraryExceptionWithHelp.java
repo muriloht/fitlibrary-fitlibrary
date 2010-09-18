@@ -4,9 +4,11 @@
 */
 package fitlibrary.exception;
 
-@SuppressWarnings("unused")
 public class FitLibraryExceptionWithHelp extends FitLibraryException {
-    public FitLibraryExceptionWithHelp(String message, String page) {
+	private static final long serialVersionUID = 1L;
+
+    @SuppressWarnings("unused")
+	public FitLibraryExceptionWithHelp(String message, String page) {
         super(message);
       }
 

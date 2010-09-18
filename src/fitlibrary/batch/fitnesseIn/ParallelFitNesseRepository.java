@@ -44,6 +44,7 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 	public ParallelFitNesseRepository(String rootDir, int port) throws IOException{
 		setUri(rootDir,port);
 	}
+	@Override
 	public BlockingQueue<TestDescriptor> getSuite(String name) throws IOException {
 		BlockingQueue<TestDescriptor> queue = new LinkedBlockingQueue<TestDescriptor>();
 		new Thread(new SuiteLoader(name,queue,context)).start();
@@ -56,6 +57,7 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 		new Thread(new DefinedActionLoader(name,queue,context.root,topFile)).start();
 		return queue;
 	}
+	@Override
 	public TestDescriptor getTest(String name) throws IOException {
 		try{
 			WikiPagePath path = PathParser.parse(name);
@@ -73,6 +75,7 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 			throw new IOException("Error reading test "+name+ " "+ ex);
 		}
 	}
+	@Override
 	public void prepareResultRepository(TestResultRepository resultRepository) throws IOException {
 		File files = new File(new File(new File(fitnesseRoot),"FitNesseRoot"),"files");
 		
@@ -84,6 +87,7 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 		resultRepository.addFile(new File(images,"collapsableClosed.gif"), "collapsableClosed.gif");
 		resultRepository.addFile(new File(images,"collapsableOpen.gif"), "collapsableOpen.gif");
 	}
+	@Override
 	public void setUri(String uri, int port) throws IOException {
 		context = makeContext(uri,port);
 		fitnesseRoot = uri;

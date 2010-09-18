@@ -49,12 +49,14 @@ public abstract class HtmlStructureParser implements HtmlParser {
                 " of class "+typed.asClass().getName()+": "+ex;
         throw new FitLibraryException(problem);
     }
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
 	protected abstract Object parse(Cell cell, TestResults testResults) throws Exception;
 	
-    public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
+    @Override
+	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
         return areEqual(parseTyped(cell,testResults).getSubject(),result);
     }
     // Overridden

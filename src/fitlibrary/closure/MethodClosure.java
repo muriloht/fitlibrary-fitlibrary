@@ -30,13 +30,16 @@ public class MethodClosure implements Closure {
 		this.typedObject = typedObject;
 		this.method = method;
 	}
+	@Override
 	public TypedObject invokeTyped(Object[] args) throws IllegalAccessException, InvocationTargetException {
 		return typedObject.asReturnTypedObject(invoke(args),method);
 	}
-    public Object invoke() throws IllegalAccessException, InvocationTargetException {
+    @Override
+	public Object invoke() throws IllegalAccessException, InvocationTargetException {
 		return invoke(new Object[]{});
 	}
-    public Object invoke(Object[] args) throws IllegalAccessException, InvocationTargetException {
+    @Override
+	public Object invoke(Object[] args) throws IllegalAccessException, InvocationTargetException {
 		if (runAlready < MAX_RUNS_SHOWN)
 			logger.trace("Calling "+this); // Avoid blowing the heap with lots of logs
 		else if (runAlready == MethodClosure.MAX_RUNS_SHOWN)
@@ -67,7 +70,8 @@ public class MethodClosure implements Closure {
 	public void setSubject(Object subject) {
     	this.typedObject = Traverse.asTypedObject(subject);
     }
-    public void setTypedSubject(TypedObject typedObject) {
+    @Override
+	public void setTypedSubject(TypedObject typedObject) {
     	this.typedObject = typedObject;
     }
 	@Override
@@ -83,20 +87,25 @@ public class MethodClosure implements Closure {
 			s += ","+t.getSimpleName();
 		return s.substring(1);
 	}
+	@Override
 	public ResultParser resultParser(Evaluator evaluator) {
 		return typedObject.resultParser(evaluator,method);
 	}
+	@Override
 	public Parser[] parameterParsers(Evaluator evaluator) {
 		return typedObject.parameterParsers(evaluator,method);
 	}
+	@Override
 	public ResultParser specialisedResultParser(ResultParser resultParser, Object result, Evaluator evaluator) {
 		if (result == null || result.getClass() == method.getReturnType())
 			return resultParser;
 		return typedObject.resultParser(evaluator,method,result.getClass());
 	}
+	@Override
 	public Class<?> getReturnType() {
 		return method.getReturnType();
 	}
+	@Override
 	public Class<?>[] getParameterTypes() {
 		return method.getParameterTypes();
 	}

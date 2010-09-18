@@ -22,6 +22,7 @@ public class GlobalDynamicVariables extends DynamicVariablesMap {
 	public GlobalDynamicVariables(DynamicVariables dynamicVariables) {
 		super(dynamicVariables);
 	}
+	@Override
 	public boolean addFromPropertiesFile(String fileName) {
 		try {
 			InputStream in = new FileInputStream(fileName);
@@ -36,6 +37,7 @@ public class GlobalDynamicVariables extends DynamicVariablesMap {
 		}
 		return true;
 	}
+	@Override
 	public void addFromUnicodePropertyFile(String fileName) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName)),"UTF8"));
 		while (true) {
@@ -51,12 +53,15 @@ public class GlobalDynamicVariables extends DynamicVariablesMap {
 		}
 		reader.close();
 	}
+	@Override
 	public void putParameter(String key, Object value) {
 		throw new RuntimeException("Cannot put a parameter to a GlobalDynamicVariables");
 	}
+	@Override
 	public DynamicVariables popLocal() {
 		throw new RuntimeException("Can't popLocal() when one is not pushed");
 	}
+	@Override
 	public DynamicVariables top() {
 		return this;
 	}

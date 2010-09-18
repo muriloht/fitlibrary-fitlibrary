@@ -33,7 +33,7 @@ public class ChatStart extends DoFixture { //COPY:ALL
 	public boolean userEntersRoom(String userName, String roomName) { //COPY:ONE
 		return chat.userEntersRoom(userName,roomName); //COPY:ONE
 	} //COPY:ONE
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Fixture usersInRoom(String roomName) { //COPY:ONE
 		Set users = chat.usersInRoom(roomName); //COPY:ONE
 		Object[] collection = new Object[users.size()]; //COPY:ONE

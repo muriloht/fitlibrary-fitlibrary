@@ -52,4 +52,9 @@ public class Counts {
 		else
 			right += 1;
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

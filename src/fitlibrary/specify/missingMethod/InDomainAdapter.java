@@ -9,6 +9,7 @@ package fitlibrary.specify.missingMethod;
 import fitlibrary.traverse.DomainAdapter;
 
 public class InDomainAdapter implements DomainAdapter  {
+	@Override
 	public Object getSystemUnderTest() {
 		return new InJustSut();
 	}

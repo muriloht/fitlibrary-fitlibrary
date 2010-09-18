@@ -36,6 +36,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 	public void setDomainTraverse(DomainTraverser domainTraverser) {
 		this.domainTraverser = domainTraverser;
 	}
+	@Override
 	public void runTable(Table table, ITableListener tableListener) {
         if (switchOnExpected(table)) {
             domainTraverser.setCurrentAction();

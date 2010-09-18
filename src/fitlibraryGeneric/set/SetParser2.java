@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import fitlibrary.collection.CollectionSetUpTraverse;
+import fitlibrary.collection.CollectionTraverse;
 import fitlibrary.collection.set.SetTraverse;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.collection.SetParser;
@@ -51,7 +52,7 @@ public class SetParser2 extends SetParser {
 		nestingSetUp.interpretWithinScope(table,evaluator,testResults);
 		return new HashSet<Object>(nestingSetUp.getResults());
 	}
-    @SuppressWarnings({"unchecked", "fallthrough"})
+    @SuppressWarnings({"unchecked", "fallthrough", "rawtypes"})
 	@Override
     protected boolean tableMatches(Table table, Object resultInitial, TestResults testResults) {
     	Object result = resultInitial;
@@ -59,7 +60,7 @@ public class SetParser2 extends SetParser {
     	case CLASS_TYPE:
         	if (result instanceof Map) {
         		if (keyed(table))
-        			result = new HashSet<Object>(SetTraverse.mapMapToSet((Map)result));
+        			result = new HashSet<Object>(CollectionTraverse.mapMapToSet((Map)result));
         		else
         			result = new HashSet<Object>(((Map)result).values());
         	}
@@ -84,7 +85,8 @@ public class SetParser2 extends SetParser {
     }
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			GenericTyped genericTyped = (GenericTyped) typed;
     			if (genericTyped.isGeneric())
     				return new SetParser2(evaluator,genericTyped);

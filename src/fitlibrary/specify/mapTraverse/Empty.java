@@ -10,7 +10,7 @@ import java.util.Map;
 import fitlibrary.object.DomainFixtured;
 
 public class Empty implements DomainFixtured {
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	public Map getEmptyMap() {
 		return new HashMap();
 	}

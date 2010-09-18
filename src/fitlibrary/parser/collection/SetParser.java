@@ -38,6 +38,7 @@ public class SetParser implements Parser {
 		parser = Traverse.asTyped(String.class).resultParser(evaluator);
 		showParser = Traverse.asTyped(Object.class).resultParser(evaluator);
 	}
+	@Override
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
 		return typed.typedObject(parse(cell,testResults));
 	}
@@ -52,6 +53,7 @@ public class SetParser implements Parser {
 		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
 		return set;
 	}
+	@Override
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
 		if (result == null)
 			return !cell.hasEmbeddedTables(evaluator) && cell.isBlank(evaluator);
@@ -70,6 +72,7 @@ public class SetParser implements Parser {
 			set.add(parser.parseTyped(TableFactory.cell(t.nextToken()),testResults).getSubject());
 		return set;
 	}
+	@Override
 	public String show(Object object) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, Exception {
 		if (object == null)
 			return "";
@@ -88,11 +91,13 @@ public class SetParser implements Parser {
 	}
     public static ParserFactory parserFactory() {
     	return new ParserFactory() {
-    		public Parser parser(Evaluator evaluator, Typed typed) {
+    		@Override
+			public Parser parser(Evaluator evaluator, Typed typed) {
     			return new SetParser(evaluator,typed);
     		}
     	};
     }
+	@Override
 	public Evaluator traverse(TypedObject typedObject) {
 		return new SetTraverse(typedObject);
 	}

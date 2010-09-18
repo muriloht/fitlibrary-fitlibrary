@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+
 import junit.framework.TestCase;
 
 public class TypeAdapterTest extends TestCase {
@@ -149,10 +150,11 @@ public class TypeAdapterTest extends TestCase {
 			TypeAdapter.registerParseDelegate(Class.class,
 					ProtectedParseMethod.class);
 		} catch (RuntimeException e) {
-			assertEquals("Parse delegate class "
-					+ ProtectedParseMethod.class.getName()
-					+ " does not have a suitable static parse() method.", e
-					.getMessage());
+			assertEquals(
+					"Parse delegate class "
+							+ ProtectedParseMethod.class.getName()
+							+ " does not have a suitable static parse() method.",
+					e.getMessage());
 		}
 	}
 
@@ -164,8 +166,8 @@ public class TypeAdapterTest extends TestCase {
 		} catch (RuntimeException e) {
 			assertEquals("Parse delegate class "
 					+ PublicNonStaticParseMethod.class.getName()
-					+ " does not have a suitable static parse() method.", e
-					.getMessage());
+					+ " does not have a suitable static parse() method.",
+					e.getMessage());
 		}
 	}
 
@@ -177,8 +179,8 @@ public class TypeAdapterTest extends TestCase {
 		} catch (RuntimeException e) {
 			assertEquals("Parse delegate class "
 					+ PublicStaticVoidParseMethod.class.getName()
-					+ " does not have a suitable static parse() method.", e
-					.getMessage());
+					+ " does not have a suitable static parse() method.",
+					e.getMessage());
 		}
 	}
 
@@ -190,8 +192,8 @@ public class TypeAdapterTest extends TestCase {
 		} catch (RuntimeException e) {
 			assertEquals("Parse delegate class "
 					+ PublicStaticParseMethodWithoutStringParam.class.getName()
-					+ " does not have a suitable static parse() method.", e
-					.getMessage());
+					+ " does not have a suitable static parse() method.",
+					e.getMessage());
 		}
 	}
 
@@ -202,24 +204,28 @@ public class TypeAdapterTest extends TestCase {
 	}
 
 	public static class ProtectedParseMethod {
+		@SuppressWarnings("unused")
 		protected static ProtectedParseMethod parse(String a) {
 			return null;
 		}
 	}
 
 	public static class PublicNonStaticParseMethod {
+		@SuppressWarnings("unused")
 		public ProtectedParseMethod parse(String a) {
 			return null;
 		}
 	}
 
 	public static class PublicStaticVoidParseMethod {
+		@SuppressWarnings("unused")
 		public static void parse(String a) {
 			//
 		}
 	}
 
 	public static class PublicStaticParseMethod {
+		@SuppressWarnings("unused")
 		public static ProtectedParseMethod parse(String a) {
 			return new ProtectedParseMethod();
 		}

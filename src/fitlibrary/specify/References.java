@@ -108,6 +108,7 @@ public class References extends DoFixture {
 		public Person findPerson(@SuppressWarnings("unused") int index) {
 			return new Person();
 		}
+		@Override
 		public Object getSystemUnderTest() {
 			return null;
 		}
