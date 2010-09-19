@@ -69,7 +69,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	protected RuntimeContextContainer(DynamicVariables dynamicVariables, Map<String,Integer> timeouts, 
 			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalActionScope global,
-			ConfigureLog4j configureLog4j) {
+			ConfigureLog4j configureLog4j, FoldingTexts foldingTexts) {
 		this.dynamicVariables = dynamicVariables;
 		this.timeouts = timeouts;
 		this.fileLogger = fileLogger;
@@ -77,6 +77,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		this.tableEvaluator = tableEvaluator;
 		this.global = global;
 		this.configureLog4j = configureLog4j;
+		this.foldingTexts = foldingTexts;
 	}
 	@Override
 	public RuntimeContextInternal copyFromSuite() {
@@ -88,7 +89,8 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 				scope,
 				tableEvaluator,
 				global,
-				configureLog4j);
+				configureLog4j,
+				foldingTexts);
 	}
 	@Override
 	public void reset() {

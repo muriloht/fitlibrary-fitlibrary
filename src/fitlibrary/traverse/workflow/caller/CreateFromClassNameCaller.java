@@ -45,6 +45,7 @@ public class CreateFromClassNameCaller extends AbstractDoCaller {
 			try {
 				Class<?> determineFullClass = determineFullClass();
 				object = ClassUtility.newInstance(determineFullClass);
+				logger.trace("Created "+object);
 				if (row.size() > 1 && object instanceof Fixture)
 						handleArgs((Fixture)object,row);
 			} catch (NoSuchMethodException ex) {
@@ -110,7 +111,6 @@ public class CreateFromClassNameCaller extends AbstractDoCaller {
 	public TypedObject run(Row row, TestResults testResults) throws Exception {
 		if (exceptionToThrow != null)
 			throw exceptionToThrow;
-		logger.trace("Created "+object);
 		return new GenericTypedObject(object);
 	}
 	public static void addDefaultPackage(String name) {
