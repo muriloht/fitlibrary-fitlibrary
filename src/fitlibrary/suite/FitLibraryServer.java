@@ -7,6 +7,7 @@ package fitlibrary.suite;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
@@ -49,6 +50,7 @@ public class FitLibraryServer extends FitServerBridge {
         System.exit(-1);
     }
 	public static void main(String[] args) {
+		PropertyConfigurator.configure("log4j.properties");
 		FitServerBridge fitServer = new FitLibraryServer();
 		try {
 			fitServer.print("\n-----------\n"+new Date()+"\n");

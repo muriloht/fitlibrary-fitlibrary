@@ -11,7 +11,7 @@ import org.apache.log4j.helpers.Transform;
 import org.apache.log4j.spi.LoggingEvent;
 
 public class CustomHtmlLayout extends Layout {
-	public static int MAX_LOGGED_SIZE = 140; // Must be > 30
+	public static int MAX_LOGGED_SIZE = 400; // Must be > 30
 	protected final int BUF_SIZE = 256;
 	protected final int MAX_CAPACITY = 1024;
 	static String TRACE_PREFIX = "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -40,7 +40,7 @@ public class CustomHtmlLayout extends Layout {
 		sbuf.append("</td>" + Layout.LINE_SEP);
 
 		String escapedThread = Transform.escapeTags(event.getThreadName());
-		sbuf.append("<td title=\"" + escapedThread + " thread\">");
+		sbuf.append("<td style=\"font-size : xx-small;\" title=\"" + escapedThread + " thread\">");
 		if (!escapedThread.equals("main"))
 			sbuf.append(escapedThread);
 		sbuf.append("</td>" + Layout.LINE_SEP);
