@@ -5,7 +5,8 @@
  * Added log4j logging capability. See .FitLibrary.AdvancedTutorials.LoggingTechniques for details on using this logging, as well as approaches to logging that are visible in the report page.
  * Added retry capability to batch running. See FitLibraryRunner for details
  * Revised the internal implementation of many of the ''special actions'' (.FitLibrary.SpecifiCations.SpecialActions).
- * Extended the ''File'' handling capability. See .FitLibrary.SpecifiCations.GlobalActionsProvided.FileProcessing
+ * Extended the [[''File'' handling capability][.FitLibrary.SpecifiCations.GlobalActionsProvided.FileProcessing]]
+ * Added [[''relative file'' handling][.FitLibrary.SpecifiCations.GlobalActionsProvided.RelativeFileHandling]], so that file accesses will work correctly both when running in ''!-FitNesse-!'' and in batch.
  * Added ''String'' handling capability. See .FitLibrary.SpecifiCations.SpecialActions.TestAsString
 
 ----!1 Earlier Releases:

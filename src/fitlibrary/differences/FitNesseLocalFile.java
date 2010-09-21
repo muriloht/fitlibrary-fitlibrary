@@ -38,7 +38,7 @@ public class FitNesseLocalFile implements LocalFile {
 	}
 	@Override
 	public File getFile() {
-		if (fileName.startsWith("/") || fileName.charAt(1) == ':')
+		if (fileName.startsWith("/") || (fileName.length() > 1 && fileName.charAt(1) == ':'))
 			return new File(fileName);
 		return new File(FITNESSE_FILES_LOCATION+"/"+fileName);
 	}

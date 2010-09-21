@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import fitlibrary.DefineAction;
 import fitlibrary.closure.ICalledMethodTarget;
+import fitlibrary.domainAdapter.FileHandler;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.IgnoredException;
@@ -199,7 +200,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	public SetVariableTraverse setVariables() {
 		return global().setVariables();
 	}
-	public DoTraverse file(String fileName) {
+	public FileHandler file(String fileName) {
 		return global().file(fileName);
 	}
 	public CrossReferenceFixture xref(String suiteName) {

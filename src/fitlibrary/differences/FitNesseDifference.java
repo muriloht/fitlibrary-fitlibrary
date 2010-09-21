@@ -7,7 +7,7 @@ package fitlibrary.differences;
 import java.io.File;
 
 /**
- * This manages the compile-time differences between Core Fit and Fit as included with FitNesse
+ * This manages the compile-time differences between running with FitNesse or in batch
  */
 public class FitNesseDifference implements DifferenceInterface {
 	protected final static String LOCAL_FILES = "/files";

@@ -17,6 +17,7 @@ import fitlibrary.DefineAction;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.domainAdapter.FileHandler;
+import fitlibrary.domainAdapter.RelativeFileHandler;
 import fitlibrary.domainAdapter.StringAdapter;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.exception.FitLibraryException;
@@ -36,7 +37,6 @@ import fitlibrary.suite.SuiteFixture;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.CommentTraverse;
 import fitlibrary.traverse.RuntimeContextual;
-import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.RandomSelectTraverse;
 import fitlibrary.traverse.workflow.SetVariableTraverse;
 import fitlibrary.traverse.workflow.StopWatch;
@@ -147,8 +147,11 @@ public class GlobalActionScope implements RuntimeContextual {
 	public SetVariableTraverse setVariables() {
 		return new SetVariableTraverse();
 	}
-	public DoTraverse file(String fileName) {
-		return new DoTraverse(new FileHandler(fileName));
+	public FileHandler file(String fileName) {
+		return new FileHandler(fileName);
+	}
+	public RelativeFileHandler relativeFile(String fileName) {
+		return new RelativeFileHandler(fileName);
 	}
 	public SuiteFixture suite() {
 		return new SuiteFixture();
