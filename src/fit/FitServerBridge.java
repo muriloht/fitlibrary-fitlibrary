@@ -8,7 +8,6 @@
 package fit;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -35,6 +34,7 @@ public abstract class FitServerBridge {
 	protected TestResults suiteTestResults = new TestResultsOnCounts();
 	protected OutputStream socketOutput;
 	private StreamReader socketReader;
+	@SuppressWarnings("unused")
 	private boolean verbose = false;
 	private String host;
 	private int port;
@@ -63,29 +63,24 @@ public abstract class FitServerBridge {
 	}
 
 	public void process() {
-		logger.trace("Ready to received messages");
+		logger.trace("Ready to received pages from FitNesse");
 		try {
 			while (true) {
-				print("FitServerBridge: Reading size...");
+				logger.trace("Reading page size...");
 				int size = FitProtocol.readSize(socketReader);
-				logger.trace("Received message of size " + size);
-				print("FitServerBridge: Size is " + size);
 				if (size == 0)
 					break;
+				logger.trace("Received page of size " + size + " from FitNesse");
 				try {
-					print("FitServerBridge: Processing document of size: "
-							+ size);
-					String document = FitProtocol.readDocument(socketReader,
-							size);
+					String document = FitProtocol.readDocument(socketReader,size);
 					TestResults storyTestResults = doTables(document);
-					print("\tresults: " + storyTestResults + "\n");
-					logger.trace("Finished storytest");
+					logger.trace("Finished running page");
 					suiteTestResults.add(storyTestResults);
 				} catch (FitParseException e) {
 					exception(e);
 				}
 			}
-			print("FitServerBridge: Completion signal received");
+			logger.trace("No more pages to receive from FitNesse");
 		} catch (Exception e) {
 			exception(e);
 		}
@@ -126,36 +121,32 @@ public abstract class FitServerBridge {
 		String result = "Arguments: ";
 		for (String s : argv)
 			result += s + " ";
-		print(result);
+		logger.trace(result);
 	}
 
 	protected void usage() {
-		System.out
-				.println("usage: java fit.FitServer [-v] host port socketTicket");
+		System.out.println("usage: java fit.FitServer [-v] host port socketTicket");
 		System.out.println("\t-v\tverbose");
 		System.exit(-1);
 	}
 
 	protected void exception(Exception e) {
 		printExceptionDetails(e);
-		Table table = TableFactory.table(TableFactory
-				.row("Exception occurred: "));
+		Table table = TableFactory.table(TableFactory.row("Exception occurred: "));
 		table.at(0).at(0).error(suiteTestResults, e);
 		reportListener.tableFinished(table);
 		reportListener.tablesFinished(suiteTestResults);
 	}
 
 	public void printExceptionDetails(Exception e) {
-		print("FitServerBridge: Exception: " + e.getMessage());
+		logger.trace(("Exception: " + e.getMessage()));
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		e.printStackTrace(new PrintStream(out));
-		print(out.toString() + "\n");
+		logger.trace((out.toString() + "\n"));
 	}
 
 	public void exit() throws Exception {
-		print("FitServerBridge: exiting");
-		print("FitServerBridge: end results: "
-				+ suiteTestResults.getCounts().toString());
+		logger.trace(("End results: " + suiteTestResults.getCounts().toString()));
 	}
 
 	public int exitCode() {
@@ -168,15 +159,15 @@ public abstract class FitServerBridge {
 	}
 
 	public void establishConnection(String httpRequest) throws Exception {
-		print("FitServerBridge: Connecting to " + host + " : " + port);
+		logger.trace(("Connecting to FitNesse on " + host + " : " + port));
 		socket = new Socket(host, port);
-		print("FitServerBridge: Connected");
+		logger.trace("Socket is connected");
 		socketOutput = socket.getOutputStream();
 		socketReader = new StreamReader(socket.getInputStream());
 		byte[] bytes = httpRequest.getBytes("UTF-8");
 		socketOutput.write(bytes);
 		socketOutput.flush();
-		print("http request sent");
+		logger.trace("Http request sent to FitNesse");
 	}
 
 	private String makeHttpRequest() {
@@ -185,37 +176,22 @@ public abstract class FitServerBridge {
 	}
 
 	public void validateConnection() throws Exception {
-		print("FitServerBridge: Validating connection...");
 		int statusSize = FitProtocol.readSize(socketReader);
 		if (statusSize == 0)
-			print("FitServerBridge: ...ok");
+			logger.trace("Connection to FitNesse is ok");
 		else {
 			String errorMessage = FitProtocol.readDocument(socketReader,
 					statusSize);
-			print("...failed because: " + errorMessage + "\n");
-			System.out.println("An error occured while connecting to client.");
+			logger.trace(("Connection to FitNesse failed because: " + errorMessage + "\n"));
+			System.out.println("An error occured while connecting to FitNesse.");
 			System.out.println(errorMessage);
 			System.exit(-1);
 		}
 	}
 
-	public void print(String message) {
-		if (verbose) {
-			System.out.println(message);
-			try {
-				FileWriter fileWriter = new FileWriter("running.txt", true);
-				fileWriter.write(message + "\n");
-				fileWriter.close();
-			} catch (IOException e) {
-				//
-			}
-		}
-	}
-
 	public static byte[] readTable(Parse table) throws Exception {
 		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-		OutputStreamWriter streamWriter = new OutputStreamWriter(byteBuffer,
-				"UTF-8");
+		OutputStreamWriter streamWriter = new OutputStreamWriter(byteBuffer,"UTF-8");
 		PrintWriter writer = new PrintWriter(streamWriter);
 		Parse more = table.more;
 		table.more = null;
@@ -236,8 +212,7 @@ public abstract class FitServerBridge {
 	class TableReportListener implements ReportListener {
 		@Override
 		public void tableFinished(Table table) {
-			print("FitServerBridge table is finished");
-			logger.trace("Sending table report");
+			logger.trace("Table is finished. Sending table report to FitNesse");
 			try {
 				byte[] bytes = readTable(table);
 				if (bytes.length > 0)
@@ -249,7 +224,7 @@ public abstract class FitServerBridge {
 
 		@Override
 		public void tablesFinished(TestResults testResults) {
-			logger.trace("Sending results");
+			logger.trace("Sending results to FitNesse: "+testResults);
 			try {
 				FitProtocol.writeCounts(testResults.getCounts(), socketOutput);
 			} catch (IOException e) {

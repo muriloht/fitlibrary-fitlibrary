@@ -6,12 +6,16 @@ package fitlibrary.suite;
 
 import java.io.IOException;
 
+import org.apache.log4j.Level;
+
 import fit.FitServerBridge;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.ScopeStack;
 import fitlibrary.flow.SetUpTearDownCache;
+import fitlibrary.log.FitLibraryLogger;
+import fitlibrary.log.FixturingLogger;
 import fitlibrary.parser.lookup.ParseDelegation;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
@@ -28,7 +32,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class BatchFitLibrary implements StorytestRunner {
-	private static final boolean SHOW_LOGS = true;
+	private static final boolean SHOW_LOGS = false;
 	public static final boolean SHOW_EXCEPTION_STACKS = false;
 	private TableListener tableListener = new TableListener(TestResultsFactory.testResults());
 	private DoFlow doFlow = wiredUpDoFlow();
@@ -55,15 +59,12 @@ public class BatchFitLibrary implements StorytestRunner {
 		flowEvaluator.setRuntimeContext(runtime);
 		DoFlow doFlow2 = new DoFlow(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		runtime.SetTableEvaluator(doFlow2);
-		global.withFitLibraryLogger().showAfter(true);
-		global.withFixturingLogger().showAfter(true);
 		if (SHOW_LOGS) {
-			global.withFitLibraryLogger().level("ALL");
-			global.withFixturingLogger().level("ALL");
-		} //else {
-//			global.withFitLibraryLogger().level("OFF");
-//			global.withFixturingLogger().level("OFF");
-//		}
+			global.withFitLibraryLogger().showAfter(true);
+			global.withFixturingLogger().showAfter(true);
+			FitLibraryLogger.getRootLogger().setLevel(Level.ALL);
+			FixturingLogger.getRootLogger().setLevel(Level.ALL);
+		}
 		return doFlow2;
 	}
 	public void setCurrentPageName(String name) {

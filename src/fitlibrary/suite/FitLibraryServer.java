@@ -7,12 +7,11 @@ package fitlibrary.suite;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
+import fitlibrary.log.ConfigureLoggingThroughFiles;
 import fitlibrary.log.FitLibraryLogger;
-import fitlibrary.log.FixturingLogger;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsOnCounts;
@@ -23,9 +22,6 @@ public class FitLibraryServer extends FitServerBridge {
 	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
 	private BatchFitLibrary batching = new BatchFitLibrary();
 
-	public FitLibraryServer() {
-		logger.trace("Started");
-	}
 	@Override
 	public TestResults doTables(String html) {
 		try {
@@ -47,17 +43,16 @@ public class FitLibraryServer extends FitServerBridge {
 	}
     @Override
 	protected void usage() {
-        print("usage: java fitlibrary.suite.FitLibraryServer [-v] host port socketTicket");
+        logger.trace("usage: java fitlibrary.suite.FitLibraryServer [-v] host port socketTicket");
         System.exit(-1);
     }
 	public static void main(String[] args) {
-		new PropertyConfigurator().doConfigure("fitnesse/FitLibraryLogger.properties", FitLibraryLogger.getOwnHierarchy());
-		new PropertyConfigurator().doConfigure("fitnesse/FixturingLogger.properties", FixturingLogger.getOwnHierarchy());
+		ConfigureLoggingThroughFiles.configure();
 		FitServerBridge fitServer = new FitLibraryServer();
 		try {
-			fitServer.print("\n-----------\n"+new Date()+"\n");
+			logger.trace(new Date());
 			fitServer.run(args);
-			fitServer.print("exit: "+fitServer.exitCode());
+			logger.trace(("Exit: "+fitServer.exitCode()));
 			if (fitServer.isExit())
 				System.exit(fitServer.exitCode());
 		} catch (Exception e) {

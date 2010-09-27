@@ -16,7 +16,7 @@ public abstract class ConfigureLogger {
 	
 	public ConfigureLogger(ShowAfterTableAppender appender) {
 		this.appender = appender;
-		rootLogger().setLevel(Level.OFF);
+//		rootLogger().setLevel(Level.OFF);
 	}
 	public void showAfter(boolean show) {
 		if (show)

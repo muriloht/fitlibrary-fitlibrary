@@ -11,15 +11,13 @@
 			<attribute name="javadoc_location" value="../javaDocs/junit4.6/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="fitnesse/lib/log4j-1.2.16.jar" sourcepath="C:/cygwin/home/RimuResearch/srcLib/log4j-1.2.16">
+	<classpathentry kind="lib" path="fitnesse/lib/log4j-1.2.16.jar" sourcepath="C:/cygwin/home/Rick/srcLib/log4j-1.2.16">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/cygwin/home/RimuResearch/javaDocs/log4j-1.2.16/javadoc/"/>
+			<attribute name="javadoc_location" value="file:/C:/cygwin/home/Rick/javaDocs/log4j-1.2.16/javadoc/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="fitnesse/lib/ognl-2.7.2.jar"/>
 	<classpathentry kind="lib" path="fitnesse/lib/poi-3.1-FINAL-20080629.jar"/>
 	<classpathentry kind="lib" path="fitnesse/fitnesse.jar"/>
-	<classpathentry kind="var" path="LibDocs"/>
-	<classpathentry kind="var" path="LibSrc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

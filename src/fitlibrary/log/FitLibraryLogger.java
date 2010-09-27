@@ -40,7 +40,7 @@ public class FitLibraryLogger extends Logger {
 		return hierarchy.getRootLogger();
 	}
 	public static Logger getLogger(String name) {
-		return hierarchy.getLogger(name,factory );
+		return hierarchy.getLogger(name,factory);
 	}
 	public static Logger getLogger(Class<?> type) {
 		return getLogger(type.getName());

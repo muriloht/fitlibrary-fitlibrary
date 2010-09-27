@@ -5,7 +5,6 @@
 
 package fitlibrary.log;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -52,7 +51,6 @@ public class ConfigureLog4j {
 			}
 		};
 		this.currentLogger = configureFixturingLogger;
-		FixturingLogger.getRootLogger().setLevel(Level.DEBUG);
 	}
 	public ConfigureLogger withNormalLog4j() {
 		return configureNormalLog4j;

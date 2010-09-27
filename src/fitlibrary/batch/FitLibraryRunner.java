@@ -31,6 +31,7 @@ import fitlibrary.batch.testRun.ParallelTestRunner;
 import fitlibrary.batch.testRun.RetryAwareFitLibraryTestEngine;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.differences.FitLibraryRunnerDifference;
+import fitlibrary.differences.FitNesseLocalFile;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.traverse.Traverse;
 
@@ -53,6 +54,7 @@ public class FitLibraryRunner {
 			boolean showPasses = runParameters.get(SHOW_PASSES).equals("true");
 			int port = runParameters.getInt(PORT);
 			int maxRetries = runParameters.getInt(RETRIES);
+			FitNesseLocalFile.fitNessePrefix(fitNesseDirectoryPath+"/");
 			runParallel(suiteName, fitNesseDirectoryPath, resultsDirectoryPath, showPasses, port, maxRetries);
 		} catch (InvalidParameterException e) {
 			error();

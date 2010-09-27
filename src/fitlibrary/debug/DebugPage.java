@@ -8,14 +8,11 @@ package fitlibrary.debug;
 
 import java.io.IOException;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.differences.FitNesseLocalFile;
-import fitlibrary.log.FitLibraryLogger;
-import fitlibrary.log.FixturingLogger;
+import fitlibrary.log.ConfigureLoggingThroughFiles;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
@@ -48,10 +45,7 @@ public class DebugPage {
 	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(reportListener));
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("FitLibraryLogger.rootLogger = "+FitLibraryLogger.getRootLogger());
-		System.out.println("FitLibraryLogger.hierarchy = "+FitLibraryLogger.getOwnHierarchy());
-		new PropertyConfigurator().doConfigure("fitnesse/FitLibraryLogger.properties", FitLibraryLogger.getOwnHierarchy()); // Needed here as this is a separate entry point. What others are there?
-		new PropertyConfigurator().doConfigure("fitnesse/FixturingLogger.properties", FixturingLogger.getOwnHierarchy());
+		ConfigureLoggingThroughFiles.configure("fitnesse/");
 		String[] pageNames = new String[] {
 //				"FitLibrary.SpecifiCations.PojoAccessToCurrentRow.AddShowCell"
 				"FitLibrary.SpecifiCations.DoWorkflow.TestActions"
