@@ -6,7 +6,6 @@
 
 package fitlibrary.utility;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,10 +20,7 @@ public class CollectionUtility {
 		return !it.hasNext() && !it2.hasNext();
 	}
 	public static <T> List<T> list(T... ss) {
-		List<T> list = new ArrayList<T>();
-		for (T s : ss)
-			list.add(s);
-		return list;
+		return ListCreator.list(ss);
 	}
 	public static <T> String mkString(String separator, List<T> ss) {
 		return mkString(separator,ss.toArray());

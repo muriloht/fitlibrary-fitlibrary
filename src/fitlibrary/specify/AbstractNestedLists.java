@@ -68,7 +68,8 @@ public abstract class AbstractNestedLists implements DomainFixtured {
 		public void setId(String id) {
 			this.id = id;
 		}
-		public static Element parse(@SuppressWarnings("unused") String s) {
+		@SuppressWarnings("unused")
+		public static Element parse(String s) {
 			return new Element("newOne",99);
 		}
 	}

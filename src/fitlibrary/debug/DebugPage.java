@@ -8,10 +8,14 @@ package fitlibrary.debug;
 
 import java.io.IOException;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.differences.FitNesseLocalFile;
+import fitlibrary.log.FitLibraryLogger;
+import fitlibrary.log.FixturingLogger;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.suite.BatchFitLibrary;
@@ -25,8 +29,10 @@ public class DebugPage {
 	protected int storytestsFinished = 0;
 	protected int expectedTablesFinished = 0;
 	private static String FITNESSE_URL = "http://localhost:8980/";
+	@SuppressWarnings("unused")
 	private static String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
-	private static String DIRY = FITNESSE_FOR_WEB_DIRY;
+	private static String FITNESSE_DIRY = "fitnesse";
+	private static String DIRY = FITNESSE_DIRY;
 	private static int PORT = 8990; // This determines the value of ${FITNESSE_PORT}
 	
 	protected ReportListener reportListener = new ReportListener() {
@@ -42,9 +48,13 @@ public class DebugPage {
 	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(reportListener));
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("FitLibraryLogger.rootLogger = "+FitLibraryLogger.getRootLogger());
+		System.out.println("FitLibraryLogger.hierarchy = "+FitLibraryLogger.getOwnHierarchy());
+		new PropertyConfigurator().doConfigure("fitnesse/FitLibraryLogger.properties", FitLibraryLogger.getOwnHierarchy()); // Needed here as this is a separate entry point. What others are there?
+		new PropertyConfigurator().doConfigure("fitnesse/FixturingLogger.properties", FixturingLogger.getOwnHierarchy());
 		String[] pageNames = new String[] {
 //				"FitLibrary.SpecifiCations.PojoAccessToCurrentRow.AddShowCell"
-				"FitLibraryWeb.SpiderFixture.SpecifySpiderFixture.SpecifyFindElement"
+				"FitLibrary.SpecifiCations.DoWorkflow.TestActions"
 		};
 		run(pageNames);
 	}

@@ -11,6 +11,6 @@ public class RelativeFileHandler extends AbstractFileHandler {
 		fileNameIs(fileName);
 	}
 	public void fileNameIs(String localFileName) {
-		file = Traverse.FITNESSE_DIFFERENCES.getLocalFile(localFileName).getFile();
+		file = Traverse.getLocalFile(localFileName).getFile();
 	}
 }

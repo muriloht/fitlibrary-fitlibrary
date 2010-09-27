@@ -4,11 +4,10 @@
  * Written: 11/11/2006
 */
 
-package fitlibraryGeneric.exception;
+package fitlibrary.exception;
 
 import java.lang.reflect.Type;
 
-import fitlibrary.exception.FitLibraryException;
 
 public class UnboundTypeException extends FitLibraryException {
 	private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import fitlibrary.object.DomainFixtured;
 import fitlibrary.specify.eg.Colour;
-import fitlibraryGeneric.utility.ListCreator;
+import fitlibrary.utility.ListCreator;
 
 @SuppressWarnings("unchecked")
 public class GenericCollections implements DomainFixtured {

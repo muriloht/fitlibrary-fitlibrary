@@ -13,8 +13,7 @@ import org.apache.log4j.spi.RootLogger;
 
 public class FitLibraryLogger extends Logger {
 	protected static boolean DELEGATING_TO_NORMAL_LOGGER = false;
-	private static RootLogger ROOT = new RootLogger(Level.DEBUG);
-	private static Hierarchy hierarchy = new Hierarchy(ROOT);
+	private static Hierarchy hierarchy = new Hierarchy(new RootLogger(Level.DEBUG));
 	private static LoggerFactory factory = new LoggerFactory() {
 		@Override
 		public Logger makeNewLoggerInstance(final String name) {
@@ -34,8 +33,11 @@ public class FitLibraryLogger extends Logger {
 	protected FitLibraryLogger() {
 		super("FitLibraryLogger");
 	}
+	public static Hierarchy getOwnHierarchy() {
+		return hierarchy;
+	}
 	public static Logger getRootLogger() {
-		return ROOT;
+		return hierarchy.getRootLogger();
 	}
 	public static Logger getLogger(String name) {
 		return hierarchy.getLogger(name,factory );

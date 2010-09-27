@@ -12,6 +12,7 @@ import org.apache.log4j.PropertyConfigurator;
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
 import fitlibrary.log.FitLibraryLogger;
+import fitlibrary.log.FixturingLogger;
 import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsOnCounts;
@@ -50,7 +51,8 @@ public class FitLibraryServer extends FitServerBridge {
         System.exit(-1);
     }
 	public static void main(String[] args) {
-		PropertyConfigurator.configure("log4j.properties");
+		new PropertyConfigurator().doConfigure("fitnesse/FitLibraryLogger.properties", FitLibraryLogger.getOwnHierarchy());
+		new PropertyConfigurator().doConfigure("fitnesse/FixturingLogger.properties", FixturingLogger.getOwnHierarchy());
 		FitServerBridge fitServer = new FitLibraryServer();
 		try {
 			fitServer.print("\n-----------\n"+new Date()+"\n");

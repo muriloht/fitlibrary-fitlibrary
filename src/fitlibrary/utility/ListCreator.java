@@ -4,7 +4,7 @@
  * Written: 23/09/2006
 */
 
-package fitlibraryGeneric.utility;
+package fitlibrary.utility;
 
 import java.util.ArrayList;
 import java.util.HashSet;

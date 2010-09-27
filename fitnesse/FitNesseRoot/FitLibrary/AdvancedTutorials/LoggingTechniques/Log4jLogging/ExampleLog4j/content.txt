@@ -17,7 +17,7 @@ The above fixture refers to an object of class ''!-AppWithLog4j-!'', as follows:
    }
 }}}The action ''call into application'' calls the method ''call()'' above.
 
-The last 2 methods above illustrate how to redirect these other loggers to the normal log4j logger. This may be useful if you want to see normal logging in relation to what things are happening in the other loggers.
+The last 2 methods above illustrate how to redirect these other loggers to the normal log4j logger. This may be useful if you want to interweave normal logging with the other specialised loggers.
 
 |''with log4j''|
 |''show after''|true|

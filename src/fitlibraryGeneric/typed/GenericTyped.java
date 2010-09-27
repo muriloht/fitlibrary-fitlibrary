@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fitlibrary.exception.FitLibraryException;
+import fitlibrary.exception.UnboundTypeException;
 import fitlibrary.object.Finder;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserSelectorForType;
@@ -22,7 +23,6 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibraryGeneric.exception.UnboundTypeException;
 import fitlibraryGeneric.generic.GenericTypeUtility;
 import fitlibraryGeneric.generic.LocalGenericArrayType;
 import fitlibraryGeneric.generic.LocalParameterizedType;

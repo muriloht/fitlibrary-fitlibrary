@@ -28,7 +28,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class BatchFitLibrary implements StorytestRunner {
-	private static final boolean SHOW_LOGS = false;
+	private static final boolean SHOW_LOGS = true;
 	public static final boolean SHOW_EXCEPTION_STACKS = false;
 	private TableListener tableListener = new TableListener(TestResultsFactory.testResults());
 	private DoFlow doFlow = wiredUpDoFlow();
@@ -60,7 +60,10 @@ public class BatchFitLibrary implements StorytestRunner {
 		if (SHOW_LOGS) {
 			global.withFitLibraryLogger().level("ALL");
 			global.withFixturingLogger().level("ALL");
-		}
+		} //else {
+//			global.withFitLibraryLogger().level("OFF");
+//			global.withFixturingLogger().level("OFF");
+//		}
 		return doFlow2;
 	}
 	public void setCurrentPageName(String name) {

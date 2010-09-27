@@ -34,6 +34,9 @@ public class FixturingLogger extends Logger {
 	protected FixturingLogger() {
 		super("FixturingLogger");
 	}
+	public static Hierarchy getOwnHierarchy() {
+		return hierarchy;
+	}
 	public static Logger getRootLogger() {
 		return ROOT;
 	}
