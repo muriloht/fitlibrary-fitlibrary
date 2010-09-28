@@ -200,7 +200,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		new File(fileName).delete();
 	}
 	public boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
-		Matcher matcher = Pattern.compile(pattern).matcher(text);
+		Matcher matcher = Pattern.compile(pattern, Pattern.DOTALL).matcher(text);
 	    if (!matcher.find())
 	    	throw new FitLibraryException("Pattern doesn't match");
 	    int groups = matcher.groupCount();
