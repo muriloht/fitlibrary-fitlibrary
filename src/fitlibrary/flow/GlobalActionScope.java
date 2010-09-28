@@ -42,16 +42,17 @@ import fitlibrary.traverse.workflow.SetVariableTraverse;
 import fitlibrary.traverse.workflow.StopWatch;
 import fitlibrary.xref.CrossReferenceFixture;
 
+// Note: If runtime was the SUT, we could eliminate some of these methods (for action lookup, anyway).
 public class GlobalActionScope implements RuntimeContextual {
 	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
 	public static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
-	private RuntimeContextInternal runtimeContext;
+	private RuntimeContextInternal runtime;
 
 	@Override
 	public void setRuntimeContext(RuntimeContextInternal runtime) {
-		this.runtimeContext = runtime;
+		this.runtime = runtime;
 	}
 	//--- BECOMES, ETC TIMEOUTS:
 	public void becomesTimeout(int timeout) {
@@ -61,22 +62,22 @@ public class GlobalActionScope implements RuntimeContextual {
 		return getTimeout(BECOMES_TIMEOUT);
 	}
 	public int getTimeout(String name) {
-		return runtimeContext.getTimeout(name,1000);
+		return runtime.getTimeout(name,1000);
 	}
 	public void putTimeout(String name, int timeout) {
-		runtimeContext.putTimeout(name,timeout);
+		runtime.putTimeout(name,timeout);
 	}
 	//--- STOP ON ERROR AND ABANDON:
 	/** When (stopOnError), don't continue interpreting a table if there's been a problem */
 	public void setStopOnError(boolean stopOnError) {
-		runtimeContext.setStopOnError(stopOnError);
+		runtime.setStopOnError(stopOnError);
 	}
 	public void abandonStorytest() {
-		runtimeContext.setAbandon(true);
+		runtime.setAbandon(true);
 	}
 	//--- DYNAMIC VARIABLES:
     public DynamicVariables getDynamicVariables() {
-    	return runtimeContext.getDynamicVariables();
+    	return runtime.getDynamicVariables();
     }
 	public void setDynamicVariable(String key, Object value) {
 		getDynamicVariables().put(key, value);
@@ -159,29 +160,29 @@ public class GlobalActionScope implements RuntimeContextual {
 	//--- DEFINED ACTIONS
 	public DefineAction defineAction(String wikiClassName) {
 		DefineAction defineAction = new DefineAction(wikiClassName);
-		defineAction.setRuntimeContext(runtimeContext);
+		defineAction.setRuntimeContext(runtime);
 		return defineAction;
 	}
 	public DefineAction defineAction() {
 		return new DefineAction();
 	}
 	public void defineActionsSlowlyAt(String pageName) throws Exception {
-		new DefineActionsOnPageSlowly(pageName,runtimeContext).process();
+		new DefineActionsOnPageSlowly(pageName,runtime).process();
 	}
 	public void defineActionsAt(String pageName) throws Exception {
-		new DefineActionsOnPage(pageName,runtimeContext).process();
+		new DefineActionsOnPage(pageName,runtime).process();
 	}
 	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
-		new DefineActionsOnPage(pageName,rootLocation,runtimeContext).process();
+		new DefineActionsOnPage(pageName,rootLocation,runtime).process();
 	}
 	public void clearDefinedActions() {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();
 	}
 	public boolean toExpandDefinedActions() {
-		return runtimeContext.toExpandDefinedActions();
+		return runtime.toExpandDefinedActions();
 	}
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
-		runtimeContext.setExpandDefinedActions(expandDefinedActions);
+		runtime.setExpandDefinedActions(expandDefinedActions);
 	}
 	public void autoTranslateDefinedActionParameters() {
 		setDynamicVariable(DefineAction.AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS, "true");
@@ -222,17 +223,17 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	//--- LOGGING
 	public ConfigureLogger withLog4j() {
-		return runtimeContext.getConfigureLog4j().withNormalLog4j();
+		return runtime.getConfigureLog4j().withNormalLog4j();
 	}
 	public ConfigureLogger withFitLibraryLogger() {
-		return runtimeContext.getConfigureLog4j().withFitLibraryLogger();
+		return runtime.getConfigureLog4j().withFitLibraryLogger();
 	}
 	public ConfigureLogger withFixturingLogger() {
-		return runtimeContext.getConfigureLog4j().withFixturingLogger();
+		return runtime.getConfigureLog4j().withFixturingLogger();
 	}	
 	//--- FILE LOGGING
 	public void recordToFile(String fileName) {
-		runtimeContext.recordToFile(fileName);
+		runtime.recordToFile(fileName);
 		try {
 			addDynamicVariablesFromFile(fileName);
 		} catch (Exception e) {
@@ -240,25 +241,25 @@ public class GlobalActionScope implements RuntimeContextual {
 		}
 	}
 	public void startLogging(String fileName) {
-		runtimeContext.startLogging(fileName);
+		runtime.startLogging(fileName);
 	}
 	public void logMessage(String s) {
 		try {
-			runtimeContext.printToLog(s);
+			runtime.printToLog(s);
 		} catch (IOException e) {
 			throw new FitLibraryException(e.getMessage());
 		}
 	}
 	public void logText(String s) {
-		runtimeContext.getConfigureLog4j().log(s);
+		runtime.getConfigureLog4j().log(s);
 	}
 	//--- SHOW
 	public void show(Row row, String text) {
 		row.addCell(text).shown();
-		runtimeContext.getDefinedActionCallManager().addShow(row);
+		runtime.getDefinedActionCallManager().addShow(row);
 	}
 	public void showAsAfterTable(String title,String s) {
-		runtimeContext.showAsAfterTable(title,s);
+		runtime.showAsAfterTable(title,s);
 	}
 	@Override
 	public Object getSystemUnderTest() {
@@ -266,7 +267,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	//--- SELECT
 	public void select(String name) {
-		runtimeContext.getTableEvaluator().select(name);
+		runtime.getTableEvaluator().select(name);
 	}
 	
 	//-------------------------------------- SPECIALS -----------------------------------------
@@ -546,7 +547,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void logged(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
-			runtimeContext.getConfigureLog4j().log(result.toString());
+			runtime.getConfigureLog4j().log(result.toString());
 	}
 	/** Allow access to String methods
 	 */

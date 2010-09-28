@@ -21,6 +21,7 @@ import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
@@ -54,6 +55,7 @@ public class BatchFitLibrary implements StorytestRunner {
 		TypedObject globalTO = new GenericTypedObject(global);
 		ScopeStack scopeStack = new ScopeStack(flowEvaluator,globalTO);
 		RuntimeContextContainer runtime = new RuntimeContextContainer(scopeStack,global);
+		attemptToAddGlobalForFitLibraryWeb(scopeStack,runtime);
 		runtime.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 		global.setRuntimeContext(runtime);
 		flowEvaluator.setRuntimeContext(runtime);
@@ -66,6 +68,15 @@ public class BatchFitLibrary implements StorytestRunner {
 			FixturingLogger.getRootLogger().setLevel(Level.ALL);
 		}
 		return doFlow2;
+	}
+	private static void attemptToAddGlobalForFitLibraryWeb(ScopeStack scopeStack, RuntimeContextInternal runtime) {
+		try {
+			GenericTypedObject typedObject = new GenericTypedObject(Class.forName("fitlibrary.flow.GlobalActionScopeForWeb").newInstance());
+			typedObject.injectRuntime(runtime);
+			scopeStack.addGlobal(typedObject);
+		} catch (Exception e) {
+			// Doesn't exist, so do nothing
+		}
 	}
 	public void setCurrentPageName(String name) {
 		doFlow.getRuntimeContext().setCurrentPageName(name);
