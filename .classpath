@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="fitnesse/lib/hamcrest-all-1.2.jar"/>
 	<classpathentry kind="lib" path="fitnesse/lib/jmock-2.5.1.jar"/>
 	<classpathentry kind="lib" path="fitnesse/lib/jmock-junit4-2.5.1.jar"/>
-	<classpathentry kind="lib" path="fitnesse/lib/junit-4.6.jar" sourcepath="/srcLib/junit-4.8.2-src.jar">
+	<classpathentry kind="lib" path="fitnesse/lib/junit-4.6.jar" sourcepath="C:/cygwin/home/Rick/srcLib/junit-4.8.2-src.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="../javaDocs/junit4.6/javadoc/"/>
 		</attributes>
@@ -19,5 +19,7 @@
 	<classpathentry kind="lib" path="fitnesse/lib/ognl-2.7.2.jar"/>
 	<classpathentry kind="lib" path="fitnesse/lib/poi-3.1-FINAL-20080629.jar"/>
 	<classpathentry kind="lib" path="fitnesse/fitnesse.jar"/>
+	<classpathentry kind="var" path="LIB_DOCS"/>
+	<classpathentry kind="var" path="LIB_SRC"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
