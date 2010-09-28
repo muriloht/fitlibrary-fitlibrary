@@ -14,6 +14,7 @@ The above fixturing code is as follows:
 }}}
 |''with fixturing logger''|
 |''level''|TRACE|
+|''show after''|true|
 
  * On ''Test'', the following has text added after the table, because we've enabled ''show after'' and the level is TRACE:
 

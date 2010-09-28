@@ -2,8 +2,8 @@
 #
 There are three aspects to logging with log4j when using ''!-FitLibrary-!''.
 
- * The first and last sections are only relevant to you if you're currently using log4j for logging in your application.
- * The middle two sections apply whether you're currently using log4j or not.
+ * Sections 3.3, 3.4 and 3.5 apply whether you're currently using log4j or not.
+ * Sections 3.1, 3.2 and 3.6 are only relevant to you if you're currently using log4j for logging in your application.
 
 We assume familiarity with log4j. See the manual that's part of the log4j download for a good introduction.
 
@@ -15,7 +15,7 @@ If you use another logging system, and would like to be able to hook it into ''s
 #
 If you're having trouble working out what's going on (or wrong) in a storytest and/or your code, you may find it convenient to have your log4j logs appended after !-FitLibrary-! tables.
 
-To start this, add the following action to the top of your storytest (''false'' stops it):
+To start this, add the following action to the top of your storytest, just after the table that specifies the main fixture (''false'' stops it):
 
 |''with log4j''|
 |''show after''|true|
@@ -47,7 +47,17 @@ With careful use of packages (or other log4j ''names''), you can easily tailor t
 
 See [[this page for an example][^ExampleLog4j]]
 #
-----!2 3.2 Using !-FixturingLogger-! in your fixture
+----!2 3.2 Logging to log4j from fixture code
+#
+Fixturing code can call the ''logText()'' method to have information logged with log4j (it will only show up if logging in normal log4j  is enabled):
+
+|''action that logs''|logging to go to log4j|
+
+The underlying method is in a subclass of ''!-DoFixture-!'':{{{	public void actionThatLogs(String s) {
+		logText(s);
+	}
+}}}#
+----!2 3.3 Using !-FixturingLogger-! in your fixture
 #
 Here's how to use it in your fixture code if:
 
@@ -60,7 +70,7 @@ See [[this page for an example][>ExampleFixturingLogger]]
 
 !-FixturingLogger-! is used by some of the fixtures in ''!-FitLibraryWeb-!'', such as for ''web services''.
 #
-----!2 3.3 Logging of ''!-FitLibrary-!'' itself
+----!2 3.4 Logging of ''!-FitLibrary-!'' itself
 #
 ''!-FitLibrary-!'' uses log4j for logging as well. However, it uses another, separate "name space" so that its logging does not affect normal uses of log4j.
 
@@ -71,7 +81,40 @@ You may like to turn on the logging in ''!-FitLibrary-!'' so you can see what it
 
 See [[this page for an example][^FitLibraryLog4j]]
 #
-----!2 3.4 Routing to Standard log4j
+----!2 3.5 Configuring ''!-FitLibraryLogger-!'' and ''!-FixturingLogger-!'' from property files
+#
+Two property files in the ''fitnesse'' directory (at the same level as ''!-FitNesseRoot-!'') are used to configure ''!-FitLibraryLogger-!'' and ''!-FixturingLogger-!'':
+
+ * !-FitLibraryLogger.properties-!
+ * !-FixturingLogger.properties-!
+
+These use the standard log4j property configuration format, but are instead applied to the specialised loggers ''!-FitLibraryLogger-!'' and ''!-FixturingLogger-!''.
+
+These two files are both the same (as provided), as follows:
+{{{    log4j.rootLogger=OFF,consoleAppender
+    log4j.appender.consoleAppender=org.apache.log4j.ConsoleAppender
+    log4j.appender.consoleAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.consoleAppender.layout.ConversionPattern=%r [%t] %-5p %c %x - %m%n
+    log4j.appender.fileAppender=org.apache.log4j.RollingFileAppender
+    log4j.appender.fileAppender.File=logForFitLibrary.txt
+    log4j.appender.fileAppender.MaxFileSize=10MB
+    log4j.appender.fileAppender.MaxBackupIndex=1
+    log4j.appender.fileAppender.layout=org.apache.log4j.PatternLayout
+    log4j.appender.fileAppender.layout.ConversionPattern=%r [%t] %-5p %c %x - %m%n
+}}}To turn on logging to the console, change the first line to:
+{{{    log4j.rootLogger=ALL,consoleAppender
+}}}To just turn on logging after tables, change the first line to:
+{{{    log4j.rootLogger=ALL
+}}}To just turn on file logging, change the first line to:
+{{{    log4j.rootLogger=ALL,fileAppender
+}}}This may be helpful if a '''Test''' or '''Suite''' doesn't complete, as it will log all the communications that ''!-FitLibraryServer-!'' has with ''!-FitNesse-!''.
+
+You may want to also change the name of the logging file, and various other attributes. See the log4j documentation for details.
+
+To turn on after-table, console and file logging, change the first line to:
+{{{    log4j.rootLogger=ALL,consoleAppender,fileAppender
+}}}#
+----!2 3.6 Routing to Standard log4j
 #
 The logging from ''!-FitLibraryLogger-!''  and/or ''!-FixturingLogger-!'' can be routed to the standard log4j:
 

@@ -23,4 +23,7 @@ public class LogExampleFromFixture extends DoFixture {
 	public void actionThatShowsOnError(String s) {
 		throw new FitLibraryShowException(new Show(s));
 	}
+	public void actionThatLogs(String s) {
+		logText(s);
+	}
 }

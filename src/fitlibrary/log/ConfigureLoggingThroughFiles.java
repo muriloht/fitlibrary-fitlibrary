@@ -10,5 +10,6 @@ public class ConfigureLoggingThroughFiles {
 		PropertyConfigurator propertyConfigurator = new PropertyConfigurator();
 		propertyConfigurator.doConfigure(diry+"FitLibraryLogger.properties", FitLibraryLogger.getOwnHierarchy());
 		propertyConfigurator.doConfigure(diry+"FixturingLogger.properties", FixturingLogger.getOwnHierarchy());
+		PropertyConfigurator.configure(diry+"log4j.properties");
 	}
 }

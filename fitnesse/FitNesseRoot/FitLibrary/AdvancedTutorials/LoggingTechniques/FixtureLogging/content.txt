@@ -24,7 +24,7 @@ The underlying method as as follows:{{{	public boolean actionThatPrints(String s
 
 The output is "escaped" so that any HTML is shown as the literal text rather than being displayed by the browser (eg, you see "<u>text</u>" rather than "''text''").
 
- * But sometimes it can be most convenient to be able to structure displayed information, such as in a list or table.
+ * But sometimes it can be more convenient to be able to structure displayed information, such as in a list or table.
 
 The major disadvantage of the ''Print'' approach is that you need to flip back and forth between the storytest and the output in order to understand what's going on.
 
@@ -79,17 +79,6 @@ The underlying method is:{{{	public void actionThatShows(String s) {
 		throw new FitLibraryShowException(new Show(s));
 	}
 }}}The class concerned can be any class at all. It does not need to be a subclass of ''!-DoFixture-!'', for example.
-#
-----!2 2.5 Logging
-#
-Fixturing code can call the ''logText()'' method to have information shown after the table:
-
-|''action that logs''|AFTER <u>all</u>|
-
-The underlying method is in a subclass of ''!-DoFixture-!'':{{{	public void actionThatLogs(String s) {
-		logText("My Log", s);
-	}
-}}}
 #
 ----!2 Next
 #
