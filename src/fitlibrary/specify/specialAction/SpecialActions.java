@@ -26,4 +26,7 @@ public class SpecialActions {
 	public int getIntProperty() {
 	    return 2;
 	}
+	public String aStringWithWhiteSpace() {
+		return "\tline one\n\tline\t2";
+	}
 }

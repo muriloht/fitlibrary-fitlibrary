@@ -153,7 +153,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 	public void addNamedObject(String name, TypedObject typedObject, Row row, TestResults testResults) {
 		typedObject.injectRuntime(runtime);
 		setUpTearDown.callSetUpOnSutChain(typedObject.getSubject(), row, testResults);
-		scopeStack.addNamedObject(name, typedObject, row, testResults);
+		scopeStack.addNamedObject(name, typedObject);
 	}
 	@Override
 	public void select(String name) {

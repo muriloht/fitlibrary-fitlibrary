@@ -32,6 +32,7 @@ import fitlibrary.tableProxy.CellProxy;
 import fitlibrary.tableProxy.RowProxy;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
+import fitlibrary.typed.TypedObject;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static Logger logger = FitLibraryLogger.getLogger(RuntimeContextContainer.class);
@@ -301,5 +302,9 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	@Override
 	public ConfigureLog4j getConfigureLog4j() {
 		return configureLog4j;
+	}
+	@Override
+	public void addNamedObject(String name, TypedObject typedObject) {
+		scope.addNamedObject(name,typedObject);
 	}
 }

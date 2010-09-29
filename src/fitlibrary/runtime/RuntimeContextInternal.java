@@ -15,6 +15,7 @@ import fitlibrary.tableProxy.CellProxy;
 import fitlibrary.tableProxy.RowProxy;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
+import fitlibrary.typed.TypedObject;
 
 public interface RuntimeContextInternal extends RuntimeContext {
 	void addAccumulatedFoldingText(Table table);
@@ -46,4 +47,5 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	void setExpandDefinedActions(boolean expandDefinedActions);
 	void startLogging(String fileName);
 	boolean toExpandDefinedActions();
+	void addNamedObject(String string, TypedObject result);
 }

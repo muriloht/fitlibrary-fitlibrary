@@ -15,10 +15,8 @@ import org.apache.log4j.Logger;
 
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.log.FitLibraryLogger;
-import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.suite.SuiteEvaluator;
-import fitlibrary.table.Row;
 import fitlibrary.traverse.DomainAdapter;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.RuntimeContextual;
@@ -169,7 +167,7 @@ public class ScopeStack implements IScopeStack {
 		};
 	}
 	@Override
-	public void addNamedObject(String name, TypedObject typedObject, Row row, TestResults testResults) {
+	public void addNamedObject(String name, TypedObject typedObject) {
 		logger.trace("Pushed "+typedObject.getSubject());
 		selectObjects.add(typedObject);
 		selectNames.put(name,typedObject);

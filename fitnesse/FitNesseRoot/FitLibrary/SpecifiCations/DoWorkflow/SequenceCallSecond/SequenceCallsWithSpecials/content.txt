@@ -89,7 +89,7 @@
 <td><i>and</i></td>
 <td>&lt;b&gt;</td>
 <td>2&lt;/b&gt;</td>
-<td bgcolor=#C0C0FF>&lt;b>2&lt;/b></td></tr>
+<td bgcolor=#C0C0FF><pre>&lt;b>2&lt;/b></pre></td></tr>
 </table>
 <br/><table border="1" cellspacing="0">
 <tr><td class="pass"><b>not</b></td>

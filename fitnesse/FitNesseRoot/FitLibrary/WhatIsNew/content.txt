@@ -8,6 +8,7 @@
  * Extended the [[''File'' handling capability][.FitLibrary.SpecifiCations.GlobalActionsProvided.FileProcessing]]
  * Added [[''relative file'' handling][.FitLibrary.SpecifiCations.GlobalActionsProvided.RelativeFileHandling]], so that file accesses will work correctly both when running in ''!-FitNesse-!'' and in batch.
  * Added ''String'' handling capability. See .FitLibrary.SpecifiCations.SpecialActions.TestAsString
+ * Added the special action '''show predefined''' to use a <pre> tag to show the whitespace (tabs, new lines, etc) in the resulting string. See .FitLibrary.SpecifiCations.SpecialActions.TestShowPredefined
 
 ----!1 Earlier Releases:
 |!contents|

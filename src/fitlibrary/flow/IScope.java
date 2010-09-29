@@ -20,4 +20,5 @@ public interface IScope {
 	boolean isAbandon();
 	void setStopOnError(boolean stop);
 	boolean isStopOnError();
+	void addNamedObject(String name, TypedObject typedObject);
 }

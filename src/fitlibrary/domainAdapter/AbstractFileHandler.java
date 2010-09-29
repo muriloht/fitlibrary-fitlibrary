@@ -35,7 +35,7 @@ public class AbstractFileHandler implements DomainAdapter {
 			String line = reader.readLine();
 			if (line == null)
 				break;
-			result += line;
+			result += line+"\n";
 		}
 		reader.close();
 		return result;

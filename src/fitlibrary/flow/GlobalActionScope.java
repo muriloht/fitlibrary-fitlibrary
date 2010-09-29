@@ -40,7 +40,9 @@ import fitlibrary.traverse.RuntimeContextual;
 import fitlibrary.traverse.workflow.RandomSelectTraverse;
 import fitlibrary.traverse.workflow.SetVariableTraverse;
 import fitlibrary.traverse.workflow.StopWatch;
+import fitlibrary.typed.TypedObject;
 import fitlibrary.xref.CrossReferenceFixture;
+import fitlibraryGeneric.typed.GenericTypedObject;
 
 // Note: If runtime was the SUT, we could eliminate some of these methods (for action lookup, anyway).
 public class GlobalActionScope implements RuntimeContextual {
@@ -48,6 +50,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
 	public static final String STOP_WATCH = "$$STOP WATCH$$";
 	public static final String BECOMES_TIMEOUT = "becomes";
+	private static int UNNAMED = 0;
 	private RuntimeContextInternal runtime;
 
 	@Override
@@ -409,7 +412,12 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void showEscaped(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
-			action.show(Fixture.escape(result.toString()));
+			action.show("<pre>"+Fixture.escape(result.toString())+"</pre>");
+	}
+	public void showPredefined(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.show("<pre>"+result.toString()+"</pre>");
 	}
 	public void showAfter(DoAction action) throws Exception {
 		Object result = action.run();
@@ -556,6 +564,21 @@ public class GlobalActionScope implements RuntimeContextual {
 		if (result != null)
 			return new StringAdapter(result.toString());
 		return null;
+	}
+	/** Allow the action result to be treated as an extra (unnamed) fixturing object
+	 */
+	public void alsoRun(DoAction action) throws Exception {
+		alsoRunAs(action,"Unnamed#"+(UNNAMED ++));
+	}
+	/** Allow the action result to be treated as an extra fixturing object
+	 */
+	public void alsoRunAs(DoAction action, String name) throws Exception {
+		Object result = action.run();
+		if (result != null) {
+			if (!(result instanceof TypedObject))
+				result = new GenericTypedObject(result);
+			runtime.addNamedObject(name,(TypedObject)result);
+		}
 	}
 	
 //	public void is(DoAction action, Object expected) throws Exception {

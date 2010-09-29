@@ -212,7 +212,7 @@ public abstract class FitServerBridge {
 	class TableReportListener implements ReportListener {
 		@Override
 		public void tableFinished(Table table) {
-			logger.trace("Table is finished. Sending table report to FitNesse");
+			logger.trace("Sending table report to FitNesse");
 			try {
 				byte[] bytes = readTable(table);
 				if (bytes.length > 0)

@@ -45,7 +45,7 @@ public class TestDoFlowWithSelect {
 			oneOf(someTypedObject).getSubject(); will(returnValue(something));
 			oneOf(someTypedObject).injectRuntime(runtime);
 			oneOf(setUpTearDown).callSetUpOnSutChain(something, row, testResults);
-			oneOf(scopeStack).addNamedObject("x",someTypedObject,row, testResults);
+			oneOf(scopeStack).addNamedObject("x",someTypedObject);
 			oneOf(scopeStack).select("x");
 		}});
 		doFlow.addNamedObject("x",someTypedObject,row,testResults);

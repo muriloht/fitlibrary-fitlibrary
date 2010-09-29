@@ -78,6 +78,7 @@ You may like to turn on the logging in ''!-FitLibrary-!'' so you can see what it
 
 |''!-with FitLibrary logger-!''|
 |''level''|TRACE|
+|''show after''|true|
 
 See [[this page for an example][^FitLibraryLog4j]]
 #

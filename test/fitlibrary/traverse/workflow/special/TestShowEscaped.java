@@ -27,7 +27,7 @@ public class TestShowEscaped {
 	public void textIsShown() throws Exception {
 		context.checking(new Expectations() {{
 			one(action).run(); will(returnValue("nz"));
-			one(action).show("nz");
+			one(action).show("<pre>nz</pre>");
 		}});
 		globalActionScope.showEscaped(action);
 	}
@@ -35,7 +35,7 @@ public class TestShowEscaped {
 	public void textWithTagIsShownEscaped() throws Exception {
 		context.checking(new Expectations() {{
 			one(action).run(); will(returnValue("<nz>"));
-			one(action).show("&lt;nz>");
+			one(action).show("<pre>&lt;nz></pre>");
 		}});
 		globalActionScope.showEscaped(action);
 	}
@@ -45,7 +45,7 @@ public class TestShowEscaped {
 		context.checking(new Expectations() {{
 			one(action).run();
 			will(returnValue(number));
-			one(action).show("4444444");
+			one(action).show("<pre>4444444</pre>");
 		}});
 		globalActionScope.showEscaped(action);
 	}
