@@ -26,10 +26,6 @@ public class TestFitLibraryTestEngine {
 	final Mockery context = new JUnit4Mockery();
 	final FitLibraryBatching mockBatching = context.mock(FitLibraryBatching.class);
 	final String linebreak = System.getProperty("line.separator");
-	@Test
-	public void doNothing() {
-		System.err.println("REMOVE THIS darren checkin temp to test Linux/Hudson.");
-	}
 	
 	@Test public void noTables() {
 		String testName = "Test One";
