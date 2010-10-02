@@ -25,20 +25,20 @@ import fitlibrary.table.Tables;
 public class TestFitLibraryTestEngine {
 	final Mockery context = new JUnit4Mockery();
 	final FitLibraryBatching mockBatching = context.mock(FitLibraryBatching.class);
-
+	final String linebreak = System.getProperty("line.separator");
 	@Test
 	public void doNothing() {
 		System.err.println("REMOVE THIS darren checkin temp to test Linux/Hudson.");
 	}
 	
-	/** @Test -- REVERT THIS!!! */ public void noTables() {
+	@Test public void noTables() {
 		String testName = "Test One";
 		String html = "contents";
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(mockBatching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(),testName," contains no tables")));
 	}
-	/** @Test -- REVERT THIS!!! */ public void passWithNoOutput() {
+	@Test public void passWithNoOutput() {
 		String testName = "Test Two";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
@@ -55,7 +55,7 @@ public class TestFitLibraryTestEngine {
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(1,0,0,0),testName,html)));
 	}
-	/** @Test -- REVERT THIS!!! */ public void failWithOutOnly() {
+	@Test public void failWithOutOnly() {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
@@ -72,11 +72,11 @@ public class TestFitLibraryTestEngine {
 		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result.getContent(),equalTo(html+"\n<hr/><h1>out</h1>\n<pre>\nMessage\r\n\n</pre>\n"));
+		assertThat(result.getContent(),equalTo(html+"\n<hr/><h1>out</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n"));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,1,0,0),testName,
-				html+"\n<hr/><h1>out</h1>\n<pre>\nMessage\r\n\n</pre>\n")));
+				html+"\n<hr/><h1>out</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n")));
 	}
-	/** @Test -- REVERT THIS!!! */ public void exceptionWithErrOnly() {
+	@Test public void exceptionWithErrOnly() {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
@@ -93,9 +93,9 @@ public class TestFitLibraryTestEngine {
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,0,1),testName,
-				html+"\n<hr/><h1>err</h1>\n<pre>\nMessage\r\n\n</pre>\n")));
+				html+"\n<hr/><h1>err</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n")));
 	}
-	/** @Test -- REVERT THIS!!! */ public void ignoreWithOutAndErr() {
+	@Test public void ignoreWithOutAndErr() {
 		String testName = "Test Three";
 		String html = "<table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
@@ -114,10 +114,10 @@ public class TestFitLibraryTestEngine {
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
-				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message\r\n\n</pre>\n"+
-				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message\r\n\n</pre>\n")));
+				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message"+linebreak+"\n</pre>\n"+
+				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n")));
 	}
-	/** @Test -- REVERT THIS!!! */ public void ignoreWithOutAndErrWithBody() {
+	@Test public void ignoreWithOutAndErrWithBody() {
 		String testName = "Test Three";
 		String html = "<body><table><tr><td>a</td></tr></table>";
 		final FitLibraryBatching batching = new FitLibraryBatching() {
@@ -136,8 +136,8 @@ public class TestFitLibraryTestEngine {
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html+"</body>"));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
-				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message\r\n\n</pre>\n"+
-				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message\r\n\n</pre>\n</body>")));
+				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message"+linebreak+"\n</pre>\n"+
+				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n</body>")));
 	}
 
 	
