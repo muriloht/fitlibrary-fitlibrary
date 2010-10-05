@@ -1,6 +1,6 @@
 !1 This Release:
 
-|!2 ''Details of changes in this release''|13 September 2010|
+|!2 ''Details of changes in this release''|October 2010|
 
  * Added log4j logging capability. See .FitLibrary.AdvancedTutorials.LoggingTechniques for details on using this logging, as well as approaches to logging that are visible in the report page.
  * Added retry capability to batch running. See FitLibraryRunner for details
@@ -9,6 +9,7 @@
  * Added [[''relative file'' handling][.FitLibrary.SpecifiCations.GlobalActionsProvided.RelativeFileHandling]], so that file accesses will work correctly both when running in ''!-FitNesse-!'' and in batch.
  * Added ''String'' handling capability. See .FitLibrary.SpecifiCations.SpecialActions.TestAsString
  * Added the special action '''show predefined''' to use a <pre> tag to show the whitespace (tabs, new lines, etc) in the resulting string. See .FitLibrary.SpecifiCations.SpecialActions.TestShowPredefined
-
+ * Now ignore synthetic methods so there isn't an ambiguity.
+#
 ----!1 Earlier Releases:
 |!contents|

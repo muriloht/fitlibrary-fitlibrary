@@ -97,7 +97,8 @@ public class LookupClosureStandard implements LookupClosure{
 			if     (name.equals(method.getName()) &&
 					method.getParameterTypes().length == argCount && 
 					!doActionMethod(method.getParameterTypes()) &&
-		            !fitLibrarySystemMethod(method,argCount,subject)) {
+		            !fitLibrarySystemMethod(method,argCount,subject) &&
+		            !method.isSynthetic()) {
 				if (chosenMethod == null)
 					chosenMethod = method;
 				else
