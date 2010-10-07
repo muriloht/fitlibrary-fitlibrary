@@ -123,6 +123,10 @@
 		<batch-run suite="FitLibrary.SpecifiCations.SpecialisedTables" showpassesinreport="false" timeout="600000"/>
 	</target>
 	
+	<target name="delete-batch-runner-results-dir">
+		<delete dir="${results-dir}"/>
+	</target>
+	
 	<macrodef name="batch-run">
 		<attribute name="suite"/>
 		<attribute name="showpassesinreport" default="true"/>
