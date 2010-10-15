@@ -55,6 +55,7 @@ public class TestDirectAccessToParser {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, En.class);
 		assertThat(ParserSelectorForType.evaluate(doFixture, type, "A"),is((Object)new Gen<En>(En.A)));
 	}
+	@Test
 	public void testParseWithGenericListEnumFinder() throws Exception {
 		LocalParameterizedType innerType = new LocalParameterizedType(TestDirectAccessToParser.class, List.class, En.class);
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, innerType);
