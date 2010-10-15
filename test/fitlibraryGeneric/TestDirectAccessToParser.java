@@ -41,10 +41,10 @@ public class TestDirectAccessToParser {
 	public void testParseWithOutFinder() throws Exception {
 		ParserSelectorForType.evaluate(doFixture, Y.class, "3");
 	}
-	@Test
-	public void testParseWithEnumFinder() throws Exception {
-		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
-	}
+//	@Test
+//	public void testParseWithEnumFinder() throws Exception {
+//		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
+//	}
 	@Test
 	public void testParseWithGenericFinder() throws Exception {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, Integer.class);
