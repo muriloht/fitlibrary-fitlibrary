@@ -82,14 +82,14 @@ public class ParserSelectorForType {
         if (TaggedStringParser.applicableType(classType))
             return TaggedStringParser.parserFactory();
         
+        if (typed.isEnum())
+        	return EnumParser.parserFactory();
         ParserFactory factory = LookupPropertyEditorBasedParser.parserFactory(typed);
         if (factory != null)
         	return factory;
         factory = ParseDelegation.selfParseFactory(typed);
         if (factory != null)
         	return factory;
-        if (typed.isEnum())
-        	return EnumParser.parserFactory();
 		if (canTreatAsString(classType, typed.hasMethodOrField(), isResult))
 			return ByStringParser.parserFactory();
 		return null;

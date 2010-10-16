@@ -33,7 +33,8 @@ public class EnumParser implements Parser {
 			return  typed.typedObject(null);
 		Class asClass = typed.asClass();
 		try {
-			return typed.typedObject(Enum.valueOf(asClass, ExtendedCamelCase.camel(text.replaceAll("\\s+","")).toUpperCase()));
+			String stringValue = ExtendedCamelCase.camel(text.replaceAll("\\s+","")).toUpperCase();
+			return typed.typedObject(Enum.valueOf(asClass, stringValue));
 		} catch (IllegalArgumentException e) {
 			try {
 				return typed.typedObject(Enum.valueOf(asClass, ExtendedCamelCase.camel(text.replaceAll("\\s+","_")).toUpperCase()));

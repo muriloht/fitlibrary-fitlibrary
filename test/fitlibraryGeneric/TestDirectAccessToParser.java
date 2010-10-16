@@ -41,10 +41,10 @@ public class TestDirectAccessToParser {
 	public void testParseWithOutFinder() throws Exception {
 		ParserSelectorForType.evaluate(doFixture, Y.class, "3");
 	}
-//	@Test
-//	public void testParseWithEnumFinder() throws Exception {
-//		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
-//	}
+	@Test
+	public void testParseWithEnumFinder() throws Exception {
+		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
+	}
 	@Test
 	public void testParseWithGenericFinder() throws Exception {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, Integer.class);
@@ -55,15 +55,15 @@ public class TestDirectAccessToParser {
 		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, En.class);
 		assertThat(ParserSelectorForType.evaluate(doFixture, type, "A"),is((Object)new Gen<En>(En.A)));
 	}
-//	@Test
-//	public void testParseWithGenericListEnumFinder() throws Exception {
-//		LocalParameterizedType innerType = new LocalParameterizedType(TestDirectAccessToParser.class, List.class, En.class);
-//		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, innerType);
-//		List<En> expectedList = new ArrayList<En>();
-//		expectedList.add(En.A);
-//		expectedList.add(En.B);
-//		assertThat(ParserSelectorForType.evaluate(doFixture, type, "a, b"),is((Object)new Gen<List<En>>(expectedList)));
-//	}
+	@Test
+	public void testParseWithGenericListEnumFinder() throws Exception {
+		LocalParameterizedType innerType = new LocalParameterizedType(TestDirectAccessToParser.class, List.class, En.class);
+		LocalParameterizedType type = new LocalParameterizedType(TestDirectAccessToParser.class, Gen.class, innerType);
+		List<En> expectedList = new ArrayList<En>();
+		expectedList.add(En.A);
+		expectedList.add(En.B);
+		assertThat(ParserSelectorForType.evaluate(doFixture, type, "a, b"),is((Object)new Gen<List<En>>(expectedList)));
+	}
 	
 	public static class MyFixture extends DoFixture {
 		public X findX(String s) {
