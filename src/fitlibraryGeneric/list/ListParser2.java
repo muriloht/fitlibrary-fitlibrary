@@ -54,7 +54,7 @@ public class ListParser2 extends ListParser {
     		if (CollectionSetUpTraverse.hasObjectFactoryMethodFor(table,evaluator))
     			return super.parseTable(table,testResults);
     		ListSetUpTraverse2 setUp = new ListSetUpTraverse2(componentTyped.asClass());
-    		setUp.interpretWithinScope(table,evaluator,testResults);
+    		setUp.interpretWithinScope(table,evaluator.getRuntimeContext(),testResults);
     		return setUp.getResults();
     	case PARAMETERIZED_TYPE:
     		return parseNested(table, testResults);
@@ -64,7 +64,7 @@ public class ListParser2 extends ListParser {
     }
 	private List<Object> parseNested(Table table, TestResults testResults) {
 		NestingListSetUpTraverse nestedSetUp = new NestingListSetUpTraverse(componentTyped);
-		nestedSetUp.interpretWithinScope(table,evaluator,testResults);
+		nestedSetUp.interpretWithinScope(table,evaluator.getRuntimeContext(),testResults);
 		return nestedSetUp.getResults();
 	}
     @SuppressWarnings({"fallthrough", "unchecked"})
@@ -85,7 +85,7 @@ public class ListParser2 extends ListParser {
     			for (int i = 0; i < listResult.size(); i++)
     				Array.set(arrayResult,i,listResult.get(i));
 				ArrayTraverse arrayTraverse = new ArrayTraverse(new GenericTypedObject(arrayResult, new GenericTyped(arrayResult.getClass())));
-    			return arrayTraverse.doesInnerTablePass(table,evaluator,testResults);
+    			return arrayTraverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
     		}
     		if (result.getClass().isArray())
     			result = Arrays.asList((Object[])result);
@@ -93,13 +93,13 @@ public class ListParser2 extends ListParser {
         		ListTraverse listTraverse = new ListTraverse(null);
         		listTraverse.setActualCollection(listResult);
         		listTraverse.setComponentType(componentTyped.asClass());
-        		return listTraverse.doesInnerTablePass(table,evaluator,testResults);
+        		return listTraverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
         	}
     	case PARAMETERIZED_TYPE:
     		if (result.getClass().isArray())
     			result = Arrays.asList((Object[])result);
     		NestingListTraverse nestingList = new NestingListTraverse((List<Object>)result,componentTyped);
-    		return nestingList.doesTablePass(table,evaluator,testResults);
+    		return nestingList.doesTablePass(table,evaluator.getRuntimeContext(),testResults);
     	default:
     		throw new FitLibraryException("Type not sufficiently bound: "+componentTyped);
     	}

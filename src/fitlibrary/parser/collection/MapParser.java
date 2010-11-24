@@ -58,7 +58,7 @@ public class MapParser implements Parser {
 	}
 	protected Object parseTable(Table table, TestResults testResults) {
 		MapSetUpTraverse setUp = new MapSetUpTraverse(keyTyped,valueTyped,evaluator.getRuntimeContext());
-		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator.getRuntimeContext(),testResults);
 		return setUp.getResults();
 	}
 	@Override
@@ -73,7 +73,7 @@ public class MapParser implements Parser {
     }
 	protected boolean tableMatches(Table table, Map<Object,Object> map, TestResults testResults) {
 		Traverse traverse = new MapTraverse(map);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	private Object parse(String s, TestResults testResults) throws Exception {
 		StringTokenizer t = new StringTokenizer(s, ",");

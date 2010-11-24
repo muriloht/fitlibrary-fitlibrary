@@ -17,6 +17,7 @@ import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
@@ -29,10 +30,10 @@ import fitlibrary.utility.ClassUtility;
 public class ArrayParser implements Parser {
 	protected final Parser componentParser;
     protected Typed componentType;
-    protected final Evaluator evaluator;
+	final private RuntimeContextInternal runtime;
 	
 	public ArrayParser(Evaluator evaluator, Typed typed) {
-        this.evaluator = evaluator;
+        this.runtime = evaluator.getRuntimeContext();
 		this.componentType = typed.getComponentTyped();
 		componentParser = componentType.resultParser(evaluator);
 	}
@@ -46,18 +47,18 @@ public class ArrayParser implements Parser {
 		return componentType.typedObject(parse(cell,testResults));
 	}
 	private Object parse(Cell cell, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTables(evaluator)) 
+		if (cell.hasEmbeddedTables(runtime)) 
 			return parseTable(cell.getEmbeddedTable(),testResults);
-		return parse(cell.text(evaluator),testResults);
+		return parse(cell.text(runtime),testResults);
 	}
     protected Object parseTable(Table table, TestResults testResults) {
         ArraySetUpTraverse setUp = new ArraySetUpTraverse(componentType.asClass(),componentParser);
-        setUp.interpretWithinScope(table,evaluator,testResults);
+        setUp.interpretWithinScope(table,runtime,testResults);
         return setUp.getResults();
     }
     @Override
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-    	if (cell.hasEmbeddedTables(evaluator))
+    	if (cell.hasEmbeddedTables(runtime))
     		return tableMatches(cell.getEmbeddedTable(),result,testResults);
     	return equals(parse(cell,testResults),result,testResults);
     }
@@ -66,13 +67,13 @@ public class ArrayParser implements Parser {
     		Object[] array = (Object[])results;
     		if (array.getClass().getComponentType().isArray()) {
     			Traverse nestingArray = new ArrayTraverse(array,true);
-    			return nestingArray.doesTablePass(table,evaluator,testResults);
+    			return nestingArray.doesTablePass(table,runtime,testResults);
     		} 
     		ArrayTraverse traverse = new ArrayTraverse(array);
-    		return traverse.doesInnerTablePass(table,evaluator,testResults);
+    		return traverse.doesInnerTablePass(table,runtime,testResults);
     	} 
         Traverse traverse = selectPrimitiveArray(results);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,runtime,testResults);
     }
 	public static Traverse selectPrimitiveArray(Object array) {
 		if (array.getClass().isArray()) {

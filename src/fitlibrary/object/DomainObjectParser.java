@@ -54,7 +54,7 @@ public class DomainObjectParser implements Parser {
 
     	if (newInstance != null)
     		setUp.callStartCreatingObjectMethod(newInstance);
-		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator.getRuntimeContext(),testResults);
 		return setUp.getSystemUnderTest();
 	}
     @Override
@@ -67,7 +67,7 @@ public class DomainObjectParser implements Parser {
     }
 	protected boolean matchesTable(Table table, Object result, TestResults testResults) {
 		DomainObjectCheckTraverse traverse = new DomainObjectCheckTraverse(result,typed);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	public boolean matches(Object a, Object b) {
 		if (a == null)

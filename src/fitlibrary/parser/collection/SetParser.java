@@ -50,7 +50,7 @@ public class SetParser implements Parser {
 	protected Object parseTable(Table table, TestResults testResults) {
 		Set<Object> set = new HashSet<Object>();
 		CollectionSetUpTraverse setUp = new CollectionSetUpTraverse(evaluator,set,true);
-		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator.getRuntimeContext(),testResults);
 		return set;
 	}
 	@Override
@@ -63,7 +63,7 @@ public class SetParser implements Parser {
     }
 	protected boolean tableMatches(Table table, Object result, TestResults testResults) {
 		CollectionTraverse traverse = FitLibrarySelector.selectSet(result);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	private Object parse(String s, TestResults testResults) throws Exception {
 		StringTokenizer t = new StringTokenizer(s, ",");

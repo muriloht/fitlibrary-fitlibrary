@@ -120,9 +120,9 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 	public String extendedCamel(String suppliedName) {
 		return runtimeContext.extendedCamel(suppliedName);
 	}
-	public void interpretWithinScope(Table table, Evaluator evaluator, TestResults testResults) {
-		setRuntimeContext(evaluator.getRuntimeContext());
-		IScope scope = scopeOf(evaluator);
+	public void interpretWithinScope(Table table, RuntimeContextInternal runtime, TestResults testResults) {
+		setRuntimeContext(runtime);
+		IScope scope = runtime.getScope();
 		scope.temporarilyAdd(this);
 		try {
 			interpretAfterFirstRow(table,testResults);
@@ -130,28 +130,25 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 			scope.removeTemporary(this);
 		}
 	}
-	public void interpretInnerTableWithInScope(Table table, Evaluator evaluator, TestResults testResults) {
+	public void interpretInnerTableWithInScope(Table table, RuntimeContextInternal runtime, TestResults testResults) {
 		RowOnList row = new RowOnList();
 		table.add(0,row);
 		row.setIsHidden();
 		try {
-			interpretWithinScope(table,evaluator,testResults);
+			interpretWithinScope(table,runtime,testResults);
 		} finally {
 			table.removeElementAt(0);
 		}
 	}
-	private IScope scopeOf(Evaluator evaluator) {
-		return evaluator.getRuntimeContext().getScope();
-	}
-	public boolean doesInnerTablePass(Table table, Evaluator evaluator, TestResults testResults) {
+	public boolean doesInnerTablePass(Table table, RuntimeContextInternal runtime, TestResults testResults) {
 		TestResults innerResults = TestResultsFactory.testResults();
-		interpretInnerTableWithInScope(table,evaluator,innerResults);
+		interpretInnerTableWithInScope(table,runtime,innerResults);
         testResults.add(innerResults);
 		return innerResults.passed();
 	}
-	public boolean doesTablePass(Table table, Evaluator evaluator, TestResults testResults) {
+	public boolean doesTablePass(Table table, RuntimeContextInternal runtime, TestResults testResults) {
 		TestResults innerResults = TestResultsFactory.testResults();
-		interpretWithinScope(table,evaluator,innerResults);
+		interpretWithinScope(table,runtime,innerResults);
         testResults.add(innerResults);
 		return innerResults.passed();
 	}
@@ -176,7 +173,7 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 		return new GenericTypedObject(sut);
 	}
 	public void callStartCreatingObjectMethod(TypedObject object) throws IllegalAccessException, InvocationTargetException {
-		IScope scope = scopeOf(this);
+		IScope scope = this.getRuntimeContext().getScope();
 		scope.temporarilyAdd(this);
 		try {
 			callCreatingMethod("startCreatingObject", object.getSubject());

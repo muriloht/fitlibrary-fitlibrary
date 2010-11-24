@@ -68,7 +68,7 @@ public class ListParser implements Parser {
 	protected List<Object> parseTable(Table table, TestResults testResults) {
 		List<Object> list = new ArrayList<Object>();
 		CollectionSetUpTraverse setUp = new CollectionSetUpTraverse(evaluator,list,true);
-		setUp.interpretInnerTableWithInScope(table,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(table,evaluator.getRuntimeContext(),testResults);
 		return list;
 	}
     private Object asArray(Class<?> componentType, List<Object> results) {
@@ -93,7 +93,7 @@ public class ListParser implements Parser {
     }
 	protected boolean tableMatches(Table table, Object result, TestResults testResults) {
 		CollectionTraverse traverse = FitLibrarySelector.selectOrderedList(result);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	protected List<Object> parse(String s, TestResults testResults) throws Exception {
 		StringTokenizer tokeniser = new StringTokenizer(s, ",");

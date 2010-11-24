@@ -54,7 +54,7 @@ public class PropertyEditorBasedParser implements Parser {
     	DomainObjectSetUpTraverse setUp = new DomainObjectSetUpTraverse(newInstance);
     	setUp.setRuntimeContext(evaluator.getRuntimeContext());
     	setUp.callStartCreatingObjectMethod(newInstance);
-		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator,testResults);
+		setUp.interpretInnerTableWithInScope(embeddedTable,evaluator.getRuntimeContext(),testResults);
     	setUp.callEndCreatingObjectMethod( newInstance);
 		return newInstance;
 	}
@@ -71,7 +71,7 @@ public class PropertyEditorBasedParser implements Parser {
 	}
 	private boolean matchesTable(Table table, Object result, TestResults testResults) {
 		DomainObjectCheckTraverse traverse = new DomainObjectCheckTraverse(result,typed);
-		return traverse.doesInnerTablePass(table,evaluator,testResults);
+		return traverse.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	@Override
 	public String show(Object object) {

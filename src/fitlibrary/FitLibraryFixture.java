@@ -76,7 +76,7 @@ public abstract class FitLibraryFixture extends Fixture implements Evaluator {
     	throw new RuntimeException("Please use FitLibraryServer instead of FitServer.");
     }
 	public boolean doEmbeddedTablePasses(Table table, Evaluator evaluator, TestResults testResults) {
-		return traverse().doesInnerTablePass(table,evaluator,testResults);
+		return traverse().doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
 	}
 	public TestResults createTestResults() {
 		return TestResultsFactory.testResults(counts);

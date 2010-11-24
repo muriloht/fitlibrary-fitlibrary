@@ -39,7 +39,7 @@ public class SetParser2 extends SetParser {
     		if (CollectionSetUpTraverse.hasObjectFactoryMethodFor(table,evaluator))
     			return super.parseTable(table,testResults);
     		ListSetUpTraverse2 setUp = new ListSetUpTraverse2(componentTyped.asClass());
-    		setUp.interpretWithinScope(table,evaluator,testResults);
+    		setUp.interpretWithinScope(table,evaluator.getRuntimeContext(),testResults);
     		return new HashSet<Object>(setUp.getResults());
     	case PARAMETERIZED_TYPE:
     		return parseNested(table, testResults);
@@ -49,7 +49,7 @@ public class SetParser2 extends SetParser {
     }
 	private Object parseNested(Table table, TestResults testResults) {
 		NestingListSetUpTraverse nestingSetUp = new NestingListSetUpTraverse(componentTyped);
-		nestingSetUp.interpretWithinScope(table,evaluator,testResults);
+		nestingSetUp.interpretWithinScope(table,evaluator.getRuntimeContext(),testResults);
 		return new HashSet<Object>(nestingSetUp.getResults());
 	}
     @SuppressWarnings({"unchecked", "fallthrough", "rawtypes"})
@@ -68,11 +68,11 @@ public class SetParser2 extends SetParser {
         		SetTraverse setChecking = new SetTraverse(null);
         		setChecking.setActualCollection((Set)result);
         		setChecking.setComponentType(componentTyped.asClass());
-        		return setChecking.doesInnerTablePass(table,evaluator,testResults);
+        		return setChecking.doesInnerTablePass(table,evaluator.getRuntimeContext(),testResults);
         	}
     	case PARAMETERIZED_TYPE:
     		NestingSetTraverse nestingSet = new NestingSetTraverse((Set)result,componentTyped);
-    		return nestingSet.doesTablePass(table,evaluator,testResults);
+    		return nestingSet.doesTablePass(table,evaluator.getRuntimeContext(),testResults);
     	default:
     		throw new RuntimeException("Type not sufficiently bound: "+componentTyped);
     	}
