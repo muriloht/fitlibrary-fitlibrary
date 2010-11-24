@@ -9,6 +9,7 @@
 	<property name="fitlibraryweb.dir" value="../fitlibraryweb" />
 
 	<!-- batch runner properties -->
+	<property name="showpassesinreport" value="false" />
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" />
 	<!-- 10 mins default timeout -->
@@ -79,7 +80,6 @@
 					<exclude name="**/TestFitLibraryRunner.java"/>
 					<include name="**/Test*.java"/>
 				</fileset>
-
 			</batchtest>
 		</junit>
 	</target>
@@ -118,11 +118,11 @@
 	</target>
 
 	<target name="batch-run-specifications">
-		<batch-run suite="FitLibrary.SpecifiCations" showpassesinreport="false" timeout="600000"/>
+		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000"/>
 	</target>
 
 	<target name="batch-run-specific">
-		<batch-run suite="FitLibrary.SpecifiCations.SpecialisedTables" showpassesinreport="false" timeout="600000"/>
+		<batch-run suite="FitLibrary.SpecifiCations.SpecialisedTables" timeout="600000"/>
 	</target>
 
 	<target name="delete-batch-runner-results-dir">
@@ -131,7 +131,6 @@
 
 	<macrodef name="batch-run">
 		<attribute name="suite"/>
-		<attribute name="showpassesinreport" default="true"/>
 		<attribute name="timeout" default="600000"/>
 		<!-- 10 mins default timeout -->
 		<sequential>
@@ -144,7 +143,7 @@
 				<arg value="-resultsDiry"/>
 				<arg value="${results-dir}"/>
 				<arg value="-showPasses"/>
-				<arg value="@{showpassesinreport}"/>
+				<arg value="${showpassesinreport}"/>
 
 				<classpath>
 					<fileset dir="${lib}">
