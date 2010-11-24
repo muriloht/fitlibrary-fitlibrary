@@ -22,6 +22,8 @@ import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.closure.LookupClosure;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.flow.IScope;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.special.DoAction;
 import fitlibrary.special.PositionedTarget;
 import fitlibrary.special.PositionedTargetFactory;
@@ -43,6 +45,7 @@ public class TestGenericTypedObjectFurther {
 	final PositionedTarget positionedTarget = context.mock(PositionedTarget.class);
 	final IScope scope = context.mock(IScope.class);
 	final GenericTypedObject typedObject = new GenericTypedObject(subject,lookupClosure,methodTargetFactory);
+	final RuntimeContextInternal runtime = new RuntimeContextContainer();
 
 	@Test
 	public void methodDoesNotExist() throws Exception {
@@ -79,7 +82,7 @@ public class TestGenericTypedObjectFurther {
 	@Test
 	public void doNotFindActionSpecialMethod() throws Exception {
 		String[] cells = {"unknown"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,positionedTargetFactory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,positionedTargetFactory,runtime);
 		assertThat(targets.isEmpty(),is(true));
 	}
 	@Test
@@ -98,7 +101,7 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"nullarySpecial","m"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory,runtime);
 		assertThat(targets.size(),is(1));
 	}
 	@Test
@@ -113,7 +116,7 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","nullarySpecial"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory,runtime);
 		assertThat(targets.size(),is(1));
 	}
 	@Test
@@ -128,7 +131,7 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","2","unaryPostSpecial", "1"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory,runtime);
 		assertThat(targets.size(),is(1));
 	}
 	@Test
@@ -143,7 +146,7 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"binary", "1", "pre special", "2", "m","a"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory,runtime);
 		assertThat(targets.size(),is(1));
 	}
 //	@Test
@@ -172,7 +175,7 @@ public class TestGenericTypedObjectFurther {
 			}
 		};
 		String[] cells = {"m","a", "binary", "1", "post special", "2"};
-		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory);
+		List<PositionedTarget> targets = typedObject.findActionSpecialMethods(cells,factory,runtime);
 		assertThat(targets.size(),is(1));
 	}
 //	@Test

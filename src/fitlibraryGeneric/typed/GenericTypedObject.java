@@ -148,14 +148,14 @@ public class GenericTypedObject implements TypedObject {
 		return getTyped().parser(evaluator).traverse(this);
 	}
 	@Override
-	public void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
+	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, RuntimeContextInternal runtime) {
 		List<String> words = Arrays.asList(textCall.split(" "));
 		Method[] methods = subject.getClass().getMethods();
 		for (Method method : methods) {
 			int argCount = method.getParameterTypes().length;
 			if (method.getDeclaringClass() != Object.class
 					&& !PlugBoard.lookupClosure.fitLibrarySystemMethod(method,argCount, subject)) {
-				ValidCall.parseAction(words, method.getName(), argCount,results);
+				ValidCall.parseAction(words, method.getName(), argCount,results,runtime);
 			}
 		}
 	}
@@ -178,11 +178,11 @@ public class GenericTypedObject implements TypedObject {
 	}
 	@Override
 	public ICalledMethodTarget new_optionallyFindGetterOnTypedObject(String propertyName, Evaluator evaluator) {
-		String getMethodName = ExtendedCamelCase.camel("get " + propertyName);
+		String getMethodName = evaluator.getRuntimeContext().extendedCamel("get " + propertyName);
 		Option<ICalledMethodTarget> target = new_findSpecificMethod(getMethodName, 0, evaluator);
 		if (target.isSome())
 			return target.get();
-		String isMethodName = ExtendedCamelCase.camel("is " + propertyName);
+		String isMethodName = evaluator.getRuntimeContext().extendedCamel("is " + propertyName);
 		target = new_findSpecificMethod(isMethodName, 0, evaluator);
 		if (target.isSome())
 			return target.get();
@@ -240,7 +240,7 @@ public class GenericTypedObject implements TypedObject {
 			getTypedSystemUnderTest().injectRuntime(runtime);
 	}
 	@Override
-	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory) {
+	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory, RuntimeContextInternal runtime) {
 //		logger.debug("Trying to find "+ExtendedCamelCase.camel(cells[0]));
 		ArrayList<PositionedTarget> list = new ArrayList<PositionedTarget>();
 		int cellCount = cells.length;
@@ -250,11 +250,11 @@ public class GenericTypedObject implements TypedObject {
 			int paramCount = parameterTypes.length;
 			if (paramCount > 0 && cellCount > paramCount)
 				if (isNullary(parameterTypes, paramCount)) {
-					nullary(cells, factory, list, method);
+					nullary(cells, factory, list, method,runtime);
 				} else if (isPostfix(parameterTypes, paramCount)) {
 					postFix(cells, factory, list, method, paramCount);
 				} else if (isPrefix(parameterTypes, paramCount)) {
-					prefix(cells, factory, list, method, paramCount);
+					prefix(cells, factory, list, method, paramCount,runtime);
 				}
 		}
 		return list;
@@ -263,8 +263,8 @@ public class GenericTypedObject implements TypedObject {
 		return paramCount > 1 && parameterTypes[paramCount-1] == DoAction.class;
 	}
 	private void prefix(String[] cells, PositionedTargetFactory factory,
-			List<PositionedTarget> list, Method method, int paramCount) {
-		String prefixName = prefixName(cells, paramCount);
+			List<PositionedTarget> list, Method method, int paramCount, RuntimeContextInternal runtime) {
+		String prefixName = prefixName(cells, paramCount,runtime);
 		if (prefixName.equals(method.getName())) {
 //			logger.debug("Found "+method);
 			list.add(factory.create(method,paramCount*2-2,cells.length));
@@ -274,11 +274,11 @@ public class GenericTypedObject implements TypedObject {
 		//					if (prefixName.equals(method.getName()))
 		//						return factory.create(method,paramCount*2-1,cellCount);
 	}
-	private String prefixName(String[] cells, int paramCount) {
+	private String prefixName(String[] cells, int paramCount, RuntimeContextInternal runtime) {
 		String prefixName = cells[0];
 		for (int i = 1; i < paramCount-1; i++)
 			prefixName += " "+cells[i*2];
-		return ExtendedCamelCase.camel(prefixName);
+		return runtime.extendedCamel(prefixName);
 	}
 	private boolean isPostfix(Class<?>[] parameterTypes, int paramCount) {
 		return paramCount > 1 && parameterTypes[0] == DoAction.class;
@@ -310,10 +310,10 @@ public class GenericTypedObject implements TypedObject {
 		return paramCount == 1 && parameterTypes[0] == DoAction.class;
 	}
 	private void nullary(String[] cells, PositionedTargetFactory factory,
-			List<PositionedTarget> list, Method method) {
+			List<PositionedTarget> list, Method method, RuntimeContextInternal runtime) {
 //		logger.debug("Trying against "+method);
 		int cellCount = cells.length;
-		if (ExtendedCamelCase.camel(cells[0]).equals(method.getName())) {
+		if (runtime.extendedCamel(cells[0]).equals(method.getName())) {
 //			logger.debug("Found "+method);
 			list.add(factory.create(method,1,cellCount));
 		} else if (cells[cellCount-1].equals(method.getName())) {

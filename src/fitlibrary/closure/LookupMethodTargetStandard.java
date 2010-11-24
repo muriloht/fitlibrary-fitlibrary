@@ -18,6 +18,7 @@ import fitlibrary.flow.IScope;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.special.PositionedTarget;
 import fitlibrary.special.PositionedTargetFactory;
 import fitlibrary.special.PositionedTargetWasFound;
@@ -193,10 +194,10 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 		return findFixturingMethod(evaluator,"newInstancePlugin", new Class[] {Class.class});
 	}
 	@Override
-	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope) {
+	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, RuntimeContextInternal runtime) {
 		int size = results.size();
-		for (TypedObject typedObject : scope.objectsForLookup()) {
-			typedObject.findMethodsFromPlainText(textCall, results);
+		for (TypedObject typedObject : runtime.getScope().objectsForLookup()) {
+			typedObject.findMethodsFromPlainText(textCall, results, runtime);
 			if (results.size() > size)
 				return;
 		}
@@ -209,7 +210,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 				public PositionedTarget create(Method method, int from, int upTo) {
 					return new PositionedTargetWasFound(evaluator,cells,typedObject,method,from,upTo,sequencing,PlugBoard.lookupTarget);
 				}
-			});
+			},evaluator.getRuntimeContext());
 			if (!positioned.isEmpty())
 				return positioned;
 		}

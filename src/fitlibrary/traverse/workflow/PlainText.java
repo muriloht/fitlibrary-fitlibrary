@@ -68,7 +68,7 @@ public class PlainText {
 		
 	}
 	private void findMethodsFromPlainText(String textCall, List<ValidCall> results) {
-		PlugBoard.lookupTarget.findMethodsFromPlainText(textCall,results,doTraverse.getRuntimeContext().getScope());
+		PlugBoard.lookupTarget.findMethodsFromPlainText(textCall,results,doTraverse.getRuntimeContext());
 	}
 	private void error(String message) {
 		row.at(0).error(testResults, message);

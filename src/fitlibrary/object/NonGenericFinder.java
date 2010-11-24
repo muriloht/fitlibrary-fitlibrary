@@ -11,7 +11,6 @@ import fitlibrary.global.PlugBoard;
 import fitlibrary.ref.EntityReference;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
-import fitlibrary.utility.ExtendedCamelCase;
 
 public class NonGenericFinder implements Finder {
 	public static final String FIND = "find";
@@ -28,8 +27,8 @@ public class NonGenericFinder implements Finder {
 		final Class<?>[] intArg = { int.class };
 		final Class<?>[] stringArg = { String.class };
 		final Class<?>[] showArg = { typed.asClass() };
-		final String findName = ExtendedCamelCase.camel(FIND+" "+shortClassName);
-		final String showMethodName = ExtendedCamelCase.camel(SHOW+" "+shortClassName);
+		final String findName = evaluator.getRuntimeContext().extendedCamel(FIND+" "+shortClassName);
+		final String showMethodName = evaluator.getRuntimeContext().extendedCamel(SHOW+" "+shortClassName);
 		List<Class<?>> potentialClasses = PlugBoard.lookupTarget.possibleClasses(evaluator.getScope());
 		
 		findExceptionMessage = "Either "+shortClassName+

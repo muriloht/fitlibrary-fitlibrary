@@ -35,7 +35,7 @@ public interface TypedObject {
 	public TypedObject asReturnTypedObject(Object object, Field field);
 	public Evaluator traverse(Evaluator evaluator);
 	public Typed getTyped();
-	public void findMethodsFromPlainText(String textCall, List<ValidCall> results);
+	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, RuntimeContextInternal runtime);
 	
 	Option<ICalledMethodTarget> new_findSpecificMethod(String methodName,
 			int argCount, Evaluator evaluator);
@@ -43,5 +43,5 @@ public interface TypedObject {
 	boolean hasTypedSystemUnderTest();
 	TypedObject getTypedSystemUnderTest();
 	void injectRuntime(RuntimeContextInternal runtime);
-	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory);
+	public List<PositionedTarget> findActionSpecialMethods(String[] cells, PositionedTargetFactory factory, RuntimeContextInternal runtime);
 }

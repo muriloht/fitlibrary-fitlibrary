@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import fitlibrary.flow.IScope;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.special.PositionedTarget;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
@@ -32,7 +33,7 @@ public interface LookupMethodTarget extends MustBeThreadSafe {
 	Class<?> findClassFromFactoryMethod(Evaluator evaluator, Class<?> type, String typeName) throws IllegalAccessException,
 			InvocationTargetException;
 	Closure findNewInstancePluginMethod(Evaluator evaluator);
-	void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope);
+	void findMethodsFromPlainText(String textCall, List<ValidCall> results, RuntimeContextInternal runtime);
 	List<PositionedTarget> findActionSpecialMethod(Evaluator evaluator, String[] cells, boolean sequencing);
 	ICalledMethodTarget findMethodByArity(Row row, int from, int upTo, boolean doStyle, Evaluator evaluator) throws Exception;
 }

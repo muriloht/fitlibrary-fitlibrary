@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
+import fitlibrary.runtime.RuntimeContextContainer;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 
 public class TestPlainTextForTableForAction extends TestCase {
@@ -143,7 +144,7 @@ public class TestPlainTextForTableForAction extends TestCase {
 	}
 	private List<String> parse(String in, String method, int argCount) {
 		List<ValidCall> results = new ArrayList<ValidCall>();
-		ValidCall.parseAction(Arrays.asList(in.split(" ")), method, argCount,results);
+		ValidCall.parseAction(Arrays.asList(in.split(" ")), method, argCount,results,new RuntimeContextContainer());
 		if (results.isEmpty())
 			return null;
 		return results.get(0).getList();

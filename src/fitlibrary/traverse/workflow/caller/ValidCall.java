@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fitlibrary.flow.GlobalActionScope;
-import fitlibrary.utility.ExtendedCamelCase;
+import fitlibrary.runtime.RuntimeContextInternal;
 
 public class ValidCall {
 	private List<String> tableCall;
@@ -53,7 +53,7 @@ public class ValidCall {
 			return;
 		results.add(new ValidCall(tableCall));
 	}
-	public static void parseAction(List<String> call, String methodNameOriginal, int argCount, List<ValidCall> results) {
+	public static void parseAction(List<String> call, String methodNameOriginal, int argCount, List<ValidCall> results, RuntimeContextInternal runtime) {
 		String methodName = methodNameOriginal;
 		List<String> tableCall = new ArrayList<String>();
 		int tableArgs = 0;
@@ -61,7 +61,7 @@ public class ValidCall {
 		String arg = "";
 		boolean keyWording = true;
 		for (String word : call) {
-			String normalisedWord = normaliseWord(word);
+			String normalisedWord = normaliseWord(word,runtime);
 			if (methodName.startsWith(normalisedWord)) {
 				if (!keyWording) {
 					tableCall.add(arg.trim());
@@ -105,10 +105,10 @@ public class ValidCall {
 			return "";
 		return "<i>"+keyWord.trim()+"</i>";
 	}
-	private static String normaliseWord(String wordOriginal) {
+	private static String normaliseWord(String wordOriginal, RuntimeContextInternal runtime) {
 		if ("".equals(wordOriginal))
 			return "blank";
-		String word = ExtendedCamelCase.camel("t"+wordOriginal);
+		String word = runtime.extendedCamel("t"+wordOriginal);
 		return word.substring(1,2).toLowerCase()+word.substring(2);
 	}
 	private static String remainingMethodName(String methodName, int wordLength) {
