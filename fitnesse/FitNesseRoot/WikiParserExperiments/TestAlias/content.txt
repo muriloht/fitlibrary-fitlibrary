@@ -1,4 +1,4 @@
-!2 Correct
+!2 Correct: assumes the url is correct without checking it
 asdasd [[aasd][adad]] fasfasdf
 
 !2 Space in "] ]" wrecks it
