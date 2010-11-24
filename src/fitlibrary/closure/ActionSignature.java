@@ -9,7 +9,6 @@ import java.util.List;
 
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
-import fitlibrary.traverse.Evaluator;
 
 public class ActionSignature {
 	public final String name;
@@ -36,13 +35,13 @@ public class ActionSignature {
 	}
 	
 	public static ActionSignature create(Row row, int from, int upTo,
-			boolean doStyle, Evaluator evaluator) {
+			boolean doStyle, RuntimeContextInternal runtime) {
 		if (!doStyle)
-			return new ActionSignature(row.text(from, evaluator), upTo-from-1,evaluator.getRuntimeContext());
-		StringBuilder name = new StringBuilder(row.text(from, evaluator));
+			return new ActionSignature(row.text(from, runtime), upTo-from-1,runtime);
+		StringBuilder name = new StringBuilder(row.text(from, runtime));
 		for (int i = from + 2; i < upTo; i += 2)
-			name.append(" ").append(row.text(i, evaluator));
-		return new ActionSignature(name.toString(), (upTo - from) / 2,evaluator.getRuntimeContext());
+			name.append(" ").append(row.text(i, runtime));
+		return new ActionSignature(name.toString(), (upTo - from) / 2,runtime);
 	}
 	public static ActionSignature doStyle(RuntimeContextInternal runtime, List<String> cells) {
 		return doStyle(runtime,cells.toArray(new String[0]));

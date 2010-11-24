@@ -71,7 +71,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	@Override
 	public ICalledMethodTarget findMethodByArity(Row row, int from, int upTo,
 			boolean doStyle, Evaluator evaluator) throws Exception {
-		ActionSignature actionSignature = ActionSignature.create(row, from, upTo, doStyle, evaluator);
+		ActionSignature actionSignature = ActionSignature.create(row, from, upTo, doStyle, evaluator.getRuntimeContext());
 		ICalledMethodTarget target = findTheMethodMapped(actionSignature.name,actionSignature.arity,evaluator);
 		target.setEverySecond(doStyle);
 		return target;

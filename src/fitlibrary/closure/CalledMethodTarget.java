@@ -20,6 +20,7 @@ import fitlibrary.parser.Parser;
 import fitlibrary.parser.lookup.GetterParser;
 import fitlibrary.parser.lookup.ResultParser;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
@@ -38,16 +39,19 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	private String repeatString = null;
     private String exceptionString = null;
 	private boolean everySecond = false;
+	final private RuntimeContextInternal runtime;
 
     public CalledMethodTarget(Closure closure, Evaluator evaluator) {
 		this.closure = closure;
 		this.evaluator = evaluator;
+		this.runtime = evaluator.getRuntimeContext();
 		args = new Object[getParameterTypes().length];
 		parameterParsers = closure.parameterParsers(evaluator);
 		resultParser = closure.resultParser(evaluator);
    }
 	public CalledMethodTarget(Evaluator evaluator) {
 		this.evaluator = evaluator;
+		this.runtime = evaluator.getRuntimeContext();
 		parameterParsers = new Parser[0];
 		args = new Object[0];
 		this.closure = null;
@@ -77,7 +81,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 	}
     @Override
 	public Object invoke(Cell cell, TestResults testResults) throws Exception {
-    	collectCell(cell,0,cell.text(evaluator),testResults,true);
+    	collectCell(cell,0,cell.text(runtime),testResults,true);
     	return invoke(args);
     }
     @Override
@@ -134,7 +138,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
     private void collectCells(Row row, int step, TestResults testResults, boolean catchParseError) throws Exception {
 		for (int argNo = 0; argNo < args.length; argNo++) {
 			Cell cell = row.at(argNo*step);
-			collectCell(cell, argNo,cell.text(evaluator),testResults,catchParseError);
+			collectCell(cell, argNo,cell.text(runtime),testResults,catchParseError);
 		}
 	}
 	private void collectCell(Cell cell, int argNo, String text, TestResults testResults, boolean catchParseError) throws Exception {
@@ -169,13 +173,13 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         boolean exceptionExpected = exceptionIsExpected(expectedCell);
         try {
             Object result = invoke(row,testResults,true);
-			DynamicVariablesRecording recorder = evaluator.getRuntimeContext().getDynamicVariableRecorder();
-			if (recorder.isRecording() && expectedCell.unresolved(evaluator)) {
+			DynamicVariablesRecording recorder = runtime.getDynamicVariableRecorder();
+			if (recorder.isRecording() && expectedCell.unresolved(runtime)) {
             	String text = expectedCell.text();
             	String key = text.substring(2,text.length()-1);
             	String resultString = result.toString();
 				if (!resultString.contains("@{"+key+"}")) { // Don't record a self-reference.
-            		evaluator.setDynamicVariable(key, resultString);
+					runtime.setDynamicVariable(key, resultString);
             		recorder.record(key,resultString);
             	}
             	expectedCell.pass(testResults,resultString);
@@ -199,7 +203,7 @@ public class CalledMethodTarget implements ICalledMethodTarget {
         }
     }
 	private boolean exceptionIsExpected(Cell expectedCell) {
-		return exceptionString != null && exceptionString.equals(expectedCell.text(evaluator));
+		return exceptionString != null && exceptionString.equals(expectedCell.text(runtime));
 	}
 	@Override
 	public String getResult() throws Exception {
@@ -243,14 +247,14 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				return false;
 			}
 			if (valueParser.matches(expectedCell,result,testResults)) {
-				expectedCell.passIfNotEmbedded(testResults,evaluator);
+				expectedCell.passIfNotEmbedded(testResults,runtime);
 				return true;
 			}
-			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables(evaluator))) {
+			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables(runtime))) {
 				if (result instanceof String)
-					expectedCell.failWithStringEquals(testResults,valueParser.show(result),evaluator);
+					expectedCell.failWithStringEquals(testResults,valueParser.show(result),runtime);
 				else
-					expectedCell.fail(testResults,valueParser.show(result),evaluator);
+					expectedCell.fail(testResults,valueParser.show(result),runtime);
 			}
 			return false;
 		} catch (Exception e) {
@@ -282,8 +286,8 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 			if (resultParser == null)
 				throw new NoValueProvidedException();
 			else if (!resultParser.matches(expectedCell,result,testResults))
-				expectedCell.passIfNotEmbedded(testResults,evaluator);
-			else if (!expectedCell.hasEmbeddedTables(evaluator)) {
+				expectedCell.passIfNotEmbedded(testResults,runtime);
+			else if (!expectedCell.hasEmbeddedTables(runtime)) {
 				expectedCell.fail(testResults);
 			}
 		} catch (Exception e) {
@@ -359,10 +363,10 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		if (!(obj instanceof CalledMethodTarget))
 			return false;
 		CalledMethodTarget other = (CalledMethodTarget) obj;
-		return closure == other.closure && evaluator == other.evaluator;
+		return closure == other.closure && runtime == other.runtime;
 	}
 	@Override
 	public int hashCode() {
-		return evaluator.hashCode();
+		return runtime.hashCode();
 	}
 }
