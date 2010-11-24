@@ -97,11 +97,6 @@ public class ClassUtility {
 		componentType == Double.class ||
 		componentType == String.class;
 	}
-	public static String camelClassName(String className) {
-		if (className.indexOf(" ") < 0)
-			return className;
-		return ExtendedCamelCase.camel(className);
-	}
 	public static List<String> methodSignatures(String name, List<String> methodArgs, String returnType) {
 		List<String> signatures = new ArrayList<String>();
 		if (methodArgs.isEmpty())

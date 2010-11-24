@@ -66,12 +66,7 @@ public class ExtendedCamelCase {
 	        javaKeywordSet.add(javaKeyWords[i]);
 	}
 
-	public static String camelClass(String name) {
-		if (name.contains("."))
-			return name;
-		String result = camel(name);
-		return result.substring(0,1).toUpperCase()+result.substring(1);
-	}
+	@Deprecated
 	public static String camel(String s) {
 		return camel(s,false);
 	}
@@ -95,6 +90,11 @@ public class ExtendedCamelCase {
 			name = Character.toLowerCase(name.charAt(0))+name.substring(1);
 		return hideJavaKeyword(translateUnicode(camelise(name),keepUnicode));
 	}
+	public static String camelClassName(String className, boolean keepUnicode) {
+		if (className.indexOf(" ") < 0)
+			return className;
+		return camel("t "+className,keepUnicode).substring(1);
+	}
 	private static String camelise(String name) {
 		// assert !name.equals("")
 		StringTokenizer tokenizer = new StringTokenizer(name);
@@ -115,9 +115,16 @@ public class ExtendedCamelCase {
      */
     private static String translateUnicode(String name, boolean keepUnicode) {
         StringBuffer b = new StringBuffer(name.length());
-	    for (int i = 0; i < name.length(); i++) {
-	        char ch =  name.charAt(i); // This needs to be updated for jdk1.5 to codePointAt()
-			if (ch < 128 || (keepUnicode && Character.isJavaIdentifierPart(ch))) // valid without translation
+        if (!name.isEmpty()) {
+        	char ch =  name.charAt(0);
+			if (ch < 128 || (keepUnicode && Character.isJavaIdentifierStart(ch)))
+			    b.append(ch);
+			else
+			    b.append("u"+Integer.toHexString(ch).toUpperCase());
+        }
+	    for (int i = 1; i < name.length(); i++) {
+	        char ch =  name.charAt(i);
+			if (ch < 128 || (keepUnicode && Character.isJavaIdentifierPart(ch)))
 			    b.append(ch);
 			else
 			    b.append("u"+Integer.toHexString(ch).toUpperCase());

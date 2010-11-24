@@ -50,15 +50,26 @@ public class TestExtendedCamelCase extends TestCase {
         check("\uFFFF","uFFFF");
         check("\u0041b","ab");
     }
+    public void testUnicodeRetained() {
+        checkUni("Ελληνικό","ελληνικό");
+        checkUni("█Ελληνικό","u2588Ελληνικό");
+        checkClassUni("Ελληνικό","Ελληνικό");
+    }
     public void testCamelClass() {
         checkClass("do fixture","DoFixture");
         checkClass("do   Fixture","DoFixture");
         checkClass("fitlibrary.DoFixture","fitlibrary.DoFixture");
     }
     private void check(String in, String out) {
-        assertEquals(out,ExtendedCamelCase.camel(in));
+        assertEquals(out,ExtendedCamelCase.camel(in,false));
+    }
+    private void checkUni(String in, String out) {
+        assertEquals(out,ExtendedCamelCase.camel(in,true));
     }
     private void checkClass(String in, String out) {
-        assertEquals(out,ExtendedCamelCase.camelClass(in));
+        assertEquals(out,ExtendedCamelCase.camelClassName(in,false));
+    }
+    private void checkClassUni(String in, String out) {
+        assertEquals(out,ExtendedCamelCase.camelClassName(in,true));
     }
 }

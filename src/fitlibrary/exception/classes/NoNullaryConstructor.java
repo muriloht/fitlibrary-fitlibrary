@@ -7,13 +7,15 @@ package fitlibrary.exception.classes;
 import java.lang.reflect.Modifier;
 
 import fitlibrary.exception.FitLibraryException;
-import fitlibrary.utility.ClassUtility;
+import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.utility.ExtendedCamelCase;
 
 public class NoNullaryConstructor extends FitLibraryException {
 	private static final long serialVersionUID = 1L;
 
-	public NoNullaryConstructor(String className) {
-		super("Class has no default constructor: "+ClassUtility.camelClassName(className));
+	public NoNullaryConstructor(String className, RuntimeContextInternal runtime) {
+		super("Class has no default constructor: "+
+				ExtendedCamelCase.camelClassName(className,runtime.getConfiguration().keepingUniCode()));
 	}
 
 	public NoNullaryConstructor(Class<?> type) {

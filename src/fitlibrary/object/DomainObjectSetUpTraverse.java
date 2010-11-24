@@ -71,9 +71,9 @@ public class DomainObjectSetUpTraverse extends Traverse {
 			setSystemUnderTest(newInstance);
 			callStartCreatingObjectMethod(newInstance);
 		} catch (IllegalAccessException e) {
-			cell.error(testResults, new ConstructorNotVisible(sutClass.getName()));
+			cell.error(testResults, new ConstructorNotVisible(sutClass.getName(),getRuntimeContext()));
 		} catch (NoSuchMethodException e) {
-			cell.error(testResults, new NoNullaryConstructor(sutClass.getName()));
+			cell.error(testResults, new NoNullaryConstructor(sutClass.getName(),getRuntimeContext()));
 		} catch (Exception e) {
 			cell.error(testResults, e);
 		}

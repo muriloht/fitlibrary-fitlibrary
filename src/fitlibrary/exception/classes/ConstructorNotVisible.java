@@ -5,12 +5,14 @@
 package fitlibrary.exception.classes;
 
 import fitlibrary.exception.FitLibraryException;
-import fitlibrary.utility.ClassUtility;
+import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.utility.ExtendedCamelCase;
 
 public class ConstructorNotVisible extends FitLibraryException {
 	private static final long serialVersionUID = 1L;
 
-	public ConstructorNotVisible(String className) {
-		super("Constructor for class is not visible: "+ClassUtility.camelClassName(className));
+	public ConstructorNotVisible(String className, RuntimeContextInternal runtime) {
+		super("Constructor for class is not visible: "+
+				ExtendedCamelCase.camelClassName(className,runtime.getConfiguration().keepingUniCode()));
 	}
 }

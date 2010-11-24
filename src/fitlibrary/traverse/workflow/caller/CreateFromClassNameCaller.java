@@ -49,13 +49,13 @@ public class CreateFromClassNameCaller extends AbstractDoCaller {
 				if (row.size() > 1 && object instanceof Fixture)
 						handleArgs((Fixture)object,row);
 			} catch (NoSuchMethodException ex) {
-				exceptionToThrow = new NoNullaryConstructor(className);
+				exceptionToThrow = new NoNullaryConstructor(className,evaluator.getRuntimeContext());
 			} catch (NoClassDefFoundError ex) { // "The definition can no longer be found"
 				exceptionToThrow = new RuntimeException(ex);
 			} catch (InstantiationException ex) {
-				exceptionToThrow = new NoNullaryConstructor(className);
+				exceptionToThrow = new NoNullaryConstructor(className,evaluator.getRuntimeContext());
 			} catch (IllegalAccessException ex) {
-				exceptionToThrow = new ConstructorNotVisible(className);
+				exceptionToThrow = new ConstructorNotVisible(className,evaluator.getRuntimeContext());
 			} catch (InvocationTargetException ex) {
 				exceptionToThrow = ex;
 			} catch (Throwable e) {
