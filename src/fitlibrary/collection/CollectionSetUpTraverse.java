@@ -17,7 +17,6 @@ import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.DoTraverse;
-import fitlibrary.utility.ExtendedCamelCase;
 
 /**
  * Used to be called SetUpTraverse
@@ -78,7 +77,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
 	private static ICalledMethodTarget findMethodTarget(Row row, Evaluator evaluator, boolean embedded) {
 		List<String> arguments = new ArrayList<String>();
 		String argNames = buildArguments(row, arguments,evaluator);
-		String methodName = ExtendedCamelCase.camel(argNames);
+		String methodName = evaluator.getRuntimeContext().extendedCamel(argNames);
 		ICalledMethodTarget findMethod = PlugBoard.lookupTarget.findMethod(methodName, arguments, "Type", evaluator);
 		if (findMethod.returnsVoid() && embedded)
 			throw new VoidMethodException(methodName,"SetUpTraverse");
@@ -89,7 +88,7 @@ public class CollectionSetUpTraverse extends DoTraverse {
         for (int i = 0; i < row.size(); i++) {
             String name = row.text(i,evaluator);
             argNames += " " + name;
-            arguments.add(ExtendedCamelCase.camel(name));
+            arguments.add(evaluator.getRuntimeContext().extendedCamel(name));
         }
 		return argNames;
 	}

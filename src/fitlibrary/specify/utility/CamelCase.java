@@ -4,10 +4,21 @@
 */
 package fitlibrary.specify.utility;
 
-import fitlibrary.utility.ExtendedCamelCase;
+import fitlibrary.runtime.RuntimeContextInternal;
+import fitlibrary.traverse.RuntimeContextual;
 
-public class CamelCase {
+public class CamelCase implements RuntimeContextual {
+	private RuntimeContextInternal runtime;
+
 	public String identifierName(String name) {
-        return ExtendedCamelCase.camel(name);
+        return runtime.extendedCamel(name);
+	}
+	@Override
+	public Object getSystemUnderTest() {
+		return null;
+	}
+	@Override
+	public void setRuntimeContext(RuntimeContextInternal runtime) {
+		this.runtime = runtime;
 	}
 }

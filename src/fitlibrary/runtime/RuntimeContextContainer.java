@@ -12,6 +12,8 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import fitlibrary.config.Configuration;
+import fitlibrary.config.ConfigurationOfRuntime;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.dynamicVariable.DynamicVariablesRecordingThatFails;
@@ -28,11 +30,14 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
+import fitlibrary.table.Tables;
 import fitlibrary.tableProxy.CellProxy;
 import fitlibrary.tableProxy.RowProxy;
 import fitlibrary.traverse.TableEvaluator;
 import fitlibrary.traverse.workflow.caller.DefinedActionCallManager;
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ExtendedCamelCase;
+import fitlibrary.utility.Pair;
 
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static Logger logger = FitLibraryLogger.getLogger(RuntimeContextContainer.class);
@@ -54,6 +59,7 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	protected Table currentTable;
 	private String currentPageName = "";
 	private ConfigureLog4j configureLog4j;
+	private Configuration configuration = new ConfigurationOfRuntime();
 
 	public RuntimeContextContainer() {
 		this(null,new GlobalActionScope()); // For those cases where a fixture is being used independently of table execution
@@ -205,7 +211,11 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	@Override
 	public VariableResolver getResolver() {
-		return getDynamicVariables();
+		return this;
+	}
+	@Override
+	public Pair<String,Tables> resolve(String key) {
+		return getDynamicVariables().resolve(key);
 	}
 	@Override
 	public void setCurrentRow(Row row) {
@@ -306,5 +316,13 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	@Override
 	public void addNamedObject(String name, TypedObject typedObject) {
 		scope.addNamedObject(name,typedObject);
+	}
+	@Override
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+	@Override
+	public String extendedCamel(String s) {
+		return ExtendedCamelCase.camel(s,configuration.keepingUniCode());
 	}
 }

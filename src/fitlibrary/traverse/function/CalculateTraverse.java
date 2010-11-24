@@ -17,7 +17,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 
 /**
  * A traverse similar in function to ColumnFixture, except that:
@@ -105,7 +104,7 @@ public class CalculateTraverse extends FunctionTraverse {
                 else {
                     notesPermitted = true;
                     if (pastDoubleColumn) {
-                        String methodName = camelCase(name+argNames);
+                        String methodName = extendedCamel(name+argNames);
                         if (arguments.size() > argCount) // Blank separating column is not an arg
                             arguments.remove(arguments.size()-1);
                         ICalledMethodTarget target = PlugBoard.lookupTarget.findMethodOrGetter(methodName, arguments, "TypeOfResult", this);
@@ -116,7 +115,7 @@ public class CalculateTraverse extends FunctionTraverse {
                         methods++;
                         target.setRepeatAndExceptionString(repeatString,exceptionString);
                     } else {
-                        arguments.add(ExtendedCamelCase.camel(name));
+                        arguments.add(runtimeContext.extendedCamel(name));
                         argNames += " " + name;
                     }
                 }

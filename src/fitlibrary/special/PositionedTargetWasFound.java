@@ -18,7 +18,6 @@ import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PositionedTargetWasFound implements PositionedTarget {
@@ -39,21 +38,21 @@ public class PositionedTargetWasFound implements PositionedTarget {
 		specialName = method.getName();
 		specialTarget = new CalledMethodTarget(new MethodClosure(typedObject,method),evaluator);
 		int argCount = 0;
-		argCount = determineInnerSignature(cells);
+		argCount = determineInnerSignature(cells,evaluator.getRuntimeContext());
 		try {
 			innerTarget = lookupTarget.findTheMethodMapped(innerName,argCount,evaluator);
 		} catch (Exception e) {
 			innerTargetMissingMessage = e.getMessage();
 		}
 	}
-	private int determineInnerSignature(String[] cells) {
+	private int determineInnerSignature(String[] cells, RuntimeContextInternal runtime) {
 		if (sequencing) {
 			innerName = cells[innerFrom];
 			return innerUpTo-innerFrom-1;
 		}
 		for (int i = innerFrom; i < innerUpTo; i += 2)
 			innerName += " "+cells[i];
-		innerName = ExtendedCamelCase.camel(innerName);
+		innerName = runtime.extendedCamel(innerName);
 		return (innerUpTo - innerFrom) / 2;
 	}
 	@Override

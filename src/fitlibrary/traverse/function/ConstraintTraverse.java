@@ -45,7 +45,7 @@ public class ConstraintTraverse extends FunctionTraverse {
 		try {
 			target = PlugBoard.lookupTarget.findTheMethodMapped(argNames, argCount, this);
 			if (!target.returnsBoolean())
-				throw new BooleanMethodException(camelCase(argNames));
+				throw new BooleanMethodException(extendedCamel(argNames));
 			target.setRepeatAndExceptionString(repeatString,exceptionString);
 			methodOK = true;
 		} catch (IgnoredException e) {

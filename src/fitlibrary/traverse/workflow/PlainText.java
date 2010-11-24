@@ -12,7 +12,6 @@ import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.caller.ValidCall;
-import fitlibrary.utility.ExtendedCamelCase;
 
 // This us not being used now.
 // But keep it in case we reintroduce plain text for fixture methods too.
@@ -76,7 +75,7 @@ public class PlainText {
 	}
 	private void findProperty(String prefix, String textCall, List<ValidCall> results) {
 		int count = results.size();
-		findMethodsFromPlainText(ExtendedCamelCase.camel(prefix+" "+textCall),results);
+		findMethodsFromPlainText(doTraverse.extendedCamel(prefix+" "+textCall),results);
 		if (results.size() > count)
 			results.get(results.size()-1).setCall(textCall);
 	}

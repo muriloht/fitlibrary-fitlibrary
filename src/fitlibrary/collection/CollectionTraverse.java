@@ -131,7 +131,7 @@ public abstract class CollectionTraverse extends Traverse {
 		}
         for (int i = 0; i < usedFields.length; i++)
             if (!usedFields[i]) {
-                String propertyName = camelCase(row.at(i).text(this));
+                String propertyName = extendedCamel(row.at(i).text(this));
                 String classNames = ClassUtility.allElementClassNames(actuals);
 				row.at(i).error(testResults,new NoSuchPropertyException(
                 		propertyName,classNames));
@@ -148,7 +148,7 @@ public abstract class CollectionTraverse extends Traverse {
                 columnBindings[i] = new ClassMethodTarget(componentType,this,typedObject);
                 usedFields[i] = true;
             } else {
-                String fieldName = cell.camelledText(this);
+                String fieldName = extendedCamel(cell.text(this));
                 try {
 					columnBindings[i] = bindPropertyGetterForTypedObject(fieldName, typedObject);
                     if (columnBindings[i] != null)
@@ -161,7 +161,7 @@ public abstract class CollectionTraverse extends Traverse {
         return columnBindings;
 	}
 	protected ICalledMethodTarget bindPropertyGetterForTypedObject(String name, TypedObject typedObject) {
-		String mappedName = camelCase(name);
+		String mappedName = extendedCamel(name);
     	if (typedObject.getSubject() instanceof Map) {
     		Object value = ((Map<?,?>)typedObject.getSubject()).get(mappedName);
     		if (value == null)

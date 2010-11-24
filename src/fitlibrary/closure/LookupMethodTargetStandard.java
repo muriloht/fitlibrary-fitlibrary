@@ -27,7 +27,6 @@ import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.option.Option;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
@@ -42,9 +41,9 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class, TestResults.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,evaluator.getRuntimeContext().extendedCamel(name),new Class[]{ Row.class, TestResults.class });
 		if (findEntityMethod == null)
-			findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ Row.class });
+			findEntityMethod = findFixturingMethod(evaluator,evaluator.getRuntimeContext().extendedCamel(name),new Class[]{ Row.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
@@ -53,7 +52,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	public CalledMethodTarget findPostfixSpecialMethod(Evaluator evaluator, String name) {
 		if (name.equals(""))
 			return null;
-		Closure findEntityMethod = findFixturingMethod(evaluator,camel(name),new Class[]{ TestResults.class, Row.class });
+		Closure findEntityMethod = findFixturingMethod(evaluator,evaluator.getRuntimeContext().extendedCamel(name),new Class[]{ TestResults.class, Row.class });
 		if (findEntityMethod == null)
 			return null;
 		return new CalledMethodTarget(findEntityMethod,evaluator);
@@ -78,7 +77,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	}
 	@Override
 	public ICalledMethodTarget findTheMethodMapped(String name, int argCount, Evaluator evaluator) throws Exception {
-		return findMethodOrGetter(camel(name), unknownParameterNames(argCount),"Type",evaluator);
+		return findMethodOrGetter(evaluator.getRuntimeContext().extendedCamel(name), unknownParameterNames(argCount),"Type",evaluator);
 	}
 	private static List<String> unknownParameterNames(int argCount) {
 		List<String> methodArgs = new ArrayList<String>();
@@ -96,11 +95,11 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			if (target.isSome())
 				return target.get();
 			if (argCount == 0) {
-				String getMethodName = ExtendedCamelCase.camel("get " + name);
+				String getMethodName = evaluator.getRuntimeContext().extendedCamel("get " + name);
 				target = typedObject.new_findSpecificMethod(getMethodName, argCount, evaluator);
 				if (target.isSome())
 					return target.get();
-				String isMethodName = ExtendedCamelCase.camel("is " + name);
+				String isMethodName = evaluator.getRuntimeContext().extendedCamel("is " + name);
 				target = typedObject.new_findSpecificMethod(isMethodName, argCount, evaluator);
 				if (target.isSome())
 					return target.get();
@@ -123,11 +122,11 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	}
 	@Override
 	public ICalledMethodTarget findSetterOnSut(String propertyName, Evaluator evaluator) {
-		return findMethodOnSut(camel("set "+propertyName), 1, evaluator,"ArgType "+camel(propertyName),"void");
+		return findMethodOnSut(evaluator.getRuntimeContext().extendedCamel(("set "+propertyName)), 1, evaluator,"ArgType "+evaluator.getRuntimeContext().extendedCamel(propertyName),"void");
 	}
 	@Override
 	public ICalledMethodTarget findGetterOnSut(String propertyName, Evaluator evaluator, String returnType) {
-		return findMethodOnSut(camel("get "+propertyName),0, evaluator,"",returnType);
+		return findMethodOnSut(evaluator.getRuntimeContext().extendedCamel(("get "+propertyName)),0, evaluator,"",returnType);
 	}
 	private ICalledMethodTarget findMethodOnSut(String methodName, int argCount, Evaluator evaluator, String arg, String returnType) {
 		TypedObject typedObject = evaluator.getTypedSystemUnderTest();
@@ -161,7 +160,7 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 			possibleClasses = evaluator.getScope().possibleClasses();
 		else
 			possibleClasses.add(typedObject.classType());
-		throw new MissingMethodException(signatures("public ResultType "+ camel("get "+propertyName)+"() { }"),possibleClasses);
+		throw new MissingMethodException(signatures("public ResultType "+ evaluator.getRuntimeContext().extendedCamel(("get "+propertyName))+"() { }"),possibleClasses);
 	}
 	private List<String> signatures(String... signature) {
 		return Arrays.asList(signature);
@@ -192,9 +191,6 @@ public class LookupMethodTargetStandard implements LookupMethodTarget {
 	@Override
 	public Closure findNewInstancePluginMethod(Evaluator evaluator) {
 		return findFixturingMethod(evaluator,"newInstancePlugin", new Class[] {Class.class});
-	}
-	private static String camel(String name) {
-		return ExtendedCamelCase.camel(name);
 	}
 	@Override
 	public void findMethodsFromPlainText(String textCall, List<ValidCall> results, IScope scope) {

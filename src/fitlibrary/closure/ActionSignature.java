@@ -7,16 +7,16 @@ package fitlibrary.closure;
 
 import java.util.List;
 
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
-import fitlibrary.utility.ExtendedCamelCase;
 
 public class ActionSignature {
 	public final String name;
 	public final int arity;
 	
-	public ActionSignature(String name, int arity) {
-		this.name = ExtendedCamelCase.camel(name);
+	public ActionSignature(String name, int arity, RuntimeContextInternal runtimeContext) {
+		this.name = runtimeContext.extendedCamel(name);
 		this.arity = arity;
 	}
 	@Override
@@ -38,25 +38,25 @@ public class ActionSignature {
 	public static ActionSignature create(Row row, int from, int upTo,
 			boolean doStyle, Evaluator evaluator) {
 		if (!doStyle)
-			return new ActionSignature(ExtendedCamelCase.camel(row.text(from, evaluator)), upTo-from-1);
+			return new ActionSignature(row.text(from, evaluator), upTo-from-1,evaluator.getRuntimeContext());
 		StringBuilder name = new StringBuilder(row.text(from, evaluator));
 		for (int i = from + 2; i < upTo; i += 2)
 			name.append(" ").append(row.text(i, evaluator));
-		return new ActionSignature(ExtendedCamelCase.camel(name.toString()), (upTo - from) / 2);
+		return new ActionSignature(name.toString(), (upTo - from) / 2,evaluator.getRuntimeContext());
 	}
-	public static ActionSignature doStyle(List<String> cells) {
-		return doStyle(cells.toArray(new String[0]));
+	public static ActionSignature doStyle(RuntimeContextInternal runtime, List<String> cells) {
+		return doStyle(runtime,cells.toArray(new String[0]));
 	}
-	public static ActionSignature doStyle(String... cells) {
+	public static ActionSignature doStyle(RuntimeContextInternal runtime, String... cells) {
 		String name = cells[0];
 		for (int i = 2; i < cells.length; i += 2)
 			name += " "+cells[i];
-		return new ActionSignature(ExtendedCamelCase.camel(name), cells.length/2);
+		return new ActionSignature(name, cells.length/2,runtime);
 	}
-	public static ActionSignature seqStyle(List<String> cells) {
-		return seqStyle(cells.toArray(new String[0]));
+	public static ActionSignature seqStyle(RuntimeContextInternal runtime, List<String> cells) {
+		return seqStyle(runtime,cells.toArray(new String[0]));
 	}
-	public static ActionSignature seqStyle(String... cells) {
-		return new ActionSignature(cells[0], cells.length-1);
+	public static ActionSignature seqStyle(RuntimeContextInternal runtime, String... cells) {
+		return new ActionSignature(cells[0], cells.length-1,runtime);
 	}
 }

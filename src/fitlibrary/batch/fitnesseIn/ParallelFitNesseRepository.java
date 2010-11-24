@@ -18,7 +18,7 @@ import fitnesse.WikiPageFactory;
 import fitnesse.authentication.PromiscuousAuthenticator;
 import fitnesse.html.HtmlPage;
 import fitnesse.html.HtmlPageFactory;
-import fitnesse.html.SetupTeardownIncluder;
+import fitnesse.html.SetupTeardownAndLibraryIncluder;
 import fitnesse.responders.ResponderFactory;
 import fitnesse.responders.WikiImportTestEventListener;
 import fitnesse.wiki.PageCrawler;
@@ -121,8 +121,8 @@ public class ParallelFitNesseRepository implements ParallelTestRepository {
 		return test == TEST_SENTINEL;
 	}
 	public static String formatWikiPage(String name, WikiPage page, WikiPage suiteSetUp, WikiPage suiteTearDown, FitNesseContext context) throws Exception{
-		PageData pd=page.getData();
-		SetupTeardownIncluder.includeInto(pd);
+		PageData pd = page.getData();
+		SetupTeardownAndLibraryIncluder.includeInto(pd);
 		HtmlPage html = context.htmlPageFactory.newPage();
 		html.title.use(name);
 		html.header.use(name);

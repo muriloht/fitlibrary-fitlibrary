@@ -7,6 +7,7 @@ package fitlibrary.specify.workflow;
 
 public class TextPassed {
 	public boolean isSeveralLines(String s) {
+		System.out.println("'"+s+"'");
 		return s.equals("abc\ndef");
 	}
 	public boolean isSeveralLinesWithNewlines(String s) {

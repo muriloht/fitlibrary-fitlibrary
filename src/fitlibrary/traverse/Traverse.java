@@ -28,7 +28,6 @@ import fitlibrary.table.Tables;
 import fitlibrary.typed.NonGenericTyped;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.Pair;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
@@ -118,8 +117,8 @@ public abstract class Traverse implements Evaluator, ShowAfter {
 	public static void setContext(File reportDiry) {
         FITNESSE_DIFFERENCES.setContext(reportDiry);
     }
-	protected String camelCase(String suppliedName) {
-		return ExtendedCamelCase.camel(suppliedName);
+	public String extendedCamel(String suppliedName) {
+		return runtimeContext.extendedCamel(suppliedName);
 	}
 	public void interpretWithinScope(Table table, Evaluator evaluator, TestResults testResults) {
 		setRuntimeContext(evaluator.getRuntimeContext());

@@ -18,7 +18,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.Pair;
 import fitlibrary.utility.ParseUtility;
@@ -68,12 +67,8 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		return text().startsWith("@{") && text().indexOf("}") == text().length()-1 &&
 				text().equals(text(resolver));
 	}
-	@Override
-	public String camelledText(VariableResolver resolver) {
-		return ExtendedCamelCase.camel(text(resolver));
-	}
    @Override
-public String textLower(VariableResolver resolver) {
+   public String textLower(VariableResolver resolver) {
         return text(resolver).toLowerCase();
     }
     @Override

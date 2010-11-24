@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import fit.Fixture;
 import fitlibrary.DefineAction;
+import fitlibrary.config.Configuration;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
 import fitlibrary.domainAdapter.FileHandler;
@@ -271,6 +272,10 @@ public class GlobalActionScope implements RuntimeContextual {
 	//--- SELECT
 	public void select(String name) {
 		runtime.getTableEvaluator().select(name);
+	}
+	//--- CONFIG
+	public Configuration configureFitlibrary() {
+		return runtime.getConfiguration();
 	}
 	
 	//-------------------------------------- SPECIALS -----------------------------------------

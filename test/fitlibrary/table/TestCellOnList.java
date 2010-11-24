@@ -94,12 +94,6 @@ public class TestCellOnList {
 		}});
 		assertThat(cellA.matchesTextInLowerCase("AC",resolver),is(false));
 	}
-	@Test public void camelledText() {
-		context.checking(new Expectations() {{
-			allowing(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));
-		}});
-		assertThat(cellA.camelledText(resolver),is("abC"));
-	}
 	@Test public void hasNoEmbeddedTables() {
 		context.checking(new Expectations() {{
 			oneOf(resolver).resolve("AbC"); will(returnValue(new StringTablesPair("AbC")));

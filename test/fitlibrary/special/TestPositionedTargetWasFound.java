@@ -5,7 +5,8 @@
 
 package fitlibrary.special;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.lang.reflect.Method;
@@ -66,8 +67,24 @@ public class TestPositionedTargetWasFound {
 	@Test
 	public void binaryPrefixInnerTargetNotFound() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find String");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" m");
+			will(returnValue("m"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("m", 1, evaluator);
-			  will(returnValue(null));
+			will(returnValue(null));
 		}});
 		String[] cells = {"binary", "1", "preSpecial", "2", "m","a"};
 		Method method = getMethod("binaryPreSpecial", String.class, String.class, DoAction.class);
@@ -78,6 +95,22 @@ public class TestPositionedTargetWasFound {
 	@Test
 	public void binaryPrefixInnerRunsReturningTrue() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find String");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" m");
+			will(returnValue("m"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
 			  will(returnValue(innerMethodTarget));
 			allowing(evaluator).resolve("1"); will(resolveTo("1"));
@@ -98,6 +131,22 @@ public class TestPositionedTargetWasFound {
 	@Test
 	public void binaryPostfixInnerTargetNotFound() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find String");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" m");
+			will(returnValue("m"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("m", 1, evaluator);
 			  will(returnValue(null));
 		}});
@@ -110,6 +159,22 @@ public class TestPositionedTargetWasFound {
 	@Test
 	public void binaryPostfixInnerRunsReturningFalse() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find String");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" m");
+			will(returnValue("m"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
 			  will(returnValue(innerMethodTarget));
 			allowing(evaluator).resolve("1"); will(resolveTo("1"));
@@ -130,6 +195,26 @@ public class TestPositionedTargetWasFound {
 	@Test
 	public void nullaryInnerRunsReturningNothing() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find void");
+			will(returnValue("findVoid"));
+			allowing(runtime).extendedCamel("show void");
+			will(returnValue("showVoid"));
+			allowing(runtime).extendedCamel("findVoid");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" n");
+			will(returnValue("n"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("n", 1, evaluator);
 			  will(returnValue(innerMethodTarget));
 			oneOf(subject).nullarySpecial(with(any(DoAction.class)));
@@ -148,6 +233,30 @@ public class TestPositionedTargetWasFound {
 		String[] cells = {"m", "unaryPostSpecial", "2"};
 		final Row row = TableFactory.row(cells);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("find void");
+			will(returnValue("findVoid"));
+			allowing(runtime).extendedCamel("show void");
+			will(returnValue("showVoid"));
+			allowing(runtime).extendedCamel("find Object");
+			will(returnValue("findObject"));
+			allowing(runtime).extendedCamel("show Object");
+			will(returnValue("showObject"));
+			allowing(runtime).extendedCamel("find String");
+			will(returnValue("findString"));
+			allowing(runtime).extendedCamel("show String");
+			will(returnValue("showString"));
+			allowing(runtime).extendedCamel("find DoAction");
+			will(returnValue("findDoAction"));
+			allowing(runtime).extendedCamel("show DoAction");
+			will(returnValue("showDoAction"));
+			allowing(runtime).extendedCamel("find boolean");
+			will(returnValue("findBoolean"));
+			allowing(runtime).extendedCamel("show boolean");
+			will(returnValue("showBoolean"));
+			allowing(runtime).extendedCamel(" m");
+			will(returnValue("m"));
 			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
 			  will(returnValue(innerMethodTarget));
 			oneOf(innerMethodTarget).getResultParser(); will(returnValue(intParser));

@@ -4,6 +4,7 @@
 */
 package fitlibrary.runtime;
 
+import fitlibrary.config.Configuration;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
@@ -48,4 +49,6 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	void startLogging(String fileName);
 	boolean toExpandDefinedActions();
 	void addNamedObject(String string, TypedObject result);
+	Configuration getConfiguration();
+	String extendedCamel(String s);
 }

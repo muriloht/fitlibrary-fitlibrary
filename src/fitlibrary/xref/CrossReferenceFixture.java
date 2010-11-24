@@ -107,7 +107,7 @@ public class CrossReferenceFixture extends Traverse {
 	private String actionOf(Row row) throws FitParseException, InterruptedException, IOException {
 		int start = 0;
 		int pastEnd = row.size();
-		String first = ExtendedCamelCase.camel(row.text(0, this));
+		String first = runtimeContext.extendedCamel(row.text(0, this));
 		if (ignoreThisAction(pastEnd, first))
 			return null;
 		if (pastEnd == 2 && first.equals("defineActionsAt")) {

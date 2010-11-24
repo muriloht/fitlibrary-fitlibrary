@@ -10,7 +10,7 @@ import java.io.IOException;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 
-public interface RuntimeContext {
+public interface RuntimeContext extends VariableResolver{
 	Object getDynamicVariable(String key);
 	DynamicVariables getDynamicVariables();
 	VariableResolver getResolver();

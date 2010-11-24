@@ -17,7 +17,7 @@ public interface Cell extends Tables {
 	void setUnvisitedEscapedText(String s);
 	boolean isBlank(VariableResolver resolver);
 	boolean matchesTextInLowerCase(String text, VariableResolver resolver);
-	String camelledText(VariableResolver resolver);
+//	String camelledText(VariableResolver resolver);
 	
 	boolean hasEmbeddedTables(VariableResolver resolver);
 	Tables getEmbeddedTables();

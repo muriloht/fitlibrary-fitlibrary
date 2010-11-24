@@ -6,5 +6,5 @@
 |''enumeration''|light red|
 ----
 ----
-|''enumeration''|l|
+|''enumeration''|lightred|
 

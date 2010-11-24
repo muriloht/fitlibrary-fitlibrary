@@ -13,7 +13,6 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.table.SingleNestedTableExpected;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.HtmlUtils;
 import fitlibrary.utility.Pair;
 
@@ -61,10 +60,6 @@ public class CellOnList extends TablesOnList implements Cell {
 	public boolean unresolved(VariableResolver resolver) {
 		return text().startsWith("@{") && text().indexOf("}") == text().length()-1 &&
 				text().equals(text(resolver));
-	}
-	@Override
-	public String camelledText(VariableResolver resolver) {
-		return ExtendedCamelCase.camel(text(resolver));
 	}
    @Override
    public String textLower(VariableResolver resolver) {

@@ -27,7 +27,7 @@ public class TestLookupMethodTarget {
 	final LookupMethodTargetStandard lookup = new LookupMethodTargetStandard();
 	final Mockery context = new Mockery();
 	final Evaluator evaluator = context.mock(Evaluator.class);
-	final RuntimeContextInternal runtimeContext = context.mock(RuntimeContextInternal.class);
+	final RuntimeContextInternal runtime = context.mock(RuntimeContextInternal.class);
 	final IScope scope = context.mock(IScope.class);
 	final LookupClosure lookupClosure = context.mock(LookupClosure.class);
 	final Closure closure = context.mock(Closure.class);
@@ -49,6 +49,12 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("get unknown");
+			will(returnValue("getUnknown"));
+			allowing(runtime).extendedCamel("is unknown");
+			will(returnValue("isUnknown"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "unknown", 0); will(returnValue(null));
@@ -63,6 +69,12 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("get m");
+			will(returnValue("getM"));
+			allowing(runtime).extendedCamel("is m");
+			will(returnValue("isM"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(closure));
@@ -76,6 +88,12 @@ public class TestLookupMethodTarget {
 		list.add(typedObjectS);
 		list.add(typedObjectT);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("get m");
+			will(returnValue("getM"));
+			allowing(runtime).extendedCamel("is m");
+			will(returnValue("isM"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(null));
@@ -126,6 +144,12 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("set m");
+			will(returnValue("setM"));
+			allowing(runtime).extendedCamel("m");
+			will(returnValue("m"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(new GenericTypedObject(null)));
 		}});
 		lookup.findSetterOnSut("m",evaluator);
@@ -135,6 +159,12 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("set unknown");
+			will(returnValue("setUnknown"));
+			allowing(runtime).extendedCamel("unknown");
+			will(returnValue("unknown"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(typedObjectS));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "setUnknown", 1); will(returnValue(null));
 			allowing(evaluator).getScope(); will(returnValue(scope));
@@ -145,6 +175,12 @@ public class TestLookupMethodTarget {
 	@Test
 	public void setterExistsOnTypedObject() throws Exception {
 		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext();
+			will(returnValue(runtime));
+			allowing(runtime).extendedCamel("set m");
+			will(returnValue("setM"));
+			allowing(runtime).extendedCamel("m");
+			will(returnValue("m"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(typedObjectS));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "setM", 1); will(returnValue(closure));
 			oneOf(methodTargetFactory).createCalledMethodTarget(closure, evaluator);

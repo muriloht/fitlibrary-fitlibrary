@@ -17,7 +17,6 @@ import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
@@ -56,7 +55,7 @@ public class RuleTable extends Traverse {
 					input = false;
 					name = name.substring(0, name.length() - 1);
 				}
-				String fn = ExtendedCamelCase.camel(name);
+				String fn = extendedCamel(name);
 				if (input)
 					columnTargets.add(new InputColumnTarget(PlugBoard.lookupTarget.findSetterOnSut(fn, this)));
 				else {

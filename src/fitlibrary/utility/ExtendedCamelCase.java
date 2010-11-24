@@ -72,7 +72,10 @@ public class ExtendedCamelCase {
 		String result = camel(name);
 		return result.substring(0,1).toUpperCase()+result.substring(1);
 	}
-	public static String camel(String nameInitial) {
+	public static String camel(String s) {
+		return camel(s,false);
+	}
+	public static String camel(String nameInitial, boolean keepUnicode) {
 		String name = nameInitial.trim();
 		if (name.length() == 0)
 			return "blank";
@@ -90,7 +93,7 @@ public class ExtendedCamelCase {
 			name = mapNumber(name.charAt(0))+name.substring(1);
 		if (Character.isUpperCase(name.charAt(0)))
 			name = Character.toLowerCase(name.charAt(0))+name.substring(1);
-		return hideJavaKeyword(translateUnicode(camelise(name)));
+		return hideJavaKeyword(translateUnicode(camelise(name),keepUnicode));
 	}
 	private static String camelise(String name) {
 		// assert !name.equals("")
@@ -110,11 +113,11 @@ public class ExtendedCamelCase {
     /**
      * Translate any unicode characters into ASCII.
      */
-    private static String translateUnicode(String name) {
+    private static String translateUnicode(String name, boolean keepUnicode) {
         StringBuffer b = new StringBuffer(name.length());
 	    for (int i = 0; i < name.length(); i++) {
 	        char ch =  name.charAt(i); // This needs to be updated for jdk1.5 to codePointAt()
-			if (ch < 128) // not unicode
+			if (ch < 128 || (keepUnicode && Character.isJavaIdentifierPart(ch))) // valid without translation
 			    b.append(ch);
 			else
 			    b.append("u"+Integer.toHexString(ch).toUpperCase());
