@@ -35,7 +35,6 @@ import fitlibrary.traverse.RuntimeContextual;
 import fitlibrary.traverse.workflow.caller.ValidCall;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
@@ -252,7 +251,7 @@ public class GenericTypedObject implements TypedObject {
 				if (isNullary(parameterTypes, paramCount)) {
 					nullary(cells, factory, list, method,runtime);
 				} else if (isPostfix(parameterTypes, paramCount)) {
-					postFix(cells, factory, list, method, paramCount);
+					postFix(cells, factory, list, method, paramCount,runtime);
 				} else if (isPrefix(parameterTypes, paramCount)) {
 					prefix(cells, factory, list, method, paramCount,runtime);
 				}
@@ -284,10 +283,10 @@ public class GenericTypedObject implements TypedObject {
 		return paramCount > 1 && parameterTypes[0] == DoAction.class;
 	}
 	private void postFix(String[] cells, PositionedTargetFactory factory,
-			List<PositionedTarget> list, Method method, int paramCount) {
+			List<PositionedTarget> list, Method method, int paramCount, RuntimeContextInternal runtime) {
 		int cellCount = cells.length;
 		int start = cellCount-2*paramCount+2;
-		String postfixName = postfixName(cells, paramCount, start);
+		String postfixName = postfixName(cells, paramCount, start,runtime);
 		if (postfixName.equals(method.getName())) {
 //			logger.debug("Found "+method);
 			list.add(factory.create(method,0,start));
@@ -300,11 +299,11 @@ public class GenericTypedObject implements TypedObject {
 		//					if (postfixName.equals(method.getName()))
 		//						return factory.create(method,0,start);
 	}
-	private String postfixName(String[] cells, int paramCount, int start) {
+	private String postfixName(String[] cells, int paramCount, int start, RuntimeContextInternal runtime) {
 		String postfixName = cells[start];
 		for (int i = 1; i < paramCount-1; i++)
 			postfixName += " "+cells[start+i*2];
-		return ExtendedCamelCase.camel(postfixName);
+		return runtime.extendedCamel(postfixName);
 	}
 	private boolean isNullary(Class<?>[] parameterTypes, int paramCount) {
 		return paramCount == 1 && parameterTypes[0] == DoAction.class;

@@ -62,9 +62,9 @@ public class DefineAction extends Traverse {
 				DefinedActionParameterTranslation.needToTranslateParameters(formalParameters, bodyCopy)) {
 			formalParameters = DefinedActionParameterTranslation.translateParameters(formalParameters, bodyCopy);
 		}
-		String name = parametersRow.methodNameForCamel(this);
+		String name = parametersRow.methodNameForCamel(getRuntimeContext());
 		ParameterBinder binder = new ParameterBinder(name,formalParameters,bodyCopy,pageName);
-		repository().define(parametersRow, wikiClassName, binder, this, pageName);
+		repository().define(parametersRow, wikiClassName, binder, getRuntimeContext(), pageName);
 	}
     private void processMultiDefinedAction(Table headerTable, Tables bodyCopy) {
 		if (headerTable.size() > 2)
@@ -82,7 +82,7 @@ public class DefineAction extends Traverse {
 		return TableFactory.tables(TableFactory.table(row));
 	}
 	private void error(String msg, Row parametersRow) {
-		throw new FitLibraryExceptionInHtml(msg +" in <b>"+parametersRow.methodNameForCamel(this)+
+		throw new FitLibraryExceptionInHtml(msg +" in <b>"+parametersRow.methodNameForCamel(getRuntimeContext())+
 				"</b> in "+DefinedActionCaller.link2(pageName));
 	}
 	private List<String> getFormalParameters(Row parametersRow, int start, int increment) {

@@ -9,11 +9,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 
-import fitlibrary.DoFixture;
-import fitlibrary.parser.ParserTestCase;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 
 public class TestRowOnList {
-	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
+	RuntimeContextInternal runtime = new RuntimeContextContainer();
 	Row row = row();
 	
 	@Test
@@ -71,32 +71,32 @@ public class TestRowOnList {
 	@Test
 	public void plainMethodNameNoArg() {
 		Row row2 = row("aa");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa"));
+		assertThat(row2.methodNameForCamel(runtime),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArg() {
 		Row row2 = row("aa","1");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|"));
+		assertThat(row2.methodNameForCamel(runtime),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArgTwoKeywords() {
 		Row row2 = row("aa","1","bb");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb"));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgs() {
 		Row row2 = row("aa","1","bb","2");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb|"));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgsThreeKeywords() {
 		Row row2 = row("aa","1","bb","2",".");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|."));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBbDot"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb|."));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBbDot"));
 	}
 	@Test
 	public void canReplaceRowAtStart() {

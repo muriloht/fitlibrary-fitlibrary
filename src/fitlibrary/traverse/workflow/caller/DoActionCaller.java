@@ -23,7 +23,7 @@ public class DoActionCaller extends AbstractDoCaller {
 	private String methodName;
 
 	public DoActionCaller(Row row, Evaluator evaluator, boolean sequencing, LookupMethodTarget lookupTarget) {
-		methodName = row.methodNameForCamel(evaluator);
+		methodName = row.methodNameForCamel(evaluator.getRuntimeContext());
 		try {
 			target = lookupTarget.findMethodByArity(row, 0, row.size(), !sequencing, evaluator);
 		} catch (Exception e) {

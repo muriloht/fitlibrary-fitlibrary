@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -28,10 +27,10 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 	private Map<String, Map<DefinedMultiAction, ParameterBinder>> classMultiActionMap = new ConcurrentHashMap<String, Map<DefinedMultiAction, ParameterBinder>>();
 
 	@Override
-	public void define(Row parametersRow, String wikiClassName, ParameterBinder binder, VariableResolver resolver,
+	public void define(Row parametersRow, String wikiClassName, ParameterBinder binder, RuntimeContextInternal runtime,
 			String absoluteFileName) {
-		defineCamel(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
-		definePlain(parametersRow, wikiClassName, binder,resolver, absoluteFileName);
+		defineCamel(parametersRow, wikiClassName, binder,runtime, absoluteFileName);
+		definePlain(parametersRow, wikiClassName, binder,runtime, absoluteFileName);
 	}
 	@Override
 	public ParameterBinder lookupByCamel(String name, int argCount) {
@@ -78,8 +77,8 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		classMultiActionMap.clear();
 	}
 	protected void definePlain(Row parametersRow, String wikiClassName,
-			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName) {
-		String name = parametersRow.methodNameForPlain(resolver);
+			ParameterBinder parameterSubstitution, RuntimeContextInternal runtime, String absoluteFileName) {
+		String name = parametersRow.methodNameForPlain(runtime);
 		DefinedAction definedAction = new DefinedAction(name, parametersRow
 				.argumentCount());
 		Map<DefinedAction, ParameterBinder> map = getClassMapForPlain(wikiClassName);
@@ -91,8 +90,8 @@ public class DefinedActionsRepositoryStandard implements DefinedActionsRepositor
 		map.put(definedAction, parameterSubstitution);
 	}
 	protected void defineCamel(Row parametersRow, String wikiClassName,
-			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName) {
-		String name = parametersRow.methodNameForCamel(resolver);
+			ParameterBinder parameterSubstitution, RuntimeContextInternal runtime, String absoluteFileName) {
+		String name = parametersRow.methodNameForCamel(runtime);
 		DefinedAction definedAction = new DefinedAction(name, parametersRow.argumentCount());
 		Map<DefinedAction, ParameterBinder> map = getClassMapForCamel(wikiClassName);
 		if (map.get(definedAction) != null)

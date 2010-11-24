@@ -7,6 +7,7 @@ package fitlibrary.table;
 
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 
 public interface Row extends TableElement<Row,Cell> {
 	Cell addCell();
@@ -25,8 +26,8 @@ public interface Row extends TableElement<Row,Cell> {
 	void shown();
 	
 	int argumentCount();
-	String methodNameForCamel(VariableResolver resolver);
-	String methodNameForPlain(VariableResolver resolver);
+	String methodNameForCamel(RuntimeContextInternal runtime);
+	String methodNameForPlain(RuntimeContextInternal runtime);
 	
 	int getColumnSpan();
 	void setColumnSpan(int span);

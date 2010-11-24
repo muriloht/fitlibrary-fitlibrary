@@ -38,7 +38,7 @@ public class DefinedActionCaller extends AbstractDoCaller {
 
 	public DefinedActionCaller(Row row, RuntimeContextInternal runtime) {
 		this.runtime = runtime;
-		methodName = row.methodNameForCamel(runtime.getResolver());
+		methodName = row.methodNameForCamel(runtime);
 		actualArgs = actualArgs(row);
 		binder = repository().lookupByCamel(methodName, actualArgs.size());
 		if (binder == null)
@@ -46,7 +46,7 @@ public class DefinedActionCaller extends AbstractDoCaller {
 	}
 	public DefinedActionCaller(String object, String className, Row row, RuntimeContextInternal runtime) {
 		this.runtime = runtime;
-		methodName = row.methodNameForCamel(runtime.getResolver());
+		methodName = row.methodNameForCamel(runtime);
 		actualArgs.add(object);
 		actualArgs(row,actualArgs);
 		this.binder = repository().

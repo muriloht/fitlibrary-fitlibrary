@@ -15,12 +15,12 @@ import fit.exception.FitParseException;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.traverse.Traverse;
-import fitlibrary.utility.ExtendedCamelCase;
 
 public class CrossReferenceFixture extends Traverse {
 	private String suiteName;
@@ -60,7 +60,7 @@ public class CrossReferenceFixture extends Traverse {
 	private void xref(String pageName, Tables tables) throws FitParseException, InterruptedException, IOException {
 		for (Table table: tables) {
 			for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-				String action = actionOf(table.at(rowNo));
+				String action = actionOf(table.at(rowNo),getRuntimeContext());
 				if (action != null)
 					add(xref, action, pageName, rowNo == 0);
 			}
@@ -104,7 +104,7 @@ public class CrossReferenceFixture extends Traverse {
 	private boolean numberChar(char ch) {
 		return Character.isDigit(ch) || ch == '.' || ch == ' ';
 	}
-	private String actionOf(Row row) throws FitParseException, InterruptedException, IOException {
+	private String actionOf(Row row, RuntimeContextInternal runtime) throws FitParseException, InterruptedException, IOException {
 		int start = 0;
 		int pastEnd = row.size();
 		String first = runtimeContext.extendedCamel(row.text(0, this));
@@ -114,7 +114,7 @@ public class CrossReferenceFixture extends Traverse {
 			processDefinedActions(row.text(1,this));
 			return null;
 		}
-		if (postFixWithValue(postFixActionName(row, pastEnd)))
+		if (postFixWithValue(postFixActionName(row, pastEnd,runtime)))
 			pastEnd -= 2;
 		else if (first.equals("check")) {
 			start++;
@@ -132,9 +132,9 @@ public class CrossReferenceFixture extends Traverse {
 			result+= " "+row.text(i, this);
 		return result.trim();
 	}
-	private String postFixActionName(Row row, int pastEnd) {
+	private String postFixActionName(Row row, int pastEnd, RuntimeContextInternal runtime) {
 		if (pastEnd > 2)
-			return ExtendedCamelCase.camel(row.text(pastEnd-2, this));
+			return runtime.extendedCamel(row.text(pastEnd-2, this));
 		return "";
 	}
 	private boolean ignoreThisAction(int pastEnd, String first) {
@@ -166,11 +166,11 @@ public class CrossReferenceFixture extends Traverse {
 					if (pageName.endsWith("."))
 						pageName = definitionsName;
 					if (header) {
-						add(definedActions,actionOf(table.at(0)),pageName,true);
+						add(definedActions,actionOf(table.at(0),getRuntimeContext()),pageName,true);
 						header = false;
 					} else {
 						for (int rowNo = 0; rowNo < table.size(); rowNo++) {
-							String action = actionOf(table.at(rowNo));
+							String action = actionOf(table.at(rowNo),getRuntimeContext());
 							if (action != null)
 								add(xref, action,pageName,rowNo==0);
 						}

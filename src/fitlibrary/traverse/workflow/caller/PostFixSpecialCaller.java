@@ -11,7 +11,6 @@ import fitlibrary.table.Row;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.traverse.workflow.AbstractDoCaller;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 public class PostFixSpecialCaller extends AbstractDoCaller {
@@ -22,7 +21,7 @@ public class PostFixSpecialCaller extends AbstractDoCaller {
 		// Warning: Hack to fix conflict between "set" and "=", by giving "set" precedence.
 		String firstCell = row.text(0,evaluator);
 		if (row.size() == 4 && "=".equals(row.text(2,evaluator)) && 
-		    ("set".equals(firstCell) || "setSymbolNamed".equals(ExtendedCamelCase.camel(firstCell))))
+		    ("set".equals(firstCell) || "setSymbolNamed".equals(evaluator.getRuntimeContext().extendedCamel(firstCell))))
 				return;
 		if (row.size() >= 2) {
 			methodName = row.text(row.size()-2,evaluator);

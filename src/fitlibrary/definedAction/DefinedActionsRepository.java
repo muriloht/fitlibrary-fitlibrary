@@ -8,7 +8,6 @@ package fitlibrary.definedAction;
 
 import java.util.List;
 
-import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.caller.ValidCall;
@@ -16,7 +15,7 @@ import fitlibrary.traverse.workflow.caller.ValidCall;
 public interface DefinedActionsRepository {
 	void clear();
 	void define(Row parametersRow, String wikiClassName,
-			ParameterBinder parameterSubstitution, VariableResolver resolver, String absoluteFileName);
+			ParameterBinder parameterSubstitution, RuntimeContextInternal runtime, String absoluteFileName);
 	ParameterBinder lookupByCamel(String name, int argCount);
 	ParameterBinder lookupByClassByCamel(String className, String name, int argCount, RuntimeContextInternal variables);
 	void findPlainTextCall(String textCall, List<ValidCall> results);

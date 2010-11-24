@@ -6,38 +6,37 @@
 
 package fitlibrary.parser;
 
-import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.parser.lookup.ParserFactory;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibraryGeneric.typed.GenericTyped;
 
 public class EnumParser implements Parser {
 	private GenericTyped typed;
-	private VariableResolver resolver;
+	private RuntimeContextInternal runtime;
 
-	public EnumParser(GenericTyped typed, VariableResolver resolver) {
+	public EnumParser(GenericTyped typed, RuntimeContextInternal runtime) {
 		this.typed = typed;
-		this.resolver = resolver;
+		this.runtime = runtime;
 	}
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TypedObject parseTyped(Cell cell, TestResults testResults) throws Exception {
-		String text = cell.text(resolver);
+		String text = cell.text(runtime);
 		if (text.equals(""))
 			return  typed.typedObject(null);
 		Class asClass = typed.asClass();
 		try {
-			String stringValue = ExtendedCamelCase.camel(text.replaceAll("\\s+","")).toUpperCase();
+			String stringValue = runtime.extendedCamel(text.replaceAll("\\s+","")).toUpperCase();
 			return typed.typedObject(Enum.valueOf(asClass, stringValue));
 		} catch (IllegalArgumentException e) {
 			try {
-				return typed.typedObject(Enum.valueOf(asClass, ExtendedCamelCase.camel(text.replaceAll("\\s+","_")).toUpperCase()));
+				return typed.typedObject(Enum.valueOf(asClass, runtime.extendedCamel(text.replaceAll("\\s+","_")).toUpperCase()));
 			} catch (IllegalArgumentException e2) {
 				throw new FitLibraryException("Unknown");
 			}
@@ -45,11 +44,11 @@ public class EnumParser implements Parser {
 	}
 	@Override
 	public boolean matches(Cell cell, Object result, TestResults testResults) throws Exception {
-		if (cell.hasEmbeddedTables(resolver)) {
+		if (cell.hasEmbeddedTables(runtime)) {
 			cell.unexpected(testResults,"collection");
 			return false;
 		}
-		if (cell.text(resolver).equals(""))
+		if (cell.text(runtime).equals(""))
 			return result == null;
 		Object parsed = parseTyped(cell,testResults).getSubject();
 		return parsed.equals(result);
@@ -62,7 +61,7 @@ public class EnumParser implements Parser {
     	return new ParserFactory() {
     		@Override
 			public Parser parser(Evaluator evaluator, Typed typed) {
-    			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext().getResolver());
+    			return new EnumParser((GenericTyped) typed,evaluator.getRuntimeContext());
     		}
     	};
     }

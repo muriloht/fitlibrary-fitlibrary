@@ -9,15 +9,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 
-import fitlibrary.DoFixture;
-import fitlibrary.parser.ParserTestCase;
+import fitlibrary.runtime.RuntimeContextContainer;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Row;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 
 public class TestRowOnParse {
+	RuntimeContextInternal runtime = new RuntimeContextContainer();
 	Row row = TableFactory.row();
-	DoFixture evaluator = ParserTestCase.evaluatorWithRuntime();
 	
 	@Test
 	public void sizeOfEmptyRow() {
@@ -74,32 +74,32 @@ public class TestRowOnParse {
 	@Test
 	public void plainMethodNameNoArg() {
 		Row row2 = TableFactory.row("aa");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa"));
+		assertThat(row2.methodNameForCamel(runtime),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArg() {
 		Row row2 = TableFactory.row("aa","1");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aa"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|"));
+		assertThat(row2.methodNameForCamel(runtime),is("aa"));
 	}
 	@Test
 	public void plainMethodNameOneArgTwoKeywords() {
 		Row row2 = TableFactory.row("aa","1","bb");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb"));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgs() {
 		Row row2 = TableFactory.row("aa","1","bb","2");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|"));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBb"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb|"));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBb"));
 	}
 	@Test
 	public void plainMethodNameTwoArgsThreeKeywords() {
 		Row row2 = TableFactory.row("aa","1","bb","2",".");
-		assertThat(row2.methodNameForPlain(evaluator),is("aa|bb|."));
-		assertThat(row2.methodNameForCamel(evaluator),is("aaBbDot"));
+		assertThat(row2.methodNameForPlain(runtime),is("aa|bb|."));
+		assertThat(row2.methodNameForCamel(runtime),is("aaBbDot"));
 	}
 	@Test
 	public void canReplaceRowAtStart() {

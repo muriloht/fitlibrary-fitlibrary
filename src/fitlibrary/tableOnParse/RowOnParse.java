@@ -14,10 +14,10 @@ import fitlibrary.exception.FitLibraryShowException;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.table.TableFactory;
-import fitlibrary.utility.ExtendedCamelCase;
 
 public class RowOnParse extends TableElementOnParse<Cell> implements Row {
     private boolean rowIsHidden = false;
@@ -168,21 +168,21 @@ public void missing(TestResults testResults) {
 		parse.parts = null;
 	}
 	@Override
-	public String methodNameForPlain(VariableResolver resolver) {
+	public String methodNameForPlain(RuntimeContextInternal runtime) {
 		String name = "";
 		for (int i = 0; i < size(); i += 2) {
-			name += text(i,resolver);
+			name += text(i,runtime);
 			if ((i+1) < size())
 				name += "|";
 		}
 		return name;
 	}
 	@Override
-	public String methodNameForCamel(VariableResolver resolver) {
+	public String methodNameForCamel(RuntimeContextInternal runtime) {
 		String name = "";
 		for (int i = 0; i < size(); i += 2)
-			name += text(i,resolver)+" ";
-		return ExtendedCamelCase.camel(name.trim());
+			name += text(i,runtime)+" ";
+		return runtime.extendedCamel(name.trim());
 	}
 	@Override
 	public int argumentCount() {

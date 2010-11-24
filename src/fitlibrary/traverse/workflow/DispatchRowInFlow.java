@@ -29,7 +29,6 @@ import fitlibrary.traverse.workflow.caller.MultiDefinedActionCaller;
 import fitlibrary.traverse.workflow.caller.PostFixSpecialCaller;
 import fitlibrary.traverse.workflow.caller.SpecialCaller;
 import fitlibrary.typed.TypedObject;
-import fitlibrary.utility.ExtendedCamelCase;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
@@ -112,7 +111,7 @@ public class DispatchRowInFlow {
 	private String possibleSeq(Row row) {
 		if (row.size() < 3)
 			return "";
-		String result = "public Type "+ExtendedCamelCase.camel(row.text(0,evaluator))+"(";
+		String result = "public Type "+evaluator.getRuntimeContext().extendedCamel(row.text(0,evaluator))+"(";
 		if (row.size() > 0)
 			result += "Type p1";
 		for (int i = 2; i < row.size(); i++)

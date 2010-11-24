@@ -111,7 +111,7 @@ public class ExtendedCamelCase {
         return name;
     }
     /**
-     * Translate any unicode characters into ASCII.
+     * Translate all unicode characters into ASCII, except for valid Java chars when required.
      */
     private static String translateUnicode(String name, boolean keepUnicode) {
         StringBuffer b = new StringBuffer(name.length());
