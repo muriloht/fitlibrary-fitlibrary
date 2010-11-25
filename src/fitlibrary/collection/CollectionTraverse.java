@@ -127,7 +127,7 @@ public abstract class CollectionTraverse extends Traverse {
         List<MethodTarget[]> bindings = new ArrayList<MethodTarget[]>();
         for (Iterator<Object> it = actuals.iterator(); it.hasNext(); ) {
 			TypedObject typedObject = asTypedObject(it.next());
-			bindings.add(bindGettersForOneElement(row, testResults, typedObject));
+			bindings.add(bindGettersForOneElement(row, typedObject));
 		}
         for (int i = 0; i < usedFields.length; i++)
             if (!usedFields[i]) {
@@ -139,8 +139,7 @@ public abstract class CollectionTraverse extends Traverse {
             }
         return bindings;
     }
-    @SuppressWarnings("unused")
-    private MethodTarget[] bindGettersForOneElement(Row row, TestResults testResults, TypedObject typedObject) {
+    private MethodTarget[] bindGettersForOneElement(Row row, TypedObject typedObject) {
 		MethodTarget[] columnBindings = new MethodTarget[row.size()];
         for (int i = 0; i < columnBindings.length; i++) {
             Cell cell = row.at(i);
@@ -148,9 +147,8 @@ public abstract class CollectionTraverse extends Traverse {
                 columnBindings[i] = new ClassMethodTarget(componentType,this,typedObject);
                 usedFields[i] = true;
             } else {
-                String fieldName = extendedCamel(cell.text(this));
                 try {
-					columnBindings[i] = bindPropertyGetterForTypedObject(fieldName, typedObject);
+					columnBindings[i] = bindPropertyGetterForTypedObject(cell.text(this), typedObject);
                     if (columnBindings[i] != null)
                         usedFields[i] = true;
                 } catch (NoSuchPropertyException e) {
@@ -164,6 +162,8 @@ public abstract class CollectionTraverse extends Traverse {
 		String mappedName = extendedCamel(name);
     	if (typedObject.getSubject() instanceof Map) {
     		Object value = ((Map<?,?>)typedObject.getSubject()).get(mappedName);
+    		if (value == null)
+    			value = ((Map<?,?>)typedObject.getSubject()).get(name);
     		if (value == null)
     			return null;
     		return new ConstantMethodTarget(value,this);

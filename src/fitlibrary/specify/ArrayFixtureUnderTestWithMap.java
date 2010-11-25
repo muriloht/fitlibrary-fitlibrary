@@ -24,7 +24,7 @@ public class ArrayFixtureUnderTestWithMap extends fitlibrary.ArrayFixture {
 	private Map makeMap(Integer plus, String ampersand) {
         Map map = new HashMap();
         map.put("plus",plus);
-        map.put("ampersand",ampersand);
+        map.put("&",ampersand);
         return map;
     }
 }

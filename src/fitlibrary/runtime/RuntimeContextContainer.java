@@ -325,4 +325,8 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public String extendedCamel(String s) {
 		return ExtendedCamelCase.camel(s,configuration.keepingUniCode());
 	}
+	@Override
+	public Row row() {
+		return currentRow;
+	}
 }

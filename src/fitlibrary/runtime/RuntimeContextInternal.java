@@ -51,4 +51,5 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	void addNamedObject(String string, TypedObject result);
 	Configuration getConfiguration();
 	String extendedCamel(String s);
+	Row row();
 }

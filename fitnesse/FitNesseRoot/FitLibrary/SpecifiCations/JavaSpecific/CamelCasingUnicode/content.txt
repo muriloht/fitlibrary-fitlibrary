@@ -6,6 +6,8 @@
 |Ελληνικό||u3B5u3BBu3BBu3B7u3BDu3B9u3BAu3CC|
 |█||u2588 |
 
+ * Here we configure it to keep unicode characters that are permissible in Java identifiers
+
 |''configure fitlibrary''|
 |''keep unicode''|true|
 

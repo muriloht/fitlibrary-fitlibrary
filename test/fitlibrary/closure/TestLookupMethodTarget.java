@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -35,6 +36,20 @@ public class TestLookupMethodTarget {
 	final TypedObject typedObjectS = new GenericTypedObject("S",lookupClosure,methodTargetFactory);
 	final TypedObject typedObjectT = new GenericTypedObject("T",lookupClosure,methodTargetFactory);
 
+	@Before
+	public void allowingExpectations() {
+		context.checking(new Expectations() {{
+			allowing(evaluator).getRuntimeContext(); will(returnValue(runtime));
+			allowing(runtime).extendedCamel("get unknown"); will(returnValue("getUnknown"));
+			allowing(runtime).extendedCamel("is unknown"); will(returnValue("isUnknown"));
+			allowing(runtime).extendedCamel("get m"); will(returnValue("getM"));
+			allowing(runtime).extendedCamel("is m"); will(returnValue("isM"));
+			allowing(runtime).extendedCamel("set m"); will(returnValue("setM"));
+			allowing(runtime).extendedCamel("m"); will(returnValue("m"));
+			allowing(runtime).extendedCamel("set unknown"); will(returnValue("setUnknown"));
+			allowing(runtime).extendedCamel("unknown"); will(returnValue("unknown"));
+		}});
+	}
 	@Test(expected=MissingMethodException.class)
 	public void methodOrGetterMissingWithEmptyStack() throws Exception {
 		context.checking(new Expectations() {{
@@ -49,12 +64,6 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("get unknown");
-			will(returnValue("getUnknown"));
-			allowing(runtime).extendedCamel("is unknown");
-			will(returnValue("isUnknown"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "unknown", 0); will(returnValue(null));
@@ -69,12 +78,6 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("get m");
-			will(returnValue("getM"));
-			allowing(runtime).extendedCamel("is m");
-			will(returnValue("isM"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(closure));
@@ -88,12 +91,6 @@ public class TestLookupMethodTarget {
 		list.add(typedObjectS);
 		list.add(typedObjectT);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("get m");
-			will(returnValue("getM"));
-			allowing(runtime).extendedCamel("is m");
-			will(returnValue("isM"));
 			allowing(evaluator).getScope(); will(returnValue(scope));
 			oneOf(scope).objectsForLookup(); will(returnValue(list));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "m", 0); will(returnValue(null));
@@ -144,12 +141,6 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("set m");
-			will(returnValue("setM"));
-			allowing(runtime).extendedCamel("m");
-			will(returnValue("m"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(new GenericTypedObject(null)));
 		}});
 		lookup.findSetterOnSut("m",evaluator);
@@ -159,12 +150,6 @@ public class TestLookupMethodTarget {
 		final ArrayList<TypedObject> list = new ArrayList<TypedObject>();
 		list.add(typedObjectS);
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("set unknown");
-			will(returnValue("setUnknown"));
-			allowing(runtime).extendedCamel("unknown");
-			will(returnValue("unknown"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(typedObjectS));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "setUnknown", 1); will(returnValue(null));
 			allowing(evaluator).getScope(); will(returnValue(scope));
@@ -175,12 +160,6 @@ public class TestLookupMethodTarget {
 	@Test
 	public void setterExistsOnTypedObject() throws Exception {
 		context.checking(new Expectations() {{
-			allowing(evaluator).getRuntimeContext();
-			will(returnValue(runtime));
-			allowing(runtime).extendedCamel("set m");
-			will(returnValue("setM"));
-			allowing(runtime).extendedCamel("m");
-			will(returnValue("m"));
 			allowing(evaluator).getTypedSystemUnderTest(); will(returnValue(typedObjectS));
 			oneOf(lookupClosure).findMethodClosure(typedObjectS, "setM", 1); will(returnValue(closure));
 			oneOf(methodTargetFactory).createCalledMethodTarget(closure, evaluator);
