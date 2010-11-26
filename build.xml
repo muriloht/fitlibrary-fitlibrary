@@ -117,6 +117,17 @@
 		</java>
 	</target>
 
+	<target name="unpack-fitnesse-to-test-fitlibrary">
+		<java jar="${fitnesse.dir}/fitnesse.jar" dir="${fitnesse.dir}" fork="true" spawn="true">
+			<arg value="-r" />
+			<arg value="FitNesseRoot" />
+			<arg value="-p" />
+			<arg value="${port}" />
+			<arg value="-e" />
+			<arg value="0" />
+		</java>
+	</target>
+
 	<target name="batch-run-specifications">
 		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000"/>
 	</target>

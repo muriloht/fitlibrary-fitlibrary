@@ -63,13 +63,13 @@ public class TestExtendedCamelCase extends TestCase {
     private void check(String in, String out) {
         assertEquals(out,ExtendedCamelCase.camel(in,false));
     }
-    private void checkUni(String in, String out) {
-        assertEquals(out,ExtendedCamelCase.camel(in,true));
-    }
+//    private void checkUni(String in, String out) {
+//        assertEquals(out,ExtendedCamelCase.camel(in,true));
+//    }
     private void checkClass(String in, String out) {
         assertEquals(out,ExtendedCamelCase.camelClassName(in,false));
     }
-    private void checkClassUni(String in, String out) {
-        assertEquals(out,ExtendedCamelCase.camelClassName(in,true));
-    }
+//    private void checkClassUni(String in, String out) {
+//        assertEquals(out,ExtendedCamelCase.camelClassName(in,true));
+//    }
 }

@@ -15,6 +15,7 @@
 	<property name="creations.home" value="${home}/Creations" />
 	<property name="release" value="${creations.home}/FitLibrary${release.version}" />
 	<property name="release.zip.file" value="FitLibrary${release.version}.zip" />
+	<property name="tempForTest.home" value="${home}/TempUnpackForTesting" />
 
 <!--  ==================== Test Release Location ==================== -->
 	<property name="releaseTests.home" value="${creations.home}/ReleaseTests" />
@@ -29,6 +30,9 @@
 			<fileset dir="${here}">
 				<include name="fitlibrary.jar" />
 				<include name="runFitNesseDirectly.bat" />
+				<include name="FitLibraryLogger.properties" />
+				<include name="FixturingLogger.properties" />
+				<include name="log4j.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${release}">
@@ -42,13 +46,14 @@
 		<copy todir="${release}/fitnesse/lib">
 			<fileset dir="${here}/lib">
 				<include name="fitbook.jar" />
-				<include name="rentEz.jar" />
-				<include name="hamcrest-all-1.1.jar" />
+				<include name="hamcrest-all-1.2.jar" />
 				<include name="jmock-2.5.1.jar" />
 				<include name="jmock-junit4-2.5.1.jar" />
 				<include name="junit-4.6.jar" />
+				<include name="log4j-1.2.16.jar" />
 				<include name="ognl-2.7.2.jar" />
 				<include name="poi-3.1-FINAL-20080629.jar" />
+				<include name="rentEz.jar" />
 			</fileset>
 		</copy>
 
@@ -139,6 +144,13 @@
 		<delete file="${releaseTest}/${release.zip.file}" />
 	</target>
 
-
+	<target name="createTempFitNesseForTesting" description="Create a place to unpack everything and test it">
+                <delete dir="${tempForTest.home}" />
+                <mkdir dir= "${tempForTest.home}" />
+		<copy todir="${tempForTest.home}">
+			<fileset file="fitnesse.jar" />
+			<fileset file="runFitNesseToUnpackIt.bat" />
+		</copy>
+	</target>
 
 </project>

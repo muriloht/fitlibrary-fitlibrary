@@ -12,7 +12,7 @@ This contains the latest release of the <i>FitLibrary</i> for <i>FitNesse</i> us
 <ul>
 <li>This release of FitLibrary needs to be added to a FitNesse system before it can be used.<p/>
 
-<li>FitLibrary has only been tested with the <i>FitNesse</i> released 18 Feb 2010. Some parts may not work with earlier versions of FitNesse.<p/>
+<li>FitLibrary has been tested with the <i>FitNesse</i> release 20101101. Some parts, such as batch running and load-defined-actions-slowly, will not work with earlier versions of FitNesse.<p/>
 
 <li>The FolderRunner parts of FitLibrary have not been tested with this version.<p/>
 
@@ -34,6 +34,9 @@ The <i>fitnesse</i> directory within the <i>FitLibrary</i> release contains the 
   fitnesse
     fitLibrary.jar
     run.bat
+    FitLibraryLogger.properties -- properties for logging
+    FixturingLogger.properties
+    log4j.properties
     FitNesseRoot
         files
             dots
@@ -48,9 +51,11 @@ The <i>fitnesse</i> directory within the <i>FitLibrary</i> release contains the 
      lib
         -- Extra jars that may be needed
         fitBook.jar
-        hamcrest-all-1.1.jar
+        hamcrest-all-1.2.jar
         jmock-2.5.1.jar
         jmock-junit4-2.5.1.jar
+        junit-4.6jar
+        log4j-1.2.16.jar
         ognl-2.7.2.jar
         poi-3.1-FINAL-20080629.jar
         rentEz.jar
