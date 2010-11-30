@@ -4,5 +4,6 @@
 ^BareEnumUnknown
 ^EnumAndNull
 ^EnumWithParse
+^PojoEnumWithParse
 ^ArrayOfEnum
 ^ListOfEnum
