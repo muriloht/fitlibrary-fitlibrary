@@ -94,7 +94,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/FitLibrary">
-			<fileset dir="fitnesse/fitNesseRoot/FitLibrary" />
+			<fileset dir="fitnesse/FitNesseRoot/FitLibrary" />
 		</copy>
 		<mkdir dir="${release.now.dir}/fitnesse/lib" />
 		<copy todir="${release.now.dir}/fitnesse/lib">
