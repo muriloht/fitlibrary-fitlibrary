@@ -13,21 +13,27 @@
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" /> <!-- 10 mins default timeout -->
 	<!-- release properties -->
-	<property name="releases.dir" value="${home}/releases" />
+	<property name="releases.dir" value="${home}/release" />
         <tstamp prefix="start"/>
-	<property name="release.version" value="${start.DSTAMP}" />
-	<property name="release.now.dir" value="${releases.dir}/FitLibrary${release.version}" />
-	<property name="release.zip.file" value="${releases.dir}/FitLibrary${release.version}.zip" />
+	<property name="release.now.dir" value="${releases.dir}/FitLibrary" />
+	<property name="release.zip.file" value="${releases.dir}/FitLibrary.zip" />
 	<!-- release checking properties -->
-	<property name="release.copy" value="${releases.dir}/FL${release.version}" />
+	<property name="release.copy" value="${releases.dir}/FL_Temp" />
 	<property name="release.fitnesse-copy" value="${release.copy}/FitNesseCopy" />
 	<property name="release.unzip" value="${release.copy}/Unzip" />
 	<property name="release.testResults" value="${release.copy}/TestResults" />
+	<!-- release properties -->
+	<property name="release.version" value="${start.DSTAMP}" />
+	<property name="final.release.zip" value="${releases.dir}/FitLibrary${release.version}.zip" />
+
+	<target name="final-release">
+		<move file="${release.zip.file}"
+		      tofile="${final.release.zip}"/>
+	</target>
 
 	<target name="release-check" depends="fresh-fitnesse, combine-release">
 		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000" runDirectory="${release.fitnesse-copy}" 
                            resultsDirectory="${release.testResults}"/>
-		<delete dir="${release.copy}"/>
 	</target>
 
 	<target name="combine-release">
@@ -64,7 +70,7 @@
 	</target>
 
 	<target name="fresh-fitnesse">
-		<delete dir="${release.fitnesse-copy}"/>
+		<delete dir="${release.copy}"/>
 		<mkdir dir="${release.fitnesse-copy}"/>
 		<copy todir="${release.fitnesse-copy}">
 			<fileset file="fitnesse/fitnesse.jar" />
