@@ -13,14 +13,13 @@
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" /> <!-- 10 mins default timeout -->
 	<!-- release properties -->
-	<property name="release.dir" value="${home}/releases" />
+	<property name="releases.dir" value="${home}/releases" />
         <tstamp prefix="start"/>
 	<property name="release.version" value="${start.DSTAMP}" />
-	<property name="release" value="${release.dir}/FitLibrary${release.version}" />
-	<property name="release.short" value="${release.dir}/FL${release.version}" />
-	<property name="release.zip.file" value="FitLibrary${release.version}.zip" />
+	<property name="release.now.dir" value="${releases.dir}/FitLibrary${release.version}" />
+	<property name="release.zip.file" value="${releases.dir}/FitLibrary${release.version}.zip" />
 	<!-- release checking properties -->
-	<property name="release.copy" value="${release.dir}/FL${release.version}" />
+	<property name="release.copy" value="${releases.dir}/FL${release.version}" />
 	<property name="release.fitnesse-copy" value="${release.copy}/FitNesseCopy" />
 	<property name="release.unzip" value="${release.copy}/Unzip" />
 	<property name="release.testResults" value="${release.copy}/TestResults" />
@@ -33,13 +32,11 @@
 
 	<target name="combine-release">
 		<mkdir dir="${release.unzip}" />
-		<unzip src="${release.dir}/${release.zip.file}" dest="${release.unzip}"/>
+		<unzip src="${release.zip.file}" dest="${release.unzip}"/>
 		<move todir="${release.fitnesse-copy}">
 			<fileset dir="${release.unzip}/fitnesse">
 				<include name="fitlibrary.jar" />
-				<include name="FitLibraryLogger.properties" />
-				<include name="FixturingLogger.properties" />
-				<include name="log4j.properties" />
+				<include name="*.properties" />
 			</fileset>
 		</move>
 		<move todir="${release.fitnesse-copy}/FitNesseRoot/FitLibrary">
@@ -48,15 +45,7 @@
 		<mkdir dir="${release.fitnesse-copy}/lib" />
 		<move todir="${release.fitnesse-copy}/lib">
 			<fileset dir="${release.unzip}/fitnesse/lib">
-				<include name="fitbook.jar" />
-				<include name="hamcrest-all-1.2.jar" />
-				<include name="jmock-2.5.1.jar" />
-				<include name="jmock-junit4-2.5.1.jar" />
-				<include name="junit-4.6.jar" />
-				<include name="log4j-1.2.16.jar" />
-				<include name="ognl-2.7.2.jar" />
-				<include name="poi-3.1-FINAL-20080629.jar" />
-				<include name="rentEz.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</move>
 		<move todir="${release.fitnesse-copy}/FitNesseRoot/files/testFiles">
@@ -86,15 +75,16 @@
 	</target>
 
 	<target name="create-release-zip">
-		<mkdir dir="${release.dir}" />
-		<delete file="${release.dir}/${release.zip.file}"/>
-		<mkdir dir="${release}" />
-		<copy todir="${release}">
+		<echo message="Creating release at ${release.now.dir}" />
+		<mkdir dir="${releases.dir}" />
+		<delete file="${release.zip.file}"/>
+		<mkdir dir="${release.now.dir}" />
+		<copy todir="${release.now.dir}">
 			<fileset file="build.xml" />
 			<fileset file="releaseREAD-ME.html" />
 			<fileset file="runFitNesse.bat" />
 		</copy>
-		<copy todir="${release}/fitnesse">
+		<copy todir="${release.now.dir}/fitnesse">
 			<fileset dir="fitnesse">
 				<include name="fitlibrary.jar" />
 				<include name="runFitNesseDirectly.bat" />
@@ -103,11 +93,11 @@
 				<include name="log4j.properties" />
 			</fileset>
 		</copy>
-		<copy todir="${release}/fitnesse/FitNesseRoot/FitLibrary">
+		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/FitLibrary">
 			<fileset dir="fitnesse/fitNesseRoot/FitLibrary" />
 		</copy>
-		<mkdir dir="${release}/fitnesse/lib" />
-		<copy todir="${release}/fitnesse/lib">
+		<mkdir dir="${release.now.dir}/fitnesse/lib" />
+		<copy todir="${release.now.dir}/fitnesse/lib">
 			<fileset dir="fitnesse/lib">
 				<include name="fitbook.jar" />
 				<include name="hamcrest-all-1.2.jar" />
@@ -120,31 +110,31 @@
 				<include name="rentEz.jar" />
 			</fileset>
 		</copy>
-		<mkdir dir="${release}/fitnesse/lib/src" />
-		<copy todir="${release}/fitnesse/lib/src">
+		<mkdir dir="${release.now.dir}/fitnesse/lib/src" />
+		<copy todir="${release.now.dir}/fitnesse/lib/src">
 			<fileset dir="fitnesse/lib/src">
 				<include name="fitbookSrc.jar" />
 				<include name="fitlibrarySrc.zip" />
 				<include name="rentEzSrc.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${release}/fitNesse/FitNesseRoot/files/testFiles">
+		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/testFiles">
 			<fileset dir="fitnesse/FitNesseRoot/files/testFiles" />
 		</copy>
-		<copy todir="${release}/fitNesse/FitNesseRoot/files/dots">
+		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/dots">
 			<fileset dir="fitnesse/FitNesseRoot/files/dots"/>
 		</copy>
-		<copy todir="${release}/fitNesse/FitNesseRoot/files/gameImages">
+		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/gameImages">
 			<fileset dir="fitnesse/FitNesseRoot/files/gameImages"/>
 		</copy>
-		<copy todir="${release}/fitNesse/FitNesseRoot/files/images">
+		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/images">
 			<fileset file="fitnesse/FitNesseRoot/files/images/FitBookCover.jpeg"/>
 		</copy>
-		<copy todir="${release}/folderRunner">
+		<copy todir="${release.now.dir}/folderRunner">
 			<fileset dir="folderRunner" />
 		</copy>
-		<zip basedir="${release}" destfile="${release.dir}/${release.zip.file}"/>
-		<delete dir="${release}"/>
+		<zip basedir="${release.now.dir}" destfile="${release.zip.file}"/>
+		<delete dir="${release.now.dir}"/>
 	</target>
 
 	<target name="jar" depends="clean, compile, junit, jar-no-test" description="Create fitlibrary jar file in local FitNesseServer directory"/>
