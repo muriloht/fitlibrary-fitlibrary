@@ -118,16 +118,16 @@
 				<include name="rentEzSrc.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/testFiles">
+		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/files/testFiles">
 			<fileset dir="fitnesse/FitNesseRoot/files/testFiles" />
 		</copy>
-		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/dots">
+		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/files/dots">
 			<fileset dir="fitnesse/FitNesseRoot/files/dots"/>
 		</copy>
-		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/gameImages">
+		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/files/gameImages">
 			<fileset dir="fitnesse/FitNesseRoot/files/gameImages"/>
 		</copy>
-		<copy todir="${release.now.dir}/fitNesse/FitNesseRoot/files/images">
+		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/files/images">
 			<fileset file="fitnesse/FitNesseRoot/files/images/FitBookCover.jpeg"/>
 		</copy>
 		<copy todir="${release.now.dir}/folderRunner">
