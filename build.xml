@@ -13,7 +13,7 @@
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" /> <!-- 10 mins default timeout -->
 	<!-- release properties -->
-	<property name="release.dir" value="${home}/../releaseFitLibrary" />
+	<property name="release.dir" value="${home}/releases" />
         <tstamp prefix="start"/>
 	<property name="release.version" value="${start.DSTAMP}" />
 	<property name="release" value="${release.dir}/FitLibrary${release.version}" />
@@ -25,10 +25,9 @@
 	<property name="release.unzip" value="${release.copy}/Unzip" />
 	<property name="release.testResults" value="${release.copy}/TestResults" />
 
-	<target name="release" depends="create-release-zip, fresh-fitnesse, combine-release, release-check"/>
-
-	<target name="release-check">
-		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000" runDirectory="${release.fitnesse-copy}" resultsDirectory="${release.testResults}"/>
+	<target name="release-check" depends="fresh-fitnesse, combine-release">
+		<batch-run suite="FitLibrary.SpecifiCations" timeout="600000" runDirectory="${release.fitnesse-copy}" 
+                           resultsDirectory="${release.testResults}"/>
 		<delete dir="${release.copy}"/>
 	</target>
 
