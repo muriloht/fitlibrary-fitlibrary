@@ -40,7 +40,7 @@
 			</fileset>
 		</move>
 		<move todir="${release.fitnesse-copy}/FitNesseRoot/FitLibrary">
-			<fileset dir="${release.unzip}/fitnesse/fitNesseRoot/FitLibrary" />
+			<fileset dir="${release.unzip}/fitnesse/FitNesseRoot/FitLibrary" />
 		</move>
 		<mkdir dir="${release.fitnesse-copy}/lib" />
 		<move todir="${release.fitnesse-copy}/lib">
