@@ -94,9 +94,7 @@
 			<fileset dir="fitnesse">
 				<include name="fitlibrary.jar" />
 				<include name="runFitNesseDirectly.bat" />
-				<include name="FitLibraryLogger.properties" />
-				<include name="FixturingLogger.properties" />
-				<include name="log4j.properties" />
+				<include name="*.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/FitLibrary">
@@ -105,23 +103,13 @@
 		<mkdir dir="${release.now.dir}/fitnesse/lib" />
 		<copy todir="${release.now.dir}/fitnesse/lib">
 			<fileset dir="fitnesse/lib">
-				<include name="fitbook.jar" />
-				<include name="hamcrest-all-1.2.jar" />
-				<include name="jmock-2.5.1.jar" />
-				<include name="jmock-junit4-2.5.1.jar" />
-				<include name="junit-4.6.jar" />
-				<include name="log4j-1.2.16.jar" />
-				<include name="ognl-2.7.2.jar" />
-				<include name="poi-3.1-FINAL-20080629.jar" />
-				<include name="rentEz.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<mkdir dir="${release.now.dir}/fitnesse/lib/src" />
 		<copy todir="${release.now.dir}/fitnesse/lib/src">
 			<fileset dir="fitnesse/lib/src">
-				<include name="fitbookSrc.jar" />
-				<include name="fitlibrarySrc.zip" />
-				<include name="rentEzSrc.jar" />
+				<include name="*.*" />
 			</fileset>
 		</copy>
 		<copy todir="${release.now.dir}/fitnesse/FitNesseRoot/files/testFiles">
