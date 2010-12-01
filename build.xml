@@ -22,7 +22,7 @@
 	<property name="release.fitnesse-copy" value="${release.copy}/FitNesseCopy" />
 	<property name="release.unzip" value="${release.copy}/Unzip" />
 	<property name="release.testResults" value="${release.copy}/TestResults" />
-	<!-- release properties -->
+	<!-- final release properties -->
 	<property name="release.version" value="${start.DSTAMP}" />
 	<property name="final.release.zip" value="${releases.dir}/FitLibrary${release.version}.zip" />
 
@@ -84,6 +84,7 @@
 		<echo message="Creating release at ${release.now.dir}" />
 		<mkdir dir="${releases.dir}" />
 		<delete file="${release.zip.file}"/>
+		<delete dir="${release.now.dir}" />
 		<mkdir dir="${release.now.dir}" />
 		<copy todir="${release.now.dir}">
 			<fileset file="build.xml" />

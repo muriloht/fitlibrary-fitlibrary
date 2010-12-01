@@ -1,6 +1,6 @@
 !1 This Release:
 
-|!2 ''Details of changes in this release''|November 2010|
+|!2 ''Details of changes in this release''|1 December 2010|
 
  * Added log4j logging capability. See .FitLibrary.AdvancedTutorials.LoggingTechniques for details on using this logging, as well as approaches to logging that are visible in the report page.
  * Added retry capability to batch running. See FitLibraryRunner for details
