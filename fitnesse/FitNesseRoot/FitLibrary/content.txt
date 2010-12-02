@@ -8,19 +8,15 @@
 !define REGRACE_TOC {false}
 
 !define advanced {Advanced (and more technical) features of FitLibrary, including:
-
  * Specific sorts of collections:
   * ordered, unordered, subsets, maps, arrays
-
  * [[''Defined actions''][.FitLibrary.UserGuide.FitLibraryByExample.DefinedActions]]
  * [[''Dynamic variables''][.FitLibrary.AdvancedTutorials.DynamicVariables]]
  * [[Multiple flow objects][.FitLibrary.AdvancedTutorials.MultipleFlowObjects]]
-
  * Implementation details:
   * [[setUp, tearDown, onFailure methods][.FitLibrary.AdvancedTutorials.SetUpTearDownOnFailure]]
   * runtime information access in fixture code
   * specialised handling of table cell text
-
  * [[Migrating from Slim to FitLibrary][.FitLibrary.AdvancedTutorials.MigratingSlimDecisionTables]]
  * [[Logging techniques][.FitLibrary.AdvancedTutorials.LoggingTechniques]] using '''show''', '''show after''' and [[''log4j''][.FitLibrary.AdvancedTutorials.LoggingTechniques.Log4jLogging]] logging
 }
@@ -41,6 +37,8 @@
 |!3 ^RentEz|''An extended example of storytests for an application. These build on the example in the [[Fit Book][.FitLibrary.GlosSary.FitBook]].''|
 |!3 ^GlosSary|''Glossary of terms used in FitLibrary''|
 |!3 ^CrossReference|''A way of getting cross reference information about actions used by storytest''|
+|!3 ^BuildingFitLibrary|''Details of the build process for FitLibrary''|
+
 !c !img http://files/images/fitBookCover.jpeg
 
 >WasSuiteSetUp

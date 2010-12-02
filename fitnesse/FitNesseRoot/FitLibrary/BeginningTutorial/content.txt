@@ -4,7 +4,7 @@ In ''!-FitLibrary-!'', one or more tables are used to specify business rules and
 
 Tables are used for two important reasons:
 
- * The help to clarify the language of the domain
+ * They help to clarify the language of the domain
  * They provide a structure in which feedback is provided, such as whether a test passed or not.
 
 As we'll see in the following, tables are used in several different ways.
@@ -40,7 +40,7 @@ Or we may want to deal with collections of things, such as a list of customers w
 ... examples of setting up and checking collections...
 
 
-For further details, see .FitLibrary.ReferenCe.DoTables
+For further details, see .FitLibrary.UserGuide and .FitLibrary.ReferenCe.DoTables
 
 !2 Under Development
 #
