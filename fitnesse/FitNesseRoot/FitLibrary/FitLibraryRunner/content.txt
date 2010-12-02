@@ -12,9 +12,9 @@ By default, the arguments are as follows:
 |!3 ''Argument''|!3 ''Default value''|!3 ''Description''|
 |''suiteName ''| |''The name of the page at the top of the suite. Eg !-FitLibrary.SpecifiCations-!''|
 |''fitNesseDiry''|fitNesseDiry|''The directory/folder where the !-FitNesse-! system is to be found, with !-FitNesseRoot-! within that''|
-|''resultsDiry''|runnerResults|''The directory/fodler where the html for the results of the bacth run are to be placed''|
+|''resultsDiry''|runnerResults|''The directory/folder where the html for the results of the bacth run are to be placed''|
 |''showPasses''|false|''If true, write reports for all storytests that have been run. If false, only show that ones that have errors.''|
 |''port''|80|''The internal port number that is passed to !-FitNesse-!. This is needed if any storytests use the FITNESSE_PORT variable.''|
 |''retries''|0|''How many times to retry running a storytest if it fails.''|
 
-FitLibraryRunner is based on Gojko Adzic's Trinidad, but runs the storytests in parallel with loading them from the file system.
+FitLibraryRunner is based on Gojko Adzic's Trinidad, but runs the storytests in parallel with loading them from the file system, so it's quicker.
