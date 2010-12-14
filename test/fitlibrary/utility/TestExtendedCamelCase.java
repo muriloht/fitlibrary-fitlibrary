@@ -41,6 +41,7 @@ public class TestExtendedCamelCase extends TestCase {
     }
     public void testJavaKeyword() {
         check("static","static_");
+        check("assert","assert_");
         check("return","return_");
         check("null","null_");
     }

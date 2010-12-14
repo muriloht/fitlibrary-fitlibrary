@@ -50,7 +50,7 @@ public class ExtendedCamelCase {
 	};
 	private static final String[] javaKeyWords = {
 	         // Can these be checked by some Java method?
-	    "abstract", "boolean", "break", "byte", "case", "catch", "char", 
+	    "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", 
 	    "class", "const", "continue", "default", "do", "double", "else", "enum",
 	    "extends", "false", "final", "finally", "float", "for", "goto", "if",
 	    "implements", "import", "instanceof", "int", "interface", "long",

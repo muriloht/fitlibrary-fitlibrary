@@ -14,7 +14,8 @@
  * To use ${fitLibrary} in Java with ${fitNesse}, you need to include the following at the top level page of your project:
 {{{
     !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
-}}} * Batch testing of ''!-FitNesse-!'' storytests (wiki format) is supported. See FitLibraryRunner
+}}} * ''!-FitLibrary-!'' requires jdk 1.6
+ * Batch testing of ''!-FitNesse-!'' storytests (wiki format) is supported. See FitLibraryRunner
 
  * ''^FolderRunner'' runs Fit tests in batch, as an alternative to ''!-FitNesse-!'' (using HTML and XLS formats instead of wiki format).
 !3 How to achieve various tasks with ${fitLibrary}

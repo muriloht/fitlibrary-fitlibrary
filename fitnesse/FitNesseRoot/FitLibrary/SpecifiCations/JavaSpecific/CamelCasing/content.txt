@@ -17,6 +17,7 @@ Extended camel is used with all of ${fitLibrary}, taking camel casing one step f
 |''calculate''|
 |name           || identifier |
 |abstract||abstract_|
+|assert||assert_|
 |boolean||boolean_|
 |break||break_|
 |byte||byte_|
