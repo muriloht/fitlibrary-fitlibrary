@@ -25,8 +25,8 @@ public class ParallelTestRunner {
 	private ParallelTestResultRepository resultRepository;
 	
 	public ParallelTestRunner(ParallelTestRepository repository, TestEngine testEngine,
-			String outputPath, boolean showPasses, String suiteName) throws IOException{
-		this(repository,testEngine,new ParallelFolderTestResultRepository(new FolderTestResultRepository(outputPath,suiteName,System.out,showPasses),
+			String outputPath, boolean showPasses, String suiteName, boolean junitXMLOutput) throws IOException{
+		this(repository,testEngine,new ParallelFolderTestResultRepository(new FolderTestResultRepository(outputPath,suiteName,System.out,showPasses,junitXMLOutput),
 				Executors.newSingleThreadExecutor()));
 	}
 	public ParallelTestRunner(ParallelTestRepository repository, TestEngine testRunner,

@@ -13,17 +13,19 @@ public class ParallelSuiteResult implements SuiteResult {
 	private Counts counts=new Counts();
 	private StringBuffer content;
 	private boolean showPasses;
+	private long durationMillis;
 	
 	public ParallelSuiteResult(String name, boolean showPasses){
 		this.name = name;
 		this.showPasses = showPasses;
+		
 		content = new StringBuffer(
 				"<head><title>").append(name).append(
 				"</title><link rel='stylesheet' type='text/css' href='fitnesse.css' media='screen'/>" +
 				"<link rel='stylesheet' type='text/css' href='fitnesse_print.css' media='print'/>"+
 				"</head><body><h2>").append(name).
 				append("</h2><p>"+new Date()).
-				append("<table><tr><td>Name</td><td>Right</td><td>Wrong</td><td>Exceptions</td></tr>");
+				append("<table><tr><td>Name</td><td>Right</td><td>Wrong</td><td>Exceptions</td><td>Duration</td></tr>");
 	}
 	
 	@Override
@@ -41,9 +43,10 @@ public class ParallelSuiteResult implements SuiteResult {
 	}
 	@Override
 	public void append(TestResult result){
-			Counts resultCounts = result.getCounts();
-			counts.tally(resultCounts);
-			appendRow(result, resultCounts);							
+		Counts resultCounts = result.getCounts(); 
+		counts.tally(resultCounts);
+		appendRow(result, resultCounts);							
+		durationMillis += result.durationMillis();
 	}
 
 	private void appendRow(TestResult result, Counts resultCounts) {
@@ -52,6 +55,7 @@ public class ParallelSuiteResult implements SuiteResult {
 		content.append("</td><td>").append(resultCounts.right)
 			.append("</td><td>").append(resultCounts.wrong)
 			.append("</td><td>").append(resultCounts.exceptions)
+			.append("</td><td>").append(result.durationMillis())
 			.append("</td></tr>");
 	}
 
@@ -66,5 +70,10 @@ public class ParallelSuiteResult implements SuiteResult {
 		if (c.wrong>0) return "fail";
 		if (c.right>0) return "pass";
 		return "plain";
+	}
+
+	@Override
+	public long durationMillis() {
+		return durationMillis;
 	}
 }

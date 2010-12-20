@@ -48,10 +48,11 @@ public class FitLibraryTestEngine implements TestEngine {
 	private TestResult runTest(TestDescriptor test, OutputStream out, OutputStream err) {
 		String content = test.getContent();
 		if (content.equals(NOT_A_TEST))
-			return new SingleTestResult(new Counts(),test.getName()," not a Test");
+			return new SingleTestResult(new Counts(),test.getName()," not a Test", 0);
 		if (!content.contains("<table"))
-			return new SingleTestResult(new Counts(),test.getName()," contains no tables");
+			return new SingleTestResult(new Counts(),test.getName()," contains no tables", 0);
         try {
+        	long time = System.currentTimeMillis();
 			Tables tables = TableFactory.tables(content);
 			TableListener listener = new TableListener();
 			batching.setCurrentPageName(test.getName());
@@ -59,11 +60,11 @@ public class FitLibraryTestEngine implements TestEngine {
 			String report = tables.report();
 			report = add("out",out,report);
 			report = add("err",err,report);
-			return new SingleTestResult(listener.getTestResults().getCounts(),test.getName(),report);
+			return new SingleTestResult(listener.getTestResults().getCounts(),test.getName(),report, System.currentTimeMillis()-time);
 		} catch (FitParseException e) {
 			Counts counts = new Counts();
 			counts.exceptions = 1;
-			return new SingleTestResult(counts,test.getName(),e.toString());
+			return new SingleTestResult(counts,test.getName(),e.toString(), 0);
 		}
 	}
 	private String add(String header, OutputStream out, String report) {

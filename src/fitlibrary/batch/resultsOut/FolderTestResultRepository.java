@@ -14,20 +14,25 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import fit.Counts;
 import fitlibrary.batch.trinidad.TestResult;
 import fitlibrary.batch.trinidad.TestResultRepository;
+import fitnesse.junit.JUnitXMLTestListener;
+import fitnesse.responders.run.TestSummary;
 
 public class FolderTestResultRepository implements TestResultRepository {
 	private final String outputPath;
 	private final PrintStream out;
 	private final boolean showPasses;
+	private final boolean junitXMLoutput;
 	
-	public FolderTestResultRepository(String outputPath, String suiteName, PrintStream out, boolean showPasses) {
+	public FolderTestResultRepository(String outputPath, String suiteName, PrintStream out, boolean showPasses, boolean junitXMLoutput) {
 		this.outputPath = selectFolderName(outputPath + "/" + suiteName+ "/" + formattedDateTime());
 		new File(this.outputPath).mkdirs();
 		this.out = out;
 		this.showPasses = showPasses;
+		this.junitXMLoutput = junitXMLoutput;
 		new File(outputPath).mkdirs();
 	}
 	private static String formattedDateTime() {
@@ -46,8 +51,9 @@ public class FolderTestResultRepository implements TestResultRepository {
 	}
 	@Override
 	public void recordTestResult(TestResult tr) throws IOException {
-		Counts counts = tr.getCounts();
-		out.println(tr.getName()+  " right="+counts.right +", wrong="+counts.wrong+ ", ignores="+counts.ignores+", exceptions= "+counts.exceptions);
+		Counts counts = tr.getCounts();  
+		out.println(tr.getName()+  " right="+counts.right +", wrong="+counts.wrong+ ", ignores="+counts.ignores+", exceptions= "+counts.exceptions+", duration= "+tr.durationMillis());
+		
 		if (showPasses || tr instanceof SuiteResult || (counts.wrong + counts.exceptions) > 0) {
 			String finalPath=new File(outputPath,tr.getName()+".html").getAbsolutePath();
 			FileWriter fw=new FileWriter(finalPath);
@@ -56,7 +62,19 @@ public class FolderTestResultRepository implements TestResultRepository {
 			fw.write(content);
 			fw.close();
 		}
+		
+		if (junitXMLoutput)
+			doJunitXMLoutput(tr);
 	}
+	
+	
+	
+	private void doJunitXMLoutput(TestResult tr) throws IOException {
+		// FitNesse already has a JUnit XML output class - adapt Counts to a TestSummary and use it. 
+		JUnitXMLTestListener xmlOut = new JUnitXMLTestListener(outputPath);
+		xmlOut.recordTestResult(tr.getName(), new TestSummary(tr.getCounts().right, tr.getCounts().wrong, tr.getCounts().ignores, tr.getCounts().exceptions), tr.durationMillis());
+	}
+	
 	@Override
 	public void addFile(File f, String relativeFilePath)throws IOException {
 		copy(f, new File(outputPath,relativeFilePath));

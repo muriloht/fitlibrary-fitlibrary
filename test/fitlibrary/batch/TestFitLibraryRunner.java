@@ -28,6 +28,7 @@ public class TestFitLibraryRunner {
 		assertThat(runParameters.get(SHOW_PASSES),is("false"));
 		assertThat(runParameters.get(PORT),is("80"));
 		assertThat(runParameters.get(RETRIES),is("0"));
+		assertThat(runParameters.get(JUNIT_XML_OUTPUT),is("false"));
 		
 	}
 	@Test(expected=InvalidParameterException.class)
@@ -113,7 +114,8 @@ public class TestFitLibraryRunner {
 				"-resultsDiry", "TheResults",
 				"-showPasses", "true",
 				"-port", "8990",
-				"-retries", "11"};
+				"-retries", "11",
+				"-junitXmlOutput", "true"};
 		RunParameters runParameters = FitLibraryRunner.getRunParameters(args);
 		assertThat(runParameters.get(SUITE_NAME),is("Suite.Name"));
 		assertThat(runParameters.get(FIT_NESSE_DIRY),is("../.."));
@@ -121,6 +123,7 @@ public class TestFitLibraryRunner {
 		assertThat(runParameters.get(SHOW_PASSES),is("true"));
 		assertThat(runParameters.get(PORT),is("8990"));
 		assertThat(runParameters.get(RETRIES),is("11"));
+		assertThat(runParameters.get(JUNIT_XML_OUTPUT),is("true"));
 	}
 	@Test
 	public void unknownParameter() {

@@ -10,6 +10,7 @@
 
 	<!-- batch runner properties -->
 	<property name="showpassesinreport" value="false" />
+	<property name="junit-xml-output" value="true" />
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" /> <!-- 10 mins default timeout -->
 	<!-- release properties -->
@@ -276,6 +277,8 @@
 				<arg value="@{resultsDirectory}"/>
 				<arg value="-showPasses"/>
 				<arg value="${showpassesinreport}"/>
+				<arg value="-junitXmlOutput"/>
+				<arg value="${junit-xml-output}"/>
 
 				<classpath>
 					<fileset dir="${lib}">

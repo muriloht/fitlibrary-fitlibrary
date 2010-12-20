@@ -32,7 +32,7 @@ public class TestFitLibraryTestEngine {
 		String html = "contents";
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(mockBatching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(),testName," contains no tables")));
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(),testName," contains no tables",0)));
 	}
 	@Test public void passWithNoOutput() {
 		String testName = "Test Two";
@@ -49,7 +49,7 @@ public class TestFitLibraryTestEngine {
 		};
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
-		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(1,0,0,0),testName,html)));
+		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(1,0,0,0),testName,html,0)));
 	}
 	@Test public void failWithOutOnly() {
 		String testName = "Test Three";
@@ -70,7 +70,7 @@ public class TestFitLibraryTestEngine {
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result.getContent(),equalTo(html+"\n<hr/><h1>out</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n"));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,1,0,0),testName,
-				html+"\n<hr/><h1>out</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n")));
+				html+"\n<hr/><h1>out</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n",0)));
 	}
 	@Test public void exceptionWithErrOnly() {
 		String testName = "Test Three";
@@ -89,7 +89,7 @@ public class TestFitLibraryTestEngine {
 		FitLibraryTestEngine engine = new FitLibraryTestEngine(batching);
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,0,1),testName,
-				html+"\n<hr/><h1>err</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n")));
+				html+"\n<hr/><h1>err</h1>\n<pre>\nMessage"+linebreak+"\n</pre>\n",0)));
 	}
 	@Test public void ignoreWithOutAndErr() {
 		String testName = "Test Three";
@@ -111,7 +111,7 @@ public class TestFitLibraryTestEngine {
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
 				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message"+linebreak+"\n</pre>\n"+
-				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n")));
+				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n",0)));
 	}
 	@Test public void ignoreWithOutAndErrWithBody() {
 		String testName = "Test Three";
@@ -133,7 +133,7 @@ public class TestFitLibraryTestEngine {
 		TestResult result = engine.runTest(new InMemoryTestImpl(testName,html+"</body>"));
 		assertThat(result,matchesTestResult(new SingleTestResult(new Counts(0,0,1,0),testName,
 				html+"\n<hr/><h1>out</h1>\n<pre>\nOut Message"+linebreak+"\n</pre>\n"+
-				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n</body>")));
+				     "\n<hr/><h1>err</h1>\n<pre>\nErr Message"+linebreak+"\n</pre>\n</body>",0)));
 	}
 
 	
@@ -147,7 +147,7 @@ public class TestFitLibraryTestEngine {
 		public TestResultMatcher(TestResult expected) {
 			this.expected = expected;
 		}
-		@Override
+		@Override             
 		public boolean matchesSafely(TestResult other) {
 			boolean namesMatch = expected.getName().equals(other.getName());
 			if (!namesMatch)

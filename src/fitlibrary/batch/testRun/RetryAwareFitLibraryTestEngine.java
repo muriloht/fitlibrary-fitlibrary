@@ -17,7 +17,7 @@ public class RetryAwareFitLibraryTestEngine extends FitLibraryTestEngine {
 	@Override
 	public TestResult runTest(TestDescriptor test) {
 		if (passedList.contains(test.getName())) {
-			return new SingleTestResult(new Counts(), test.getName()+" (skipping already passed)", "");
+			return new SingleTestResult(new Counts(), test.getName()+" (skipping already passed)", "", 0);
 		}
 		
 		TestResult result = super.runTest(test);

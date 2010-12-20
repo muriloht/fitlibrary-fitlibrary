@@ -9,4 +9,5 @@ public interface TestResult {
 	Counts getCounts();
 	String getName();
 	String getContent();
+	long durationMillis();
 }

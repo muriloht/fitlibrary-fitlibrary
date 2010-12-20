@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import fit.Counts;
+import fitlibrary.batch.FitLibraryRunner.RunParameters.ValidParameters;
 import fitlibrary.batch.fitnesseIn.ParallelFitNesseRepository;
 import fitlibrary.batch.resultsOut.ParallelSuiteResult;
 import fitlibrary.batch.testRun.FitLibraryTestEngine;
@@ -48,21 +49,22 @@ public class FitLibraryRunner {
 		System.out.println("FitLibraryRunner diry is "+new File(".").getAbsolutePath());
 		try {
 			RunParameters runParameters = RunParameters.getRunParameters(args);
-			String suiteName = runParameters.get(RunParameters.ValidParameters.SUITE_NAME);
 			String fitNesseDirectoryPath = runParameters.get(FIT_NESSE_DIRY);
-			String resultsDirectoryPath = runParameters.get(RESULTS_DIRY);
-			boolean showPasses = runParameters.get(SHOW_PASSES).equals("true");
-			int port = runParameters.getInt(PORT);
-			int maxRetries = runParameters.getInt(RETRIES);
 			ConfigureLoggingThroughFiles.configure(fitNesseDirectoryPath+"/");
-			runParallel(suiteName, fitNesseDirectoryPath, resultsDirectoryPath, showPasses, port, maxRetries);
+			
+			runParallel(runParameters.get(SUITE_NAME), 
+						fitNesseDirectoryPath, 
+						runParameters.get(RESULTS_DIRY), 
+						runParameters.getBoolean(SHOW_PASSES), 
+						runParameters.getInt(PORT), 
+						runParameters.getInt(RETRIES), 
+						runParameters.getBoolean(ValidParameters.JUNIT_XML_OUTPUT));
 		} catch (InvalidParameterException e) {
 			error();
 		} catch (NumberFormatException e) {
 			error();
 		}
 	}
-
 	private static void error() {
 		System.err.println("Usage: fitlibrary.batch.FitLibraryRunner "+"" +
 				"-suiteName suiteName [-fitNesseDiry fitNesseDiry] [-resultsDiry resultsDiry] [-showPasses true] [-port port]");
@@ -76,9 +78,9 @@ public class FitLibraryRunner {
 		String fitNesseDirectoryPath = args[1];
 		String resultsDirectoryPath = args[2];
 		boolean showPasses = args.length == 4;
-		runParallel(suiteName, fitNesseDirectoryPath, resultsDirectoryPath, showPasses, PORT_NO, 0);
+		runParallel(suiteName, fitNesseDirectoryPath, resultsDirectoryPath, showPasses, PORT_NO, 0, false);
 	}
-	private static void runParallel(String suiteName, String fitNesseDirectoryPath, String resultsDirectoryPath, boolean showPasses, int port, int maxRetries) throws IOException, InterruptedException {
+	private static void runParallel(String suiteName, String fitNesseDirectoryPath, String resultsDirectoryPath, boolean showPasses, int port, int maxRetries, boolean junitXmlOutput) throws IOException, InterruptedException {
 		verifyFitNesseDirectory(fitNesseDirectoryPath);
 		DefineActionsOnPageSlowly.setFitNesseDiry(fitNesseDirectoryPath); // Hack this in for now.
 		Traverse.setDifferenceStrategy(new FitLibraryRunnerDifference(fitNesseDirectoryPath));
@@ -88,7 +90,7 @@ public class FitLibraryRunner {
 		int numLoops = 1; 
 		Counts counts;
 		while(true) {
-			ParallelTestRunner runner = new ParallelTestRunner(new ParallelFitNesseRepository(fitNesseDirectoryPath,port), testEngine,resultsDirectoryPath,showPasses,suiteName);
+			ParallelTestRunner runner = new ParallelTestRunner(new ParallelFitNesseRepository(fitNesseDirectoryPath,port), testEngine,resultsDirectoryPath,showPasses,suiteName,junitXmlOutput);
 			counts = runner.runSuite(suiteName,new ParallelSuiteResult(suiteName,showPasses));
 			report(start, counts);
 			if ((counts.exceptions+counts.wrong) == 0 || numLoops++ > maxRetries) 
@@ -191,6 +193,16 @@ public class FitLibraryRunner {
 				public String defaultValue() {
 					return "0";
 				}
+			},
+			JUNIT_XML_OUTPUT {
+				@Override
+				public String parameterName() {
+					return "junitXmlOutput";
+				}
+				@Override
+				public String defaultValue() {
+					return "false";
+				}
 			};
 			
 			abstract String parameterName();
@@ -231,8 +243,11 @@ public class FitLibraryRunner {
 		public int getInt(ValidParameters key) {
 			return Integer.parseInt(get(key));
 		}
+		public boolean getBoolean(ValidParameters key) {
+			return Boolean.parseBoolean(get(key));
+		}
 		public String get(ValidParameters key) {
-			return parameterMap .get(key);
+			return parameterMap.get(key);
 		}
 		public void put(ValidParameters key, String value) {
 			parameterMap.put(key,value);
