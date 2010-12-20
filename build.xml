@@ -10,7 +10,7 @@
 
 	<!-- batch runner properties -->
 	<property name="showpassesinreport" value="false" />
-	<property name="junit-xml-output" value="true" />
+	<property name="junit-xml-output" value="false" />
 	<property name="results-dir" value="${home}/runnerResults" />
 	<property name="timeout" value="600000" /> <!-- 10 mins default timeout -->
 	<!-- release properties -->
