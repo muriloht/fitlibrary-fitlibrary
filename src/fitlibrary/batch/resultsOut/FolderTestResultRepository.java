@@ -67,14 +67,22 @@ public class FolderTestResultRepository implements TestResultRepository {
 			doJunitXMLoutput(tr);
 	}
 	
-	
-	
 	private void doJunitXMLoutput(TestResult tr) throws IOException {
-		// FitNesse already has a JUnit XML output class - adapt Counts to a TestSummary and use it. 
-		JUnitXMLTestListener xmlOut = new JUnitXMLTestListener(outputPath);
-		xmlOut.recordTestResult(tr.getName(), new TestSummary(tr.getCounts().right, tr.getCounts().wrong, tr.getCounts().ignores, tr.getCounts().exceptions), tr.durationMillis());
+        Counts counts = tr.getCounts();
+
+        if (skippedAlreadyPassed(counts)) {
+        	return;
+        }
+
+        // FitNesse already has a JUnit XML output class - adapt Counts to a TestSummary and use it.
+        JUnitXMLTestListener xmlOut = new JUnitXMLTestListener(outputPath);
+        xmlOut.recordTestResult(tr.getName(), new TestSummary(counts.right, counts.wrong, counts.ignores, counts.exceptions), tr.durationMillis());
 	}
 	
+	private boolean skippedAlreadyPassed(Counts counts) {
+		return counts.right+counts.wrong+counts.ignores+counts.exceptions==0;
+    }
+	 
 	@Override
 	public void addFile(File f, String relativeFilePath)throws IOException {
 		copy(f, new File(outputPath,relativeFilePath));
