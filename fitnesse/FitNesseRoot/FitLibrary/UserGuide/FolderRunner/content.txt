@@ -5,12 +5,13 @@ FolderRunner:
  * Now works with the version of Java Fit included with ''!-FitLibrary-!''.
  * Uses CSS for reports, and automatically includes the appropriate links in the html header for those
 
-Run FolderRunner as follows:
-{{{      java -cp fitlibrary.jar fitlibrary.runner.FolderRunner testDiry reportDiry
+Run FolderRunner as follows (replace the ";" by ":" if you're on Linux):
+{{{      java -cp fitlibrary.jar;log4j-1.2.16.jar fitlibrary.runner.FolderRunner testDiry reportDiry
 }}} * You will need to add to the classpath (''cp'') for any application code that you're testing.
+ * The log4j jar file is provided in the release in fitlibrary/fitnesse/lib 
 
 If you want feedback on progress of FolderRunner, instead run ''!-FolderRunnerUI-!'' as follows:
-{{{      java -cp fitlibrary.jar fitlibrary.runner.FolderRunnerUI testDiry reportDiry
+{{{      java -cp fitlibrary.jar;log4j-1.2.16.jar fitlibrary.runner.FolderRunnerUI testDiry reportDiry
 }}} * This shows the current counts of passed tests, etc as it runs the tests
  * It also shows any program output (to ''out'' or ''err'')
  * It allows you to quit partway through
@@ -36,8 +37,8 @@ ${suite} allows the same storytests to be run with different fixtures, etc. For 
 #
  * FolderRunner uses ''!-SpreadsheetRunner-!'' which in turn uses ''Poi'' to read XLS files.
  * ''!-SpreadsheetRunner-!'' uses spreadsheet borders to work out where the tables are in the spreadsheet (just the first sheet).
- * See the directory ''testFolders'' in the distribution of ''!-FitLibrayForFit-!'' for examples of the use of spreadsheet files (these are used in my Fit tests for FolderRunner itself).
- * Add the poi jar in the classpath when using such files. (Download poi from http://jakarta.apache.org/poi)
+ * See the directory ''testFolders'' in the distribution of ''!-FitLibrayForFit-!'' for examples of the use of spreadsheet files.
+ * Add the poi jar in the classpath when using such files. (This jar is provided in the release folder ''fitlibrary/fitnesse/lib''. Or download poi from http://jakarta.apache.org/poi)
 #
 !3 ''!-SetUp-!'' and ''!-TearDown-!''
 #
