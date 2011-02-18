@@ -109,7 +109,7 @@ public class TablesCompare {
 	}
 	private String canonical(String s) {
 		return s.replaceAll("\t"," ").replaceAll("\r","").replaceAll("<hr>","").
-			replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").replaceAll("\n","").trim();
+		replaceAll("&nbsp;","").replaceAll("<hr/>","").replaceAll("<br>","").replaceAll("<br/>","").replaceAll("\n","").trim();
 	}
 	static class MismatchException extends Exception {
 		private static final long serialVersionUID = 1L;

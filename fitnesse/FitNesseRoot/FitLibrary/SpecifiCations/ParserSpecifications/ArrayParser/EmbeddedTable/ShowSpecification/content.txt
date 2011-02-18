@@ -31,6 +31,6 @@
 <br><table border="1" cellspacing="0">
 <tr><td><b>check</b></td>
 <td><i>array123</i></td>
-<td class="fail">&nbsp; <span class="fit_label">expected</span><hr>1, 2, 3 <span class="fit_label">actual</span></td>
+<td class="fail"> <span class="fit_label">expected</span><hr>1, 2, 3 <span class="fit_label">actual</span></td>
 </tr>
 </table>-!|

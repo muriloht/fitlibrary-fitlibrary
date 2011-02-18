@@ -125,10 +125,10 @@ public class CellOnList extends TablesOnList implements Cell {
     }
     @Override
 	public void fail(TestResults testResults, String msg, VariableResolver resolver) {
-    	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
-    		failHtml(testResults,msg);
-    		return;
-    	}
+//    	if (fullText.isEmpty() && !hasEmbeddedTables(resolver)) {
+//    		failHtml(testResults,msg);
+//    		return;
+//    	}
         fail(testResults);
         String resolved = "";
         if (!text().equals(text(resolver)))

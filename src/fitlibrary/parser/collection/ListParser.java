@@ -86,7 +86,7 @@ public class ListParser implements Parser {
     		return tableMatches(cell.getEmbeddedTable(),actual,testResults);
     	Object expected = parse(cell,testResults);
     	if (isIterator())
-    		return CollectionUtility.equalsIterator((Iterator<?>)expected,(Iterator<?>)actual);
+    		return CollectionUtility.equalsIterator((Iterator<?>)expected,((List<?>)actual).iterator());
     	if (typed.isArray())
     		return Arrays.equals((Object[])expected,(Object[]) actual);
 		return expected.equals(actual);
@@ -113,7 +113,7 @@ public class ListParser implements Parser {
         if (object.getClass().isArray())
         	it = Arrays.asList((Object[])object).iterator();
         else if (isIterator())
-        	it = (Iterator<Object>)object;
+        	it = ((List<Object>)object).iterator();
         else
         	it = ((List<Object>)object).iterator();
         boolean first = true;

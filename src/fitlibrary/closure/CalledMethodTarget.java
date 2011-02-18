@@ -5,7 +5,10 @@
 package fitlibrary.closure;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import fitlibrary.diff.Diff_match_patch;
 import fitlibrary.diff.Diff_match_patch.Diff;
@@ -231,7 +234,16 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 		}
 	}
 	@Override
-	public boolean checkResult(Cell expectedCell, Object result, boolean showWrongs, boolean handleSubtype, TestResults testResults) {
+	public boolean checkResult(Cell expectedCell, Object initialResult, boolean showWrongs, 
+			boolean handleSubtype, TestResults testResults) {
+		Object result = initialResult;
+		if (result != null && Iterator.class.isAssignableFrom(result.getClass())) {
+			Iterator<?> it = (Iterator<?>) result;
+			List<Object> list = new ArrayList<Object>();
+			while (it.hasNext())
+				list.add(it.next());
+			result = list;
+		}
 		ResultParser valueParser = resultParser;
 		if (handleSubtype && closure != null)
 			valueParser = closure.specialisedResultParser(resultParser,result,evaluator);
@@ -251,10 +263,11 @@ public class CalledMethodTarget implements ICalledMethodTarget {
 				return true;
 			}
 			if (showWrongs && (result == null || !expectedCell.hasEmbeddedTables(runtime))) {
-				if (result instanceof String)
+				if (result instanceof String) {
 					expectedCell.failWithStringEquals(testResults,valueParser.show(result),runtime);
-				else
+				} else {
 					expectedCell.fail(testResults,valueParser.show(result),runtime);
+				}
 			}
 			return false;
 		} catch (Exception e) {

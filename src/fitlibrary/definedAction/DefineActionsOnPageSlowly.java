@@ -19,7 +19,7 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 import fitlibrary.utility.ParseUtility;
 
-public class DefineActionsOnPageSlowly { //extends Traverse {
+public class DefineActionsOnPageSlowly {
 	protected String topPageName;
 	private static String FITNESSE_DIRY = ".";
 	protected final RuntimeContextInternal runtime;
