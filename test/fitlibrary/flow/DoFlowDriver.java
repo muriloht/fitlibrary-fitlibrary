@@ -14,6 +14,7 @@ import org.jmock.States;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.config.Configuration;
 import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.TestDoFlowWithFixture.MockFixture;
@@ -41,6 +42,7 @@ public class DoFlowDriver {
 	final RuntimeContextInternal runtime;
 	final RuntimeContextInternal runtimeCopy;
 	final SetUpTearDown setUpTearDown;
+	final Configuration config;
 	final VariableResolver resolver = new GlobalDynamicVariables();
 	
 	final States state;
@@ -59,9 +61,10 @@ public class DoFlowDriver {
 		scopeStack = context.mock(IScopeStack.class);
 		testResults = TestResultsFactory.testResults();
 		tableListener = context.mock(ITableListener.class);
-		runtime = context.mock(RuntimeContextInternal.class);
+		runtime = context.mock(RuntimeContextInternal.class,"runtime");
 		runtimeCopy = context.mock(RuntimeContextInternal.class,"runtimeCopy");
 		setUpTearDown = context.mock(SetUpTearDown.class);
+		config = context.mock(Configuration.class);
 		state = context.states("doFlow").startsAs(BEGIN_STATE);
 		doFlow = new DoFlow(flowEvaluator,scopeStack,runtime,setUpTearDown);
 		startingStorytest();
@@ -77,12 +80,12 @@ public class DoFlowDriver {
 		final String endState = endState("startingStorytest");
 		storytestNo++;
 		context.checking(new Expectations() {{
-			allowing(tableListener).getTestResults();
-			   will(returnValue(testResults));
-			allowing(runtime).getResolver();
-			   will(returnValue(resolver));
-			allowing(runtimeCopy).getResolver();
-			   will(returnValue(resolver));
+			allowing(runtime).getConfiguration(); will(returnValue(config));
+			allowing(runtimeCopy).getConfiguration(); will(returnValue(config));
+			allowing(config).isAddTimings(); will(returnValue(false));
+			allowing(tableListener).getTestResults(); will(returnValue(testResults));
+			allowing(runtime).getResolver(); will(returnValue(resolver));
+			allowing(runtimeCopy).getResolver(); will(returnValue(resolver));
 			oneOf(scopeStack).setAbandon(false);     when(state.is(currentState));
 			oneOf(scopeStack).setStopOnError(false); when(state.is(currentState));
 			oneOf(scopeStack).clearAllButSuite();    when(state.is(currentState));

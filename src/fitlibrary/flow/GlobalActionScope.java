@@ -277,6 +277,9 @@ public class GlobalActionScope implements RuntimeContextual {
 	public Configuration configureFitlibrary() {
 		return runtime.getConfiguration();
 	}
+	public Configuration getRuntimeConfiguration() {
+		return runtime.getConfiguration();
+	}
 	
 	//-------------------------------------- SPECIALS -----------------------------------------
 	/** Check that the result of the action in the first part of the row is less than

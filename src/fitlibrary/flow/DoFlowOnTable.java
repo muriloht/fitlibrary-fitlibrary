@@ -5,6 +5,9 @@
 
 package fitlibrary.flow;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import fit.Fixture;
@@ -75,7 +78,9 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 //			    		System.out.println("DoFlow set current Row "+row);
 			    		runtime.setCurrentRow(row);
 //			    		System.out.println("DoFlow runtime = "+runtime.hashCode());
+			    		long startTime = System.currentTimeMillis();
 			    		TypedObject typedResult = flowEvaluator.interpretRow(row,testResults);
+			    		addTimeText(row,startTime);
 			    		Object subject = typedResult.getSubject();
 			    		if (subject != null && !(subject instanceof Boolean))
 			    			logger.trace("Interpreted  row #"+rowNo+" -> "+subject);
@@ -94,18 +99,20 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 			    		} else if (subject instanceof SuiteEvaluator) {
 			    			handleSuiteFixture((SuiteEvaluator)subject, typedResult, row, testResults);
 			    		} else if (subject instanceof CollectionSetUpTraverse || subject instanceof SetUpFixture) {
-			    			handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
+			    			runEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
 			    			return;// have finished table
 			    		} else if (subject instanceof DoEvaluator) {
 			    			pushOnScope(typedResult,row,testResults);
 			    		} else if (subject instanceof Evaluator) { // Calculate, etc
-			    			handleEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
+			    			runEvaluator(typedResult, (Evaluator) subject, rowNo, table, testResults);
 			    			return; // have finished table
 			    		} else if (subject instanceof Fixture) {
+			    			startTime = System.currentTimeMillis();
 			    			Table remainingTable = table.fromAt(rowNo).asTableOnParse();
 			    			flowEvaluator.fitHandler().doTable((Fixture) subject,remainingTable,testResults,flowEvaluator);
 			    			for (int i = 0; i < remainingTable.size(); i++)
 			    				table.replaceAt(rowNo+i, remainingTable.at(i));
+			    			addTimeText(row,startTime);
 			    			return; // have finished table
 			    		}
 			    	}
@@ -115,17 +122,30 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 			}
 		}
 	}
-	private void handleEvaluator(TypedObject typedResult, Evaluator subject,
+	private void addTimeText(Row row, long startTime) {
+		if (runtime.getConfiguration().isAddTimings()) {
+			long endTime = System.currentTimeMillis();
+			long elapsedTime = endTime - startTime;
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+			String tooltip = format.format(new Date(startTime))+"\n"+format.format(new Date(endTime));
+			if (elapsedTime > 0)
+				row.addCell("<span class='note' title='"+tooltip+"'><i>" + elapsedTime + "</i> ms</span>");
+		}
+	}
+	private void runEvaluator(TypedObject typedResult, Evaluator subject,
 			int rowNo, Table table, TestResults testResults) {
 		Table restOfTable = table.fromAt(rowNo);
 		int rest = restOfTable.size();
 		Row row = table.at(rowNo);
 		typedResult.injectRuntime(runtime);
+		long startTime = System.currentTimeMillis();
 		if (!(subject instanceof DefineAction)) // Don't want this as the storytest's main fixture/object
 			pushOnScope(typedResult,row,testResults);
 		else
 			callSetUpSutChain(subject,row,testResults);
 		subject.interpretAfterFirstRow(restOfTable, testResults);
+		addTimeText(row,startTime);
+
 		if (subject instanceof DefineAction)
 			setUpTearDown.callTearDownOnSutChain(subject, row, testResults);
 		if (restOfTable != table && restOfTable.size() > rest)

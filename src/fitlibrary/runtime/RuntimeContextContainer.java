@@ -6,14 +6,11 @@
 package fitlibrary.runtime;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 import fitlibrary.config.Configuration;
-import fitlibrary.config.ConfigurationOfRuntime;
 import fitlibrary.dynamicVariable.DynamicVariables;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.dynamicVariable.DynamicVariablesRecordingThatFails;
@@ -24,7 +21,6 @@ import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
 import fitlibrary.log.ConfigureLog4j;
-import fitlibrary.log.FileLogger;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
@@ -42,14 +38,10 @@ import fitlibrary.utility.Pair;
 public class RuntimeContextContainer implements RuntimeContextInternal {
 	private static Logger logger = FitLibraryLogger.getLogger(RuntimeContextContainer.class);
 	private static final String EXPAND_DEFINED_ACTIONS = "$$expandDefinedActions$$";
+	private SuiteWideRuntimeContext suiteWideRuntimeContext;
+	// This is part suite-wide and part local to a storytest:
 	protected DynamicVariables dynamicVariables = new GlobalDynamicVariables();
-	private Map<String,Integer> timeouts = new HashMap<String, Integer>();
-	private FileLogger fileLogger = new FileLogger();
-	private IScope scope;
-	private TableEvaluator tableEvaluator;
-	private GlobalActionScope global;
-	// Remember to copy across any added valuable thing inside copyFromSuite()
-	// Following are local to a storytest and so are not copied across a suite:
+	// Following are local to a storytest:
 	private DynamicVariablesRecording dynamicVariablesRecording = new DynamicVariablesRecordingThatFails();
 	private DefinedActionCallManager definedActionCallManager = new DefinedActionCallManager();
 	private FoldingTexts foldingTexts = new FoldingTexts();
@@ -59,14 +51,12 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	protected Table currentTable;
 	private String currentPageName = "";
 	private ConfigureLog4j configureLog4j;
-	private Configuration configuration = new ConfigurationOfRuntime();
 
 	public RuntimeContextContainer() {
 		this(null,new GlobalActionScope()); // For those cases where a fixture is being used independently of table execution
 	}
 	public RuntimeContextContainer(IScope scope, GlobalActionScope global) {
-		this.scope = scope;
-		this.global = global;
+		suiteWideRuntimeContext = new SuiteWideRuntimeContext(scope,global);
 		global.setRuntimeContext(this);
 		configureLog4j = new ConfigureLog4j(this);
 	}
@@ -74,37 +64,25 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 		for (int i = 0; i < s.length-1; i += 2)
 			dynamicVariables.put(s[i],s[i+1]);
 	}
-	protected RuntimeContextContainer(DynamicVariables dynamicVariables, Map<String,Integer> timeouts, 
-			FileLogger fileLogger, IScope scope, TableEvaluator tableEvaluator, GlobalActionScope global,
+	protected RuntimeContextContainer(DynamicVariables dynamicVariables, SuiteWideRuntimeContext suiteWideRuntimeContext,
 			ConfigureLog4j configureLog4j, FoldingTexts foldingTexts) {
 		this.dynamicVariables = dynamicVariables;
-		this.timeouts = timeouts;
-		this.fileLogger = fileLogger;
-		this.scope = scope;
-		this.tableEvaluator = tableEvaluator;
-		this.global = global;
+		this.suiteWideRuntimeContext = suiteWideRuntimeContext;
 		this.configureLog4j = configureLog4j;
 		this.foldingTexts = foldingTexts;
 	}
-	@Override
 	public RuntimeContextInternal copyFromSuite() {
 		logger.trace("Use Suite dynamic variables "+dynamicVariables.top());
 		return new RuntimeContextContainer(
 				new GlobalDynamicVariables(dynamicVariables.top()),
-				timeouts,
-				fileLogger,
-				scope,
-				tableEvaluator,
-				global,
+				suiteWideRuntimeContext,
 				configureLog4j,
 				foldingTexts);
 	}
-	@Override
 	public void reset() {
 		dynamicVariables = new GlobalDynamicVariables();
-		timeouts = new HashMap<String, Integer>();
+		suiteWideRuntimeContext.reset();
 	}
-	@Override
 	public DynamicVariables getDynamicVariables() {
 		return dynamicVariables;
 	}
@@ -112,139 +90,103 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public String toString() {
 		return getDynamicVariables().toString();
 	}
-	@Override
 	public void putTimeout(String name, int timeout) {
-		timeouts.put(name,timeout);
+		suiteWideRuntimeContext.putTimeout(name, timeout);
 	}
-	@Override
 	public int getTimeout(String name, int defaultTimeout) {
-		Integer timeout = timeouts.get(name);
-		if (timeout == null)
-			return defaultTimeout;
-		return timeout;
+		return suiteWideRuntimeContext.getTimeout(name, defaultTimeout);
 	}
-	@Override
 	public void startLogging(String fileName) {
-		fileLogger.start(fileName);
+		suiteWideRuntimeContext.startLogging(fileName);
 	}
-	@Override
 	public void printToLog(String s) throws IOException {
-		fileLogger.println(s);
+		suiteWideRuntimeContext.printToLog(s);
 	}
-	@Override
 	public void pushLocalDynamicVariables() {
 		dynamicVariables = new LocalDynamicVariables(dynamicVariables);
 	}
-	@Override
 	public void popLocalDynamicVariables() {
 		dynamicVariables = dynamicVariables.popLocal();
 	}
-	@Override
 	public void setDynamicVariable(String key, Object value) {
 		dynamicVariables.put(key, value);
 	}
-	@Override
 	public Object getDynamicVariable(String key) {
 		return dynamicVariables.get(key);
 	}
-	@Override
 	public boolean toExpandDefinedActions() {
 		return "true".equals(getDynamicVariable(EXPAND_DEFINED_ACTIONS));
 	}
-	@Override
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		setDynamicVariable(EXPAND_DEFINED_ACTIONS, ""+expandDefinedActions);
 	}
-	@Override
 	public IScope getScope() {
-		if (scope == null)
-			throw new RuntimeException("No scope in runtime");
-		return scope;
+		return suiteWideRuntimeContext.getScope();
 	}
 	public void SetTableEvaluator(TableEvaluator evaluator) {
-		this.tableEvaluator = evaluator;
+		suiteWideRuntimeContext.SetTableEvaluator(evaluator);
 	}
-	@Override
 	public TableEvaluator getTableEvaluator() {
-		return tableEvaluator;
+		return suiteWideRuntimeContext.getTableEvaluator();
 	}
-	@Override
 	public GlobalActionScope getGlobal() {
-		return global;
+		return suiteWideRuntimeContext.getGlobal();
 	}
-	@Override
 	public void showAsAfterTable(String title, String s) {
 		foldingTexts.logAsAfterTable(title, s);
 	}
-	@Override
 	public void show(String s) {
 		currentRow.addCell(s).shown();
 		getDefinedActionCallManager().addShow(currentRow);
 	}
-	@Override
 	public void addAccumulatedFoldingText(Table table) {
 		foldingTexts.addAccumulatedFoldingText(table);
 	}
-	@Override
 	public void recordToFile(String fileName) {
 		dynamicVariablesRecording = new DynamicVariablesRecordingToFile(fileName);
 	}
-	@Override
 	public DynamicVariablesRecording getDynamicVariableRecorder() {
 		return dynamicVariablesRecording;
 	}
-	@Override
 	public void setAbandon(boolean abandon) {
-		scope.setAbandon(abandon);
+		suiteWideRuntimeContext.setAbandon(abandon);
 	}
-	@Override
 	public boolean isAbandoned(TestResults testResults2) {
-		return scope.isAbandon() || (scope.isStopOnError() && testResults2.problems());
+		return suiteWideRuntimeContext.isAbandoned(testResults2);
 	}
-	@Override
 	public void setStopOnError(boolean stop) {
-		scope.setStopOnError(stop);
+		suiteWideRuntimeContext.setStopOnError(stop);
 	}
-	@Override
 	public DefinedActionCallManager getDefinedActionCallManager() {
 		return definedActionCallManager ;
 	}
-	@Override
 	public VariableResolver getResolver() {
 		return this;
 	}
-	@Override
 	public Pair<String,Tables> resolve(String key) {
 		return getDynamicVariables().resolve(key);
 	}
-	@Override
 	public void setCurrentRow(Row row) {
 		currentRow = row;
 	}
-	@Override
 	public void setCurrentTable(Table table) {
 		currentTable = table;
 	}
-	@Override
 	public boolean hasRowsAfter(Row row) {
 		if (currentTable == null || currentRow == null)
 			return false;
 		return currentTable.hasRowsAfter(currentRow);
 	}
-	@Override
 	public TestResults getTestResults() {
 		return testResults;
 	}
-	@Override
 	public void pushTestResults(TestResults results) {
 		testResultsStack.push(this.testResults);
 		this.testResults = results;
 	}
-	@Override
 	public void popTestResults() {
 		this.testResults = testResultsStack.pop();
 	}
-	@Override
 	public CellProxy cellAt(final int i) {
 		final Cell cell = currentRow.at(i);
 		return new CellProxy() {
@@ -288,7 +230,6 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 			}
 		};
 	}
-	@Override
 	public RowProxy currentRow() {
 		return new RowProxy() {
 			@Override
@@ -297,35 +238,27 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 			}
 		};
 	}
-	@Override
 	public Table currentTable() {
 		return currentTable;
 	}
-	@Override
 	public void setCurrentPageName(String pageName) {
 		this.currentPageName = pageName;
 	}
-	@Override
 	public String getCurrentPageName() {
 		return currentPageName;
 	}
-	@Override
 	public ConfigureLog4j getConfigureLog4j() {
 		return configureLog4j;
 	}
-	@Override
 	public void addNamedObject(String name, TypedObject typedObject) {
-		scope.addNamedObject(name,typedObject);
+		suiteWideRuntimeContext.addNamedObject(name,typedObject);
 	}
-	@Override
 	public Configuration getConfiguration() {
-		return configuration;
+		return suiteWideRuntimeContext;
 	}
-	@Override
 	public String extendedCamel(String s) {
-		return ExtendedCamelCase.camel(s,configuration.keepingUniCode());
+		return ExtendedCamelCase.camel(s,suiteWideRuntimeContext.keepingUniCode());
 	}
-	@Override
 	public Row row() {
 		return currentRow;
 	}

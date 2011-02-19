@@ -11,6 +11,7 @@ import org.jmock.States;
 
 import fit.Parse;
 import fit.exception.FitParseException;
+import fitlibrary.config.Configuration;
 import fitlibrary.dynamicVariable.GlobalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.DoFlowOnTable.DoFlower;
@@ -39,6 +40,8 @@ public class DoFlowOnTableDriver {
 	final DoFlower doFlower;
 	final TestResults testResults;
 	final DoFlowOnTable doFlowOnTable;
+	final Configuration config;
+
 	final VariableResolver resolver = new GlobalDynamicVariables();
 
 	final States state;
@@ -52,8 +55,9 @@ public class DoFlowOnTableDriver {
 		scopeStack = context.mock(IScopeStack.class);
 		tableListener = context.mock(ITableListener.class);
 		setUpTearDown = context.mock(SetUpTearDown.class);
-		runtime = context.mock(RuntimeContextInternal.class);
+		runtime = context.mock(RuntimeContextInternal.class,"runtime");
 		doFlower = context.mock(DoFlower.class);
+		config = context.mock(Configuration.class);
 		testResults = TestResultsFactory.testResults();
 		doFlowOnTable = new DoFlowOnTable(flowEvaluator, scopeStack, setUpTearDown, doFlower);
 		state = context.states("doFlowOnTable").startsAs(BEGIN_STATE);
@@ -173,10 +177,10 @@ public class DoFlowOnTableDriver {
 	}
 	private void startTable() {
 		context.checking(new Expectations() {{
-			allowing(tableListener).getTestResults();
-			   will(returnValue(testResults));
-			allowing(runtime).getResolver();
-			   will(returnValue(resolver));
+			allowing(tableListener).getTestResults(); will(returnValue(testResults));
+			allowing(runtime).getResolver(); will(returnValue(resolver));
+			allowing(runtime).getConfiguration(); will(returnValue(config));
+			allowing(config).isAddTimings(); will(returnValue(false));
 		}});
 	}
 	private String endState(String name) {

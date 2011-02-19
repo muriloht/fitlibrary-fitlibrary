@@ -1,10 +1,14 @@
 !1 This Release:
 
-|!2 ''Details of changes in this release''|3 December 2010|
+|!2 ''Details of changes in this release''|21 February 2011|
+
+ * Can request that elapsed time information be added to the table in the report. See .FitLibrary.SpecifiCations.GlobalActionsProvided.ElapsedTimesAdded
+
+|!2 ''Details of changes in release''|3 December 2010|
 
  * Logging property files are now optional.
 
-|!2 ''Details of changes in this release''|1 December 2010|
+|!2 ''Details of changes in release''|1 December 2010|
 
  * Added log4j logging capability. See .FitLibrary.AdvancedTutorials.LoggingTechniques for details on using this logging, as well as approaches to logging that are visible in the report page.
  * Added retry capability to batch running. See FitLibraryRunner for details
