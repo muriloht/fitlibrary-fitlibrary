@@ -62,7 +62,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		this.runtime = runtime;
 	}
 	//--- BECOMES, ETC TIMEOUTS:
-	@AnAction(wiki="",tooltip="Change the timeout period (in ms) for becomes",actionType=ActionType.SIMPLE)
+	@AnAction(wiki="",tooltip="Change the timeout period (in ms) for becomes.",actionType=ActionType.SIMPLE)
 	public void becomesTimeout(int timeout) {
 		putTimeout(BECOMES_TIMEOUT,timeout);
 	}
@@ -76,19 +76,19 @@ public class GlobalActionScope implements RuntimeContextual {
 		return runtime.getTimeout(name,1000);
 	}
 	@AnAction(wiki="|''<i>put timeout</i>''|timeout name|",
-			tooltip="Change the timeout period (in ms) for the named timeout",actionType=ActionType.SIMPLE)
+			tooltip="Change the timeout period (in ms) for the named timeout.",actionType=ActionType.SIMPLE)
 	public void putTimeout(String name, int timeout) {
 		runtime.putTimeout(name,timeout);
 	}
 	//--- STOP ON ERROR AND ABANDON:
 	/** When (stopOnError), don't continue interpreting a table if there's been a problem */
 	@AnAction(wiki="|''<i>set stop on error</i>''|true or false|",
-			tooltip="Alter whether or not a storytest will stop on error, to avoid the extra time and errors",actionType=ActionType.SIMPLE)
+			tooltip="Alter whether or not a storytest will stop on error, to avoid the extra time and errors.",actionType=ActionType.SIMPLE)
 	public void setStopOnError(boolean stopOnError) {
 		runtime.setStopOnError(stopOnError);
 	}
 	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Stop running the storytest immediately, so you can effectively ignore the rest of a storytest while exploring a problem")
+			tooltip="Stop running the storytest immediately, so you can effectively ignore the rest of a storytest while exploring a problem.")
 	public void abandonStorytest() {
 		runtime.setAbandon(true);
 	}
@@ -111,35 +111,35 @@ public class GlobalActionScope implements RuntimeContextual {
 		return true;
 	}
 	@AnAction(wiki="|''<i>add dynamic variables from file</i>''|filename|",
-			tooltip="Load the given property file and set dynamic variables from the properties (but it's usually better to set them on a page)",actionType=ActionType.SIMPLE)
+			tooltip="Load the given property file and set dynamic variables from the properties (but it is usually better to set them on a page).",actionType=ActionType.SIMPLE)
 	public boolean addDynamicVariablesFromFile(String fileName) {
 		return getDynamicVariables().addFromPropertiesFile(fileName);
 	}
 	@AnAction(wiki="|''<i>add dynamic variables from unicode file</i>''|filename|",actionType=ActionType.SIMPLE,
-			tooltip="Load the given property file, respecting unicode, and set dynamic variables from the properties (but it's usually better to set them on a page)")
+			tooltip="Load the given property file, respecting unicode, and set dynamic variables from the properties (but it is usually better to set them on a page).")
 	public void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
 		getDynamicVariables().addFromUnicodePropertyFile(fileName);
 	}
 	@AnAction(wiki="|''<i>set system property</i>''|property name|''<i>to</i>''|value|",
-			tooltip="Set the Java system property, and the dynamic variable of the same name, to the value. Can be used to affect an application that is still be created",actionType=ActionType.SIMPLE)
+			tooltip="Set the Java system property, and the dynamic variable of the same name, to the value. Can be used to affect an application that is still be created.",actionType=ActionType.SIMPLE)
 	public boolean setSystemPropertyTo(String property, String value) {
 		System.setProperty(property,value);
 		setDynamicVariable(property, value);
 		return true;
 	}
 	@AnAction(wiki="|''<i>set fit variable</i>''|variable name|value|",
-			tooltip="Set the Fit variable to the value, so a value from FitLibrary can be used in a Fit table",actionType=ActionType.SIMPLE)
+			tooltip="Set the Fit variable to the value, so a value from FitLibrary can be used in a Fit table.",actionType=ActionType.SIMPLE)
 	public void setFitVariable(String variableName, Object result) {
 		Fixture.setSymbol(variableName, result);
 	}
 	@AnAction(wiki="|''<i>get symbol named</i>''|variable name|",
-			tooltip="Get the value of the Fit variable, so it can be used with a FitLibrary table",actionType=ActionType.SIMPLE)
+			tooltip="Get the value of the Fit variable, so it can be used with a FitLibrary table.",actionType=ActionType.SIMPLE)
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
 	}
 	//--- SLEEP & STOPWATCH:
 	@AnAction(wiki="|''<i>sleep for</i>''|time in milliseconds|",
-			tooltip="Sleep for the given time in millseconds (the becomes special action may be better)",actionType=ActionType.SIMPLE)
+			tooltip="Sleep for the given time in millseconds (the becomes special action may be better).",actionType=ActionType.SIMPLE)
 	public boolean sleepFor(int milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
@@ -167,7 +167,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	//--- FIXTURE SELECTION
     /** The rest of the table is ignored (and not coloured) */
 	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all).")
 	public CommentTraverse comment() {
 		return new CommentTraverse();
 	}
@@ -178,12 +178,12 @@ public class GlobalActionScope implements RuntimeContextual {
 		return ignore();
 	}
 	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all).")
 	public CommentTraverse ignore() {
 		return new CommentTraverse(true);
 	}
 	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all).")
 	public CommentTraverse ignoreTable() {
 		return new CommentTraverse(true);
 	}
@@ -198,12 +198,12 @@ public class GlobalActionScope implements RuntimeContextual {
 		return new SetVariableTraverse();
 	}
 	@AnAction(wiki="|''<i>file</i>''|absolute file name|",actionType=ActionType.COMPOUND,
-			tooltip="Access the given file and allow actions on it in the rest of the table")
+			tooltip="Access the given file and allow actions on it in the rest of the table.")
 	public FileHandler file(String fileName) {
 		return new FileHandler(fileName);
 	}
 	@AnAction(wiki="|''<i>relative file</i>''|relative file name|",actionType=ActionType.COMPOUND,
-			tooltip="Access the given file and allow actions on it in the rest of the table")
+			tooltip="Access the given file and allow actions on it in the rest of the table.")
 	public RelativeFileHandler relativeFile(String fileName) {
 		return new RelativeFileHandler(fileName);
 	}
@@ -219,7 +219,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		return defineAction;
 	}
 	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Define a new action of that name and as given by the rest of the table")
+			tooltip="Define a new action of that name and as given by the rest of the table.")
 	public DefineAction defineAction() {
 		return new DefineAction();
 	}
@@ -228,12 +228,12 @@ public class GlobalActionScope implements RuntimeContextual {
 		new DefineActionsOnPageSlowly(pageName,runtime).process();
 	}
 	@AnAction(wiki="|''<i>define actions at</i>''|page name|",actionType=ActionType.SIMPLE,
-			tooltip="Load the defined actions from the given page and any sub-pages")
+			tooltip="Load the defined actions from the given page and any sub-pages.")
 	public void defineActionsAt(String pageName) throws Exception {
 		new DefineActionsOnPage(pageName,runtime).process();
 	}
 	@AnAction(wiki="|''<i>define actions at</i>''|page name|''<i>from</i>''|folder location|",actionType=ActionType.SIMPLE,
-			tooltip="Load the defined actions from the given page and any sub-pages, taking account of the folder location")
+			tooltip="Load the defined actions from the given page and any sub-pages, taking account of the folder location.")
 	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
 		new DefineActionsOnPage(pageName,rootLocation,runtime).process();
 	}
@@ -367,12 +367,11 @@ public class GlobalActionScope implements RuntimeContextual {
 		runtime.getTableEvaluator().select(name);
 	}
 	//--- CONFIG
-	@AnAction(wiki="|''<i>configure FitLibrary</i>''||",actionType=ActionType.COMPOUND,
-			tooltip="Starts a table for changing configuation of FitLibrary.")
+	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public Configuration configureFitLibrary() {
 		return runtime.getConfiguration();
 	}
-	@AnAction(wiki="|''<i>runtime configuration</i>''||",actionType=ActionType.COMPOUND,
+	@AnAction(wiki="|''<i>runtime configuration</i>''|",actionType=ActionType.COMPOUND,
 			tooltip="Starts a table for changing configuation of FitLibrary.")
 	public Configuration runtimeConfiguration() {
 		return runtime.getConfiguration();
@@ -381,7 +380,13 @@ public class GlobalActionScope implements RuntimeContextual {
 	@AnAction(wiki="",actionType=ActionType.COMPOUND,
 			tooltip="Show all the actions in scope after the current table.")
 	public boolean showActionsInScope() {
-		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope()));
+		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),""));
+		return true;
+	}
+	@AnAction(wiki="",actionType=ActionType.COMPOUND,
+			tooltip="Show all the actions in scope that contain the string after the current table.")
+	public boolean showActionsInScopeContaining(String substring) {
+		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),substring));
 		return true;
 	}
 	
@@ -712,7 +717,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow access to String methods
 	 */
-	@AnAction(wiki="",tooltip="Run the action. If an object results, allow it to be tested as a String",actionType=ActionType.PREFIX)
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="The object that results from the action can now be tested as a String.")
 	public StringAdapter asString(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
@@ -721,13 +727,15 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow the action result to be treated as an extra (unnamed) fixturing object
 	 */
-	@AnAction(wiki="",tooltip="Run the action and add the resulting object to the scope",actionType=ActionType.PREFIX)
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="The object that results from the action is added to the scope, so actions can be called on it in future.")
 	public void alsoRun(DoAction action) throws Exception {
 		alsoRunAs(action,"Unnamed#"+(UNNAMED ++));
 	}
 	/** Allow the action result to be treated as an extra fixturing object
 	 */
-	@AnAction(wiki="|''<i>also run</i>''|name|",tooltip="Run the action, add the resulting object to the scope, and allow it to be selected by name",actionType=ActionType.PREFIX)
+	@AnAction(wiki="|''<i>also run</i>''|name|",actionType=ActionType.PREFIX,
+			tooltip="The object that results from the action is added to the scope, so actions can be called on it in future and it can be selected by name.")
 	public void alsoRunAs(DoAction action, String name) throws Exception {
 		Object result = action.run();
 		if (result != null) {

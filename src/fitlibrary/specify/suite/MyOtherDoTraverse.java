@@ -6,4 +6,7 @@ public class MyOtherDoTraverse extends DoTraverse {
     public boolean actionOnThat() {
         return true;
     }
+    public void severalArgs(String s, int i, long j) {
+    	//
+    }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import fit.Fixture;
 import fit.Parse;
+import fitlibrary.annotation.ShowSelectedActions;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.traverse.workflow.DoEvaluator;
@@ -18,6 +19,7 @@ import fitlibrary.traverse.workflow.DoTraverse;
   * 
   * See the specifications for examples
 */
+@ShowSelectedActions(rename="")
 public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	private DoTraverse doTraverse = new DoTraverse(this);
 	

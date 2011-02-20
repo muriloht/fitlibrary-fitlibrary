@@ -20,8 +20,10 @@ import java.util.StringTokenizer;
 import fit.exception.CouldNotParseFitFailureException;
 import fit.exception.FitFailureException;
 import fit.exception.FitMatcherException;
+import fitlibrary.annotation.ShowSelectedActions;
 
 // TODO-RcM Figure out how to make me smaller.
+@ShowSelectedActions(rename="")
 public class Fixture {
 	public Map<String, Object> summary = new HashMap<String, Object>();
 

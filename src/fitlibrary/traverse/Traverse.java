@@ -8,6 +8,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import fitlibrary.annotation.ShowSelectedActions;
 import fitlibrary.closure.Closure;
 import fitlibrary.differences.DifferenceInterface;
 import fitlibrary.differences.FitNesseDifference;
@@ -32,6 +33,7 @@ import fitlibrary.utility.Pair;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
+@ShowSelectedActions(rename="")
 public abstract class Traverse implements Evaluator, ShowAfter {
 	public static DifferenceInterface FITNESSE_DIFFERENCES = new FitNesseDifference();
 	protected static FitHandler FIT_HANDLER = new FitHandler();

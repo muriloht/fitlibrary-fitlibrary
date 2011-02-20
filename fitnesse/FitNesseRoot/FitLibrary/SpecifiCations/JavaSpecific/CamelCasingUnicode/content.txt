@@ -8,7 +8,7 @@
 
  * Here we configure it to keep unicode characters that are permissible in Java identifiers
 
-|''configure fitlibrary''|
+|''runtime configuration''|
 |''keep unicode''|true|
 
 |''calculate''|
@@ -18,5 +18,5 @@
 |█||u2588 |
 |█Ελληνικό||u2588Ελληνικό|
 
-|''configure fitlibrary''|
+|''runtime configuration''|
 |''keep unicode''|false|

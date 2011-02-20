@@ -286,3 +286,8 @@ Here we stop after 2 errors:
 	</tr>
 </table>-!|
 
+!2 4. Stopping when response is too slow
+#
+It can be handy to test that things happen within a given expected response time.
+
+A stopwatch can be used to do this. See: .FitLibrary.SpecifiCations.GlobalActionsProvided.StopWatch

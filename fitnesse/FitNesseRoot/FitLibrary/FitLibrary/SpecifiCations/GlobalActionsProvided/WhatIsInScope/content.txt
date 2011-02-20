@@ -1,1 +1,17 @@
+Here are the actions before we've introduced any objects:
+
 |''show actions in scope''|
+
+Now we add an object, so it's added to the scope:
+
+!|fitlibrary.specify.workflow.Keywords|
+
+And the actions are now extended:
+
+|''show actions in scope''|
+
+Note that the top actions have less information. That's because the corresponding methods don't have annotations to provide it.
+
+We can also look for one by partial name:
+
+|''show actions in scope containing''|show|
