@@ -1,4 +1,6 @@
-Can request that elapsed time information is added to tables. 
+Can request that elapsed time information is added to tables.
+
+The setting applies to this and subsequent storytests (until it's changed), so it can be set at a suite level (eg, in ''!-SuiteSetUp-!'').
 
 The timing information is in milliseconds.
 

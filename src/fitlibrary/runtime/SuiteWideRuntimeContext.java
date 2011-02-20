@@ -20,6 +20,8 @@ public class SuiteWideRuntimeContext implements Configuration {
 	private GlobalActionScope global;
 	private boolean keepUniCode = false;
 	private boolean addTimings = false;
+	private int maxErrorBeforeStopping = Integer.MAX_VALUE;
+	private int maxFailsBeforeStopping = Integer.MAX_VALUE;
 
 	public SuiteWideRuntimeContext(IScope scope, GlobalActionScope global) {
 		this.scope = scope;
@@ -51,19 +53,28 @@ public class SuiteWideRuntimeContext implements Configuration {
 			throw new RuntimeException("No scope in runtime");
 		return scope;
 	}
+	public void addNamedObject(String name, TypedObject typedObject) {
+		scope.addNamedObject(name,typedObject);
+	}
+	
 	public void setAbandon(boolean abandon) {
 		scope.setAbandon(abandon);
 	}
-	public boolean isAbandoned(TestResults testResults2) {
-		return scope.isAbandon() || (scope.isStopOnError() && testResults2.problems());
+	public boolean isAbandoned(TestResults testResults) {
+		return  scope.isAbandon() || 
+		        (scope.isStopOnError() && testResults.problems() ||
+				(testResults.getCounts().exceptions >= maxErrorBeforeStopping) ||
+				(testResults.getCounts().wrong >= maxFailsBeforeStopping)
+		);
 	}
 	public void setStopOnError(boolean stop) {
 		scope.setStopOnError(stop);
 	}
-	public void addNamedObject(String name, TypedObject typedObject) {
-		scope.addNamedObject(name,typedObject);
+	public void stopAfterErrorsOrFails(int maxErrors, int maxFails) {
+		this.maxErrorBeforeStopping = maxErrors;
+		this.maxFailsBeforeStopping = maxFails;
 	}
-
+	
 	public void SetTableEvaluator(TableEvaluator evaluator) {
 		this.tableEvaluator = evaluator;
 	}
