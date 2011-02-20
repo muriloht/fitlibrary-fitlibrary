@@ -6,15 +6,13 @@ package fitlibrary.domainAdapter;
 
 import java.io.File;
 
-import fitlibrary.annotation.ActionType;
-import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.ShowSelectedActions;
 
+@ShowSelectedActions
 public class FileHandler extends AbstractFileHandler {
 	public FileHandler(String fileName) {
 		fileNameIs(fileName);
 	}
-	@AnAction(wiki="",actionType=ActionType.IGNORE,
-			tooltip="")
 	public void fileNameIs(String fileNameGiven) {
 		file = new File(fileNameGiven);
 	}

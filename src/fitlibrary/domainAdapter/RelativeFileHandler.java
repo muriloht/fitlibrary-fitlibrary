@@ -4,16 +4,14 @@
 */
 package fitlibrary.domainAdapter;
 
-import fitlibrary.annotation.ActionType;
-import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.ShowSelectedActions;
 import fitlibrary.traverse.Traverse;
 
+@ShowSelectedActions
 public class RelativeFileHandler extends AbstractFileHandler {
 	public RelativeFileHandler(String fileName) {
 		fileNameIs(fileName);
 	}
-	@AnAction(wiki="",actionType=ActionType.IGNORE,
-			tooltip="")
 	public void fileNameIs(String localFileName) {
 		file = Traverse.getLocalFile(localFileName).getFile();
 	}

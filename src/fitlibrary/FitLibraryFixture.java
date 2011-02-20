@@ -28,7 +28,7 @@ import fitlibrary.utility.Pair;
  * needed here to avoid compiletime conflicts. It also has to be created 
  * reflectively, because we can't mention its name here, except in a String.
  */
-@ShowSelectedActions(rename="")
+@ShowSelectedActions
 public abstract class FitLibraryFixture extends Fixture implements Evaluator {
 	private Traverse traverse;
 	private TypedObject typedObjectUnderTest = Traverse.asTypedObject(null);

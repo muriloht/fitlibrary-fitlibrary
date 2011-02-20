@@ -23,7 +23,7 @@ import fit.exception.FitMatcherException;
 import fitlibrary.annotation.ShowSelectedActions;
 
 // TODO-RcM Figure out how to make me smaller.
-@ShowSelectedActions(rename="")
+@ShowSelectedActions
 public class Fixture {
 	public Map<String, Object> summary = new HashMap<String, Object>();
 

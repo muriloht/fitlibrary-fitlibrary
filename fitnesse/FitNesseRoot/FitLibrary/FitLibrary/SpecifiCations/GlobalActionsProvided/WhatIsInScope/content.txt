@@ -1,17 +1,35 @@
+Run ('''Test''') this page to see the help documentation.
+
 Here are the actions before we've introduced any objects:
 
-|''show actions in scope''|
+|''help''|
+
+Notice that they have tooltips, with further information.
 
 Now we add an object, so it's added to the scope:
 
 !|fitlibrary.specify.workflow.Keywords|
 
+Notice that the first few actions are not in flow style (alternating keywords and data) and don't have tooltips. That's because there is no documentation associated with them.
+
 And the actions are now extended:
 
-|''show actions in scope''|
+|''help''|
 
 Note that the top actions have less information. That's because the corresponding methods don't have annotations to provide it.
 
-We can also look for one by partial name:
+Let's add an object into scope (and this has a chain of SUTs):
 
-|''show actions in scope containing''|show|
+|'''also run'''|''add object''|
+
+|''help''|
+
+We can also look for those with some text in the name or tooltip:
+
+|''help with''|show|
+
+|''help with''|<|
+
+|''help with''|greater|
+
+|''help with''|file|

@@ -10,8 +10,10 @@ import java.io.OutputStreamWriter;
 
 import fitlibrary.annotation.ActionType;
 import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.ShowSelectedActions;
 import fitlibrary.traverse.DomainAdapter;
 
+@ShowSelectedActions
 public class AbstractFileHandler implements DomainAdapter {
 	protected File file = new File(".");
 
@@ -40,8 +42,6 @@ public class AbstractFileHandler implements DomainAdapter {
 	public String read() throws IOException {
 		return readFile();
 	}
-	@AnAction(wiki="",actionType=ActionType.IGNORE,
-			tooltip="")
 	public String readFile() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		String result = "";
@@ -65,8 +65,6 @@ public class AbstractFileHandler implements DomainAdapter {
 		return file.delete();
 	}
 	@Override
-	@AnAction(wiki="",actionType=ActionType.IGNORE,
-			tooltip="")
 	public String toString() {
 		return "FileHandler["+file.getName()+"]";
 	}

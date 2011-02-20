@@ -45,7 +45,7 @@ import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibrary.xref.CrossReferenceFixture;
 
-@ShowSelectedActions(rename="Work Flow")
+@ShowSelectedActions
 public class DoTraverse extends Traverse implements FlowEvaluator, SpecialActionContext {
 	private static Logger logger = FitLibraryLogger.getLogger(DoTraverse.class);
 	private final PrefixSpecialAction prefixSpecialAction = new PrefixSpecialAction(this);

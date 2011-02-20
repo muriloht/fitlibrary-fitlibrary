@@ -16,6 +16,8 @@ import fit.Fixture;
 import fitlibrary.DefineAction;
 import fitlibrary.annotation.ActionType;
 import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.ShowSelectedActions;
+import fitlibrary.annotation.SimpleAction;
 import fitlibrary.config.Configuration;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
@@ -48,6 +50,7 @@ import fitlibrary.xref.CrossReferenceFixture;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
 // Note: If runtime was the SUT, we could eliminate some of these methods (for action lookup, anyway).
+@ShowSelectedActions
 public class GlobalActionScope implements RuntimeContextual {
 	@SuppressWarnings("unused")
 	private static Logger logger = FitLibraryLogger.getLogger(GlobalActionScope.class);
@@ -57,12 +60,11 @@ public class GlobalActionScope implements RuntimeContextual {
 	private RuntimeContextInternal runtime;
 
 	@Override
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void setRuntimeContext(RuntimeContextInternal runtime) {
 		this.runtime = runtime;
 	}
 	//--- BECOMES, ETC TIMEOUTS:
-	@AnAction(wiki="",tooltip="Change the timeout period (in ms) for becomes.",actionType=ActionType.SIMPLE)
+	@SimpleAction(tooltip="Change the timeout period (in ms) for becomes.")
 	public void becomesTimeout(int timeout) {
 		putTimeout(BECOMES_TIMEOUT,timeout);
 	}
@@ -70,13 +72,13 @@ public class GlobalActionScope implements RuntimeContextual {
 	public int becomesTimeout() {
 		return getTimeout(BECOMES_TIMEOUT);
 	}
-	@AnAction(wiki="|''<i>timeout</i>''|timeout name|",
-			tooltip="What is the timeout period (in ms) for the named timeout?",actionType=ActionType.SIMPLE)
+	@AnAction(wiki="|''<i>timeout</i>''|timeout name|",actionType=ActionType.SIMPLE,
+			tooltip="What is the timeout period (in ms) for the named timeout?")
 	public int getTimeout(String name) {
 		return runtime.getTimeout(name,1000);
 	}
-	@AnAction(wiki="|''<i>put timeout</i>''|timeout name|",
-			tooltip="Change the timeout period (in ms) for the named timeout.",actionType=ActionType.SIMPLE)
+	@AnAction(wiki="|''<i>put timeout</i>''|timeout name|",actionType=ActionType.SIMPLE,
+			tooltip="Change the timeout period (in ms) for the named timeout.")
 	public void putTimeout(String name, int timeout) {
 		runtime.putTimeout(name,timeout);
 	}
@@ -93,19 +95,15 @@ public class GlobalActionScope implements RuntimeContextual {
 		runtime.setAbandon(true);
 	}
 	//--- DYNAMIC VARIABLES:
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
     public DynamicVariables getDynamicVariables() {
     	return runtime.getDynamicVariables();
     }
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void setDynamicVariable(String key, Object value) {
 		getDynamicVariables().put(key, value);
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public Object getDynamicVariable(String key) {
 		return getDynamicVariables().get(key);
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public boolean clearDynamicVariables() {
 		getDynamicVariables().clearAll();
 		return true;
@@ -153,8 +151,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void startStopWatch() {
 		setDynamicVariable(STOP_WATCH, new StopWatch());
 	}
-	@AnAction(wiki="",
-			tooltip="Stop the stopwatch, and return how long it has been going (in ms), so you can cause the storytest to fail if it's been too long.",actionType=ActionType.SIMPLE)
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Stop the stopwatch, and return how long it has been going (in ms), so you can cause the storytest to fail if it's been too long.")
 	public long stopWatch() {
 		return getStopWatch().delay();
 	}
@@ -192,8 +190,6 @@ public class GlobalActionScope implements RuntimeContextual {
 	public CrossReferenceFixture xref(String suiteName) {
 		return new CrossReferenceFixture(suiteName);
 	}
-	@AnAction(wiki="",
-			tooltip="",actionType=ActionType.IGNORE)
 	public SetVariableTraverse setVariables() {
 		return new SetVariableTraverse();
 	}
@@ -207,12 +203,10 @@ public class GlobalActionScope implements RuntimeContextual {
 	public RelativeFileHandler relativeFile(String fileName) {
 		return new RelativeFileHandler(fileName);
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public SuiteFixture suite() {
 		return new SuiteFixture();
 	}
 	//--- DEFINED ACTIONS
-	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public DefineAction defineAction(String wikiClassName) {
 		DefineAction defineAction = new DefineAction(wikiClassName);
 		defineAction.setRuntimeContext(runtime);
@@ -223,7 +217,6 @@ public class GlobalActionScope implements RuntimeContextual {
 	public DefineAction defineAction() {
 		return new DefineAction();
 	}
-	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public void defineActionsSlowlyAt(String pageName) throws Exception {
 		new DefineActionsOnPageSlowly(pageName,runtime).process();
 	}
@@ -237,11 +230,9 @@ public class GlobalActionScope implements RuntimeContextual {
 	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
 		new DefineActionsOnPage(pageName,rootLocation,runtime).process();
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void clearDefinedActions() {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public boolean toExpandDefinedActions() {
 		return runtime.toExpandDefinedActions();
 	}
@@ -271,7 +262,6 @@ public class GlobalActionScope implements RuntimeContextual {
 	public String get(String s) {
 		return s;
 	}
-	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void removeFile(String fileName) {
 		new File(fileName).delete();
 	}
@@ -367,7 +357,6 @@ public class GlobalActionScope implements RuntimeContextual {
 		runtime.getTableEvaluator().select(name);
 	}
 	//--- CONFIG
-	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public Configuration configureFitLibrary() {
 		return runtime.getConfiguration();
 	}
@@ -379,13 +368,13 @@ public class GlobalActionScope implements RuntimeContextual {
 	//--- WHAT'S IN SCOPE
 	@AnAction(wiki="",actionType=ActionType.COMPOUND,
 			tooltip="Show all the actions in scope after the current table.")
-	public boolean showActionsInScope() {
+	public boolean help() {
 		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),""));
 		return true;
 	}
 	@AnAction(wiki="",actionType=ActionType.COMPOUND,
 			tooltip="Show all the actions in scope that contain the string after the current table.")
-	public boolean showActionsInScopeContaining(String substring) {
+	public boolean helpWith(String substring) {
 		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),substring));
 		return true;
 	}
@@ -653,7 +642,6 @@ public class GlobalActionScope implements RuntimeContextual {
      *  o For other result types, no exception should be thrown.
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
      */
-	@AnAction(wiki="",actionType=ActionType.IGNORE, tooltip="")
 	public Boolean ensure(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result instanceof Boolean)
@@ -717,7 +705,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow access to String methods
 	 */
-	@AnAction(wiki="",actionType=ActionType.PREFIX,
+	@AnAction(wiki="|'''<b>as string</b>'''|",actionType=ActionType.COMPOUND,
 			tooltip="The object that results from the action can now be tested as a String.")
 	public StringAdapter asString(DoAction action) throws Exception {
 		Object result = action.run();

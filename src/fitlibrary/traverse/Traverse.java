@@ -33,7 +33,7 @@ import fitlibrary.utility.Pair;
 import fitlibraryGeneric.typed.GenericTyped;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-@ShowSelectedActions(rename="")
+@ShowSelectedActions
 public abstract class Traverse implements Evaluator, ShowAfter {
 	public static DifferenceInterface FITNESSE_DIFFERENCES = new FitNesseDifference();
 	protected static FitHandler FIT_HANDLER = new FitHandler();

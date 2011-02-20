@@ -4,6 +4,10 @@
 */
 package fitlibrary.specify.workflow;
 
+import java.awt.Point;
+
+import fitlibrary.specify.DomainAdapterUnderTest;
+
 public class Keywords {
 	private double sum = 0.0;
 
@@ -12,5 +16,11 @@ public class Keywords {
 	}
 	public double totalOwingDollar() {
 		return sum;
+	}
+	public Point makeYourPoint(int x, int y) {
+		return new Point(x,y);
+	}
+	public DomainAdapterUnderTest addObject() {
+		return new DomainAdapterUnderTest();
 	}
 }

@@ -19,7 +19,7 @@ import fitlibrary.traverse.workflow.DoTraverse;
   * 
   * See the specifications for examples
 */
-@ShowSelectedActions(rename="")
+@ShowSelectedActions
 public class DoFixture extends FitLibraryFixture implements DoEvaluator {
 	private DoTraverse doTraverse = new DoTraverse(this);
 	
