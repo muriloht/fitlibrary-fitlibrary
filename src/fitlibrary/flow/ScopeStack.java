@@ -44,12 +44,10 @@ public class ScopeStack implements IScopeStack {
 		this.global = global;
 		globals.add(global);
 	}
-	@Override
 	public void clearAllButSuite() {
 		stack.clear();
 	}
 	// Tracks the first SuiteEvaluator, which is not popped during a storytest
-	@Override
 	public void push(TypedObject typedObject) {
 		logger.trace("Pushed "+typedObject.getSubject());
 		if (typedObject.getSubject() instanceof SuiteEvaluator && suiteOption.isNone())
@@ -59,7 +57,6 @@ public class ScopeStack implements IScopeStack {
 		else
 			stack.push(typedObject);
 	}
-	@Override
 	public List<TypedObject> poppedAtEndOfTable() {
 		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
 		while (!stack.isEmpty()) {
@@ -69,7 +66,6 @@ public class ScopeStack implements IScopeStack {
 		}
 		return results;
 	}
-	@Override
 	public List<TypedObject> poppedAtEndOfStorytest() {
 		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
 		while (!stack.isEmpty())
@@ -81,11 +77,9 @@ public class ScopeStack implements IScopeStack {
 			logger.trace("Popped "+to.getSubject());
 		return results;
 	}
-	@Override
 	public TypedObject pop() {
 		return stack.pop();
 	}
-	@Override
 	public List<TypedObject> objectsForLookup() {
 		List<TypedObject> objects = new ArrayList<TypedObject>();
 		for (int i = stack.size() - 1; i >= 0; i--)
@@ -110,7 +104,6 @@ public class ScopeStack implements IScopeStack {
 		if (typedObject.hasTypedSystemUnderTest())
 			addObject(typedObject.getTypedSystemUnderTest(),accumulatingObjects);
 	}
-	@Override
 	public List<Class<?>> possibleClasses() {
 		ArrayList<Class<?>> results = new ArrayList<Class<?>>();
 		for (int i = stack.size() - 1; i >= 0; i--)
@@ -141,19 +134,16 @@ public class ScopeStack implements IScopeStack {
 			return true;
 		return packageName.startsWith("fitlibrary.specify") || packageName.startsWith("fitlibraryGeneric.specify");
 	}
-	@Override
 	public void temporarilyAdd(Evaluator evaluator) {
 		logger.trace("Pushed "+evaluator);
 		stack.push(new GenericTypedObject(evaluator));
 	}
-	@Override
 	public void removeTemporary(Evaluator evaluator) {
 		logger.trace("Pop from scope stack: "+evaluator);
 		TypedObject top = stack.pop();
 		if (top.getSubject() != evaluator)
 			throw new RuntimeException("Whoops, temporary was not on the top of the stack!");
 	}
-	@Override
 	public IScopeState currentState() {
 		final int size = stack.size();
 		return new IScopeState() {
@@ -166,13 +156,11 @@ public class ScopeStack implements IScopeStack {
 			}
 		};
 	}
-	@Override
 	public void addNamedObject(String name, TypedObject typedObject) {
 		logger.trace("Pushed "+typedObject.getSubject());
 		selectObjects.add(typedObject);
 		selectNames.put(name,typedObject);
 	}
-	@Override
 	public void select(String name) {
 		TypedObject typedObject = selectNames.get(name);
 		if (typedObject == null)
@@ -181,27 +169,21 @@ public class ScopeStack implements IScopeStack {
 		selectObjects.remove(typedObject);
 		selectObjects.add(0,typedObject);
 	}
-	@Override
 	public void addGlobal(TypedObject typedObject) {
 		globals.add(typedObject);
 	}
-	@Override
 	public void setAbandon(boolean abandon) {
 		this.abandon  = abandon;
 	}
-	@Override
 	public boolean isAbandon() {
 		return abandon;
 	}
-	@Override
 	public boolean isStopOnError() {
 		return stopOnError;
 	}
-	@Override
 	public void setStopOnError(boolean stop) {
 		this.stopOnError = stop;
 	}
-	@Override
 	public void switchRuntime(RuntimeContextInternal runtime) {
 		setRuntimeContextOf(flowEvaluator.getSubject(),runtime);
 		for (TypedObject aGlobal: globals)

@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 
 import fit.Fixture;
 import fitlibrary.DefineAction;
+import fitlibrary.annotation.ActionType;
+import fitlibrary.annotation.AnAction;
 import fitlibrary.config.Configuration;
 import fitlibrary.definedAction.DefineActionsOnPage;
 import fitlibrary.definedAction.DefineActionsOnPageSlowly;
@@ -55,62 +57,89 @@ public class GlobalActionScope implements RuntimeContextual {
 	private RuntimeContextInternal runtime;
 
 	@Override
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void setRuntimeContext(RuntimeContextInternal runtime) {
 		this.runtime = runtime;
 	}
 	//--- BECOMES, ETC TIMEOUTS:
+	@AnAction(wiki="",tooltip="Change the timeout period (in ms) for becomes",actionType=ActionType.SIMPLE)
 	public void becomesTimeout(int timeout) {
 		putTimeout(BECOMES_TIMEOUT,timeout);
 	}
+	@AnAction(wiki="",tooltip="What is the timeout period (in ms) for becomes?",actionType=ActionType.SIMPLE)
 	public int becomesTimeout() {
 		return getTimeout(BECOMES_TIMEOUT);
 	}
+	@AnAction(wiki="|''<i>timeout</i>''|timeout name|",
+			tooltip="What is the timeout period (in ms) for the named timeout?",actionType=ActionType.SIMPLE)
 	public int getTimeout(String name) {
 		return runtime.getTimeout(name,1000);
 	}
+	@AnAction(wiki="|''<i>put timeout</i>''|timeout name|",
+			tooltip="Change the timeout period (in ms) for the named timeout",actionType=ActionType.SIMPLE)
 	public void putTimeout(String name, int timeout) {
 		runtime.putTimeout(name,timeout);
 	}
 	//--- STOP ON ERROR AND ABANDON:
 	/** When (stopOnError), don't continue interpreting a table if there's been a problem */
+	@AnAction(wiki="|''<i>set stop on error</i>''|true or false|",
+			tooltip="Alter whether or not a storytest will stop on error, to avoid the extra time and errors",actionType=ActionType.SIMPLE)
 	public void setStopOnError(boolean stopOnError) {
 		runtime.setStopOnError(stopOnError);
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Stop running the storytest immediately, so you can effectively ignore the rest of a storytest while exploring a problem")
 	public void abandonStorytest() {
 		runtime.setAbandon(true);
 	}
 	//--- DYNAMIC VARIABLES:
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
     public DynamicVariables getDynamicVariables() {
     	return runtime.getDynamicVariables();
     }
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void setDynamicVariable(String key, Object value) {
 		getDynamicVariables().put(key, value);
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public Object getDynamicVariable(String key) {
 		return getDynamicVariables().get(key);
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public boolean clearDynamicVariables() {
 		getDynamicVariables().clearAll();
 		return true;
 	}
+	@AnAction(wiki="|''<i>add dynamic variables from file</i>''|filename|",
+			tooltip="Load the given property file and set dynamic variables from the properties (but it's usually better to set them on a page)",actionType=ActionType.SIMPLE)
 	public boolean addDynamicVariablesFromFile(String fileName) {
 		return getDynamicVariables().addFromPropertiesFile(fileName);
 	}
+	@AnAction(wiki="|''<i>add dynamic variables from unicode file</i>''|filename|",actionType=ActionType.SIMPLE,
+			tooltip="Load the given property file, respecting unicode, and set dynamic variables from the properties (but it's usually better to set them on a page)")
 	public void addDynamicVariablesFromUnicodeFile(String fileName) throws IOException {
 		getDynamicVariables().addFromUnicodePropertyFile(fileName);
 	}
+	@AnAction(wiki="|''<i>set system property</i>''|property name|''<i>to</i>''|value|",
+			tooltip="Set the Java system property, and the dynamic variable of the same name, to the value. Can be used to affect an application that is still be created",actionType=ActionType.SIMPLE)
 	public boolean setSystemPropertyTo(String property, String value) {
 		System.setProperty(property,value);
 		setDynamicVariable(property, value);
 		return true;
 	}
+	@AnAction(wiki="|''<i>set fit variable</i>''|variable name|value|",
+			tooltip="Set the Fit variable to the value, so a value from FitLibrary can be used in a Fit table",actionType=ActionType.SIMPLE)
 	public void setFitVariable(String variableName, Object result) {
 		Fixture.setSymbol(variableName, result);
 	}
+	@AnAction(wiki="|''<i>get symbol named</i>''|variable name|",
+			tooltip="Get the value of the Fit variable, so it can be used with a FitLibrary table",actionType=ActionType.SIMPLE)
 	public Object getSymbolNamed(String fitSymbolName) {
 		return Fixture.getSymbol(fitSymbolName);
 	}
 	//--- SLEEP & STOPWATCH:
+	@AnAction(wiki="|''<i>sleep for</i>''|time in milliseconds|",
+			tooltip="Sleep for the given time in millseconds (the becomes special action may be better)",actionType=ActionType.SIMPLE)
 	public boolean sleepFor(int milliseconds) {
 		try {
 			Thread.sleep(milliseconds);
@@ -119,9 +148,13 @@ public class GlobalActionScope implements RuntimeContextual {
 		}
 		return true;
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Start the stopwatch, so it can be used to fail a storytest if things take too long (with |stop stop watch|).")
 	public void startStopWatch() {
 		setDynamicVariable(STOP_WATCH, new StopWatch());
 	}
+	@AnAction(wiki="",
+			tooltip="Stop the stopwatch, and return how long it has been going (in ms), so you can cause the storytest to fail if it's been too long.",actionType=ActionType.SIMPLE)
 	public long stopWatch() {
 		return getStopWatch().delay();
 	}
@@ -133,77 +166,117 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	//--- FIXTURE SELECTION
     /** The rest of the table is ignored (and not coloured) */
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
 	public CommentTraverse comment() {
 		return new CommentTraverse();
 	}
     /** The rest of the table is ignored (and the first row is coloured as ignored) */
+	@AnAction(wiki="", actionType=ActionType.SIMPLE,
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all). Colour the table as ignored.")
 	public CommentTraverse ignored() {
 		return ignore();
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
 	public CommentTraverse ignore() {
 		return new CommentTraverse(true);
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Place this in the first row of a table that is to be ignored (not run at all)")
 	public CommentTraverse ignoreTable() {
 		return new CommentTraverse(true);
 	}
+	@AnAction(wiki="|''<i>xref</i>''|page name of a defined action suite|",actionType=ActionType.SIMPLE,
+			tooltip="Produce a cross reference of all the defined actions in the selected suite")
 	public CrossReferenceFixture xref(String suiteName) {
 		return new CrossReferenceFixture(suiteName);
 	}
+	@AnAction(wiki="",
+			tooltip="",actionType=ActionType.IGNORE)
 	public SetVariableTraverse setVariables() {
 		return new SetVariableTraverse();
 	}
+	@AnAction(wiki="|''<i>file</i>''|absolute file name|",actionType=ActionType.COMPOUND,
+			tooltip="Access the given file and allow actions on it in the rest of the table")
 	public FileHandler file(String fileName) {
 		return new FileHandler(fileName);
 	}
+	@AnAction(wiki="|''<i>relative file</i>''|relative file name|",actionType=ActionType.COMPOUND,
+			tooltip="Access the given file and allow actions on it in the rest of the table")
 	public RelativeFileHandler relativeFile(String fileName) {
 		return new RelativeFileHandler(fileName);
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public SuiteFixture suite() {
 		return new SuiteFixture();
 	}
 	//--- DEFINED ACTIONS
+	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public DefineAction defineAction(String wikiClassName) {
 		DefineAction defineAction = new DefineAction(wikiClassName);
 		defineAction.setRuntimeContext(runtime);
 		return defineAction;
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Define a new action of that name and as given by the rest of the table")
 	public DefineAction defineAction() {
 		return new DefineAction();
 	}
+	@AnAction(wiki="",actionType=ActionType.IGNORE,tooltip="")
 	public void defineActionsSlowlyAt(String pageName) throws Exception {
 		new DefineActionsOnPageSlowly(pageName,runtime).process();
 	}
+	@AnAction(wiki="|''<i>define actions at</i>''|page name|",actionType=ActionType.SIMPLE,
+			tooltip="Load the defined actions from the given page and any sub-pages")
 	public void defineActionsAt(String pageName) throws Exception {
 		new DefineActionsOnPage(pageName,runtime).process();
 	}
+	@AnAction(wiki="|''<i>define actions at</i>''|page name|''<i>from</i>''|folder location|",actionType=ActionType.SIMPLE,
+			tooltip="Load the defined actions from the given page and any sub-pages, taking account of the folder location")
 	public void defineActionsAtFrom(String pageName, String rootLocation) throws Exception {
 		new DefineActionsOnPage(pageName,rootLocation,runtime).process();
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void clearDefinedActions() {
 		TemporaryPlugBoardForRuntime.definedActionsRepository().clear();
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public boolean toExpandDefinedActions() {
 		return runtime.toExpandDefinedActions();
 	}
+	@AnAction(wiki="|''<i>set expand defined actions</i>''|true or false|",actionType=ActionType.SIMPLE,
+			tooltip="If set to true, expand calls to defined actions regardless.")
 	public void setExpandDefinedActions(boolean expandDefinedActions) {
 		runtime.setExpandDefinedActions(expandDefinedActions);
 	}
+	@AnAction(wiki="",actionType=ActionType.SIMPLE,
+			tooltip="Allow for old-style use of parameters in defined actions, with no @{}.")
 	public void autoTranslateDefinedActionParameters() {
 		setDynamicVariable(DefineAction.AUTO_TRANSLATE_DEFINED_ACTION_PARAMETERS, "true");
 	}
 	//--- RANDOM, TO, GET, FILE, HARVEST
+	@AnAction(wiki="|''<i>select randomly</i>''|dynamic variable name|",actionType=ActionType.SIMPLE,
+			tooltip="Randomly select one of the values in the rows of the rest of the table.")
 	public RandomSelectTraverse selectRandomly(String var) {
 		return new RandomSelectTraverse(var);
 	}
+	@AnAction(wiki="|''<i>to</i>''|string|",actionType=ActionType.SIMPLE,
+			tooltip="Returns the string, which is handy for use with a special action, such as set.")
 	public String to(String s) {
 		return s;
 	}
+	@AnAction(wiki="|''<i>get</i>''|string|",actionType=ActionType.SIMPLE,
+			tooltip="Returns the string, which is handy for use with a special action, such as show.")
 	public String get(String s) {
 		return s;
 	}
+	@AnAction(wiki="",tooltip="",actionType=ActionType.IGNORE)
 	public void removeFile(String fileName) {
 		new File(fileName).delete();
 	}
+	@AnAction(wiki="|''<i>harvest</i>''|dynamic variables|''<i>using pattern</i>''|regular expression|''<i>from</i>''|text|",actionType=ActionType.SIMPLE,
+			tooltip="Uses the regular expression to extract out one or more dynamic variables from the text, which is handy when text needs to be pulled apart to get at the required data.")
 	public boolean harvestUsingPatternFrom(String[] vars, String pattern, String text) {
 		Matcher matcher = Pattern.compile(pattern, Pattern.DOTALL).matcher(text);
 	    if (!matcher.find())
@@ -226,16 +299,24 @@ public class GlobalActionScope implements RuntimeContextual {
 		return "are only "+groups;
 	}
 	//--- LOGGING
+	@AnAction(wiki="",actionType=ActionType.COMPOUND,
+			tooltip="Starts a table for configuring log4j.")
 	public ConfigureLogger withLog4j() {
 		return runtime.getConfigureLog4j().withNormalLog4j();
 	}
+	@AnAction(wiki="",actionType=ActionType.COMPOUND,
+			tooltip="Starts a table for accessing the FitLibrary-specific logger.")
 	public ConfigureLogger withFitLibraryLogger() {
 		return runtime.getConfigureLog4j().withFitLibraryLogger();
 	}
+	@AnAction(wiki="",actionType=ActionType.COMPOUND,
+			tooltip="Starts a table for accessing the Fixturing-specific logger.")
 	public ConfigureLogger withFixturingLogger() {
 		return runtime.getConfigureLog4j().withFixturingLogger();
 	}	
 	//--- FILE LOGGING
+	@AnAction(wiki="|''<i>record to file</i>''|file name|",actionType=ActionType.SIMPLE,
+			tooltip="Writes the dynamic variables to the file (this needs a better explanation).")
 	public void recordToFile(String fileName) {
 		runtime.recordToFile(fileName);
 		try {
@@ -244,9 +325,13 @@ public class GlobalActionScope implements RuntimeContextual {
 			//
 		}
 	}
+	@AnAction(wiki="|''<i>start logging</i>''|file name|",actionType=ActionType.SIMPLE,
+			tooltip="Starts an obscure logging process to the file (this needs a better explanation).")
 	public void startLogging(String fileName) {
 		runtime.startLogging(fileName);
 	}
+	@AnAction(wiki="|''<i>log message</i>''|message|",actionType=ActionType.SIMPLE,
+			tooltip="Log the message to an obscure logging process (this needs a better explanation).")
 	public void logMessage(String s) {
 		try {
 			runtime.printToLog(s);
@@ -254,14 +339,20 @@ public class GlobalActionScope implements RuntimeContextual {
 			throw new FitLibraryException(e.getMessage());
 		}
 	}
+	@AnAction(wiki="|''<i>log text</i>''|message|",actionType=ActionType.SIMPLE,
+			tooltip="Log the message to the log4j log.")
 	public void logText(String s) {
 		runtime.getConfigureLog4j().log(s);
 	}
 	//--- SHOW
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Show the result of the action in a cell added to the row.")
 	public void show(Row row, String text) {
 		row.addCell(text).shown();
 		runtime.getDefinedActionCallManager().addShow(row);
 	}
+	@AnAction(wiki="|''<i>show</i>''|title|''<i>as</i>''|message|''<i>after table</i>''|",actionType=ActionType.PREFIX,
+			tooltip="Show the message in a titled area that's added after the table.")
 	public void showAsAfterTable(String title,String s) {
 		runtime.showAsAfterTable(title,s);
 	}
@@ -270,21 +361,36 @@ public class GlobalActionScope implements RuntimeContextual {
 		return null;
 	}
 	//--- SELECT
+	@AnAction(wiki="|''<i>select</i>''|name|",actionType=ActionType.PREFIX,
+			tooltip="Select the named object so that it's actions take priority over others.")
 	public void select(String name) {
 		runtime.getTableEvaluator().select(name);
 	}
 	//--- CONFIG
-	public Configuration configureFitlibrary() {
+	@AnAction(wiki="|''<i>configure FitLibrary</i>''||",actionType=ActionType.COMPOUND,
+			tooltip="Starts a table for changing configuation of FitLibrary.")
+	public Configuration configureFitLibrary() {
 		return runtime.getConfiguration();
 	}
-	public Configuration getRuntimeConfiguration() {
+	@AnAction(wiki="|''<i>runtime configuration</i>''||",actionType=ActionType.COMPOUND,
+			tooltip="Starts a table for changing configuation of FitLibrary.")
+	public Configuration runtimeConfiguration() {
 		return runtime.getConfiguration();
+	}
+	//--- WHAT'S IN SCOPE
+	@AnAction(wiki="",actionType=ActionType.COMPOUND,
+			tooltip="Show all the actions in scope after the current table.")
+	public boolean showActionsInScope() {
+		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope()));
+		return true;
 	}
 	
 	//-------------------------------------- SPECIALS -----------------------------------------
 	/** Check that the result of the action in the first part of the row is less than
 	 *  the expected value in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''&lt;'''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it is less than the expected value.")
 	public void lessThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
 			@Override @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -296,6 +402,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is less than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''&lt;='''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it is less than or equal to the expected value.")
 	public void lessThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
 			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -307,6 +415,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  the expected value in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''>'''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it is greater than the expected value.")
 	public void greaterThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
 			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -318,6 +428,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''>='''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it is greater than or equal to the expected value.")
 	public void greaterThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
 			@Override @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -348,6 +460,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''<b>contains</b>'''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it contains the expected value.")
 	public void contains(DoAction action, String s) throws Exception {
 		if (s == null) {
 			action.cellAt(1).fail("expected is null");
@@ -367,6 +481,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''does not contain'''|unexpected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it does not contain the unexpected value.")
 	public void doesNotContain(DoAction action, String s) throws Exception {
 		if (s == null) {
 			action.cellAt(1).fail("expected is null");
@@ -388,6 +504,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''eventually contains'''|expected value|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it eventually contains the expected value. It fails if the timeout period for becomes is exceeded.")
 	public void eventuallyContains(final DoAction action, final String s) throws Exception {
 		if (s == null) {
 			action.cellAt(1).fail("expected is null");
@@ -412,26 +530,36 @@ public class GlobalActionScope implements RuntimeContextual {
 		} else
 			action.cellAt(1).fail("result is null");
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Show the value of the action is a cell added to the row.")
 	public void show(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
 			action.showResult(result);
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Show the value of the action is a cell added to the row. But the text is escaped so that any tags, etc will be visible.")
 	public void showEscaped(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
 			action.show("<pre>"+Fixture.escape(result.toString())+"</pre>");
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Show the value of the action is a cell added to the row. The text retains its layout across lines.")
 	public void showPredefined(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
 			action.show("<pre>"+result.toString()+"</pre>");
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Show the value of the action in a folding area added after the table.")
 	public void showAfter(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
 			action.showAfter(result);
 	}
+	@AnAction(wiki="|'''<i>show after as</i>'''|action...|",actionType=ActionType.PREFIX,
+			tooltip="Show the value of the action in a titled folding area added after the table.")
 	public void showAfterAs(String title, DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
@@ -440,6 +568,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''matches'''|regular expression|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it matches the regular expression.")
 	public void matches(DoAction action, String pattern) throws Exception {
 		if (pattern == null) {
 			action.cellAt(1).fail("expected is null");
@@ -460,6 +590,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, does not match
 	 *  the regular expression in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''does not match'''|regular expression|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it does not match the regular expression.")
 	public void doesNotMatch(DoAction action, String pattern) throws Exception {
 		if (pattern == null) {
 			action.cellAt(1).fail("expected is null");
@@ -482,6 +614,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, eventually matches
 	 *  the regular expression in the last cell of the row.
 	 */
+	@AnAction(wiki="|action...|'''eventually matches'''|regular expression|",actionType=ActionType.SUFFIX,
+			tooltip="Take the result of the action and see whether it eventually matches the regular expression. It fails if the timeout period for becomes is exceeded.")
 	public void eventuallyMatches(final DoAction action, final String s) throws Exception {
 		if (s == null) {
 			action.cellAt(1).fail("expected is null");
@@ -514,6 +648,7 @@ public class GlobalActionScope implements RuntimeContextual {
      *  o For other result types, no exception should be thrown.
      *  It's no longer needed, because the same result can now be achieved with a boolean method.
      */
+	@AnAction(wiki="",actionType=ActionType.IGNORE, tooltip="")
 	public Boolean ensure(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result instanceof Boolean)
@@ -522,6 +657,8 @@ public class GlobalActionScope implements RuntimeContextual {
 			return true;
 		return null;
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Passes if the action fails or gives an error. Fails otherwise. Use notTrue if errors should be shown.")
 	public Boolean not(DoAction action) throws Exception {
 		Object result = null;
 		try {
@@ -542,17 +679,23 @@ public class GlobalActionScope implements RuntimeContextual {
 			throw new NotRejectedException();
 		return null;
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Passes if the action fails and vice versa. Any errors are shown.")
 	public boolean notTrue(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result instanceof Boolean)
 			return !((Boolean)result).booleanValue();
 		throw new NotRejectedException();
 	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Passes if the action fails or gives an error. Fails otherwise. Use notTrue if errors should be shown.")
 	public boolean reject(DoAction action) throws Exception {
 		return not(action);
 	}
 	/** Log result to a file
 	 */
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Logs the result of the action to the current (old-style) log file, if any.")
 	public void log(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
@@ -560,6 +703,8 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Log result to log4j
 	 */
+	@AnAction(wiki="",actionType=ActionType.PREFIX,
+			tooltip="Logs the result of the action to log4j.")
 	public void logged(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
@@ -567,6 +712,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow access to String methods
 	 */
+	@AnAction(wiki="",tooltip="Run the action. If an object results, allow it to be tested as a String",actionType=ActionType.PREFIX)
 	public StringAdapter asString(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
@@ -575,11 +721,13 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow the action result to be treated as an extra (unnamed) fixturing object
 	 */
+	@AnAction(wiki="",tooltip="Run the action and add the resulting object to the scope",actionType=ActionType.PREFIX)
 	public void alsoRun(DoAction action) throws Exception {
 		alsoRunAs(action,"Unnamed#"+(UNNAMED ++));
 	}
 	/** Allow the action result to be treated as an extra fixturing object
 	 */
+	@AnAction(wiki="|''<i>also run</i>''|name|",tooltip="Run the action, add the resulting object to the scope, and allow it to be selected by name",actionType=ActionType.PREFIX)
 	public void alsoRunAs(DoAction action, String name) throws Exception {
 		Object result = action.run();
 		if (result != null) {
