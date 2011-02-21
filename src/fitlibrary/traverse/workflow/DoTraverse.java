@@ -443,7 +443,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/*
 	 * |''add named''|name|...action or fixture|
 	 */
-	@AnAction(wiki="|''<i>add named</i>''|name|action... or class name|",
+	@AnAction(wiki="|'''<b>add named</b>'''|name|action... or class name|",
 			actionType=ActionType.SELF_FORMAT,  isCompound=false,
 			tooltip="Take the result of the action (or an instance of the class) and add it the current scope, with the given name. "+
 			"This is one way of allowing several objects to be used in a storytest at the same time.")

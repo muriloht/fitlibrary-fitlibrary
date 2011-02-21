@@ -345,7 +345,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		runtime.getDefinedActionCallManager().addShow(row);
 	}
 	
-	@AnAction(wiki="|''<i>show</i>''|title|''<i>as</i>''|message|''<i>after table</i>''|",
+	@AnAction(wiki="|'''<b>show</b>'''|title|'''<b>as</b>'''|message|'''<b>after table</b>'''|",
 			actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Show the message in a titled area that's added after the table.")
 	public void showAsAfterTable(String title,String s) {
@@ -357,7 +357,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	//--- SELECT
 	
-	@AnAction(wiki="|''<i>select</i>''|name|",actionType=ActionType.PREFIX, isCompound=false,
+	@SimpleAction(wiki="|''<i>select</i>''|name|",
 			tooltip="Select the named object so that it's actions take priority over others.")
 	public void select(String name) {
 		runtime.getTableEvaluator().select(name);
@@ -381,7 +381,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		return true;
 	}
 	
-	@CompoundAction(wiki="",
+	@CompoundAction(wiki="|''<i>help with</i>''|text|",
 			tooltip="Show all the actions in scope that contain the string after the current table.")
 	public boolean helpWith(String substring) {
 		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),substring));
@@ -392,7 +392,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is less than
 	 *  the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''&lt;'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>&lt;</b>'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it is less than the expected value.")
 	public void lessThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
@@ -405,7 +405,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is less than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''&lt;='''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>&lt;=</b>'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it is less than or equal to the expected value.")
 	public void lessThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
@@ -418,7 +418,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''>'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>></b>'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it is greater than the expected value.")
 	public void greaterThan(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
@@ -431,7 +431,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row is greater than
 	 *  or equal to the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''>='''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>>=</b>'''|expected value|",actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it is greater than or equal to the expected value.")
 	public void greaterThanEquals(DoAction action, Object expect) throws Exception {
 		comparison(action,expect,new Comparison(){
@@ -485,7 +485,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''does not contain'''|unexpected value|",
+	@AnAction(wiki="|action...|'''<b>does not contain</b>'''|unexpected value|",
 			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it does not contain the unexpected value.")
 	public void doesNotContain(DoAction action, String s) throws Exception {
@@ -509,7 +509,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, contains
 	 *  the string in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''eventually contains'''|expected value|",
+	@AnAction(wiki="|action...|'''<b>eventually contains</b>'''|expected value|",
 			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it eventually contains the expected value. It fails if the timeout period for becomes is exceeded.")
 	public void eventuallyContains(final DoAction action, final String s) throws Exception {
@@ -564,7 +564,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		if (result != null)
 			action.showAfter(result);
 	}
-	@AnAction(wiki="|'''<i>show after as</i>'''|action...|",actionType=ActionType.PREFIX, isCompound=false,
+	@AnAction(wiki="|'''<b>show after as</b>'''|action...|",actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Show the value of the action in a titled folding area added after the table.")
 	public void showAfterAs(String title, DoAction action) throws Exception {
 		Object result = action.run();
@@ -574,7 +574,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''matches'''|regular expression|",actionType=ActionType.SUFFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>matches</b>'''|regular expression|",actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it matches the regular expression.")
 	public void matches(DoAction action, String pattern) throws Exception {
 		if (pattern == null) {
@@ -596,7 +596,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, does not match
 	 *  the regular expression in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''does not match'''|regular expression|",
+	@AnAction(wiki="|action...|'''<b>does not match</b>'''|regular expression|",
 			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it does not match the regular expression.")
 	public void doesNotMatch(DoAction action, String pattern) throws Exception {
@@ -621,7 +621,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	/** Check that the result of the action in the first part of the row, as a string, eventually matches
 	 *  the regular expression in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''eventually matches'''|regular expression|",
+	@AnAction(wiki="|action...|'''<b>eventually matches</b>'''|regular expression|",
 			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Take the result of the action and see whether it eventually matches the regular expression. It fails if the timeout period for becomes is exceeded.")
 	public void eventuallyMatches(final DoAction action, final String s) throws Exception {
@@ -736,7 +736,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow the action result to be treated as an extra fixturing object
 	 */
-	@AnAction(wiki="|''<i>also run</i>''|name|",actionType=ActionType.PREFIX, isCompound=false,
+	@AnAction(wiki="|'''<b>also run</b>'''|name|",actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="The object that results from the action is added to the scope, so actions can be called on it in future and it can be selected by name.")
 	public void alsoRunAs(DoAction action, String name) throws Exception {
 		Object result = action.run();
