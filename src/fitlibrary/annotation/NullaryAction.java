@@ -7,9 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AnAction {
-	String wiki();
+public @interface NullaryAction {
 	String tooltip();
-	ActionType actionType();
-	boolean isCompound();
 }

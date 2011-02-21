@@ -14,7 +14,9 @@ import org.apache.log4j.Logger;
 import fitlibrary.DefineAction;
 import fitlibrary.annotation.ActionType;
 import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.NullaryAction;
 import fitlibrary.annotation.ShowSelectedActions;
+import fitlibrary.annotation.SimpleAction;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.domainAdapter.FileHandler;
 import fitlibrary.exception.FitLibraryException;
@@ -118,8 +120,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 //	--- FIXTURE WRAPPERS FOR THIS (and so not available in GlobalScope):
 	/** To allow for a CalculateTraverse to be used for the rest of the table.
      */
-	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Treat the rest of the table as a calculate table.")
+	@NullaryAction(tooltip="Treat the rest of the table as a calculate table.")
 	public CalculateTraverse calculate() {
 		CalculateTraverse traverse;
 		if (this.getClass() == DoTraverse.class)
@@ -139,15 +140,13 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	}
 	/** To allow for a ConstraintTraverse to be used for the rest of the table.
      */
-	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Treat the rest of the table as a constraint table.")
+	@NullaryAction(tooltip="Treat the rest of the table as a constraint table.")
 	public ConstraintTraverse constraint() {
 		return new ConstraintTraverse(this);
 	}
 	/** To allow for a failing ConstraintTraverse to be used for the rest of the table.
      */
-	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Treat the rest of the table as a failing constraint table.")
+	@NullaryAction(tooltip="Treat the rest of the table as a failing constraint table.")
 	public ConstraintTraverse failingConstraint() {
 		ConstraintTraverse traverse = new ConstraintTraverse(this,false);
 		return traverse;
@@ -272,7 +271,8 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/** Check that the result of the action in the first part of the row is the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''<b>is</b>'''|expected value|",actionType=ActionType.SUFFIX,
+	@AnAction(wiki="|action...|'''<b>is</b>'''|expected value|",
+			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Check if the result of the action is the expected value.")
 	public void is(TestResults testResults, Row row) throws Exception {
 		int less = 3;
@@ -288,7 +288,8 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/** Check that the result of the action in the first part of the row is not the same as
 	 *  the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|action...|'''<b>is not</b>'''|unexpected value|",actionType=ActionType.SUFFIX,
+	@AnAction(wiki="|action...|'''<b>is not</b>'''|unexpected value|",
+			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Check if the result of the action is not the unexpected value.")
 	public void isNot(TestResults testResults, Row row) throws Exception {
 		int less = 3;
@@ -319,7 +320,8 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/** Check that the result of the action in the first part of the row, as a string becomes equals
 	 *  to the given value within the timeout period.
 	 */
-	@AnAction(wiki="|action...|'''<b>becomes</b>'''|expected value|",actionType=ActionType.SUFFIX,
+	@AnAction(wiki="|action...|'''<b>becomes</b>'''|expected value|",
+			actionType=ActionType.SUFFIX, isCompound=false,
 			tooltip="Check if the result of the action eventually becomes the expected value. It fails after the timeout period otherwise.")
 	public void becomes(TestResults testResults, Row row) throws Exception {
 		int less = 3;
@@ -353,21 +355,23 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/** Check that the result of the action in the rest of the row matches
 	 *  the expected value in the last cell of the row.
 	 */
-	@AnAction(wiki="|'''<b>check</b>'''|action...|expected value|",actionType=ActionType.SELF_FORMAT,
+	@SimpleAction(wiki="|'''<b>check</b>'''|action...|expected value|",
 			tooltip="Check if the result of the action is the expected value.")
 	public TwoStageSpecial check(Row row) throws Exception {
 		return prefixSpecialAction.check(row);
 	}
 	/** Set the dynamic variable name to the result of the action, or to the string if there's no action.
 	 */
-	@AnAction(wiki="|'''<b>set</b>'''|dynamic variable name|",actionType=ActionType.PREFIX,
+	@AnAction(wiki="|'''<b>set</b>'''|dynamic variable name|",
+			actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Set the dynamic variable to the result of the action (or the expression when the action starts with |=|).")
 	public TwoStageSpecial set(Row row) throws Exception {
 		return prefixSpecialAction.set(row);
 	}
 	/** Set the named FIT symbol to the result of the action, or to the string if there's no action.
 	 */
-	@AnAction(wiki="|'''<b>set symbol named</b>'''|symbol name|",actionType=ActionType.PREFIX,
+	@AnAction(wiki="|'''<b>set symbol named</b>'''|symbol name|",
+			actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Set the Fit symbol to the result of the action.")
 	public TwoStageSpecial setSymbolNamed(Row row) throws Exception {
 		return prefixSpecialAction.setSymbolNamed(row);
@@ -376,7 +380,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
      *  shown as a Dot graphic.
 	 * @param testResults 
      */
-	@AnAction(wiki="",actionType=ActionType.PREFIX,
+	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Treat the result of the action as a Dot specification, use Dot to create an image, and include it in the report.")
 	public void showDot(Row row, TestResults testResults) throws Exception {
 		Parser adapter = new GraphicParser(new NonGenericTyped(ObjectDotGraphic.class));
@@ -390,7 +394,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/** The rest of the row is ignored. 
      */
 	@SuppressWarnings("unused")
-	@AnAction(wiki="",actionType=ActionType.PREFIX,
+	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Ignore the rest of the row.")
 	public void note(Row row, TestResults testResults) throws Exception {
 		//		Nothing to do
@@ -439,7 +443,8 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/*
 	 * |''add named''|name|...action or fixture|
 	 */
-	@AnAction(wiki="|''<i>add named</i>''|name|action... or class name|",actionType=ActionType.SELF_FORMAT,
+	@AnAction(wiki="|''<i>add named</i>''|name|action... or class name|",
+			actionType=ActionType.SELF_FORMAT,  isCompound=false,
 			tooltip="Take the result of the action (or an instance of the class) and add it the current scope, with the given name. "+
 			"This is one way of allowing several objects to be used in a storytest at the same time.")
 	public void addNamed(Row row, TestResults testResults) throws Exception {
@@ -452,7 +457,7 @@ public class DoTraverse extends Traverse implements FlowEvaluator, SpecialAction
 	/*
 	 * |''add global''|...action or fixture|
 	 */
-	@AnAction(wiki="",actionType=ActionType.PREFIX,
+	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
 			tooltip="Take the result of the action (or an instance of the class) and add it as a new global to the scope.")
 	public void addGlobal(Row row, TestResults testResults) throws Exception {
 		int less = 2;

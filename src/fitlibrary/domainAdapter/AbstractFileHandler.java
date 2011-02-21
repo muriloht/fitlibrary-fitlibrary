@@ -8,37 +8,36 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import fitlibrary.annotation.ActionType;
-import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.NullaryAction;
 import fitlibrary.annotation.ShowSelectedActions;
+import fitlibrary.annotation.SimpleAction;
 import fitlibrary.traverse.DomainAdapter;
 
 @ShowSelectedActions
 public class AbstractFileHandler implements DomainAdapter {
 	protected File file = new File(".");
 
-	@AnAction(wiki="|''<i>append</i>''|contents|",actionType=ActionType.SIMPLE,
+	@SimpleAction(wiki="|''<i>append</i>''|contents|",
 			tooltip="Append the contents to the end of the file.")
 	public void append(String content) throws IOException {
 		writeToFile(content, true);
 	}
-	@AnAction(wiki="|''<i>write</i>''|contents|",actionType=ActionType.SIMPLE,
+	@SimpleAction(wiki="|''<i>write</i>''|contents|",
 			tooltip="Write the contents to the file.")
 	public void write(String content) throws IOException {
 		writeToFile(content, false);
 	}
-	@AnAction(wiki="|''<i>append unicode</i>''|contents|",actionType=ActionType.SIMPLE,
+	@SimpleAction(wiki="|''<i>append unicode</i>''|contents|",
 			tooltip="Append the contents as unicode to the end of the file.")
 	public void appendUnicode(String content) throws IOException {
 		writeUnicodeToFile(content, true);
 	}
-	@AnAction(wiki="|''<i>write unicode</i>''|contents|",actionType=ActionType.SIMPLE,
+	@SimpleAction(wiki="|''<i>write unicode</i>''|contents|",
 			tooltip="Write the contents as unicode to the file.")
 	public void writeUnicode(String content) throws IOException {
 		writeUnicodeToFile(content, false);
 	}
-	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Read the contents of the file, so we can use it or check (parts of) it.")
+	@NullaryAction(tooltip="Read the contents of the file, so we can use it or check (parts of) it.")
 	public String read() throws IOException {
 		return readFile();
 	}
@@ -54,13 +53,12 @@ public class AbstractFileHandler implements DomainAdapter {
 		reader.close();
 		return result;
 	}
-	@AnAction(wiki="|''<i>make folders</i>''|folder name|",actionType=ActionType.SIMPLE,
+	@SimpleAction(wiki="|''<i>make folders</i>''|folder name|",
 			tooltip="Create this as a folder, along with any other folders that are needed to hold it.")
 	public void makeFolders(String folderPath) { // Don't need this action, but leave it for backwards compatibility
 		new File(folderPath).mkdirs();
 	}
-	@AnAction(wiki="",actionType=ActionType.SIMPLE,
-			tooltip="Delete the file, returning true if it succeeded.")
+	@NullaryAction(tooltip="Delete the file, returning true if it succeeded.")
 	public boolean delete() {
 		return file.delete();
 	}

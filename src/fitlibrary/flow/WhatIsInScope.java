@@ -8,7 +8,10 @@ import java.util.Date;
 import fit.Fixture;
 import fitlibrary.annotation.ActionType;
 import fitlibrary.annotation.AnAction;
+import fitlibrary.annotation.CompoundAction;
+import fitlibrary.annotation.NullaryAction;
 import fitlibrary.annotation.ShowSelectedActions;
+import fitlibrary.annotation.SimpleAction;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.typed.TypedObject;
@@ -33,54 +36,118 @@ public class WhatIsInScope {
 	private static void addActions(StringBuilder s, Class<? extends Object> aClass, String pattern, boolean selective) {
 		boolean matchAll = pattern.isEmpty();
 		s.append("<td><table>");
-		s.append("<tr><td><h4>Action</h4></td><td><h4>Return type</h4></td><td><h4>Following actions</h4></td></tr>\n");
 		Method[] methods = aClass.getMethods();
 		Arrays.sort(methods, new Comparator<Method>() {
 			public int compare(Method m1, Method m2) {
 				return m1.getName().compareToIgnoreCase(m2.getName());
 			}
 		});
+		boolean first = true;
 		for (Method method : methods) {
-			Class<?> declaringClass = method.getDeclaringClass();
-			ShowSelectedActions showAnnotation = declaringClass.getAnnotation(ShowSelectedActions.class);
-			boolean locallySelective = selective || showAnnotation != null;
-			boolean ignoreDoTraverse = declaringClass == DoTraverse.class && aClass != DoTraverse.class;
-			if (	!ignoreDoTraverse &&
-					declaringClass != Object.class && 
-					declaringClass != Fixture.class && 
-					!method.getName().equals("getSystemUnderTest")) {
-				Class<?> returnType = method.getReturnType();
-				String returns = returnType.getSimpleName();
-				if (returnType == Void.TYPE || returnType == TwoStageSpecial.class)
-					returns = "";
-				AnAction action = method.getAnnotation(AnAction.class);
-				if (action == null) {
-					String methodName = methodName(method);
-					String nameWithoutTags = methodName.replaceAll("<i>","").replaceAll("</i>","").replaceAll("<b>","").replaceAll("</b>","");
-					boolean matches = matchAll || nameWithoutTags.contains(pattern);
-					if (!locallySelective && matches) {
-						s.append("<tr><td>" + methodName + "</td><td>"+returns+"</td></tr>\n");
-					}
-				} else if (action.actionType() != ActionType.IGNORE) {
-					String name = action.wiki();
-					if (name.isEmpty())
-						name = unCamel(method.getName(),action.actionType());
-					String tooltip = action.tooltip();
-					String nameWithoutTags = name.replaceAll("<i>","").replaceAll("</i>","").replaceAll("<b>","").replaceAll("</b>","");
-					boolean matches = matchAll || nameWithoutTags.contains(pattern) || tooltip.contains(pattern);
-					if (matches) {
-						if (action.actionType() == ActionType.PREFIX)
-							name += "action...|";
-						s.append("<tr><td><span class='note' title='"+tooltip+"'>" + name + "</span></td><td>"+returns+"</td>");
-						if (action.actionType() == ActionType.COMPOUND && !ignoreType(returnType)) {
-							addActions(s,returnType,"",true);
-						}
-						s.append("</tr>");
-					}
+			if (!ignoreMethod(aClass,method)) {
+				boolean locallySelective = selective || method.getDeclaringClass().getAnnotation(ShowSelectedActions.class) != null;
+				ActionInfo actionInfo = decodeAnnotation(method,locallySelective);
+				if (!actionInfo.ignore && (matchAll || actionInfo.matches(pattern))) {
+					if (first)
+						s.append("<tr><td><h4>Action</h4></td>"+
+								"<td><h4><span title='The Java return type.'>Returns</span></h4></td>"+
+								"<td><h4><span title='Actions that can occur in the rest of the table.'>Following actions</span></h4></td></tr>\n");
+					first = false;					
+					actionInfo.display(s,returnTypeDisplay(method));
+					Class<?> returnType = method.getReturnType();
+					if (actionInfo.compound && !ignoreType(returnType))
+						addActions(s,returnType,"",true);
 				}
 			}
 		}
 		s.append("</table></td>");
+	}
+	
+	private static boolean ignoreMethod(Class<? extends Object> aClass, Method method) {
+		Class<?> declaringClass = method.getDeclaringClass();
+		return declaringClass == Object.class || 
+		       declaringClass == Fixture.class ||
+		       (declaringClass == DoTraverse.class && aClass != DoTraverse.class) ||
+		       method.getName().equals("getSystemUnderTest");
+	}
+	
+	static class ActionInfo {
+		public final String name;
+		public final String tooltip;
+		public final boolean ignore;
+		public final boolean compound;
+
+		public ActionInfo(String name, String tooltip, boolean compound, boolean hasParameters) {
+			this.name = name;
+			if (tooltip.isEmpty())
+				if (hasParameters)
+					this.tooltip = "Action in sequence form, where the method name is followed by the types of each of the arguments.\n\n"+
+					               "This has been determined automatically from the underlying method.\n\n"+
+					               "If you want better documentation, which shows how to mix keywords and arguments, ask the developer who wrote the fixturing code to provide it. "+
+					               "(See .FitLibrary.FitLibrary.SpecifiCations.GlobalActionsProvided.WhatIsInScope for how to do this.)";
+				else
+					this.tooltip = "Action name has been determined automatically from the name of the underlying method.";
+			else
+				this.tooltip = tooltip.replace("\"", "'");
+			this.compound = compound;
+			this.ignore = false;
+		}
+		public ActionInfo() {
+			this.name = "";
+			this.tooltip = "";
+			this.compound = false;
+			this.ignore = true;
+		}
+		public boolean matches(String pattern) {
+			return tooltip.contains(pattern) || nameWithoutTags().contains(pattern);
+		}
+		public String nameWithoutTags() {
+			return name.replaceAll("<i>","").replaceAll("</i>","").replaceAll("<b>","").replaceAll("</b>","");
+		}
+		public void display(StringBuilder s, String returns) {
+			s.append("<tr><td><span style='background-color: #ffffcc' title=\""+tooltip+"\">" + name + "</span></td><td>"+returns+"</td>");
+		}
+		public static ActionInfo ignore() {
+			return new ActionInfo();
+		}
+	}
+	  
+	private static String returnTypeDisplay(Method method) {
+		Class<?> returnType = method.getReturnType();
+		if (returnType == Void.TYPE || returnType == TwoStageSpecial.class)
+			return "";
+		return returnType.getSimpleName();
+	}
+	
+	private static ActionInfo decodeAnnotation(Method method, boolean selective) {
+		boolean hasParameters = method.getParameterTypes().length > 0;
+		NullaryAction nullaryAction = method.getAnnotation(NullaryAction.class);
+		if (nullaryAction != null)
+			return new ActionInfo(unCamel(method.getName(),ActionType.SIMPLE),nullaryAction.tooltip(),false,hasParameters);
+		SimpleAction simpleAction = method.getAnnotation(SimpleAction.class);
+		if (simpleAction != null)
+			return new ActionInfo(simpleAction.wiki(),simpleAction.tooltip(),false,hasParameters);
+		CompoundAction compoundAction = method.getAnnotation(CompoundAction.class);
+		if (compoundAction != null) {
+			String name = compoundAction.wiki();
+			if (name.isEmpty())
+				name = unCamel(method.getName(),ActionType.SIMPLE);
+			return new ActionInfo(name,compoundAction.tooltip(),true,hasParameters);
+		}
+		AnAction anAction = method.getAnnotation(AnAction.class);
+		if (anAction != null) {
+			if (anAction.actionType() == ActionType.IGNORE)
+				return ActionInfo.ignore();
+			String name = anAction.wiki();
+			if (name.isEmpty())
+				name = unCamel(method.getName(),anAction.actionType());
+			if (anAction.actionType() == ActionType.PREFIX)
+				name += "action...|";
+			return new ActionInfo(name,anAction.tooltip(),anAction.isCompound(),hasParameters);
+		}
+		if (selective)
+			return ActionInfo.ignore();
+		return new ActionInfo(methodName(method),"",false,hasParameters);
 	}
 
 	private static boolean ignoreType(Class<?> type) {
@@ -122,4 +189,5 @@ public class WhatIsInScope {
 	  s.append(quotes+"</"+format+">|");
 	  return s.toString();
   }
+  
 }

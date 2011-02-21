@@ -4,7 +4,7 @@
 
  * Can request that elapsed time information be added to the table in the report. See .FitLibrary.SpecifiCations.GlobalActionsProvided.ElapsedTimesAdded
  * Can request that a storytest stop running if there are more than a specified number of exceptions and/or fails. This generalises stopOnError. See .FitLibrary.SpecifiCations.GlobalActionsProvided.StoppingOnErrors
- * Can find out what actions may be called at a point in a storytest, based on what is in scope. See FitLibrary.SpecifiCations.GlobalActionsProvided.WhatIsInScope
+ * Can find out what actions may be called at a point in a storytest, based on what is in scope. See .FitLibrary.SpecifiCations.GlobalActionsProvided.WhatIsInScope
 
 |!2 ''Details of changes in release''|3 December 2010|
 
