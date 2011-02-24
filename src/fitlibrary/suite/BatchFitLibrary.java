@@ -44,9 +44,13 @@ public class BatchFitLibrary implements StorytestRunner {
 	public BatchFitLibrary(TableListener tableListener) {
 		this.tableListener = tableListener;
 	}
-	@Override
 	public TestResults doStorytest(Tables theTables) {
 		ParseDelegation.clearDelegatesForNextStorytest();
+		return doTables(theTables);
+	}
+	public TestResults doStorytest(Tables theTables, Object externalObject) {
+		ParseDelegation.clearDelegatesForNextStorytest();
+		doFlow.getRuntimeContext().addNamedObject("external", new GenericTypedObject(externalObject));
 		return doTables(theTables);
 	}
 	private static DoFlow wiredUpDoFlow() {
