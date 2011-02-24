@@ -2,5 +2,6 @@
 
 Also see SpecialActions
 
-^StoppingOnErrors
+^OnErrorListener
+
 

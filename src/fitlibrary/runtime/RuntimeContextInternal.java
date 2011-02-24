@@ -8,6 +8,7 @@ import fitlibrary.config.Configuration;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
+import fitlibrary.listener.OnError;
 import fitlibrary.log.ConfigureLog4j;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Row;
@@ -52,4 +53,6 @@ public interface RuntimeContextInternal extends RuntimeContext {
 	Configuration getConfiguration();
 	String extendedCamel(String s);
 	Row row();
+	void registerOnErrorHandler(OnError result);
+	void checkStopOnError(TestResults testResults);
 }

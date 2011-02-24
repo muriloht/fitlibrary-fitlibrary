@@ -37,7 +37,7 @@ ${suite} allows the same storytests to be run with different fixtures, etc. For 
 #
  * FolderRunner uses ''!-SpreadsheetRunner-!'' which in turn uses ''Poi'' to read XLS files.
  * ''!-SpreadsheetRunner-!'' uses spreadsheet borders to work out where the tables are in the spreadsheet (just the first sheet).
- * See the directory ''testFolders'' in the distribution of ''!-FitLibrayForFit-!'' for examples of the use of spreadsheet files.
+ * See the directory ''folderRunner/tests/trySetUpTearDown/nested'' in the distribution of ''!-FitLibrary-!'' for an example of the use of a spreadsheet file.
  * Add the poi jar in the classpath when using such files. (This jar is provided in the release folder ''fitlibrary/fitnesse/lib''. Or download poi from http://jakarta.apache.org/poi)
 #
 !3 ''!-SetUp-!'' and ''!-TearDown-!''
@@ -52,4 +52,3 @@ Before running a test, all  ''!-SetUp-!'' files that appear in the current direc
 All  ''!-TearDown-!'' files that appear in the current directory and all those above it (up to the level of the ''testDiry'') are (effectively) added to the end of the test. They are added with the top-most last.
 
 NB: this differs from the ''!-FitNesse-!'' approach, which only takes the closest ''!-SetUp-!'' or ''!-TearDown-!''.
-

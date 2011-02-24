@@ -25,7 +25,7 @@ import fitlibrary.utility.CollectionUtility;
 @RunWith(JMock.class)
 public class TestDoFlowWithNestedTables {
 	final Mockery context = new Mockery();
-	final DoFlowDriver driver = new DoFlowDriver(context);
+	final DoFlowDriverForTests driver = new DoFlowDriverForTests(context);
 	final Tables tables = makeTables();
 
 	private Tables makeTables() {

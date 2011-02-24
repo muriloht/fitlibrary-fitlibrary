@@ -33,7 +33,7 @@ import fitlibrary.traverse.workflow.FlowEvaluator;
 import fitlibrary.typed.TypedObject;
 import fitlibraryGeneric.typed.GenericTypedObject;
 
-public class DoFlowDriver {
+public class DoFlowDriverForTests {
 	final Mockery context;
 	final FlowEvaluator flowEvaluator;
 	final IScopeStack scopeStack;
@@ -55,7 +55,7 @@ public class DoFlowDriver {
 	
 	public boolean showTearDown = false;
 
-	public DoFlowDriver(Mockery context) {
+	public DoFlowDriverForTests(Mockery context) {
 		this.context = context;
 		flowEvaluator = context.mock(FlowEvaluator.class);
 		scopeStack = context.mock(IScopeStack.class);

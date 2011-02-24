@@ -34,7 +34,7 @@ import fitlibrary.utility.CollectionUtility;
 @RunWith(JMock.class)
 public class TestDoFlow {
 	final Mockery context = new Mockery();
-	final DoFlowDriver driver = new DoFlowDriver(context);
+	final DoFlowDriverForTests driver = new DoFlowDriverForTests(context);
 	final Tables tables = makeTables();
 
 	// FOLLOWING DON'T CHANGE SCOPE AT ALL:

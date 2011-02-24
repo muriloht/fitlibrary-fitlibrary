@@ -27,7 +27,7 @@ import fitlibrary.table.Tables;
 @RunWith(JMock.class)
 public class TestDoFlowWithFixture {
 	final Mockery context = new Mockery();
-	final DoFlowDriver doFlowDriver = new DoFlowDriver(context);
+	final DoFlowDriverForTests doFlowDriver = new DoFlowDriverForTests(context);
 	final Tables tables = tables().with(
 			table().with(
 					row().with(cell(),cell()),

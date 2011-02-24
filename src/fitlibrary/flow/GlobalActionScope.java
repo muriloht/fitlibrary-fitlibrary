@@ -33,6 +33,7 @@ import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.NotRejectedException;
 import fitlibrary.global.PlugBoard;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
+import fitlibrary.listener.OnError;
 import fitlibrary.log.ConfigureLogger;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.polling.Eventually;
@@ -747,7 +748,16 @@ public class GlobalActionScope implements RuntimeContextual {
 		}
 	}
 	
-//	public void is(DoAction action, Object expected) throws Exception {
+	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
+			tooltip="The action must return an object that implements OnError.\nOnce there are fails or errors in a storytest, the method stopOnError() is called with the counts after each action.")
+	public void informOnFailOrErrorInStorytest(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result == null || !(result instanceof OnError))
+			throw new FitLibraryException("Must be an object of type OnError");
+		runtime.registerOnErrorHandler((OnError)result);
+	}
+
+	//	public void is(DoAction action, Object expected) throws Exception {
 //		Object result = action.run();
 //		if (action.equals(result,expected))
 //			action.cellAt(1).pass();

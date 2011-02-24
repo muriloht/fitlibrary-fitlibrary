@@ -20,6 +20,7 @@ import fitlibrary.dynamicVariable.LocalDynamicVariables;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.IScope;
+import fitlibrary.listener.OnError;
 import fitlibrary.log.ConfigureLog4j;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
@@ -51,6 +52,12 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	protected Table currentTable;
 	private String currentPageName = "";
 	private ConfigureLog4j configureLog4j;
+	private OnError onErrorHandler = new OnError() {
+		@Override
+		public boolean stopOnError(int fails, int errors) {
+			return false;
+		}
+	};
 
 	public RuntimeContextContainer() {
 		this(null,new GlobalActionScope()); // For those cases where a fixture is being used independently of table execution
@@ -261,5 +268,14 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	}
 	public Row row() {
 		return currentRow;
+	}
+	@Override
+	public void registerOnErrorHandler(OnError onError) {
+		onErrorHandler = onError;
+	}
+	@Override
+	public void checkStopOnError(TestResults testResults2) {
+		if (onErrorHandler.stopOnError(testResults2.getCounts().wrong, testResults2.getCounts().exceptions))
+			getScope().setAbandon(true);
 	}
 }

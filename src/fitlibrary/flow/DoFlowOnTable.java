@@ -63,6 +63,9 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 	private void runTable(Table table, TestResults testResults, ITableListener tableListener) {
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 			Row row = table.at(rowNo);
+			if (testResults.problems())
+				runtime.checkStopOnError(testResults);
+					
 			if (runtime.isAbandoned(testResults)) {
 				row.ignore(testResults);
 			} else if (doFlower.hasDomainCheck() && row.size() == 1 && row.text(0, flowEvaluator).equals("checks")) {

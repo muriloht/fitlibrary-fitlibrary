@@ -28,7 +28,7 @@ import fitlibrary.utility.CollectionUtility;
 @RunWith(JMock.class)
 public class TestDoFlowWithSuiteEvaluator {
 	final Mockery context = new Mockery();
-	final DoFlowDriver driver = new DoFlowDriver(context);
+	final DoFlowDriverForTests driver = new DoFlowDriverForTests(context);
 	
 	final Tables storytest1 = tables().with(
 			table().with(

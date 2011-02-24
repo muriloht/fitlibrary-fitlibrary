@@ -1,5 +1,9 @@
 !1 This Release:
 #
+|!2 ''Details of changes in release''|24 February 2010|
+
+ * Technical addition: Can register a listener to be informed of errors, so that stopping on errors can be tailored. See .FitLibrary.SpecifiCations.GlobalActionsProvided.OnErrorListener
+
 |!2 ''Details of changes in this release''|21 February 2011|
 
  * Can request that elapsed time information be added to the table in the report. See .FitLibrary.SpecifiCations.GlobalActionsProvided.ElapsedTimesAdded
