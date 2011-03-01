@@ -6,9 +6,9 @@ Here we show how adding and multiplying on a calculator affect the total.
 
 |''given the total is''|10|
 
-|+|5|
+|''+''|5|
 
-|*|10|
+|''*''|10|
 
 |''the total now is''|150|
 

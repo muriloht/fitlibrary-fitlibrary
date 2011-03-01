@@ -1,5 +1,9 @@
 !1 This Release:
 #
+|!2 ''Details of changes in release''|1 March 2010|
+
+ * Revised the previous addition so that the errors are signalled for the row where they occur. Updated the specs to show how info can be added to the current row. See .FitLibrary.SpecifiCations.GlobalActionsProvided.OnErrorListener
+
 |!2 ''Details of changes in release''|24 February 2010|
 
  * Technical addition: Can register a listener to be informed of errors, so that stopping on errors can be tailored. See .FitLibrary.SpecifiCations.GlobalActionsProvided.OnErrorListener
