@@ -375,14 +375,14 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	//--- WHAT'S IN SCOPE
 	
-	@CompoundAction(wiki="",
+	@SimpleAction(wiki="",
 			tooltip="Show all the actions in scope after the current table.")
 	public boolean help() {
 		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),""));
 		return true;
 	}
 	
-	@CompoundAction(wiki="|''<i>help with</i>''|text|",
+	@SimpleAction(wiki="|''<i>help with</i>''|text|",
 			tooltip="Show all the actions in scope that contain the string after the current table.")
 	public boolean helpWith(String substring) {
 		showAsAfterTable("Actions",WhatIsInScope.what(runtime.getScope(),substring));
@@ -737,7 +737,7 @@ public class GlobalActionScope implements RuntimeContextual {
 	}
 	/** Allow the action result to be treated as an extra fixturing object
 	 */
-	@AnAction(wiki="|'''<b>also run</b>'''|name|",actionType=ActionType.PREFIX, isCompound=false,
+	@AnAction(wiki="|action...|'''<b>also run as</b>'''|name|",actionType=ActionType.SELF_FORMAT, isCompound=false,
 			tooltip="The object that results from the action is added to the scope, so actions can be called on it in future and it can be selected by name.")
 	public void alsoRunAs(DoAction action, String name) throws Exception {
 		Object result = action.run();
