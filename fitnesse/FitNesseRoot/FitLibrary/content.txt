@@ -25,6 +25,7 @@
 !3 Invented and developed in Java by [[''Rick Mugridge''][.FitLibrary.GlosSary.RickMugridge]], http://www.rimuresearch.com
 
 |!3 ^WhatIsNew|''What's new in this release.''|
+|!3 ^ToDo|''Things we might do.''|
 
 |!3 ^BeginningTutorial|''First tutorial for FitLibrary''|
 |!3 >AdvancedTutorials|''${advanced}''|
