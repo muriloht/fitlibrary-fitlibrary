@@ -1,8 +1,6 @@
 package fitlibrary.specify.dynamicVariable;
 
-import fitlibrary.DoFixture;
-
-public class DynamicVariablesUnderTest extends DoFixture {
+public class DynamicVariablesUnderTest {
 	private int count = 0;
 
 	public int getCount() {

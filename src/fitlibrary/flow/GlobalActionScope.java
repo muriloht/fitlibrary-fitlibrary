@@ -545,8 +545,15 @@ public class GlobalActionScope implements RuntimeContextual {
 			action.showResult(result);
 	}
 	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
-			tooltip="Show the value of the action is a cell added to the row. But the text is escaped so that any tags, etc will be visible.")
+			tooltip="Show the value of the action in a cell added to the row. But the text is escaped so that any tags, etc will be visible.")
 	public void showEscaped(DoAction action) throws Exception {
+		Object result = action.run();
+		if (result != null)
+			action.show("<pre>"+Fixture.escape(result.toString())+"</pre>");
+	}
+	@AnAction(wiki="",actionType=ActionType.PREFIX, isCompound=false,
+			tooltip="Show the value of the action in a cell added to the row. The tags will be visible.")
+	public void showWithTags(DoAction action) throws Exception {
 		Object result = action.run();
 		if (result != null)
 			action.show("<pre>"+Fixture.escape(result.toString())+"</pre>");

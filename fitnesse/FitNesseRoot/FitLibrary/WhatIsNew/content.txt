@@ -1,5 +1,9 @@
 !1 This Release:
 #
+|!2 ''Details of changes in release''|??|
+
+ * Added the action-modifier ("special" action) '''show with tags'''. See .FitLibrary.SpecifiCations.SpecialActions.TestShowWithTags
+
 |!2 ''Details of changes in release''|1 March 2010|
 
  * Revised the previous addition so that the errors are signalled for the row where they occur. Updated the specs to show how info can be added to the current row. See .FitLibrary.SpecifiCations.GlobalActionsProvided.OnErrorListener
