@@ -3,10 +3,39 @@ View the ImportantInformation page for more details on implementing this.
 
  * Note that credit card expiry dates are in the format (month / year)
 
-!3 Here are some valid numbers.
+!3 Valid cards
+#
+|''Valid Credit Cards''|
+|''Credit Card No''|''Card Type''|''Expires''|
+|5169961933224494|Mastercard|04/12|
+|4485891284549100|Visa|01/12|
+|378238305872855|American Express|12/11|
+|30328219479275|Diners Club|11/11|
+#
+!3 Incorrect card types
+#
+|''Invalid Credit Cards''|
+|''Credit Card No''|''Card Type''|''Expires''|
+|5420218419129712|American Express|12/12|
+|4532236754255544|Visar|12/11|
+#
+!3 Expired
+|''Invalid Credit Cards''|
+|''Credit Card No''|''Card Type''|''Expires''|
+|4024007154824048|Visa|02/10|
+#
+!3 Invalid card numbers
+#
+|''Invalid Credit Cards''|
+|''Credit Card No''|''Card Type''|''Expires''|
+|5169961983244414|Mastercard|02/13|
+|xxxxxxxxxxxxxxxx|Visa|02/12|
+
+
+
 
 |''Validate Credit Card''|
-|''Credit Card No''|''Card Type''|''Expires''||''Valid Number''|
+|''Credit Card No''|''Card Type''|''Expires''|''Valid Number''|
 |5169961933224494|Mastercard|12/05||true|
 |5379884413318972|Mastercard|12/05||true|
 |5243914958172676|Mastercard|12/05||true|
@@ -76,5 +105,3 @@ View the ImportantInformation page for more details on implementing this.
 |30328554553609|American Express|02/06||false|
 |30291266636411|Discover|02/06||false|
 |6011404643082688|Discover|12/05||false|
-
-

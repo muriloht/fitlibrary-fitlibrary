@@ -3,6 +3,7 @@
 |!2 ''Details of changes in release''|??|
 
  * Added the action-modifier ("special" action) '''show with tags'''. See .FitLibrary.SpecifiCations.SpecialActions.TestShowWithTags
+ * Made ''!-FitLibrary's-!'' ''!-DebugPage-!'' Java class more convenient to use inside an IDE for debugging. Call ''!-DebugPage.run(String[] fullPageNames, String fitNesseDiry, int port)-!'' from your own class.
 
 |!2 ''Details of changes in release''|1 March 2010|
 

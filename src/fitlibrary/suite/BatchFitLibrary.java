@@ -48,9 +48,10 @@ public class BatchFitLibrary implements StorytestRunner {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		return doTables(theTables);
 	}
+	// Following is called from ZiBreve, for self-testing
 	public TestResults doStorytest(Tables theTables, Object externalObject) {
 		ParseDelegation.clearDelegatesForNextStorytest();
-		doFlow.getRuntimeContext().addNamedObject("external", new GenericTypedObject(externalObject));
+		doFlow.getRuntimeContext().getScope().addGlobal(new GenericTypedObject(externalObject));
 		return doTables(theTables);
 	}
 	private static DoFlow wiredUpDoFlow() {

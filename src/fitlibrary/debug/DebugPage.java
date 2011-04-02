@@ -22,15 +22,11 @@ import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class DebugPage {
+	private final String fitNesseDiry;
+	private final int port;
 	protected int tablesFinished = 0;
 	protected int storytestsFinished = 0;
 	protected int expectedTablesFinished = 0;
-	private static String FITNESSE_URL = "http://localhost:8980/";
-	@SuppressWarnings("unused")
-	private static String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
-	private static String FITNESSE_DIRY = "fitnesse";
-	private static String DIRY = FITNESSE_DIRY;
-	private static int PORT = 8990; // This determines the value of ${FITNESSE_PORT}
 	
 	protected ReportListener reportListener = new ReportListener() {
 		@Override
@@ -44,24 +40,18 @@ public class DebugPage {
 	};
 	BatchFitLibrary batchFitLibrary = new BatchFitLibrary(new TableListener(reportListener));
 
-	public static void main(String[] args) throws Exception {
-		ConfigureLoggingThroughFiles.configure("fitnesse/");
-		String[] pageNames = new String[] {
-//				"FitLibrary.SpecifiCations.PojoAccessToCurrentRow.AddShowCell"
-				"FitLibrary.SpecifiCations.DoWorkflow.TestActions"
-		};
-		run(pageNames);
-	}
-	public static void run(String[] pageNames) throws Exception {
-		FitNesseLocalFile.fitNessePrefix("fitnesse");
-		DebugPage runPage = new DebugPage();
-		runPage.runs(pageNames);
-	}
-	public void runs(String[] pageNames) throws FitParseException, IOException {
+	public DebugPage(String fitNesseDiry, int port) {
+		this.fitNesseDiry = fitNesseDiry;
+		this.port = port;
+	}	
+	
+	public void debugPages(String[] pageNames) throws FitParseException, IOException {
+		ConfigureLoggingThroughFiles.configure(fitNesseDiry+"/");
+		FitNesseLocalFile.fitNessePrefix(fitNesseDiry);
 		tablesFinished = 0;
 		storytestsFinished = 0;
 		for (int i = 0; i < pageNames.length; i++) {
-			run(pageNames[i]);
+			runPage(pageNames[i]);
 			if (storytestsFinished != i+1)
 				throw new RuntimeException("Wrong # of FixtureListener events fired for "+pageNames[i]+
 						": "+storytestsFinished+" instead of "+(i+1));
@@ -70,14 +60,30 @@ public class DebugPage {
 			throw new RuntimeException("Expected FixtureListener events for "+expectedTablesFinished+
 					" tables but instead got "+tablesFinished);
 	}
-	public void run(String pageName) throws IOException, FitParseException {
-		String html = new ParallelFitNesseRepository(DIRY,PORT).getTest(pageName).getContent();
+	public void runPage(String pageName) throws IOException, FitParseException {
+		String html = new ParallelFitNesseRepository(fitNesseDiry,port).getTest(pageName).getContent();
 		System.out.println("\n----------\nHTML for "+pageName+"\n----------\n"+html);
 		Tables tables = TableFactory.tables(html);
 		expectedTablesFinished += tables.size();
-		FitServerBridge.setFitNesseUrl(FITNESSE_URL); // Yuck passing important info through a global. See method for links.
+		FitServerBridge.setFitNesseUrl("http://localhost:"+port); // Yuck passing important info through a global. See method for links.
 		TestResults testResults = batchFitLibrary.doStorytest(tables);
 		System.out.println("\n----------\nHTML Report for "+pageName+"\n----------\n"+tables.report());
 		System.out.println(testResults);
+	}
+
+	public static void main(String[] args) throws Exception {
+		String[] fullPageNames = new String[] {
+				"FitLibrary.SpecifiCations.DoWorkflow.TestActions"
+		};
+//		final String FITNESSE_FOR_WEB_DIRY = "../fitlibraryweb/fitnesse";
+		final String FITNESSE_DIRY = "fitnesse";
+		final int PORT = 8990; // This determines the value of ${FITNESSE_PORT}
+		run(fullPageNames,FITNESSE_DIRY,PORT);
+	}
+	
+	// This is the best way to run this, from another class. For an eg of using it, see the main() above. 
+	public static void run(String[] fullPageNames, String fitNesseDiry, int port) throws Exception {
+		DebugPage debugPage = new DebugPage(fitNesseDiry,port);
+		debugPage.debugPages(fullPageNames);
 	}
 }

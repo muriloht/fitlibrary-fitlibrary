@@ -1,6 +1,6 @@
-|check|''account owing for''| Bob |''is''|0.00|
+|check|''account owing for''|Bob|'''is'''|0.00|
 
-|''begin transaction for client''| Bob |''staff''| Bill |
+|''begin transaction for client''|Bob|''staff''|Bill|
 |''rent''|1||Tricycle|''for''|1 day|
 |''pay on account $''|20.00|
 |''complete transaction''|
@@ -9,4 +9,4 @@
 |''name''|''free count''|
 |Tricycle|0|
 
-|check|''account owing for''| Bob |''is''|20.00|
+|check|''account owing for''|Bob|'''is'''|20.00|
