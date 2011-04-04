@@ -20,12 +20,14 @@ import fitlibrary.parser.collection.ListParser;
 import fitlibrary.parser.collection.SetParser;
 import fitlibrary.parser.graphic.GraphicParser;
 import fitlibrary.parser.table.TableParser;
+import fitlibrary.parser.table.TablesParser;
 import fitlibrary.parser.tagged.TaggedStringParser;
 import fitlibrary.parser.tree.TreeParser;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.table.Cell;
 import fitlibrary.table.TableFactory;
+import fitlibrary.table.Tables;
 import fitlibrary.traverse.Evaluator;
 import fitlibrary.typed.Typed;
 import fitlibraryGeneric.list.ListParser2;
@@ -81,6 +83,8 @@ public class ParserSelectorForType {
             return GraphicParser.parserFactory();
         if (TaggedStringParser.applicableType(classType))
             return TaggedStringParser.parserFactory();
+        if (classType == Tables.class)
+        	return TablesParser.parserFactory();
         
         ParserFactory factory = LookupPropertyEditorBasedParser.parserFactory(typed);
         if (factory != null)

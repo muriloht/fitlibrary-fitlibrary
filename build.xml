@@ -157,7 +157,7 @@
 
 	<target name="compile">
 		<mkdir dir="${bin}" />
-		<javac srcdir="${src}" destdir="${bin}">
+		<javac srcdir="${src}" destdir="${bin}" debug="on">
 			<classpath>
 				<fileset dir="${fitnesse.dir}">
 					<include name="fitnesse.jar" />
