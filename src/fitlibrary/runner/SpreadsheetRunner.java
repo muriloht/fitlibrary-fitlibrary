@@ -182,6 +182,11 @@ public class SpreadsheetRunner extends AbstractRunner {
 	@SuppressWarnings("unchecked")
 	private HSSFCell[] getCells(HSSFRow row) {
 		int maxCell = row.getLastCellNum();
+		
+		if (maxCell < 0) {
+		   return new HSSFCell[] { null };
+		}
+		
 		HSSFCell[] cells = new HSSFCell[maxCell];
 		for (int i = 0; i < cells.length; i++)
 		    cells[i] = null;
