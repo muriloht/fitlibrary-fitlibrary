@@ -20,7 +20,6 @@ import fitlibrary.collection.CollectionSetUpTraverse;
 import fitlibrary.dynamicVariable.VariableResolver;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.object.DomainFixtured;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.suite.SuiteEvaluator;
@@ -49,18 +48,17 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 		this.doFlower = doFlower;
 	}
 	@Override
-	public void runTable(Table table, ITableListener tableListener, RuntimeContextInternal runtimeInternal) {
+	public void runTable(Table table, TestResults testResults, RuntimeContextInternal runtimeInternal) {
 		this.runtime = runtimeInternal;
 		runtimeInternal.setCurrentTable(table);
-		TestResults testResults = tableListener.getTestResults();
 		runtimeInternal.pushTestResults(testResults);
 		try {
-			runTable(table, testResults,tableListener);
+			runTable(table, testResults);
 		} finally {
 			runtimeInternal.popTestResults();
 		}
 	}
-	private void runTable(Table table, TestResults testResults, ITableListener tableListener) {
+	private void runTable(Table table, TestResults testResults) {
 		for (int rowNo = 0; rowNo < table.size(); rowNo++) {
 			Row row = table.at(rowNo);					
 			if (runtime.isAbandoned(testResults)) {
@@ -72,7 +70,7 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 //					System.out.println("DoFlow row "+row);
 					final Cell cell = row.at(0);
 			    	if (cell.hasEmbeddedTables(runtime.getResolver())) { // Doesn't allow for other cells in row...
-			    		doFlower.runInnerTables(cell.getEmbeddedTables(), tableListener);
+			    		doFlower.runInnerTables(cell.getEmbeddedTables(), testResults);
 			    	} else {
 			    		row = mapOddBalls(row,flowEvaluator);
 //			    		System.out.println("DoFlow set current Row "+row);
@@ -190,7 +188,7 @@ public class DoFlowOnTable implements DoFlowerOnTable {
 		return row;
 	}
 	public interface DoFlower {
-		void runInnerTables(Tables embeddedTables, ITableListener tableListener);
+		void runInnerTables(Tables embeddedTables, TestResults testResults);
 		void setDomainFixture(TypedObject typedResult);
 		void setSuite(SuiteEvaluator suiteEvaluator);
 		boolean hasDomainCheck();

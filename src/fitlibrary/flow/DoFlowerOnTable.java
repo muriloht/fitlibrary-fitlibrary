@@ -5,11 +5,10 @@
 
 package fitlibrary.flow;
 
-import fitlibrary.runResults.ITableListener;
+import fitlibrary.runResults.TestResults;
 import fitlibrary.runtime.RuntimeContextInternal;
 import fitlibrary.table.Table;
 
 public interface DoFlowerOnTable {
-	void runTable(Table table, ITableListener tableListener,
-			RuntimeContextInternal runtime);
+	void runTable(Table table, TestResults testResults, RuntimeContextInternal runtime);
 }

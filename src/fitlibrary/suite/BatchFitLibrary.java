@@ -48,7 +48,7 @@ public class BatchFitLibrary implements StorytestRunner {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		return doTables(theTables);
 	}
-	// Following is called from ZiBreve, for self-testing
+	// Following is called from ZiBreve, for configuration and self-testing
 	public TestResults doStorytest(Tables theTables, Object externalObject) {
 		ParseDelegation.clearDelegatesForNextStorytest();
 		doFlow.getRuntimeContext().getScope().addGlobal(new GenericTypedObject(externalObject));
@@ -96,7 +96,7 @@ public class BatchFitLibrary implements StorytestRunner {
 			} catch (IOException e) {
 				Table errorTable = TableFactory.table(TableFactory.row("note",TableElementOnParse.label("Problem on writing property file:")+"<hr/>"+e.getMessage()));
 				errorTable.at(0).at(1).error(tableListener.getTestResults());
-				theTables.add(errorTable );
+				theTables.add(errorTable);
 			}
 		}
 		return tableListener.getTestResults();

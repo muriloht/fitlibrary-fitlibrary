@@ -65,7 +65,7 @@ public class DoFlowOnTableDriver {
 	}
 	public void runTable(Table table) {
 		poppingScopeStackAtEndOfTable();
-		doFlowOnTable.runTable(table, tableListener, runtime);
+		doFlowOnTable.runTable(table, testResults, runtime);
 	}
 	public void startingOnTable(final Table table) {
 		final String endState = endState("startingOnTable");
@@ -169,7 +169,7 @@ public class DoFlowOnTableDriver {
 		context.checking(new Expectations() {{
 			allowing(runtime).isAbandoned(with(any(TestResults.class)));
 			  will(returnValue(false));                          when(state.is(currentState));
-			oneOf(doFlower).runInnerTables(embeddedTables, tableListener);
+			oneOf(doFlower).runInnerTables(embeddedTables, testResults);
 			                                                     when(state.is(currentState));
 			                                                     then(state.is(endState));
 		}});

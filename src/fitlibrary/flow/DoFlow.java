@@ -57,12 +57,6 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		this.setUpTearDown = setUpTearDown;
 		this.doFlowOnTable = new DoFlowOnTable(flowEvaluator, scopeStack, setUpTearDown, this);
 	}
-	public DoFlow(IScopeStack scopeStack, RuntimeContextInternal runtime, SetUpTearDown setUpTearDown, DoFlowerOnTable doFlowOnTable) {
-		this.scopeStack = scopeStack;
-		this.runtime = runtime;
-		this.setUpTearDown = setUpTearDown;
-		this.doFlowOnTable = doFlowOnTable;
-	}
 	public void runStorytest(Tables tables, ITableListener tableListener) {
 		logger.trace("Running storytest");
 		TestResults testResults = tableListener.getTestResults();
@@ -80,7 +74,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 			if (domainCheck != null)
 				handleDomainPhases(table);
 			if (!plainTextFailed)
-				current.runTable(table,tableListener);
+				current.runTable(table,testResults);
 			if (t < tables.size() - 1) {
 				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
 				logger.trace("Finished table");
@@ -94,8 +88,8 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		tableListener.storytestFinished();
 	}
 	@Override
-	public void runTable(Table table, ITableListener tableListener) {
-		doFlowOnTable.runTable(table, tableListener, runtime);
+	public void runTable(Table table, TestResults testResults) {
+		doFlowOnTable.runTable(table, testResults, runtime);
 	}
 	private void resetToStartStorytest() {
 		scopeStack.setAbandon(false);
@@ -123,11 +117,11 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
         }
 	}
 	@Override
-	public void runInnerTables(Tables innerTables, ITableListener tableListener) {
+	public void runInnerTables(Tables innerTables, TestResults testResults) {
 		IScopeState state = scopeStack.currentState();
 		for (Table iTable: innerTables) {
-			runTable(iTable,tableListener);
-			tearDown(state.restore(), iTable.at(0), tableListener.getTestResults());
+			runTable(iTable,testResults);
+			tearDown(state.restore(), iTable.at(0), testResults);
 		}
 	}
 	private void tearDown(List<TypedObject> typedObjects, Row row, TestResults testResults) {

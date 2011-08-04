@@ -8,7 +8,6 @@ import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.NoSystemUnderTestException;
 import fitlibrary.exception.method.MissingMethodException;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -37,7 +36,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 		this.domainTraverser = domainTraverser;
 	}
 	@Override
-	public void runTable(Table table, ITableListener tableListener) {
+	public void runTable(Table table, TestResults testResults) {
         if (switchOnExpected(table)) {
             domainTraverser.setCurrentAction();
             return;
@@ -47,10 +46,10 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
                 Row row = table.at(rowNo);
                 if (row.text(0,this).equals("comment"))
                 	return;
-				processRow(row,tableListener.getTestResults());
+				processRow(row,testResults);
             }
         } catch (Exception e) {
-            table.error(tableListener,e);
+            table.error(testResults,e);
         }
     }
 	private void processRow(Row row, TestResults testResults) {
@@ -101,8 +100,7 @@ public class DomainCheckTraverse extends Traverse implements TableEvaluator {
 		// Remove this later
 	}
 	@Override
-	public void runInnerTables(Tables definedActionBody,
-			ITableListener tableListener) {
+	public void runInnerTables(Tables definedActionBody, TestResults testResults) {
 		// TODO Auto-generated method stub
 		// Remove this later
 	}

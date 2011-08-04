@@ -104,7 +104,7 @@ public class FolderRunner extends FileParseUtilities {
         String title = "";
         File topReportDiry = reportDiry;
         topReport = new Report("FolderRunner",reportDiry,"",topReportDiry);
-        File reportFile = new File(reportDiry,INDEX_HTML); // exposed critical region between this and next
+        File reportFile = new File(reportDiry,INDEX_HTML); // exposed critical region between this and next statement
         if (fileIsLocked(reportFile))
         	throw new RuntimeException("Already running");
         if (suiteFile != null)

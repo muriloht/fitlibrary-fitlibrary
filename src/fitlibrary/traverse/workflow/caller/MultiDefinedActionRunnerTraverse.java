@@ -7,7 +7,6 @@ package fitlibrary.traverse.workflow.caller;
 import fit.Fixture;
 import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
-import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -75,7 +74,7 @@ public class MultiDefinedActionRunnerTraverse extends Traverse {
 	}
 	private void runBody(Tables body, TestResults subTestResults) {
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
-		tableEvaluator.runInnerTables(body, new TableListener(subTestResults));
+		tableEvaluator.runInnerTables(body, subTestResults);
 	}
 	private void colourRowInReport(Row callRow, TestResults testResults, TestResults subTestResults) {
 		if (runtime.isAbandoned(testResults))

@@ -16,7 +16,6 @@ import fitlibrary.definedAction.ParameterBinder;
 import fitlibrary.exception.FitLibraryException;
 import fitlibrary.global.TemporaryPlugBoardForRuntime;
 import fitlibrary.log.FitLibraryLogger;
-import fitlibrary.runResults.TableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsFactory;
 import fitlibrary.runtime.RuntimeContextInternal;
@@ -112,7 +111,7 @@ public class DefinedActionCaller extends AbstractDoCaller {
 	private void processDefinedAction(Tables definedActionBody, Row row, TestResults testResults) {
 		TestResults subTestResults = TestResultsFactory.testResults();
 		TableEvaluator tableEvaluator = runtime.getTableEvaluator();
-		tableEvaluator.runInnerTables(definedActionBody, new TableListener(subTestResults));
+		tableEvaluator.runInnerTables(definedActionBody, subTestResults);
 		colourRowInReport(row, testResults, subTestResults);
 		if (runtime.toExpandDefinedActions() || subTestResults.problems() || runtime.isAbandoned(testResults)) {
 			Cell cell = TableFactory.cell(definedActionBody);

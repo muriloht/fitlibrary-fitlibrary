@@ -58,7 +58,7 @@ public class ScopeStack implements IScopeStack {
 			stack.push(typedObject);
 	}
 	public List<TypedObject> poppedAtEndOfTable() {
-		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
+		List<TypedObject> results = new ArrayList<TypedObject>();
 		while (!stack.isEmpty()) {
 			TypedObject top = stack.pop();
 			results.add(top);
@@ -67,9 +67,7 @@ public class ScopeStack implements IScopeStack {
 		return results;
 	}
 	public List<TypedObject> poppedAtEndOfStorytest() {
-		ArrayList<TypedObject> results = new ArrayList<TypedObject>();
-		while (!stack.isEmpty())
-			results.add(stack.pop());
+		List<TypedObject> results = poppedAtEndOfTable();
 		for (TypedObject typedObject : selectObjects)
 			results.add(typedObject);
 		selectObjects.clear();

@@ -7,7 +7,6 @@ package fitlibrary.object;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.global.PlugBoard;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
@@ -30,7 +29,7 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
         this.domainTraverser = domainTraverser;
 	}
     @Override
-	public void runTable(Table table, ITableListener tableListener) {
+	public void runTable(Table table, TestResults testResults) {
         if (switchOnActions(table)) {
             domainTraverser.setCurrentAction();
             return;
@@ -41,11 +40,11 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
         }
         try {
         	for (int rowNo = 0; rowNo < table.size(); rowNo++)
-        		processRow(table.at(rowNo),tableListener.getTestResults());
+        		processRow(table.at(rowNo),testResults);
         } catch (IgnoredException e) {
         	//
         } catch (Exception e) {
-        	table.error(tableListener,e);
+        	table.error(testResults,e);
         }
     }
     private boolean switchOnActions(Table table) {
@@ -92,8 +91,7 @@ public class DomainInjectionTraverse extends Traverse implements TableEvaluator 
 		// Remove this later
 	}
 	@Override
-	public void runInnerTables(Tables definedActionBody,
-			ITableListener tableListener) {
+	public void runInnerTables(Tables definedActionBody, TestResults testResults) {
 		// TODO Auto-generated method stub
 		// Remove this later
 	}
