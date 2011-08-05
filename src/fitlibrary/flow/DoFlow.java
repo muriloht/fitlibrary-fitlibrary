@@ -43,7 +43,7 @@ import fitlibrary.utility.option.Some;
 public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 	private static Logger logger = FitLibraryLogger.getLogger(DoFlow.class);
 	private final IScopeStack scopeStack;
-	private RuntimeContextInternal runtime;
+	protected RuntimeContextInternal runtime;
 	private final SetUpTearDown setUpTearDown;
 	private Option<SuiteEvaluator> suiteFixtureOption = None.none();
 	private DomainInjectionTraverse domainInject = null;
@@ -63,35 +63,47 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		resetToStartStorytest();
 		for (int t = 0; t < tables.size(); t++) {
 			Table table = tables.at(t);
-			boolean plainTextFailed = false;
-			if (current == this && table.isPlainTextTable()) {
-				PlainTextAnalyser plainTextAnalyser = new PlainTextAnalyser(runtime,TemporaryPlugBoardForRuntime.definedActionsRepository());
-				TestResults testResults2 = TestResultsFactory.testResults();
-				plainTextAnalyser.analyseAndReplaceRowsIn(table, testResults2);
-				plainTextFailed = testResults2.problems();
-				testResults.add(testResults2);
-			}
-			if (domainCheck != null)
-				handleDomainPhases(table);
-			if (!plainTextFailed)
-				current.runTable(table,testResults);
-			if (t < tables.size() - 1) {
-				tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
-				logger.trace("Finished table");
-			} else {
-				tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
-				logger.trace("Finished table and storytest");
-			}
-			runtime.addAccumulatedFoldingText(table);
+			runSingleTable(testResults, table);
+			if (t < tables.size() - 1)
+				finishTable(table, testResults);
+			else
+				finishLastTable(table, testResults);
+			addAccumulatedFoldingText(table);
 			tableListener.tableFinished(table);
 		}
+		logger.trace("Finished storytest");
 		tableListener.storytestFinished();
+	}
+	protected void runSingleTable(TestResults testResults, Table table) {
+		boolean plainTextFailed = false;
+		if (current == this && table.isPlainTextTable()) {
+			PlainTextAnalyser plainTextAnalyser = new PlainTextAnalyser(runtime,TemporaryPlugBoardForRuntime.definedActionsRepository());
+			TestResults testResults2 = TestResultsFactory.testResults();
+			plainTextAnalyser.analyseAndReplaceRowsIn(table, testResults2);
+			plainTextFailed = testResults2.problems();
+			testResults.add(testResults2);
+		}
+		if (domainCheck != null)
+			handleDomainPhases(table);
+		if (!plainTextFailed)
+			current.runTable(table,testResults);
+	}
+	protected void addAccumulatedFoldingText(Table table) {
+		runtime.addAccumulatedFoldingText(table);
+	}
+	protected void finishTable(Table table, TestResults testResults) {
+		tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
+		logger.trace("Finished table");
+	}
+	protected void finishLastTable(Table table, TestResults testResults) {
+		tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
+		logger.trace("Finished last table");
 	}
 	@Override
 	public void runTable(Table table, TestResults testResults) {
 		doFlowOnTable.runTable(table, testResults, runtime);
 	}
-	private void resetToStartStorytest() {
+	protected void resetToStartStorytest() {
 		scopeStack.setAbandon(false);
 		scopeStack.setStopOnError(false);
 		scopeStack.clearAllButSuite();

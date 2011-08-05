@@ -8,8 +8,9 @@
 <tr><td><i>a</i></td><td></td><td><i>result</i></td></tr>
 <tr><td>1</td><td></td><td>2</td></tr>
 </table>-!|!-<table>
-<tr><td colspan=3 class="error">fitlibrary.specify.CalculateFixtureTearDown<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
+<tr><td colspan=3>fitlibrary.specify.CalculateFixtureTearDown</td></tr>
 <tr><td><i>a</i></td><td></td><td><i>result</i></td></tr>
 <tr><td>1</td><td></td><td class="error">2<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
-</table>-!|
+</table>
+<br/><table border="1" cellspacing="0"><tr><td class="error"><i>Error in storytest tear down: </i><hr><pre><div class="fit_stacktrace"></div></pre></td></tr></table>-!|
 

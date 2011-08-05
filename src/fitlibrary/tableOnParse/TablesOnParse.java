@@ -70,6 +70,9 @@ public class TablesOnParse extends TableElementOnParse<Table> implements Tables 
 	public Tables fromAt(int i) {
 		return TableFactory.tables(at(i));
 	}
+	public Tables getActualEmbeddedTables() {
+		return fromAt(0);
+	}
 	@Override
 	public Tables fromTo(int from, int upto) {
 		Tables result = TableFactory.tables();

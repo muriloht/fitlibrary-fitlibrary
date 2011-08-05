@@ -21,6 +21,7 @@ public interface Cell extends Tables {
 	
 	boolean hasEmbeddedTables(VariableResolver resolver);
 	Tables getEmbeddedTables();
+	Tables getActualEmbeddedTables();
 	Table getEmbeddedTable();
 	void setInnerTables(Tables tables);
 	

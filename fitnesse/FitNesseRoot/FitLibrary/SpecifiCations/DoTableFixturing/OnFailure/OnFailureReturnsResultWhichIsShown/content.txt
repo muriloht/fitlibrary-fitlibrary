@@ -18,6 +18,6 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td><i>end</i></td>
-<td bgcolor=#C0C0FF>onFailure() called</td></tr>
-</table>-!|
+<tr><td><i>end</i></td></tr>
+</table>
+<br/><table border="1" cellspacing="0"><tr><td><i>Error in storytest tear down: </i></td><td bgcolor=#C0C0FF>onFailure() called</td></tr></table>-!|

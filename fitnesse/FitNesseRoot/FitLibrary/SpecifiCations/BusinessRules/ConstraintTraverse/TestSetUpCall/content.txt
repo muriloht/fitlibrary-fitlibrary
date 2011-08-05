@@ -15,7 +15,7 @@ The class is defined so that the ''setUp()'' method has to be called for the fir
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td colspan="2" class="error"><i>constraint</i><hr><pre><div class="fit_stacktrace"></div></pre></td>
+<tr><td colspan="2"><i>constraint</i></td>
 </tr>
 <tr><td><i>a</i></td>
 <td><i>b</i></td>
@@ -26,4 +26,5 @@ The class is defined so that the ''setUp()'' method has to be called for the fir
 <tr class="pass"><td>2</td>
 <td>3</td>
 </tr>
-</table>-!|
+</table>
+<br/><table border="1" cellspacing="0"><tr><td class="error"><i>Error in storytest tear down: </i><hr><pre><div class="fit_stacktrace"></div></pre></td></tr></table>-!|

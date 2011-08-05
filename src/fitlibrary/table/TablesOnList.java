@@ -75,4 +75,7 @@ public class TablesOnList extends TableElementOnList<Tables,Table> implements Ta
 	public Tables fromAt(int i) {
 		return fromTo(i,size());
 	}
+	public Tables getActualEmbeddedTables() {
+		return this;
+	}
 }

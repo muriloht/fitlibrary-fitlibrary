@@ -11,7 +11,6 @@
 </table>
 <br>
 <table>
-<tr><td class="error" class="error">an exception<hr><pre><div class="fit_stacktrace">
-</div></pre><hr><pre><div class="fit_stacktrace">
-</div></pre></td></tr>
-</table>-!|
+<tr><td class="error" class="error">an exception<hr><pre><div class="fit_stacktrace"></div></pre></td></tr>
+</table>
+<br/><table border="1" cellspacing="0"><tr><td class="error"><i>Error in storytest tear down: </i><hr><pre><div class="fit_stacktrace"></div></pre></td></tr></table>-!|

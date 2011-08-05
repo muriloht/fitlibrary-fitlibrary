@@ -37,8 +37,8 @@ public class SpecifyFixture extends Traverse {
 			if (actualCell.isEmpty())
 				throw new FitLibraryException("Missing nested tables to be run");
 			Cell expectedCell = expectedOf(table);
-			Tables expectedTables = expectedCell.getEmbeddedTables();
-			Tables actualTables = actualCell.getEmbeddedTables();
+			Tables expectedTables = expectedCell.getActualEmbeddedTables();
+			Tables actualTables = actualCell.getActualEmbeddedTables();
 			runner.doStorytest(actualTables);
 			if (tablesCompare.tablesEqual("",actualTables,expectedTables)) {
 				expectedCell.pass(testResults);

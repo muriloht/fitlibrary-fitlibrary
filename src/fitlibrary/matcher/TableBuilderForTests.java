@@ -86,6 +86,7 @@ public class TableBuilderForTests {
 				allowing(cell).text(with(any(VariableResolver.class))); will(returnValue(text));
 				allowing(cell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(!cell.isEmpty()));
 				allowing(cell).getEmbeddedTables(); will(returnValue(cell));
+				allowing(cell).getActualEmbeddedTables(); will(returnValue(cell));
 			}});
 			return cell;
 		}

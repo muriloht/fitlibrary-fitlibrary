@@ -189,6 +189,16 @@ public class DoFlowDriverForTests {
 		}});
 		currentState = endState;
 	}
+	public void finishingLastTable() { // Added this
+		final String endState = endState("finishingLastTable");
+		tableNo--;
+		context.checking(new Expectations() {{
+			oneOf(runtime).addAccumulatedFoldingText(with(any(Table.class))); when(state.is(currentState));
+			oneOf(tableListener).tableFinished(with(any(Table.class)));  when(state.is(currentState));
+			                                            then(state.is(endState));
+		}});
+		currentState = endState;
+	}
 	public void interpretingRowReturning(final Row row, final Object object) {
 		interpretingRowReturning(row, object, runtime);
 	}

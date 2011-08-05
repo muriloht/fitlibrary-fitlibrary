@@ -13,8 +13,8 @@
 </tr>
 </table>
 <br/><table border="1" cellspacing="0">
-<tr><td class="pass" class="error">some action<hr><pre><div class="fit_stacktrace">
-</div></pre></td>
+<tr><td class="pass">some action</td>
 </tr>
-</table>-!|
+</table>
+<br/><table border="1" cellspacing="0"><tr><td class="error"><i>Error in storytest tear down: </i><hr><pre><div class="fit_stacktrace"></div></pre></td></tr></table>-!|
 
