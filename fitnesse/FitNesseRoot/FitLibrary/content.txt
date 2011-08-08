@@ -3,7 +3,7 @@
 !path ../bin
 !path fitnesse.jar
 !path lib/*.jar
-!define TEST_RUNNER {fitlibrary.suite.FitLibraryServerSingleStep}
+!define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
 !define REGRACE_LINK {false}
 !define REGRACE_TOC {false}
 
