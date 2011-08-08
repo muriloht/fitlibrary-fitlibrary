@@ -33,7 +33,7 @@ public abstract class FitServerBridge {
 	protected ReportListener reportListener = new TableReportListener();
 	protected TestResults suiteTestResults = new TestResultsOnCounts();
 	protected OutputStream socketOutput;
-	private StreamReader socketReader;
+	protected StreamReader socketReader;
 	@SuppressWarnings("unused")
 	private boolean verbose = false;
 	private String host;
@@ -209,27 +209,35 @@ public abstract class FitServerBridge {
 		return builder.toString().getBytes("UTF-8");
 	}
 
+	public void sendTableReport(Table table) {
+		logger.trace("Sending table report to FitNesse");
+		try {
+			byte[] bytes = readTable(table);
+			if (bytes.length > 0)
+				FitProtocol.writeData(bytes, socketOutput);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void sendTestResults(TestResults testResults) {
+		logger.trace("Sending results to FitNesse: "+testResults);
+		try {
+			FitProtocol.writeCounts(testResults.getCounts(), socketOutput);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	class TableReportListener implements ReportListener {
 		@Override
 		public void tableFinished(Table table) {
-			logger.trace("Sending table report to FitNesse");
-			try {
-				byte[] bytes = readTable(table);
-				if (bytes.length > 0)
-					FitProtocol.writeData(bytes, socketOutput);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			sendTableReport(table);
 		}
 
 		@Override
 		public void tablesFinished(TestResults testResults) {
-			logger.trace("Sending results to FitNesse: "+testResults);
-			try {
-				FitProtocol.writeCounts(testResults.getCounts(), socketOutput);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendTestResults(testResults);
 		}
 	}
 
