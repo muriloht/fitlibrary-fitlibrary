@@ -8,9 +8,9 @@ import org.apache.log4j.Logger;
 import fitlibrary.flow.DoFlow;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.suite.FitLibraryServerSingleStep.ReportAction;
-import fitlibrary.suite.FitLibraryServerSingleStep.ReportFinished;
-import fitlibrary.suite.FitLibraryServerSingleStep.TableReport;
+import fitlibrary.suite.Reporter.ReportAction;
+import fitlibrary.suite.Reporter.ReportFinished;
+import fitlibrary.suite.Reporter.TableReport;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 

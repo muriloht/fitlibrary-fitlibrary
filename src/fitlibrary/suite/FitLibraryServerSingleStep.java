@@ -14,17 +14,16 @@ import fitlibrary.log.ConfigureLoggingThroughFiles;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.runResults.TestResultsOnCounts;
-import fitlibrary.table.Table;
+import fitlibrary.suite.Reporter.ReportAction;
 import fitlibrary.table.TableFactory;
 import fitlibrary.table.Tables;
 
 public class FitLibraryServerSingleStep extends FitServerBridge {
 	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
 	private BatchFitLibrarySingleStep batching = new BatchFitLibrarySingleStep();
-	protected final ArrayBlockingQueue<ReportAction> reportQueue = new ArrayBlockingQueue<ReportAction>(
-			5);
+	private final ArrayBlockingQueue<ReportAction> reportQueue = new ArrayBlockingQueue<ReportAction>(5);
 	private final DoFlowActor actor = batching.actor(reportQueue, suiteTestResults);
-	protected final CountDownLatch endGate = new CountDownLatch(1);
+	private final CountDownLatch endGate = new CountDownLatch(1);
 
 	@Override
 	public TestResults doTables(String html) {
@@ -57,7 +56,7 @@ public class FitLibraryServerSingleStep extends FitServerBridge {
 	@Override
 	public void process() {
 		logger.trace("Ready to receive tables from ZiBreve");
-		new Thread(new Reporter()).start();
+		new Thread(new Reporter(reportQueue,this,endGate,suiteTestResults)).start();
 		try {
 			while (true) {
 				logger.trace("Reading table size...");
@@ -92,63 +91,6 @@ public class FitLibraryServerSingleStep extends FitServerBridge {
 				System.exit(fitServer.exitCode());
 		} catch (Exception e) {
 			fitServer.printExceptionDetails(e);
-		}
-	}
-
-	class Reporter implements Runnable {
-		@SuppressWarnings("synthetic-access")
-		public void run() {
-			System.out.println("Running actor12 version");
-			try {
-				while (true) {
-					ReportAction action;
-					action = reportQueue.take();
-					action.run(FitLibraryServerSingleStep.this, suiteTestResults);
-					if (action.isDone()) {
-						break;
-					}
-				}
-			} catch (InterruptedException e) {
-				//
-			}
-			endGate.countDown(); // We can now finish
-			System.out.println("Finished actor version");
-		}
-	}
-
-	public interface ReportAction {
-		void run(FitServerBridge fitLibraryServer, TestResults testResults);
-
-		boolean isDone();
-	}
-
-	public static class TableReport implements ReportAction {
-		private final Table table;
-
-		public TableReport(Table table) {
-			this.table = table;
-		}
-
-		@Override
-		public void run(FitServerBridge fitLibraryServer, TestResults testResults) {
-			fitLibraryServer.sendTableReport(table);
-		}
-
-		@Override
-		public boolean isDone() {
-			return false;
-		}
-	}
-
-	public static class ReportFinished implements ReportAction {
-		@Override
-		public void run(FitServerBridge fitLibraryServer, TestResults testResults) {
-			fitLibraryServer.sendTestResults(testResults);
-		}
-
-		@Override
-		public boolean isDone() {
-			return true;
 		}
 	}
 }
