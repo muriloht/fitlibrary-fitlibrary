@@ -11,10 +11,10 @@ import org.apache.log4j.Level;
 import fit.FitServerBridge;
 import fitlibrary.dynamicVariable.DynamicVariablesRecording;
 import fitlibrary.flow.DoFlow;
+import fitlibrary.flow.DoFlowWithExtraTableAddedWhenNeeded;
 import fitlibrary.flow.GlobalActionScope;
 import fitlibrary.flow.ScopeStack;
 import fitlibrary.flow.SetUpTearDownCache;
-import fitlibrary.flow.actor.DoFlowRunningActor;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.log.FixturingLogger;
 import fitlibrary.parser.lookup.ParseDelegation;
@@ -36,8 +36,8 @@ import fitlibraryGeneric.typed.GenericTypedObject;
 public class BatchFitLibrary implements StorytestRunner {
 	private static final boolean SHOW_LOGS = false;
 	public static final boolean SHOW_EXCEPTION_STACKS = false;
-	private TableListener tableListener = new TableListener(TestResultsFactory.testResults());
-	private DoFlow doFlow = wiredUpDoFlow();
+	protected TableListener tableListener = new TableListener(TestResultsFactory.testResults());
+	protected DoFlow doFlow = wiredUpDoFlow();
 
 	public BatchFitLibrary() {
 		//
@@ -65,8 +65,8 @@ public class BatchFitLibrary implements StorytestRunner {
 		runtime.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 		global.setRuntimeContext(runtime);
 		flowEvaluator.setRuntimeContext(runtime);
-		DoFlow doFlow2 = new DoFlowRunningActor(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
-//		DoFlow doFlow2 = new DoFlowWithExtraTableAddedWhenNeeded(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
+//		DoFlow doFlow2 = new DoFlowRunningActor2(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
+		DoFlow doFlow2 = new DoFlowWithExtraTableAddedWhenNeeded(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		runtime.SetTableEvaluator(doFlow2);
 		if (SHOW_LOGS) {
 			global.withFitLibraryLogger().showAfter(true);

@@ -6,11 +6,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.log4j.Logger;
 
 import fitlibrary.flow.DoFlow;
-import fitlibrary.flow.actor.DoFlowRunningActor.ReportAction;
-import fitlibrary.flow.actor.DoFlowRunningActor.ReportFinished;
-import fitlibrary.flow.actor.DoFlowRunningActor.TableReport;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
+import fitlibrary.suite.BatchFitLibrarySingleStep.ReportAction;
+import fitlibrary.suite.BatchFitLibrarySingleStep.ReportFinished;
+import fitlibrary.suite.BatchFitLibrarySingleStep.TableReport;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 

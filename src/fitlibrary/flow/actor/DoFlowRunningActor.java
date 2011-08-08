@@ -3,29 +3,19 @@ package fitlibrary.flow.actor;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import fitlibrary.flow.DoFlow;
-import fitlibrary.flow.IScopeStack;
-import fitlibrary.flow.SetUpTearDown;
 import fitlibrary.runResults.ITableListener;
-import fitlibrary.runtime.RuntimeContextInternal;
-import fitlibrary.table.Table;
+import fitlibrary.suite.BatchFitLibrarySingleStep.ReportAction;
 import fitlibrary.table.Tables;
-import fitlibrary.traverse.workflow.FlowEvaluator;
 
 /*
  * This only runs a single storytest, in single-step mode.
  */
-public class DoFlowRunningActor extends DoFlow {
+public class DoFlowRunningActor {
 	private final ArrayBlockingQueue<ReportAction> reportQueue = new ArrayBlockingQueue<ReportAction>(
 			5);
-	private final DoFlowActor actor = new DoFlowActor(this, reportQueue);
 
-	public DoFlowRunningActor(FlowEvaluator flowEvaluator, IScopeStack scopeStack,
-			RuntimeContextInternal runtime, SetUpTearDown setUpTearDown) {
-		super(flowEvaluator, scopeStack, runtime, setUpTearDown);
-	}
-
-	@Override
-	public void runStorytest(Tables tables, ITableListener tableListener) {
+	public void runStorytest(DoFlow doFlow, Tables tables, ITableListener tableListener) {
+		DoFlowActor actor = new DoFlowActor(doFlow, reportQueue);
 		actor.start(tableListener.getTestResults());
 		for (int t = 0; t < tables.size(); t++)
 			actor.addTable(tables.at(t));
@@ -48,46 +38,6 @@ public class DoFlowRunningActor extends DoFlow {
 		}
 	}
 
-	@Override
-	public void exit() {
-		// Do nothing here, as we already handle exit inside endStorytest().
-	}
-
-	interface ReportAction {
-		void run(ITableListener tableListener);
-
-		boolean isDone();
-	}
-
-	public static class TableReport implements ReportAction {
-		private final Table table;
-
-		public TableReport(Table table) {
-			this.table = table;
-		}
-
-		@Override
-		public void run(ITableListener tableListener) {
-			tableListener.tableFinished(table);
-		}
-
-		@Override
-		public boolean isDone() {
-			return false;
-		}
-	}
-
-	public static class ReportFinished implements ReportAction {
-		@Override
-		public void run(ITableListener tableListener) {
-			tableListener.storytestFinished();
-		}
-
-		@Override
-		public boolean isDone() {
-			return true;
-		}
-	}
 }
 
 // Next step is to push functionality here back into a variation of BatchFitLibrary
