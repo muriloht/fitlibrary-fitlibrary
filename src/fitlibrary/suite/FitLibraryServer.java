@@ -20,8 +20,7 @@ import fitlibrary.table.Tables;
 
 public class FitLibraryServer extends FitServerBridge {
 	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
-//	private BatchFitLibrary batching = new BatchFitLibrary();
-	private BatchFitLibrary batching = new BatchFitLibrarySingleStep();
+	private BatchFitLibrary batching = new BatchFitLibrary();
 
 	@Override
 	public TestResults doTables(String html) {

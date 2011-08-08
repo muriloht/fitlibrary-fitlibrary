@@ -8,9 +8,9 @@ import org.apache.log4j.Logger;
 import fitlibrary.flow.DoFlow;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.TestResults;
-import fitlibrary.suite.BatchFitLibrarySingleStep.ReportAction;
-import fitlibrary.suite.BatchFitLibrarySingleStep.ReportFinished;
-import fitlibrary.suite.BatchFitLibrarySingleStep.TableReport;
+import fitlibrary.suite.FitLibraryServerSingleStep.ReportAction;
+import fitlibrary.suite.FitLibraryServerSingleStep.ReportFinished;
+import fitlibrary.suite.FitLibraryServerSingleStep.TableReport;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 
@@ -45,15 +45,12 @@ public class DoFlowActor implements Runnable {
 		}
 	}
 
-	abstract class FlowAction {
-		public abstract void run();
-		
-		public boolean isDone() { 
-			return false;
-		}
+	interface FlowAction {
+		void run();
+		boolean isDone();
 	}
 
-	class TableAction extends FlowAction {
+	class TableAction implements FlowAction {
 		private final Table table;
 		
 		public TableAction(Table table) {
@@ -66,9 +63,13 @@ public class DoFlowActor implements Runnable {
 			doFlow.addAccumulatedFoldingText(table);
 			reportQueue.add(new TableReport(table));
 		}
+		@Override
+		public boolean isDone() { 
+			return false;
+		}
 	}
 	
-	class EndStoryTestAction extends FlowAction {
+	class EndStoryTestAction implements FlowAction {
 		@Override
 		public void run() {
 			Table errorTable = TableFactory.table(TableFactory
