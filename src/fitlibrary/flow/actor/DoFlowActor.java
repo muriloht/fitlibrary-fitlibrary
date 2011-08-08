@@ -19,14 +19,12 @@ public class DoFlowActor implements Runnable {
 	private final Queue<FlowAction> queue = new ConcurrentLinkedQueue<FlowAction>();
 	protected final DoFlow doFlow;
 	protected final Queue<ReportAction> reportQueue;
-	protected TestResults testResults;
+	protected final TestResults testResults;
 
-	public DoFlowActor(DoFlow doFlow, Queue<ReportAction> reportQueue) {
+	public DoFlowActor(DoFlow doFlow, Queue<ReportAction> reportQueue, TestResults testResults) {
 		this.doFlow = doFlow;
 		this.reportQueue = reportQueue;
-	}
-	public void start(TestResults theTestResults) {
-		queue.add(new StartAction(theTestResults));
+		this.testResults = testResults;
 	}
 	public void addTable(Table table) {
 		queue.add(new TableAction(table));
@@ -35,6 +33,8 @@ public class DoFlowActor implements Runnable {
 		queue.add(new EndStoryTestAction());
 	}
 	public void run() {
+		DoFlowActor.logger.trace("Running storytest");
+		doFlow.resetToStartStorytest();
 		while (true) {
 			FlowAction action = queue.remove();
 			action.run();
@@ -50,20 +50,6 @@ public class DoFlowActor implements Runnable {
 		
 		public boolean isDone() { 
 			return false;
-		}
-	}
-
-	class StartAction extends FlowAction {
-		private final TestResults theTestResults;
-		
-		public StartAction(TestResults testResults) {
-			this.theTestResults = testResults;
-		}
-		@Override
-		public void run() {
-			DoFlowActor.this.testResults = theTestResults;
-			DoFlowActor.logger.trace("Running storytest");
-			doFlow.resetToStartStorytest();
 		}
 	}
 

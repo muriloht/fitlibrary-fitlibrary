@@ -65,7 +65,6 @@ public class BatchFitLibrary implements StorytestRunner {
 		runtime.setDynamicVariable(Traverse.FITNESSE_URL_KEY,FitServerBridge.FITNESSE_URL);
 		global.setRuntimeContext(runtime);
 		flowEvaluator.setRuntimeContext(runtime);
-//		DoFlow doFlow2 = new DoFlowRunningActor2(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		DoFlow doFlow2 = new DoFlowWithExtraTableAddedWhenNeeded(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
 		runtime.SetTableEvaluator(doFlow2);
 		if (SHOW_LOGS) {
