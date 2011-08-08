@@ -6,8 +6,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.log4j.Logger;
 
 import fitlibrary.flow.DoFlow;
+import fitlibrary.flow.actor.DoFlowRunningActor.ReportAction;
+import fitlibrary.flow.actor.DoFlowRunningActor.ReportFinished;
+import fitlibrary.flow.actor.DoFlowRunningActor.TableReport;
 import fitlibrary.log.FitLibraryLogger;
-import fitlibrary.runResults.ITableListener;
 import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
@@ -16,13 +18,15 @@ public class DoFlowActor implements Runnable {
 	public static Logger logger = FitLibraryLogger.getLogger(DoFlowActor.class);
 	private final Queue<FlowAction> queue = new ConcurrentLinkedQueue<FlowAction>();
 	protected final DoFlow doFlow;
-	protected ITableListener tableListener;
+	protected final Queue<ReportAction> reportQueue;
+	protected TestResults testResults;
 
-	public DoFlowActor(DoFlow doFlow) {
+	public DoFlowActor(DoFlow doFlow, Queue<ReportAction> reportQueue) {
 		this.doFlow = doFlow;
+		this.reportQueue = reportQueue;
 	}
-	public void start(ITableListener nextTableListener) {
-		queue.add(new StartAction(nextTableListener));
+	public void start(TestResults theTestResults) {
+		queue.add(new StartAction(theTestResults));
 	}
 	public void addTable(Table table) {
 		queue.add(new TableAction(table));
@@ -41,7 +45,7 @@ public class DoFlowActor implements Runnable {
 		}
 	}
 
-	public abstract class FlowAction {
+	abstract class FlowAction {
 		public abstract void run();
 		
 		public boolean isDone() { 
@@ -50,14 +54,14 @@ public class DoFlowActor implements Runnable {
 	}
 
 	class StartAction extends FlowAction {
-		private final ITableListener nextTableListener;
+		private final TestResults theTestResults;
 		
-		public StartAction(ITableListener tableListener) {
-			this.nextTableListener = tableListener;
+		public StartAction(TestResults testResults) {
+			this.theTestResults = testResults;
 		}
 		@Override
 		public void run() {
-			tableListener = nextTableListener;
+			DoFlowActor.this.testResults = theTestResults;
 			DoFlowActor.logger.trace("Running storytest");
 			doFlow.resetToStartStorytest();
 		}
@@ -71,11 +75,10 @@ public class DoFlowActor implements Runnable {
 		}
 		@Override
 		public void run() {
-			TestResults testResults = tableListener.getTestResults();
 			doFlow.runSingleTable(testResults, table);
 			doFlow.finishTable(table, testResults);
 			doFlow.addAccumulatedFoldingText(table);
-			tableListener.tableFinished(table);
+			reportQueue.add(new TableReport(table));
 		}
 	}
 	
@@ -84,16 +87,16 @@ public class DoFlowActor implements Runnable {
 		public void run() {
 			Table errorTable = TableFactory.table(TableFactory
 					.row("<i>Error in storytest tear down: </i>"));
-			doFlow.finishLastTable(errorTable, tableListener.getTestResults());
+			doFlow.finishLastTable(errorTable, testResults);
 			doFlow.addAccumulatedFoldingText(errorTable);
 			if (errorTable.size() > 1 || errorTable.at(0).size() > 1
 					|| errorTable.at(0).at(0).hadError() || !errorTable.getTrailer().isEmpty()) {
 				errorTable.setLeader("\n<br/>");
-				tableListener.tableFinished(errorTable);
+				reportQueue.add(new TableReport(errorTable));
 			}
 			DoFlowActor.logger.trace("Finished storytest");
-			tableListener.storytestFinished();
-			doFlow.exit(); // Later enable this!!!!!!!!!!!!!!
+			reportQueue.add(new ReportFinished());
+			doFlow.exit();
 		}
 		@Override
 		public boolean isDone() { 
