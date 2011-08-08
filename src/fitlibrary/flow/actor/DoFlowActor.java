@@ -12,7 +12,7 @@ import fitlibrary.runResults.TestResults;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
 
-public class DoFlowActor {
+public class DoFlowActor implements Runnable {
 	public static Logger logger = FitLibraryLogger.getLogger(DoFlowActor.class);
 	private final Queue<FlowAction> queue = new ConcurrentLinkedQueue<FlowAction>();
 	protected final DoFlow doFlow;
@@ -34,8 +34,10 @@ public class DoFlowActor {
 		while (true) {
 			FlowAction action = queue.remove();
 			action.run();
-			if (action.isDone())
+			if (action.isDone()) {
+				System.out.println("DoFlowActor thread done.");
 				return;
+			}
 		}
 	}
 
@@ -91,7 +93,7 @@ public class DoFlowActor {
 			}
 			DoFlowActor.logger.trace("Finished storytest");
 			tableListener.storytestFinished();
-//			doFlow.exit(); // Later enable this!!!!!!!!!!!!!!
+			doFlow.exit(); // Later enable this!!!!!!!!!!!!!!
 		}
 		@Override
 		public boolean isDone() { 
