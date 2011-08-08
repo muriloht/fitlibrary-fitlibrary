@@ -74,7 +74,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		logger.trace("Finished storytest");
 		tableListener.storytestFinished();
 	}
-	protected void runSingleTable(TestResults testResults, Table table) {
+	public void runSingleTable(TestResults testResults, Table table) {
 		boolean plainTextFailed = false;
 		if (current == this && table.isPlainTextTable()) {
 			PlainTextAnalyser plainTextAnalyser = new PlainTextAnalyser(runtime,TemporaryPlugBoardForRuntime.definedActionsRepository());
@@ -88,14 +88,14 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 		if (!plainTextFailed)
 			current.runTable(table,testResults);
 	}
-	protected void addAccumulatedFoldingText(Table table) {
+	public void addAccumulatedFoldingText(Table table) {
 		runtime.addAccumulatedFoldingText(table);
 	}
-	protected void finishTable(Table table, TestResults testResults) {
+	public void finishTable(Table table, TestResults testResults) {
 		tearDown(scopeStack.poppedAtEndOfTable(), table.at(0), testResults);
 		logger.trace("Finished table");
 	}
-	protected void finishLastTable(Table table, TestResults testResults) {
+	public void finishLastTable(Table table, TestResults testResults) {
 		tearDown(scopeStack.poppedAtEndOfStorytest(), table.at(0), testResults);
 		logger.trace("Finished last table");
 	}
@@ -103,7 +103,7 @@ public class DoFlow implements DomainTraverser, TableEvaluator, DoFlower {
 	public void runTable(Table table, TestResults testResults) {
 		doFlowOnTable.runTable(table, testResults, runtime);
 	}
-	protected void resetToStartStorytest() {
+	public void resetToStartStorytest() {
 		scopeStack.setAbandon(false);
 		scopeStack.setStopOnError(false);
 		scopeStack.clearAllButSuite();
