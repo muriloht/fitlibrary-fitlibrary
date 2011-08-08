@@ -1,11 +1,13 @@
 package fitlibrary.suite;
 
 import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
 
 import fit.FitServerBridge;
 import fit.exception.FitParseException;
+import fitlibrary.flow.actor.DoFlowActor;
 import fitlibrary.log.ConfigureLoggingThroughFiles;
 import fitlibrary.log.FitLibraryLogger;
 import fitlibrary.runResults.ITableListener;
@@ -18,7 +20,7 @@ import fitlibrary.table.Tables;
 
 public class FitLibraryServerSingleStep extends FitServerBridge {
 	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
-	private BatchFitLibrary batching = new BatchFitLibrarySingleStep();
+	private BatchFitLibrarySingleStep batching = new BatchFitLibrarySingleStep();
 
 	@Override
 	public TestResults doTables(String html) {
@@ -29,9 +31,32 @@ public class FitLibraryServerSingleStep extends FitServerBridge {
 		}
 		return new TestResultsOnCounts();
 	}
-	public TestResults doTables(Tables theTables) {
+	public TestResults doTables(Tables tables) {
+		final ArrayBlockingQueue<ReportAction> reportQueue = new ArrayBlockingQueue<ReportAction>(
+				5);
 		TableListener tableListener = new TableListener(reportListener);
-		batching.doTables(theTables,tableListener);
+
+		
+		DoFlowActor actor = batching.actor(reportQueue,tableListener.getTestResults());
+		for (int t = 0; t < tables.size(); t++)
+			actor.addTable(tables.at(t));
+		actor.endStorytest();
+
+		
+		System.out.println("Running actor10 version");
+		try {
+			while (true) {
+				ReportAction action;
+				action = reportQueue.take();
+				action.run(tableListener);
+				if (action.isDone()) {
+					break;
+				}
+			}
+		} catch (InterruptedException e) {
+			//
+		}
+		System.out.println("Finished actor version");
 		return tableListener.getTestResults();
 	}
 	@Override

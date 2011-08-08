@@ -1,7 +1,7 @@
 package fitlibrary.flow.actor;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ import fitlibrary.table.TableFactory;
 
 public class DoFlowActor implements Runnable {
 	public static Logger logger = FitLibraryLogger.getLogger(DoFlowActor.class);
-	private final Queue<FlowAction> queue = new ConcurrentLinkedQueue<FlowAction>();
+	private final ArrayBlockingQueue<FlowAction> queue = new ArrayBlockingQueue<FlowAction>(5);
 	protected final DoFlow doFlow;
 	protected final Queue<ReportAction> reportQueue;
 	protected final TestResults testResults;
@@ -26,36 +26,46 @@ public class DoFlowActor implements Runnable {
 		this.reportQueue = reportQueue;
 		this.testResults = testResults;
 	}
+
 	public void addTable(Table table) {
 		queue.add(new TableAction(table));
 	}
+
 	public void endStorytest() {
 		queue.add(new EndStoryTestAction());
 	}
+
 	public void run() {
 		DoFlowActor.logger.trace("Running storytest");
 		doFlow.resetToStartStorytest();
-		while (true) {
-			FlowAction action = queue.remove();
-			action.run();
-			if (action.isDone()) {
-				System.out.println("DoFlowActor thread done.");
-				return;
+		try {
+			while (true) {
+				FlowAction action;
+				action = queue.take();
+				action.run();
+				if (action.isDone()) {
+					System.out.println("DoFlowActor thread done.");
+					return;
+				}
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
 	interface FlowAction {
 		void run();
+
 		boolean isDone();
 	}
 
 	class TableAction implements FlowAction {
 		private final Table table;
-		
+
 		public TableAction(Table table) {
 			this.table = table;
 		}
+
 		@Override
 		public void run() {
 			doFlow.runSingleTable(testResults, table);
@@ -63,12 +73,13 @@ public class DoFlowActor implements Runnable {
 			doFlow.addAccumulatedFoldingText(table);
 			reportQueue.add(new TableReport(table));
 		}
+
 		@Override
-		public boolean isDone() { 
+		public boolean isDone() {
 			return false;
 		}
 	}
-	
+
 	class EndStoryTestAction implements FlowAction {
 		@Override
 		public void run() {
@@ -85,8 +96,9 @@ public class DoFlowActor implements Runnable {
 			reportQueue.add(new ReportFinished());
 			doFlow.exit();
 		}
+
 		@Override
-		public boolean isDone() { 
+		public boolean isDone() {
 			return true;
 		}
 	}
