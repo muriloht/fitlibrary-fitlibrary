@@ -1,8 +1,9 @@
 package fitlibrary.suite;
 
 import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,7 @@ import fitlibrary.table.Tables;
 public class FitLibraryServerSingleStep extends FitServerBridge {
 	static Logger logger = FitLibraryLogger.getLogger(FitLibraryServer.class);
 	private BatchFitLibrarySingleStep batching = new BatchFitLibrarySingleStep();
-	private final ArrayBlockingQueue<ReportAction> reportQueue = new ArrayBlockingQueue<ReportAction>(5);
+	private final BlockingQueue<ReportAction> reportQueue = new LinkedBlockingQueue<ReportAction>();
 	private final DoFlowActor actor = batching.actor(reportQueue, suiteTestResults);
 	private final CountDownLatch endGate = new CountDownLatch(1);
 
@@ -67,13 +68,13 @@ public class FitLibraryServerSingleStep extends FitServerBridge {
 				try {
 					String document = FitProtocol.readDocument(socketReader, size);
 					doTables(document);
-					actor.endStorytest();
 					logger.trace("Finished running table");
 				} catch (FitParseException e) {
 					exception(e);
 				}
 			}
 			logger.trace("No more tables to receive from ZiBreve");
+			actor.endStorytest();
 			endGate.await();
 		} catch (Exception e) {
 			exception(e);

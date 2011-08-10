@@ -1,7 +1,8 @@
 package fitlibrary.flow.actor;
 
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,7 @@ import fitlibrary.table.TableFactory;
 
 public class DoFlowActor implements Runnable {
 	public static Logger logger = FitLibraryLogger.getLogger(DoFlowActor.class);
-	private final ArrayBlockingQueue<FlowAction> queue = new ArrayBlockingQueue<FlowAction>(5);
+	private final BlockingQueue<FlowAction> queue = new LinkedBlockingQueue<FlowAction>();
 	protected final DoFlow doFlow;
 	protected final Queue<ReportAction> reportQueue;
 	protected final TestResults testResults;
@@ -43,10 +44,8 @@ public class DoFlowActor implements Runnable {
 				FlowAction action;
 				action = queue.take();
 				action.run();
-				if (action.isDone()) {
-					System.out.println("DoFlowActor thread done.");
+				if (action.isDone())
 					return;
-				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
