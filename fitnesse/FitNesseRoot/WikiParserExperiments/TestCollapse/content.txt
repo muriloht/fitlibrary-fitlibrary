@@ -9,3 +9,7 @@ This ''italics''
 !*** WikiWord other
 This ''italics''
 ***!abc
+
+!*** Table inside
+|a|b|c|
+***!def

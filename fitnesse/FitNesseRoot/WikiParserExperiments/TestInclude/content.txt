@@ -30,3 +30,7 @@
 
 !define arg {-c}
 !include ${arg} .FrontPage
+
+!2 Followed by table:
+!include .FrontPage aaa
+|a|

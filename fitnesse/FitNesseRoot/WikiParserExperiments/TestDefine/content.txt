@@ -15,6 +15,9 @@ CC}
 
 !define b4 {aa.com} http://${b4}
 
+!define followedByTable {aa.com}
+|a|
+
 !define c {aa.com aa[[} - http://a${c}a  - http://a${c}${c}a   - http://a${c} ${c}a
 - ${c} - [[${c}][http://a${c}a]]
 
@@ -32,20 +35,20 @@ http://${across}
 
 ${b}
 
-!define aaaaa
+!define aaaaa 
  {aad}
 
 
 ${a} ${b.2_2}
 
-!define z{Z}
+!define z {Z}
 ${z}
 
 !define aa bb {12}
 
 ${aa bb}
 
-!define a-b {AB}
+!define a -b {AB}
 ${a-b}
 
 !define c {

@@ -7,3 +7,6 @@ Some text !2 title
 !3a
 !34
 #
+
+!2 Header followed immediately by table
+|a|
