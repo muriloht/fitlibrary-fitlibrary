@@ -49,7 +49,7 @@ public class BindingTest extends RegexTestCase {
 			return intField;
 		}
 
-		public Integer integerField = new Integer(42);
+		public Integer integerField = Integer.valueOf(42);
 
 		public Integer integerMethodIsNull() {
 			return integerField;

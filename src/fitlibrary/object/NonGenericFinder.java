@@ -60,7 +60,7 @@ public class NonGenericFinder implements Finder {
             } catch (FitLibraryException e) {
                 return callFindStringMethod(text);
             }
-			return findIntMethod.invoke(new Integer[]{ new Integer(index) });
+			return findIntMethod.invoke(new Integer[]{ Integer.valueOf(index) });
         }
         return callFindStringMethod(text);
 	}

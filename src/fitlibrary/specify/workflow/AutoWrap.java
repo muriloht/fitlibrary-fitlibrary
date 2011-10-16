@@ -18,7 +18,7 @@ public class AutoWrap {
 		return new int[]{1,2,3};
 	}
 	public Integer[] getAnArrayOfInteger() {
-		return new Integer[]{new Integer(1),new Integer(2),new Integer(3)};
+		return new Integer[]{Integer.valueOf(1),Integer.valueOf(2),Integer.valueOf(3)};
 	}
 	public Object[] getAnArrayOfPoint() {
 	    return new Object[] { new MyPoint(0,0), new MyPoint(5,5) };

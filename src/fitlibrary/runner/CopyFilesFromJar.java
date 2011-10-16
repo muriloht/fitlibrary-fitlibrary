@@ -16,7 +16,7 @@ import fitlibrary.exception.FitLibraryException;
 
 public class CopyFilesFromJar {
 	// Copy them into the files directory so they will be copied with anything else there into the reports directory
-    public static void copyCssAndImageFilesFromJar(File theInDiry) throws IOException {
+    public static void copyCssAndImageFilesFromJar(File theInDiry) throws IOException, SecurityException {
         File filesDiry = new File(theInDiry,FolderRunner.FILES);
         if (!filesDiry.exists())
             filesDiry.mkdir();

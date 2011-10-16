@@ -130,8 +130,8 @@ public class RuntimeContextContainer implements RuntimeContextInternal {
 	public IScope getScope() {
 		return suiteWideRuntimeContext.getScope();
 	}
-	public void SetTableEvaluator(TableEvaluator evaluator) {
-		suiteWideRuntimeContext.SetTableEvaluator(evaluator);
+	public void setTableEvaluator(TableEvaluator evaluator) {
+		suiteWideRuntimeContext.setTableEvaluator(evaluator);
 	}
 	public TableEvaluator getTableEvaluator() {
 		return suiteWideRuntimeContext.getTableEvaluator();

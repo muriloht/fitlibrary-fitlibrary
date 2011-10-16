@@ -13,14 +13,14 @@ import java.io.IOException;
 
 public class CopyFiles {
 	
-	public static void copyFilesRecursively(File sourceFiles, File targetFiles, String diryName) throws IOException {
+	public static void copyFilesRecursively(File sourceFiles, File targetFiles, String diryName) throws IOException, SecurityException {
 		if (!targetFiles.exists())
 			targetFiles.mkdir();
 		File targetDiry = new File(targetFiles,diryName);
 		targetDiry.mkdir();
 		copyFilesRecursively(new File(sourceFiles,diryName),targetDiry);
 	}
-	private static void copyFilesRecursively(File sourceDiry, File targetDiry) throws IOException {
+	private static void copyFilesRecursively(File sourceDiry, File targetDiry) throws IOException, SecurityException {
 		File[] files = sourceDiry.listFiles();
 		for (int i = 0; i < files.length; i++) {
 			File file = files[i];

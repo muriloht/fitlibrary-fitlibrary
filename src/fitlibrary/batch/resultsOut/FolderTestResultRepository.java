@@ -27,7 +27,8 @@ public class FolderTestResultRepository implements TestResultRepository {
 	private final boolean showPasses;
 	private final boolean junitXMLoutput;
 	
-	public FolderTestResultRepository(String outputPath, String suiteName, PrintStream out, boolean showPasses, boolean junitXMLoutput) {
+	public FolderTestResultRepository(String outputPath, 
+			String suiteName, PrintStream out, boolean showPasses, boolean junitXMLoutput) throws SecurityException {
 		this.outputPath = selectFolderName(outputPath + "/" + suiteName+ "/" + formattedDateTime());
 		new File(this.outputPath).mkdirs();
 		this.out = out;

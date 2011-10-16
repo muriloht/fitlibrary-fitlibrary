@@ -75,7 +75,7 @@ public class SuiteWideRuntimeContext implements Configuration {
 		this.maxFailsBeforeStopping = maxFails;
 	}
 	
-	public void SetTableEvaluator(TableEvaluator evaluator) {
+	public void setTableEvaluator(TableEvaluator evaluator) {
 		this.tableEvaluator = evaluator;
 	}
 	public TableEvaluator getTableEvaluator() {

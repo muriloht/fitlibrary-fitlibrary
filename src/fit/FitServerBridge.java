@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 
 import util.StreamReader;
@@ -25,6 +26,7 @@ import fitlibrary.runResults.TestResultsOnCounts;
 import fitlibrary.suite.ReportListener;
 import fitlibrary.table.Table;
 import fitlibrary.table.TableFactory;
+import fitlibrary.utility.ArrayUtility;
 
 /* This is a variation of FitServer that's needed to run FitLibrary
  */
@@ -118,10 +120,7 @@ public abstract class FitServerBridge {
 	}
 
 	private void printArgs(String[] argv) {
-		String result = "Arguments: ";
-		for (String s : argv)
-			result += s + " ";
-		logger.trace(result);
+		logger.trace("Arguments: "+ArrayUtility.mkString(argv," "));
 	}
 
 	protected void usage() {

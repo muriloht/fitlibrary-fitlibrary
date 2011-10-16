@@ -17,7 +17,7 @@ public class DomainFixture extends DoFixture {
     	setSystemUnderTest(sut);
     }
     
-    class DomainTraverse extends DoTraverse {
+    static class DomainTraverse extends DoTraverse {
     	public DomainTraverse(Object sut) {
     		super(sut);
     	}

@@ -39,10 +39,10 @@ public class EntityReference {
             put(theForm,new Integer(0)); // "the"
 			put(theForm+" "+entityClassName,new Integer(0)); // "the client"
 			put(theForm+" last",new Integer(-1)); // "the last"
-			put(theForm+" last "+entityClassName,new Integer(-1)); // "the last client"
+			put(theForm+" last "+entityClassName,Integer.valueOf(-1)); // "the last client"
 			for (int count = 0; count < counts.length; count++) {
 				final String theCountString = counts[count];
-                final Integer theCount = new Integer(count);
+                final Integer theCount = Integer.valueOf(count);
                 put(theCountString,theCount); // "first"
 				put(theForm+" "+theCountString,theCount); // "the first"
 				put(theForm+" "+theCountString+" "+entityClassName,theCount); // "the first client"

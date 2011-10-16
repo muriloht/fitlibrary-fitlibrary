@@ -11,6 +11,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import fitlibrary.typed.TypedObject;
+import fitlibrary.utility.ArrayUtility;
 
 public class HasTypedSubjectsMatcher extends TypeSafeMatcher<List<TypedObject>> {
 	private final Object[] expected;
@@ -30,6 +31,6 @@ public class HasTypedSubjectsMatcher extends TypeSafeMatcher<List<TypedObject>> 
 	}
 	@Override
 	public void describeTo(Description description) {
-		description.appendText("does not contain: "+expected);
+		description.appendText("does not contain: "+ArrayUtility.mkString(expected));
 	}
 }

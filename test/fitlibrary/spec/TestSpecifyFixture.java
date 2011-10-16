@@ -99,7 +99,7 @@ public class TestSpecifyFixture {
 		specifyFixture.interpretAfterFirstRow(table,testResults);
 	}
 	@Test
-	public void TagLineOfCellDoesNotMatch() {
+	public void tagLineOfCellDoesNotMatch() {
 		final Table table = specifyingTable(
 				cell("").with(singleRowTable(cell("ab").withTagLine("pass"))),
 				cell("").with(singleRowTable(cell("ab").withTagLine("fail")))

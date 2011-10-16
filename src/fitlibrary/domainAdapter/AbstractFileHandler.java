@@ -43,19 +43,19 @@ public class AbstractFileHandler implements DomainAdapter {
 	}
 	public String readFile() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		while (true) {
 			String line = reader.readLine();
 			if (line == null)
 				break;
-			result += line+"\n";
+			result.append(line).append("\n");
 		}
 		reader.close();
-		return result;
+		return result.toString();
 	}
 	@SimpleAction(wiki="|''<i>make folders</i>''|folder name|",
 			tooltip="Create this as a folder, along with any other folders that are needed to hold it.")
-	public void makeFolders(String folderPath) { // Don't need this action, but leave it for backwards compatibility
+	public void makeFolders(String folderPath) throws SecurityException { // Don't need this action, but leave it for backwards compatibility
 		new File(folderPath).mkdirs();
 	}
 	@NullaryAction(tooltip="Delete the file, returning true if it succeeded.")

@@ -112,8 +112,6 @@ public class ListParser implements Parser {
         Iterator<Object> it;
         if (object.getClass().isArray())
         	it = Arrays.asList((Object[])object).iterator();
-        else if (isIterator())
-        	it = ((List<Object>)object).iterator();
         else
         	it = ((List<Object>)object).iterator();
         boolean first = true;

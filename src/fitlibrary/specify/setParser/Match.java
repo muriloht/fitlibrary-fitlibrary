@@ -18,7 +18,7 @@ public class Match {
 	}
 	public Set getSetOf123() {
 		return set(new Integer[]{
-						new Integer(1), new Integer(2), new Integer(3)});
+						Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3)});
 	}
 	@SuppressWarnings("unchecked")
 	private HashSet set(Object[] array) {

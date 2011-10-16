@@ -9,7 +9,7 @@ import fitlibrary.PrimitiveArrayFixture;
 public class PrimitiveArrayFixtureUnderTestMixed extends PrimitiveArrayFixture {
 
     public PrimitiveArrayFixtureUnderTestMixed() {
-        super(new Object[] { new Integer(1), new Double(2.0), "three" });
+        super(new Object[] { Integer.valueOf(1), Double.valueOf(2.0), "three" });
     }
 
 }

@@ -2,6 +2,11 @@
 This ''italics''
 *!
 
+!* WikiWord nested define
+!define a {|a|}
+${a}
+*!
+
 !*   WikiWord other
 This ''italics''
 *!

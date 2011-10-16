@@ -66,7 +66,7 @@ public class BatchFitLibrary implements StorytestRunner {
 		global.setRuntimeContext(runtime);
 		flowEvaluator.setRuntimeContext(runtime);
 		DoFlow doFlow2 = new DoFlowWithExtraTableAddedWhenNeeded(flowEvaluator,scopeStack,runtime,new SetUpTearDownCache());
-		runtime.SetTableEvaluator(doFlow2);
+		runtime.setTableEvaluator(doFlow2);
 		if (SHOW_LOGS) {
 			global.withFitLibraryLogger().showAfter(true);
 			global.withFixturingLogger().showAfter(true);

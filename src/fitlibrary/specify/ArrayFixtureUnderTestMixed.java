@@ -16,9 +16,9 @@ public class ArrayFixtureUnderTestMixed extends fitlibrary.ArrayFixture {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public List query() throws Exception {
         List result = new ArrayList();
-        result.add(makeMap(new Integer(1), "one"));
+        result.add(makeMap(Integer.valueOf(1), "one"));
         result.add(new MockCollection(1,"two"));
-        result.add(makeMap(new Integer(2), "two"));
+        result.add(makeMap(Integer.valueOf(2), "two"));
         return result;
    }
     private Map<String,Object> makeMap(Integer plus, String ampersand) {

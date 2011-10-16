@@ -86,7 +86,7 @@ public class DotGraphic implements GraphicInterface {
         return getFileContents(file.withSuffix("dot").getFile());
 	}
     private static String getFileContents(File file) {
-	    FileReader reader;
+	    FileReader reader = null;
 	    try {
 	        reader = new FileReader(file);
 	        char[] chars = new char[(int)file.length()];
@@ -95,6 +95,12 @@ public class DotGraphic implements GraphicInterface {
 	    } catch (IOException ex) {
 	        throw new RuntimeException("Problem reading "+
 	                file.getAbsolutePath()+": "+ex);
+	    } finally {
+	    	try {
+				reader.close();
+			} catch (Exception e) {
+				// Ignore
+			}
 	    }
     }
 }

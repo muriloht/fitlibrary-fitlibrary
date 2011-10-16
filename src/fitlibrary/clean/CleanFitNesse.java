@@ -21,7 +21,11 @@ public class CleanFitNesse {
 				cleanFitNesse(file);
 			else if (file.getName().endsWith(".zip")) {
 				System.out.println("Deleted "+file.getAbsolutePath());
-				file.delete();
+				try {
+					file.delete();
+				} catch (Exception e) {
+					// Ignore
+				}
 			}
 		}
 	}

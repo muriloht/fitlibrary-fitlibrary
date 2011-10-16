@@ -1,3 +1,7 @@
+!define a {|a|}
+
+${a}
+
 ----!3 define
 [[a][http://asd.com]]
 !define a {''AA}

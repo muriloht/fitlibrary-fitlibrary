@@ -51,7 +51,7 @@ public class CellOnParse extends TablesOnParse implements Cell {
 		if (parse.body == null)
 			return "";
 		Pair<String,Tables> resolve = resolver.resolve(parse.body);
-		if (!parse.body.equals(resolve))
+		if (!parse.body.equals(resolve.first))
 			parse.body = resolve.first;
 		addTables(resolve.second);
 		return text();

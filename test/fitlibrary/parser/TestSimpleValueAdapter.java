@@ -20,7 +20,7 @@ public class TestSimpleValueAdapter extends ParserTestCase {
 		Parser parser = Traverse.asTyped(int.class).parser(evaluatorWithRuntime());
 		String cellText = "12";
 		Cell cell = TableFactory.cell(cellText);
-		Integer expectedResult = new Integer(12);
+		Integer expectedResult = Integer.valueOf(12);
 		TestResults testResults = TestResultsFactory.testResults();
 		assertEquals(expectedResult,parser.parseTyped(cell,testResults).getSubject());
 		assertTrue(parser.matches(cell, expectedResult,testResults));
@@ -30,7 +30,7 @@ public class TestSimpleValueAdapter extends ParserTestCase {
 		Method method = getClass().getMethod("aMethod", new Class[] {});
 		ResultParser adapter = Traverse.asTypedObject(this).resultParser(evaluatorWithRuntime(), method);
 		adapter.setTarget(this);
-		assertEquals(new Integer(43),adapter.getResult());
+		assertEquals(Integer.valueOf(43),adapter.getResult());
 		assertEquals("43",adapter.show(adapter.getResult()));
 	}
 	public int aMethod() {

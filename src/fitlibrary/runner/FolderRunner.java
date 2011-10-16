@@ -117,7 +117,7 @@ public class FolderRunner extends FileParseUtilities {
         return topReport;
     }
 	private void runDiry(String title, File theInDiry, File theReportDiry, Report parentReport,
-    		Parse setUpTables, Parse tearDownTables, String path, File topReportDiry) throws ParseException, IOException {
+    		Parse setUpTables, Parse tearDownTables, String path, File topReportDiry) throws ParseException, IOException, SecurityException {
     	FolderRunnerDifference.setCurrentTestDiryFile(theInDiry);
      	Report report = new Report(title,theReportDiry,parentReport,path,topReportDiry);
      	CollectSetUpTearDown collectSetUpTearDown = new CollectSetUpTearDown(encoding);

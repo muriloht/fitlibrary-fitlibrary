@@ -260,7 +260,7 @@ public class GlobalActionScope implements RuntimeContextual {
 		return s;
 	}
 	
-	public void removeFile(String fileName) {
+	public void removeFile(String fileName) throws SecurityException {
 		new File(fileName).delete();
 	}
 	
@@ -652,10 +652,8 @@ public class GlobalActionScope implements RuntimeContextual {
 		if (answer != null && answer.result != null) {
 			if (answer.hasPassed)
 				action.cellAt(1).pass();
-			else if (answer.result != null)
-				action.cellAt(1).fail(answer.result.toString());
 			else
-				action.cellAt(1).fail();
+				action.cellAt(1).fail(answer.result.toString());
 		} else
 			action.cellAt(1).fail("result is null");
 	}

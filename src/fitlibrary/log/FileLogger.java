@@ -22,7 +22,7 @@ public class FileLogger {
 			fileCreationLock.unlock();
 		}
 	}
-	private void createAnyDirectories(String fileName) {
+	private void createAnyDirectories(String fileName) throws SecurityException {
 		int slash = fileName.lastIndexOf("/");
 		if (slash < 0)
 			slash = fileName.lastIndexOf("\\");

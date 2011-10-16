@@ -20,9 +20,9 @@ public class Match {
 	@SuppressWarnings("unchecked")
 	public Map getMapOf123() {
 		Map map = new HashMap();
-		map.put(new Integer(1),new Integer(2));
-		map.put(new Integer(2),new Integer(3));
-		map.put(new Integer(3),new Integer(4));
+		map.put(Integer.valueOf(1),Integer.valueOf(2));
+		map.put(Integer.valueOf(2),Integer.valueOf(3));
+		map.put(Integer.valueOf(3),Integer.valueOf(4));
 		return map;
 	}
 	public Map getMapEmpty() {

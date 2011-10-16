@@ -68,9 +68,9 @@ public class LookupPropertyEditorBasedParser {
 		@Override
 		public void setAsText(String text) throws IllegalArgumentException {
 			if ("".equals(text))
-				setValue(new Character(' '));
+				setValue(Character.valueOf(' '));
 			else 
-				setValue(new Character(text.charAt(0)));
+				setValue(Character.valueOf(text.charAt(0)));
 		}
 	}
 	public static class BooleanPropertyEditor extends PropertyEditorSupport {
@@ -79,7 +79,7 @@ public class LookupPropertyEditorBasedParser {
 			String text = textInitially.toLowerCase();
 			boolean bool = (text.equals("true") || text.equals("yes") || 
 					text.equals("1") || text.equals("y") || text.equals("+"));
-			setValue(new Boolean(bool));
+			setValue(Boolean.valueOf(bool));
 		}
 	}
 	public static class DatePropertyEditor extends PropertyEditorSupport {

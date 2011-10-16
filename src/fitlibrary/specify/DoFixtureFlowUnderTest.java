@@ -42,7 +42,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 		throw new RuntimeException("Ambiguity with fit.ColumnFixture");
 	}
 	@SuppressWarnings("unused")
-	public boolean Action(Row row, TestResults testResults) {
+	public boolean action(Row row, TestResults testResults) {
 		throw new RuntimeException("Ambiguity of special action with fit.ActionFixture");
 	}
 	public void hiddenMethod() {
@@ -51,7 +51,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 	public Object aPoint() {
 	    return new Point(2,3);
 	}
-	public class DateHolder {
+	public static class DateHolder {
 		public Date date;
 		public DateHolder(Date date) {
 			this.date = date;
@@ -61,7 +61,7 @@ public class DoFixtureFlowUnderTest extends DoFixture {
 		throw new RuntimeException("Forced exception");
 	}
 	public Integer anInteger() {
-	    return new Integer(23);
+	    return Integer.valueOf(23);
 	}
 	public Fixture getSlice(int row, int column) {
 		return new LocalRowFixture(row,column);

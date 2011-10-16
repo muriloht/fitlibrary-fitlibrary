@@ -64,7 +64,7 @@ public class References extends DoFixture {
 	public List<AccountRef> checkAccountReferences() {
 		return accountReferences;
 	}
-	public class CalculateReference extends CalculateFixture {
+	public static class CalculateReference extends CalculateFixture {
 		private EntityReference entityReference;
 
 		public CalculateReference(String entityName) {

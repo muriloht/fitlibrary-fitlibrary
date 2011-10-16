@@ -42,7 +42,7 @@ public class AccountVariables extends DomainAdapterWithVariables {
 		public Integer create(String accountName) {
 			NEXT_ID++;
 			accounts.add(new Account(NEXT_ID,accountName));
-			return new Integer(NEXT_ID);
+			return Integer.valueOf(NEXT_ID);
 		}
 		public void setAccounts(List<Account> accounts) {
 			this.accounts = accounts;

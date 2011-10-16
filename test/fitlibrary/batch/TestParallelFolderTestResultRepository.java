@@ -45,7 +45,7 @@ public class TestParallelFolderTestResultRepository {
 		testResultRepository.closeAndWaitForCompletion();
 	}
 	
-	 class ThreadPerTaskExecutor implements Executor {
+	 static class ThreadPerTaskExecutor implements Executor {
 	     @Override
 		public void execute(Runnable r) {
 	         new Thread(r).start();

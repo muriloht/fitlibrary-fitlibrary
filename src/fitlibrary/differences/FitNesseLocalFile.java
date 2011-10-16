@@ -43,7 +43,7 @@ public class FitNesseLocalFile implements LocalFile {
 		return new File(FITNESSE_FILES_LOCATION+"/"+fileName);
 	}
 	@Override
-	public void mkdirs() {
+	public void mkdirs() throws SecurityException {
 		File file = getFile().getParentFile();
 		if (!file.exists())
 			file.mkdirs();

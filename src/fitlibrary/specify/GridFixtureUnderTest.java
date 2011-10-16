@@ -18,8 +18,8 @@ public class GridFixtureUnderTest {
 	}
 	public GridFixture ints() {
 		return new GridFixture(new Integer[][] {
-				{new Integer(1), new Integer(2)},
-				{new Integer(3), new Integer(4)} });
+				{Integer.valueOf(1), Integer.valueOf(2)},
+				{Integer.valueOf(3), Integer.valueOf(4)} });
 	}
 	public GridFixture trees() {
 		return new GridFixture(new ListTree[][] {

@@ -1,4 +1,4 @@
-!3 ''Parsers'' are used selected automatically by ${fitLibrary}
+!3 ''Parsers'' are selected automatically by ${fitLibrary}
 !3 ''Parsers'' are responsible for:
  * ''Parsing'': Turning the contents of a cell (a String or embedded tables) into a primitive value, collection or object. A Parser uses a suitable ''traverse'' to create a value from embedded tables. Sometimes, a ''factory method'' is also needed.
  * ''Matching'': Ensuring that the contents of a cell (String or embedded tables) corresponds to a primitive value, collection or object. A ${parser} uses a suitable ${traverse} to match against embedded tables.

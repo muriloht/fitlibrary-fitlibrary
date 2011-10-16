@@ -18,7 +18,7 @@ public class Match {
 	}
 	public List list123() {
 		return Arrays.asList(new Integer[] {
-				new Integer(1),new Integer(2),new Integer(3)});
+				Integer.valueOf(1),Integer.valueOf(2),Integer.valueOf(3)});
 	}
 	public Iterator iterator23() {
 		return counts23().iterator();

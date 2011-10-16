@@ -44,7 +44,7 @@ public class FolderRunnerLocalFile implements LocalFile {
         return file;
     }
     @Override
-	public void mkdirs() {
+	public void mkdirs() throws SecurityException {
         File diry = file.getParentFile();
         logger.trace("mkdirs(): "+diry.getAbsolutePath());
         if (!diry.exists())

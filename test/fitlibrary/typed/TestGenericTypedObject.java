@@ -50,23 +50,23 @@ public class TestGenericTypedObject {
 		verifyMethodOnEvaluator("m");
 	}
 	@Test
-	public void HasNoSutWhenTypedSystemUnderTestIsNull() throws Exception {
+	public void hasNoSutWhenTypedSystemUnderTestIsNull() throws Exception {
 		GenericTypedObject typedObject2 = new GenericTypedObject(new WithSut(null));
 		assertThat(typedObject2.hasTypedSystemUnderTest(),is(false));
 	}
 	@Test
-	public void HasSutWhenTypedSystemUnderTestIsNotNull() throws Exception {
+	public void hasSutWhenTypedSystemUnderTestIsNotNull() throws Exception {
 		GenericTypedObject typedObject2 = new GenericTypedObject(new WithSut("s"));
 		assertThat(typedObject2.hasTypedSystemUnderTest(),is(true));
 		assertThat(typedObject2.getTypedSystemUnderTest().getSubject(),is((Object)"s"));
 	}
 	@Test
-	public void DoesNoInjectWhenTypedSystemUnderTestIsNull() throws Exception {
+	public void doesNoInjectWhenTypedSystemUnderTestIsNull() throws Exception {
 		GenericTypedObject typedObject2 = new GenericTypedObject(new WithSut(null));
 		typedObject2.injectRuntime(runtime);
 	}
 	@Test
-	public void DoesNoInjectWhenTypedSystemUnderTestIsNotRuntimeContextual() throws Exception {
+	public void doesNoInjectWhenTypedSystemUnderTestIsNotRuntimeContextual() throws Exception {
 		GenericTypedObject typedObject2 = new GenericTypedObject(new WithSut("s"));
 		typedObject2.injectRuntime(runtime);
 	}
@@ -125,7 +125,7 @@ public class TestGenericTypedObject {
 	interface Sut {
 		void m();
 	}
-	class WithSut implements DomainAdapter {
+	static class WithSut implements DomainAdapter {
 		private final Object sut;
 		
 		public WithSut(Object sut) {

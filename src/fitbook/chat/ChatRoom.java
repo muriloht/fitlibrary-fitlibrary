@@ -81,7 +81,7 @@ public class ChatRoom { //COPY:ALL
 			return false;
 		if (room.occupantCount() > 0)
 			return false;
-		rooms.remove(room);
+		rooms.remove(roomName);
 		return true;
 	}
 	public User user(String userName) {
