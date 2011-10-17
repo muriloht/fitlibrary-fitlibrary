@@ -1,9 +1,10 @@
 !1 This Release:
 #
-|!2 ''Details of changes in release''|??|
+|!2 ''Details of changes in release''|Version '''2.0''', 17 October 2011|
 
  * Added the action-modifier ("special" action) '''show with tags'''. See .FitLibrary.SpecifiCations.SpecialActions.TestShowWithTags
  * Made ''!-FitLibrary's-!'' ''!-DebugPage-!'' Java class more convenient to use inside an IDE for debugging. Call ''!-DebugPage.run(String[] fullPageNames, String fitNesseDiry, int port)-!'' from your own class.
+ * Added an alternative protocol so that ''!-ZiBreve-!'' can run tests in a non-batch way. This allows for tests to be created dynamically by "running" defined actions and recording them, and run through ''!-FitLibrary-!'' as they're created.  
 
 |!2 ''Details of changes in release''|1 March 2010|
 

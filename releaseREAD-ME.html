@@ -7,12 +7,14 @@
 
 <h1><i>FitLibrary For FitNesse</i></h1>
 
-This contains the latest release of the <i>FitLibrary</i> for <i>FitNesse</i> users. 
+This contains the latest release of the <i>FitLibrary</i> for <i>FitNesse</i> users.
+
+<p>Note the change to the name of the fitlibrary jar to <i>fitlibrary-2.0.jar</i>, which requires a change to your path in FitNesse, as shown below.
 
 <ul>
 <li>This release of FitLibrary needs to be added to a FitNesse system before it can be used.<p/>
 
-<li>FitLibrary has been tested with the <i>FitNesse</i> release 20101101. Some parts, such as batch running and load-defined-actions-slowly, will not work with earlier versions of FitNesse.<p/>
+<li>FitLibrary has been tested with the <i>FitNesse</i> release 20110104. Some parts, such as batch running and load-defined-actions-slowly, will not work with earlier versions of FitNesse.<p/>
 
 <li>The FolderRunner parts of FitLibrary have not been tested with this version.<p/>
 
@@ -23,9 +25,9 @@ This contains the latest release of the <i>FitLibrary</i> for <i>FitNesse</i> us
 
 <h3>FitNesse configuration for using <i>FitLibrary</i></h3>
 
-To run FitLibrary from Fitnesse, it is necessary to include the following in your test page or in one of it's ancestor pages:
+To run FitLibrary from Fitnesse, it is necessary to include the following in your test page or in one of it's ancestor pages (notice the change here):
 <pre>
-!path fitlibrary.jar
+!path fitlibrary-2.0.jar
 !path fitnesse.jar
 !path lib/*.jar
 !define TEST_RUNNER {fitlibrary.suite.FitLibraryServer}
@@ -40,13 +42,13 @@ See the page .FitLibrary.WhatIsNew for details of the latest changes, along with
 
 <h3>Supplied <i>FitLibrary</i> files</h3>
 
-The <i>fitnesse</i> directory within the <i>FitLibrary</i> release contains the following files and subdirectories:
+The <i>fitnesse</i> directory within the <i>FitLibrary</i> release contains the following files and subdirectories (notice the change in name of the fitlibrary jar file):
 
 <br/>
 <pre>
   build.xml - Ant build file for FiLibrary
   fitnesse
-    fitLibrary.jar
+    fitLibrary-2.0.jar
     run.bat
     FitLibraryLogger.properties -- properties for logging
     FixturingLogger.properties
@@ -76,7 +78,7 @@ The <i>fitnesse</i> directory within the <i>FitLibrary</i> release contains the 
         src
            -- source code and ant build for FitLibrary
            fitBookSrc.jar -- source code for examples from the Fit Book
-           fitLibrarySrc.jar -- source code for FitLibrary
+           fitLibrarySrc-2.0.jar -- source code for FitLibrary
            rentEzSrc.jar -- source code for example RentEz application
 </pre>
 
@@ -118,7 +120,7 @@ Any suggestions for improvements in this release approach are most welcome.
 <br/><br/>
 Rick Mugridge, <a href="http://www.RimuResearch.com">http://www.RimuResearch.com</a>.
 <br/>
-Altered December 2010<br/>
+Altered October 2011<br/>
 
 </body>
 </html>
