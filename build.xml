@@ -288,7 +288,7 @@
 					</fileset>
 					<fileset dir="${fitnesse.dir}">
 						<include name="fitnesse.jar" />
-						<include name="fitlibrary.jar" />
+						<include name="${jar}" />
 					</fileset>
 				</classpath>
 			</java>
