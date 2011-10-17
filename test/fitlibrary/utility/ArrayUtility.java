@@ -17,5 +17,4 @@ public class ArrayUtility {
 		}
 		return s.toString();
 	}
-
 }

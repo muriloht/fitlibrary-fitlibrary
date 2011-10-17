@@ -1,4 +1,5 @@
 <project name="FitLibrary" default="jar" basedir=".">
+	<property name="version" value="2.0" />
 	<property name="home" value="${basedir}" />
 	<property name="fitnesse.dir" value="${home}/fitnesse" />
 	<property name="lib" value="${fitnesse.dir}/lib" />
@@ -17,16 +18,15 @@
 	<property name="releases.dir" value="${home}/release" />
         <tstamp prefix="start"/>
 	<property name="release.now.dir" value="${releases.dir}/FitLibrary" />
-	<property name="release.zip.file" value="${releases.dir}/FitLibrary.zip" />
+	<property name="release.zip.file" value="${releases.dir}/fitLibrary-${version}.zip" />
 	<!-- release checking properties -->
 	<property name="release.copy" value="${releases.dir}/FL_Temp" />
 	<property name="release.fitnesse-copy" value="${release.copy}/FitNesseCopy" />
 	<property name="release.unzip" value="${release.copy}/Unzip" />
 	<property name="release.testResults" value="${release.copy}/TestResults" />
 	<!-- final release properties -->
-	<property name="release.version" value="${start.DSTAMP}" />
 	<property name="final.release.dir" value="${releases.dir}" />
-	<property name="final.release.zip" value="${final.release.dir}/FitLibrary${release.version}.zip" />
+	<property name="final.release.zip" value="${final.release.dir}/FitLibrary-${version}.zip" />
 
 	<target name="final-release">
 		<move file="${release.zip.file}"
@@ -138,16 +138,16 @@
 
 	<target name="jar-no-test" depends="clean, compile">
 		<echo message="Create fitlibrary jar file in local FitNesse"/>
-		<jar destfile="${fitnesse.dir}/fitlibrary.jar" basedir="bin"/>
+		<jar destfile="${fitnesse.dir}/fitlibrary-${version}.jar" basedir="bin"/>
 		<echo message="Create source zip file"/>
-		<zip destfile="${lib}/src/fitlibrarySrc.zip">
+		<zip destfile="${lib}/src/fitlibrarySrc-${version}.zip">
 			<fileset dir="src"/>
 		</zip>
 		<copy todir="${fitlibraryweb.dir}/fitnesse">
-			<fileset file="${fitnesse.dir}/fitlibrary.jar" />
+			<fileset file="${fitnesse.dir}/fitlibrary-${version}.jar" />
 		</copy>
 		<copy todir="${fitlibraryweb.dir}/fitnesse/lib/src">
-			<fileset file="${lib}/src/fitlibrarySrc.zip" />
+			<fileset file="${lib}/src/fitlibrarySrc-${version}.zip" />
 		</copy>
 	</target>
 
