@@ -19,6 +19,7 @@
   * specialised handling of table cell text
  * [[Migrating from Slim to FitLibrary][.FitLibrary.AdvancedTutorials.MigratingSlimDecisionTables]]
  * [[Logging techniques][.FitLibrary.AdvancedTutorials.LoggingTechniques]] using '''show''', '''show after''' and [[''log4j''][.FitLibrary.AdvancedTutorials.LoggingTechniques.Log4jLogging]] logging
+ * [[Regular Expressions][.FitLibrary.AdvancedTutorials.RegularExpressionsTutorial]] a comprehensive tutorial of regular expression and their use in !-FitLibrary-!
 }
 
 **!

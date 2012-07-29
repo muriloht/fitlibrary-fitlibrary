@@ -24,4 +24,9 @@ Logging Techniques
 
 |[[Logging Techniques][^LoggingTechniques]]|''How to log information to help understand what is happening''|
 
+Regular Expressions
+
+|[[Regular Expressions][^RegularExpressionsTutorial]]|''How regular expressions work and how to use them in !-FitLibrary-!''|
+
+
 This will be expanded further.
