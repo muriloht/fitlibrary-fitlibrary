@@ -3,13 +3,18 @@
 // Released under the terms of the GNU General Public License version 2 or later.
 package fit;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 
-import util.CommandLine;
-import util.StreamReader;
-import util.FileUtil;
 import fit.exception.FitParseException;
+import util.CommandLine;
+import util.FileUtil;
+import util.StreamReader;
 
 public class FitServer {
 	public String input;

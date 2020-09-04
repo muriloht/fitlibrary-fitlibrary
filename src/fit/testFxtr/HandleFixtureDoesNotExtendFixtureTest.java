@@ -5,10 +5,11 @@ package fit.testFxtr;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.TestCase;
-import util.StringUtil;
+import org.apache.poi.util.StringUtil;
+
 import fit.Fixture;
 import fit.Parse;
+import junit.framework.TestCase;
 
 public class HandleFixtureDoesNotExtendFixtureTest extends TestCase {
   public void testLearnHowBadFixtureClassIsHandled() throws Exception {
@@ -19,7 +20,7 @@ public class HandleFixtureDoesNotExtendFixtureTest extends TestCase {
         "    </tr>",
         "</table>"});
 
-    String tableText = StringUtil.join(tableLines, "\r\n");
+    String tableText = StringUtil.join(tableLines.toArray(), "\r\n");
 
     Parse tableForFaultyFixture = new Parse(tableText);
 

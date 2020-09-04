@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import util.ListUtility;
 
 abstract public class RowFixture extends ColumnFixture {
 
@@ -132,7 +131,7 @@ abstract public class RowFixture extends ColumnFixture {
 			key = Arrays.asList((Object[]) key);
 		}
 		if (result.containsKey(key)) {
-			ListUtility.uncheckedCast(Object.class, result.get(key)).add(row);
+			Arrays.asList(result.get(key)).add(row);
 		} else {
 			List<Object> list = new LinkedList<Object>();
 			list.add(row);

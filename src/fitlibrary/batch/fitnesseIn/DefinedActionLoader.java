@@ -14,7 +14,6 @@ import fitlibrary.batch.trinidad.InMemoryTestImpl;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitnesse.wiki.PageCrawler;
 import fitnesse.wiki.PathParser;
-import fitnesse.wiki.VirtualEnabledPageCrawler;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
 
@@ -35,12 +34,11 @@ public class DefinedActionLoader implements Runnable {
 		try {
 			List<String> pages = getPageNames();
 			PageCrawler crawler = root.getPageCrawler();
-			crawler.setDeadEndStrategy(new VirtualEnabledPageCrawler());
 			for (String pageName : pages){
 				String fullPageName = name+"."+pageName;
 				WikiPagePath path = PathParser.parse(fullPageName);
-				WikiPage page = crawler.getPage(root, path);
-				String html = page.getData().getHtml();
+				WikiPage page = crawler.getPage(path);
+				String html = page.getHtml();
 				if (html.contains("<table"))
 					queue.add(new InMemoryTestImpl(fullPageName,html));
 			}

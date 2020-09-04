@@ -43,7 +43,7 @@ public class TestDirectAccessToParser {
 	}
 	@Test
 	public void testParseWithEnumFinder() throws Exception {
-		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "a"),is((Object)En.A));
+		assertThat(ParserSelectorForType.evaluate(doFixture, En.class, "A"),is((Object)En.A));
 	}
 	@Test
 	public void testParseWithGenericFinder() throws Exception {
@@ -62,7 +62,7 @@ public class TestDirectAccessToParser {
 		List<En> expectedList = new ArrayList<En>();
 		expectedList.add(En.A);
 		expectedList.add(En.B);
-		assertThat(ParserSelectorForType.evaluate(doFixture, type, "a, b"),is((Object)new Gen<List<En>>(expectedList)));
+		assertThat(ParserSelectorForType.evaluate(doFixture, type, "A, B"),is((Object)new Gen<List<En>>(expectedList)));
 	}
 	
 	public static class MyFixture extends DoFixture {

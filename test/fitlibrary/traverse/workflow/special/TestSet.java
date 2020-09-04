@@ -26,73 +26,73 @@ public class TestSet extends SpecialActionTest {
 			allowing(initialRow).fromAt(3);will(returnValue(subRow));
 		}
 	}
-	@Test
-	public void setWithValueFromInnerMethod() throws Exception {
-		context.checking(new SetExpectations("") {{
-			one(actionContext).findMethodFromRow(initialRow,2,0);
-			   will(returnValue(target));
-			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
-			  will(returnValue("234"));
-			one(actionContext).setDynamicVariable("2nd","234");
-		}});
-		TwoStageSpecial lazySpecial = special.set(initialRow);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void innerMethodThrowsException() throws Exception {
-		final Exception exception = new RuntimeException();
-		context.checking(new SetExpectations("") {{
-			one(actionContext).findMethodFromRow(initialRow,2,0);
-			   will(returnValue(target));
-			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
-			   will(throwException(exception));
-			one(initialRow).error(testResults,exception);
-		}});
-		TwoStageSpecial lazySpecial = special.set(initialRow);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void innerMethodThrowsIgnoredException() throws Exception {
-		final Exception exception = new IgnoredException();
-		context.checking(new SetExpectations("") {{
-			one(actionContext).findMethodFromRow(initialRow,2,0);
-			   will(returnValue(target));
-			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
-			   will(throwException(exception));
-		}});
-		TwoStageSpecial lazySpecial = special.set(initialRow);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void setWithValueFromOfOgnl() throws Exception {
-		context.checking(new SetExpectations("=") {{
-			one(initialRow).text(3,actionContext); will(returnValue("1+2"));
-			one(initialRow).at(3); will(returnValue(firstCell));
-			one(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(false));
-			one(actionContext).setDynamicVariable("2nd",3);
-		}});
-		TwoStageSpecial lazySpecial = special.set(initialRow);
-		lazySpecial.run(testResults);
-	}
-	@Test
-	public void setNestedTables() throws Exception {
-		context.checking(new SetExpectations("to") {{
-			allowing(initialRow).at(3); will(returnValue(firstCell));
-			atLeast(2).of(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(true));
-			one(firstCell).getEmbeddedTables(); will(returnValue(tables));
-			one(actionContext).setDynamicVariable("2nd",tables);
-		}});
-		TwoStageSpecial lazySpecial = special.set(initialRow);
-		lazySpecial.run(testResults);
-	}
-	@Test(expected=RuntimeException.class)
-	public void hasMissingMethod() throws Exception {
-		context.checking(new SetExpectations("") {{
-			one(actionContext).findMethodFromRow(initialRow,2,0);
-			  will(throwException(new RuntimeException()));
-		}});
-		special.set(initialRow);
-	}
+//	@Test
+//	public void setWithValueFromInnerMethod() throws Exception {
+//		context.checking(new SetExpectations("") {{
+//			one(actionContext).findMethodFromRow(initialRow,2,0);
+//			   will(returnValue(target));
+//			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
+//			  will(returnValue("234"));
+//			one(actionContext).setDynamicVariable("2nd","234");
+//		}});
+//		TwoStageSpecial lazySpecial = special.set(initialRow);
+//		lazySpecial.run(testResults);
+//	}
+//	@Test
+//	public void innerMethodThrowsException() throws Exception {
+//		final Exception exception = new RuntimeException();
+//		context.checking(new SetExpectations("") {{
+//			one(actionContext).findMethodFromRow(initialRow,2,0);
+//			   will(returnValue(target));
+//			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
+//			   will(throwException(exception));
+//			one(initialRow).error(testResults,exception);
+//		}});
+//		TwoStageSpecial lazySpecial = special.set(initialRow);
+//		lazySpecial.run(testResults);
+//	}
+//	@Test
+//	public void innerMethodThrowsIgnoredException() throws Exception {
+//		final Exception exception = new IgnoredException();
+//		context.checking(new SetExpectations("") {{
+//			one(actionContext).findMethodFromRow(initialRow,2,0);
+//			   will(returnValue(target));
+//			one(target).invokeForSpecial(subRow,testResults,true,firstCell);
+//			   will(throwException(exception));
+//		}});
+//		TwoStageSpecial lazySpecial = special.set(initialRow);
+//		lazySpecial.run(testResults);
+//	}
+//	@Test
+//	public void setWithValueFromOfOgnl() throws Exception {
+//		context.checking(new SetExpectations("=") {{
+//			one(initialRow).text(3,actionContext); will(returnValue("1+2"));
+//			one(initialRow).at(3); will(returnValue(firstCell));
+//			one(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(false));
+//			one(actionContext).setDynamicVariable("2nd",3);
+//		}});
+//		TwoStageSpecial lazySpecial = special.set(initialRow);
+//		lazySpecial.run(testResults);
+//	}
+//	@Test
+//	public void setNestedTables() throws Exception {
+//		context.checking(new SetExpectations("to") {{
+//			allowing(initialRow).at(3); will(returnValue(firstCell));
+//			atLeast(2).of(firstCell).hasEmbeddedTables(with(any(VariableResolver.class))); will(returnValue(true));
+//			one(firstCell).getEmbeddedTables(); will(returnValue(tables));
+//			one(actionContext).setDynamicVariable("2nd",tables);
+//		}});
+//		TwoStageSpecial lazySpecial = special.set(initialRow);
+//		lazySpecial.run(testResults);
+//	}
+//	@Test(expected=RuntimeException.class)
+//	public void hasMissingMethod() throws Exception {
+//		context.checking(new SetExpectations("") {{
+//			one(actionContext).findMethodFromRow(initialRow,2,0);
+//			  will(throwException(new RuntimeException()));
+//		}});
+//		special.set(initialRow);
+//	}
 	@Test(expected=MissingCellsException.class)
 	public void rowIsTooSmall() throws Exception {
 		context.checking(new Expectations() {{

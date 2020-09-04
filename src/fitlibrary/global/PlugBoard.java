@@ -5,8 +5,8 @@
  */
 package fitlibrary.global;
 
-import fitlibrary.closure.LookupClosureStandard;
 import fitlibrary.closure.LookupClosure;
+import fitlibrary.closure.LookupClosureStandard;
 import fitlibrary.closure.LookupMethodTarget;
 import fitlibrary.closure.LookupMethodTargetStandard;
 import fitlibrary.diff.StringDifferencing;

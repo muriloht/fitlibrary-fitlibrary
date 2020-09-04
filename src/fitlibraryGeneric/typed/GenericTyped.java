@@ -24,9 +24,9 @@ import fitlibrary.typed.Typed;
 import fitlibrary.typed.TypedObject;
 import fitlibrary.utility.ClassUtility;
 import fitlibraryGeneric.generic.GenericTypeUtility;
+import fitlibraryGeneric.generic.GenericTypeUtility.GenericCases;
 import fitlibraryGeneric.generic.LocalGenericArrayType;
 import fitlibraryGeneric.generic.LocalParameterizedType;
-import fitlibraryGeneric.generic.GenericTypeUtility.GenericCases;
 import fitlibraryGeneric.object.GenericFinder;
 
 public class GenericTyped implements Typed {

@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
 import junit.framework.TestCase;
 
 public class TypeAdapterTest extends TestCase {

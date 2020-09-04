@@ -68,8 +68,8 @@ public class TestDefinedActionAutoTranslation {
 	@Test public void autoTranslationWithTwoParametersWithOneASubstringOfTheOther() {
 		Tables body = tables("A bc AB","AAB","cBc");
 		List<String> list = list("A","AB");
-		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("paRameRer__1","paRameRer__0")));
-		assertThat(body,new TablesMatcher(tables("@{paRameRer__1} bc @{paRameRer__0}","@{paRameRer__1}@{paRameRer__0}","cBc"),resolver));
+		assertThat(DefinedActionParameterTranslation.translateParameters(list,body),is(list("paRameRer__0","AB")));
+		assertThat(body,new TablesMatcher(tables("@{paRameRer__0} bc @{paRameRer__0}B","@{paRameRer__0}@{paRameRer__0}B","cBc"),resolver));
 	}
 	
 	private Tables tables(String... ss) {

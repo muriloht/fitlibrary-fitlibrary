@@ -21,6 +21,9 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 import fit.Counts;
 import fit.Parse;
@@ -91,8 +94,8 @@ public class SpreadsheetRunner extends AbstractRunner {
 	private String collectTables(CustomRunner runner, HSSFWorkbook workbook) {
         HSSFSheet sheet = workbook.getSheetAt(0);
         String preText = "";
-        for (Iterator<HSSFRow> it = sheet.rowIterator(); it.hasNext();) {
-            HSSFRow row = it.next();
+        for (Iterator<Row> it = sheet.rowIterator(); it.hasNext();) {
+            HSSFRow row = (HSSFRow) it.next();
             HSSFCell[] cells = getCells(row);
             String[] borderedCellValues = getBorderedCellValues(cells,workbook);
             if (borderedCellValues.length > 0) {
@@ -177,7 +180,7 @@ public class SpreadsheetRunner extends AbstractRunner {
     private boolean leftBordered(HSSFCell cell) {
     	if (cell == null)
     		return false;
-		return cell.getCellStyle().getBorderLeft() > 0;
+		return cell.getCellStyle().getBorderLeft() != BorderStyle.NONE;
 	}
 	@SuppressWarnings("unchecked")
 	private HSSFCell[] getCells(HSSFRow row) {
@@ -190,9 +193,9 @@ public class SpreadsheetRunner extends AbstractRunner {
 		HSSFCell[] cells = new HSSFCell[maxCell];
 		for (int i = 0; i < cells.length; i++)
 		    cells[i] = null;
-		for (Iterator<HSSFCell> r = row.cellIterator(); r.hasNext(); ) {
-			HSSFCell cell = r.next();
-			short cellNo = cell.getCellNum();
+		for (Iterator<Cell> r = row.cellIterator(); r.hasNext(); ) {
+			HSSFCell cell = (HSSFCell) r.next();
+			int cellNo = cell.getColumnIndex();
 			cells[cellNo] = cell;
 		}
 		return cells;
@@ -230,8 +233,8 @@ public class SpreadsheetRunner extends AbstractRunner {
 		//System.err.println("Formatting "+value(cell)+"= "+font.getFontHeight());
 		if (font.getItalic())
 		    value = tag("i",value);
-		if (font.getBoldweight() > 400)
-		    value = tag("b",value);
+//		if (font.getBold())
+//		    value = tag("b",value);
 		if (font.getUnderline() > 0)
 		    value = tag("u",value);
 		if (font.getFontHeight() >= 480)
@@ -248,10 +251,10 @@ public class SpreadsheetRunner extends AbstractRunner {
     @SuppressWarnings("deprecation")
 	private String value(HSSFCell cell) {
         switch (cell.getCellType()) {
-        case HSSFCell.CELL_TYPE_BLANK: return "";
-        case HSSFCell.CELL_TYPE_BOOLEAN: return ""+cell.getBooleanCellValue();
-        case HSSFCell.CELL_TYPE_ERROR: return "ERROR";
-        case HSSFCell.CELL_TYPE_FORMULA: 
+        case BLANK: return "";
+        case BOOLEAN: return ""+cell.getBooleanCellValue();
+        case ERROR: return "ERROR";
+        case FORMULA: 
             if (Double.isNaN(cell.getNumericCellValue())) {
                 try {
                     return ""+cell.getBooleanCellValue();
@@ -261,12 +264,12 @@ public class SpreadsheetRunner extends AbstractRunner {
                 }
             }
             return number(cell);
-        case HSSFCell.CELL_TYPE_NUMERIC: return number(cell);
-        case HSSFCell.CELL_TYPE_STRING: return cell.getStringCellValue();
+        case NUMERIC: return number(cell);
+        case STRING: return cell.getStringCellValue();
         }
         return "UNKNOWN";
     }
-    private String number(HSSFCell cell) {
+    private String number(Cell cell) {
         double value = cell.getNumericCellValue();
         if (((int)value) == value)
             return ""+((int) value);

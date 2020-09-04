@@ -22,6 +22,7 @@ public class ParallelFolderTestResultRepository implements ParallelTestResultRep
 	
 	public ParallelFolderTestResultRepository(final TestResultRepository testResultRepository, Executor executor) {
 		this.testResultRepository = testResultRepository;
+		
 		executor.execute(new Runnable() {
 			@Override
 			public void run() {

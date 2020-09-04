@@ -3,8 +3,9 @@
  * Released under the terms of the GNU General Public License version 2 or later.
 */
 package fit.specify;
-import fit.ColumnFixture;
 import java.util.Calendar;
+
+import fit.ColumnFixture;
 
 public class ColumnFixtureUnderTest extends ColumnFixture { //COPY:ALL
 	private int count = 1;

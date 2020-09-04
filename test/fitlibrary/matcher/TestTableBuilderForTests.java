@@ -48,11 +48,11 @@ public class TestTableBuilderForTests {
 		Tables tables = tables().mock(context);
 		tables.last();
 	}
-	@Test(expected=ExpectationError.class)
-	public void emptyTablesHasNoFirst() {
-		Tables tables = tables().mock(context);
-		tables.at(0);
-	}
+//	@Test(expected=ExpectationError.class)
+//	public void emptyTablesHasNoFirst() {
+//		Tables tables = tables().mock(context);
+//		tables.at(0);
+//	}
 	@Test
 	public void emptyTablesHasEmptyIterator() {
 		Tables tables = tables().mock(context);

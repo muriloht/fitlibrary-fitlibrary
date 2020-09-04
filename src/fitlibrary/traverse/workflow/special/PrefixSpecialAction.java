@@ -5,7 +5,6 @@
 
 package fitlibrary.traverse.workflow.special;
 
-import ognl.Ognl;
 import fitlibrary.closure.ICalledMethodTarget;
 import fitlibrary.exception.IgnoredException;
 import fitlibrary.exception.table.ExtraCellsException;
@@ -17,6 +16,7 @@ import fitlibrary.traverse.workflow.caller.TwoStageSpecial;
 import fitlibrary.utility.option.None;
 import fitlibrary.utility.option.Option;
 import fitlibrary.utility.option.Some;
+import ognl.Ognl;
 
 public class PrefixSpecialAction {
 //	static Logger logger = FitLibraryLogger.getLogger(PrefixSpecialAction.class);

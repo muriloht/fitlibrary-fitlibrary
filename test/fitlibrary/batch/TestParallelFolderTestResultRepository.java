@@ -7,6 +7,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.concurrent.Synchroniser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,7 +17,12 @@ import fitlibrary.batch.trinidad.TestResultRepository;
 
 @RunWith(JMock.class)
 public class TestParallelFolderTestResultRepository {
-	final Mockery context = new JUnit4Mockery();
+	Synchroniser synchroniser = new Synchroniser();
+
+	final Mockery context = new JUnit4Mockery(){{
+	    setThreadingPolicy(synchroniser);
+	}};
+
 	final TestResultRepository testResults = context.mock(TestResultRepository.class);
 	final TestResult result1 = context.mock(TestResult.class);
 	final TestResult result2 = context.mock(TestResult.class,"TestResult2");

@@ -1,8 +1,8 @@
 package fitbook;
 
+import fit.Fixture;
 import fitlibrary.ArrayFixture;
 import fitlibrary.DoFixture;
-import fit.Fixture;
 import fitlibrary.SubsetFixture;
 
 /*

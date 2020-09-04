@@ -4,7 +4,11 @@
 */
 package fitlibrary.runner;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 import fit.Counts; // With Fit itself, this class is Fixture.Counts.

@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import util.GracefulNamer;
 import fit.exception.FitFailureException;
 import fit.exception.NoSuchFieldFitFailureException;
 import fit.exception.NoSuchMethodFitFailureException;
+import util.GracefulNamer;
 
 public abstract class Binding {
 	private static Pattern regexMethodPattern = Pattern

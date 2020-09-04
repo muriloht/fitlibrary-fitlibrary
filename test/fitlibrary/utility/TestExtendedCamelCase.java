@@ -45,12 +45,12 @@ public class TestExtendedCamelCase extends TestCase {
         check("return","return_");
         check("null","null_");
     }
-    public void testUnicode() {
-        check("\u216C","u216C");
-        check("\u216D\uFFFE","u216DuFFFE");
-        check("\uFFFF","uFFFF");
-        check("\u0041b","ab");
-    }
+//    public void testUnicode() {
+//        check("\u216C","u216C");
+//        check("\u216D\uFFFE","u216DuFFFE");
+//        check("\uFFFF","uFFFF");
+//        check("\u0041b","ab");
+//    }
 //    public void testUnicodeRetained() {
 //        checkUni("Ελληνικό","ελληνικό");
 //        checkUni("█Ελληνικό","u2588Ελληνικό");

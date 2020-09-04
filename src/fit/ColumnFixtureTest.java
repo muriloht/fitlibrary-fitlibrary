@@ -6,7 +6,6 @@ package fit;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-
 import junit.framework.TestCase;
 
 public class ColumnFixtureTest extends TestCase {

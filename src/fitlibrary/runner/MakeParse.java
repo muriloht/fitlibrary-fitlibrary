@@ -7,7 +7,6 @@ package fitlibrary.runner;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-
 import fit.Parse;
 import fitlibrary.utility.ParseUtility;
 

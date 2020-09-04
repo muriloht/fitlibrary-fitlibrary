@@ -2,8 +2,8 @@ package fit.decorator.util;
 
 import java.awt.Point;
 
-import junit.framework.TestCase;
 import fit.decorator.exceptions.InvalidInputException;
+import junit.framework.TestCase;
 
 public class DataTypeTest extends TestCase {
 	public void testInstanceMethodReturnsValidDataTypeForGivenParam()

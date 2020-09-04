@@ -12,11 +12,10 @@ import java.util.Queue;
 import fitlibrary.batch.trinidad.InMemoryTestImpl;
 import fitlibrary.batch.trinidad.TestDescriptor;
 import fitnesse.FitNesseContext;
-import fitnesse.responders.run.PageListSetUpTearDownSurrounder;
-import fitnesse.responders.run.SuiteContentsFinder;
+import fitnesse.testrunner.SuiteContentsFinder;
+import fitnesse.testrunner.run.PageListSetUpTearDownSurrounder;
 import fitnesse.wiki.PageCrawler;
 import fitnesse.wiki.PathParser;
-import fitnesse.wiki.VirtualEnabledPageCrawler;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
 
@@ -34,21 +33,20 @@ public class SuiteLoader implements Runnable {
 	public void run() {
 		try {
 			WikiPagePath path = PathParser.parse(name);
-			PageCrawler crawler = context.root.getPageCrawler();
-			crawler.setDeadEndStrategy(new VirtualEnabledPageCrawler());
-			WikiPage suiteRoot = crawler.getPage(context.root, path);
+			PageCrawler crawler = context.getRootPage().getPageCrawler();
+			WikiPage suiteRoot = crawler.getPage(path);
 			if (!suiteRoot.getData().hasAttribute("Suite")){
 				throw new IllegalArgumentException("page "+name+" is not a suite");
 			}
-			WikiPage root = crawler.getPage(context.root,PathParser.parse("."));
-			List<WikiPage> pages = new SuiteContentsFinder(suiteRoot, null, root).makePageList();
+			WikiPage root = crawler.getPage(PathParser.parse("."));
+			List<WikiPage> pages = new SuiteContentsFinder(suiteRoot, null, root).getAllPagesToRunForThisSuite();
 			
-			PageListSetUpTearDownSurrounder surrounder = new PageListSetUpTearDownSurrounder(root);
-            surrounder.surroundGroupsOfTestPagesWithRespectiveSetUpAndTearDowns(pages);
+			PageListSetUpTearDownSurrounder surrounder = new PageListSetUpTearDownSurrounder();
+            surrounder.addSuiteSetUpsAndTearDowns(pages);
             
 			for (WikiPage page : pages){
 				if (selects(page)){		    		
-					String testName = crawler.getFullPath(page).toString();
+					String testName = page.getFullPath().toString();
 					String content = ParallelFitNesseRepository.formatWikiPage(testName,page,null,null,context);
 					queue.add(new InMemoryTestImpl(testName,content));
 				}

@@ -1,7 +1,7 @@
 package fit.decorator.util;
 
-import junit.framework.TestCase;
 import fit.decorator.exceptions.InvalidInputException;
+import junit.framework.TestCase;
 
 public class DeltaTest extends TestCase {
 

@@ -90,26 +90,26 @@ public class TestPositionedTargetWasFound {
 			new PositionedTargetWasFound(evaluator,cells,typedObject,method,4,6,false,lookupMethodTarget);
 		assertThat(positionedTarget.isFound(),is(false));
 	}
-	@Test
-	public void binaryPrefixInnerRunsReturningTrue() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
-			  will(returnValue(innerMethodTarget));
-			allowing(evaluator).resolve("1"); will(resolveTo("1"));
-			allowing(evaluator).resolve("2"); will(resolveTo("2"));
-			oneOf(subject).binaryPreSpecial((String)with(is("1")),(String)with(is("2")),with(any(DoAction.class)));
-			  will(returnValue(true));
-			oneOf(testResults).pass();
-		}});
-		String[] cells = {"binary", "1", "preSpecial", "2", "m"};
-		Method method = getMethod("binaryPreSpecial", String.class, String.class, DoAction.class);
-		PositionedTarget positionedTarget = 
-			new PositionedTargetWasFound(evaluator,cells,typedObject,method,4,5,false,lookupMethodTarget);
-		assertThat(positionedTarget.isFound(),is(true));
-		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special binaryPreSpecial(String,String,DoAction) + m()"));
-		Row row = TableFactory.row(cells);
-		positionedTarget.run(row,testResults,runtime);
-	}
+//	@Test
+//	public void binaryPrefixInnerRunsReturningTrue() throws Exception {
+//		context.checking(new Expectations() {{
+//			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
+//			  will(returnValue(innerMethodTarget));
+//			allowing(evaluator).resolve("1"); will(resolveTo("1"));
+//			allowing(evaluator).resolve("2"); will(resolveTo("2"));
+//			oneOf(subject).binaryPreSpecial((String)with(is("1")),(String)with(is("2")),with(any(DoAction.class)));
+//			  will(returnValue(true));
+//			oneOf(testResults).pass();
+//		}});
+//		String[] cells = {"binary", "1", "preSpecial", "2", "m"};
+//		Method method = getMethod("binaryPreSpecial", String.class, String.class, DoAction.class);
+//		PositionedTarget positionedTarget = 
+//			new PositionedTargetWasFound(evaluator,cells,typedObject,method,4,5,false,lookupMethodTarget);
+//		assertThat(positionedTarget.isFound(),is(true));
+//		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special binaryPreSpecial(String,String,DoAction) + m()"));
+//		Row row = TableFactory.row(cells);
+//		positionedTarget.run(row,testResults,runtime);
+//	}
 	@Test
 	public void binaryPostfixInnerTargetNotFound() throws Exception {
 		context.checking(new Expectations() {{
@@ -122,60 +122,60 @@ public class TestPositionedTargetWasFound {
 			new PositionedTargetWasFound(evaluator,cells,typedObject,method,0,2,false,lookupMethodTarget);
 		assertThat(positionedTarget.isFound(),is(false));
 	}
-	@Test
-	public void binaryPostfixInnerRunsReturningFalse() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
-			  will(returnValue(innerMethodTarget));
-			allowing(evaluator).resolve("1"); will(resolveTo("1"));
-			allowing(evaluator).resolve("2"); will(resolveTo("2"));
-			oneOf(subject).binaryPostSpecial(with(any(DoAction.class)),(String)with(is("1")),(String)with(is("2")));
-			  will(returnValue(false));
-			oneOf(testResults).fail();
-		}});
-		String[] cells = {"m", "binary", "1", "postSpecial", "2"};
-		Method method = getMethod("binaryPostSpecial", DoAction.class, String.class, String.class);
-		PositionedTarget positionedTarget = 
-			new PositionedTargetWasFound(evaluator,cells,typedObject,method,0,1,false,lookupMethodTarget);
-		assertThat(positionedTarget.isFound(),is(true));
-		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special binaryPostSpecial(DoAction,String,String) + m()"));
-		Row row = TableFactory.row(cells);
-		positionedTarget.run(row,testResults,runtime);
-	}
-	@Test
-	public void nullaryInnerRunsReturningNothing() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(lookupMethodTarget).findTheMethodMapped("n", 1, evaluator);
-			  will(returnValue(innerMethodTarget));
-			oneOf(subject).nullarySpecial(with(any(DoAction.class)));
-		}});
-		String[] cells = {"nullarySpecial", "n", "z"};
-		Method method = getMethod("nullarySpecial", DoAction.class);
-		PositionedTarget positionedTarget = 
-			new PositionedTargetWasFound(evaluator,cells,typedObject,method,1,3,false,lookupMethodTarget);
-		assertThat(positionedTarget.isFound(),is(true));
-		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special nullarySpecial(DoAction) + n()"));
-		Row row = TableFactory.row(cells);
-		positionedTarget.run(row,testResults,runtime);
-	}
-	@Test
-	public void unaryPostfixTakesObject() throws Exception {
-		String[] cells = {"m", "unaryPostSpecial", "2"};
-		final Row row = TableFactory.row(cells);
-		context.checking(new Expectations() {{
-			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
-			  will(returnValue(innerMethodTarget));
-			oneOf(innerMethodTarget).getResultParser(); will(returnValue(intParser));
-			oneOf(intParser).parseTyped(row.at(2), testResults); will(returnValue(new GenericTypedObject(2)));
-			oneOf(subject).unaryPostSpecial(with(any(DoAction.class)),with(is(2)));
-		}});
-		Method method = getMethod("unaryPostSpecial", DoAction.class, Object.class);
-		PositionedTarget positionedTarget = 
-			new PositionedTargetWasFound(evaluator,cells,typedObject,method,0,1,false,lookupMethodTarget);
-		assertThat(positionedTarget.isFound(),is(true));
-		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special unaryPostSpecial(DoAction,Object) + m()"));
-		positionedTarget.run(row,testResults,runtime);
-	}
+//	@Test
+//	public void binaryPostfixInnerRunsReturningFalse() throws Exception {
+//		context.checking(new Expectations() {{
+//			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
+//			  will(returnValue(innerMethodTarget));
+//			allowing(evaluator).resolve("1"); will(resolveTo("1"));
+//			allowing(evaluator).resolve("2"); will(resolveTo("2"));
+//			oneOf(subject).binaryPostSpecial(with(any(DoAction.class)),(String)with(is("1")),(String)with(is("2")));
+//			  will(returnValue(false));
+//			oneOf(testResults).fail();
+//		}});
+//		String[] cells = {"m", "binary", "1", "postSpecial", "2"};
+//		Method method = getMethod("binaryPostSpecial", DoAction.class, String.class, String.class);
+//		PositionedTarget positionedTarget = 
+//			new PositionedTargetWasFound(evaluator,cells,typedObject,method,0,1,false,lookupMethodTarget);
+//		assertThat(positionedTarget.isFound(),is(true));
+//		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special binaryPostSpecial(DoAction,String,String) + m()"));
+//		Row row = TableFactory.row(cells);
+//		positionedTarget.run(row,testResults,runtime);
+//	}
+//	@Test
+//	public void nullaryInnerRunsReturningNothing() throws Exception {
+//		context.checking(new Expectations() {{
+//			oneOf(lookupMethodTarget).findTheMethodMapped("n", 1, evaluator);
+//			  will(returnValue(innerMethodTarget));
+//			oneOf(subject).nullarySpecial(with(any(DoAction.class)));
+//		}});
+//		String[] cells = {"nullarySpecial", "n", "z"};
+//		Method method = getMethod("nullarySpecial", DoAction.class);
+//		PositionedTarget positionedTarget = 
+//			new PositionedTargetWasFound(evaluator,cells,typedObject,method,1,3,false,lookupMethodTarget);
+//		assertThat(positionedTarget.isFound(),is(true));
+//		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special nullarySpecial(DoAction) + n()"));
+//		Row row = TableFactory.row(cells);
+//		positionedTarget.run(row,testResults,runtime);
+//	}
+//	@Test
+//	public void unaryPostfixTakesObject() throws Exception {
+//		String[] cells = {"m", "unaryPostSpecial", "2"};
+//		final Row row = TableFactory.row(cells);
+//		context.checking(new Expectations() {{
+//			oneOf(lookupMethodTarget).findTheMethodMapped("m", 0, evaluator);
+//			  will(returnValue(innerMethodTarget));
+//			oneOf(innerMethodTarget).getResultParser(); will(returnValue(intParser));
+//			oneOf(intParser).parseTyped(row.at(2), testResults); will(returnValue(new GenericTypedObject(2)));
+//			oneOf(subject).unaryPostSpecial(with(any(DoAction.class)),with(is(2)));
+//		}});
+//		Method method = getMethod("unaryPostSpecial", DoAction.class, Object.class);
+//		PositionedTarget positionedTarget = 
+//			new PositionedTargetWasFound(evaluator,cells,typedObject,method,0,1,false,lookupMethodTarget);
+//		assertThat(positionedTarget.isFound(),is(true));
+//		assertThat(positionedTarget.ambiguityErrorMessage(),startsWith("Special unaryPostSpecial(DoAction,Object) + m()"));
+//		positionedTarget.run(row,testResults,runtime);
+//	}
 	private Method getMethod(String methodName, Class<?>... parameterTypes)
 			throws NoSuchMethodException {
 		Method method = subject.getClass().getMethod(methodName, parameterTypes);

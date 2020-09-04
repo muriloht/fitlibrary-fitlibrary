@@ -1,7 +1,7 @@
 package fit.decorator.util;
 
-import junit.framework.Assert;
 import fit.Counts;
+import junit.framework.Assert;
 
 public class TestCaseHelper {
 	public static void assertCounts(Counts expected, Counts actual) {

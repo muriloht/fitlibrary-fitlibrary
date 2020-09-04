@@ -2,8 +2,6 @@ package fitlibrary.batch;
 
 import java.io.IOException;
 
-import fitlibrary.batch.FitLibraryRunner;
-
 public class RunFitLibraryRunner {
 
 	public static void main(String[] args) throws IOException, InterruptedException {

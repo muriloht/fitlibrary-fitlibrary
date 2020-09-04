@@ -62,15 +62,15 @@ public class TestSetSymbolNamed extends SpecialActionTest {
 		TwoStageSpecial lazySpecial = special.setSymbolNamed(initialRow);
 		lazySpecial.run(testResults);
 	}
-	@Test
-	public void setWithValueFromOfOgnl() throws Exception {
-		context.checking(new SetExpectations("=") {{
-			one(initialRow).text(3,actionContext); will(returnValue("1+2"));
-			one(actionContext).setFitVariable("2nd",3);
-		}});
-		TwoStageSpecial lazySpecial = special.setSymbolNamed(initialRow);
-		lazySpecial.run(testResults);
-	}
+//	@Test
+//	public void setWithValueFromOfOgnl() throws Exception {
+//		context.checking(new SetExpectations("=") {{
+//			one(initialRow).text(3,actionContext); will(returnValue("1+2"));
+//			one(actionContext).setFitVariable("2nd",3);
+//		}});
+//		TwoStageSpecial lazySpecial = special.setSymbolNamed(initialRow);
+//		lazySpecial.run(testResults);
+//	}
 	@Test(expected=RuntimeException.class)
 	public void hasMissingMethod() throws Exception {
 		context.checking(new SetExpectations("") {{

@@ -7,10 +7,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import junit.framework.TestCase;
 
-import util.RegexTestCase;
-
-public class FixtureTest extends RegexTestCase {
+public class FixtureTest extends TestCase {
 	private Locale saveLocale;
 
 	static class HasParseMethod {
@@ -152,8 +151,12 @@ public class FixtureTest extends RegexTestCase {
 
 		Parse cell = new Parse("td", "", null, null);
 		fixture.exception(cell, new NullPointerException("gobble gobble"));
-		assertSubString("gobble gobble", cell.body);
-		assertNotSubString("Exception", cell.body);
+		
+		if (!"gobble gobble".contains(cell.body))
+			fail("substring '" + cell.body + "' not found in string '" + "gobble gobble" + "'.");
+		
+		if ("Exception".contains(cell.body))
+			fail("expecting substring:'" + cell.body + "' in string:'" + "Exception" + "'.");
 	}
 
 	public void testClearingSymbols() throws Exception {

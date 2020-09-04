@@ -6,8 +6,8 @@
 
 package fitlibrary.global;
 
-import fitlibrary.definedAction.DefinedActionsRepositoryStandard;
 import fitlibrary.definedAction.DefinedActionsRepository;
+import fitlibrary.definedAction.DefinedActionsRepositoryStandard;
 
 /*
  * This will be eliminated once I've wired in a full Runtime into the execution, so there's no needed for these to be global.

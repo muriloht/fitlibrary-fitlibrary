@@ -1,6 +1,6 @@
 package fitbook;
 
-import fitbook.items.*;
+import fitbook.items.LineItems;
 
 /*
  * @author Rick Mugridge 8/12/2003
