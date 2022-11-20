@@ -15,5 +15,16 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="fitnesse/lib/commons-lang3-3.12.0.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/commons-text-1.10.0.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/diffutils-1.3.0.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/fitbook.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/htmllexer-2.1.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/htmlparser-2.1.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/json-20220924.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/rentEz.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/slf4j-api-2.0.4.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/slf4j-jdk14-2.0.4.jar"/>
+	<classpathentry kind="lib" path="fitnesse/lib/velocity-engine-core-2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
